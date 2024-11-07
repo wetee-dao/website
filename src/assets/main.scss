@@ -1,0 +1,78 @@
+@forward './base.scss';
+
+
+.space {
+    flex: 1;
+}
+
+a {
+    text-decoration: none;
+}
+
+.container {
+    width: calc(100% - 80px);
+    margin-left: 40px;
+    margin-right: 40px;
+}
+
+.section {
+    position: relative;
+    overflow: hidden;
+    padding: 60px 0;
+}
+
+.section--first {
+    padding-top: 0;
+}
+
+.section--bt {
+    border-top: 2px solid rgba(115, 115, 115, 0.12);
+}
+
+.btns {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+    margin-top: 40px;
+    position: relative;
+    z-index: 3;
+    justify-content: flex-start;
+    width: auto;
+}
+
+.btn {
+    position: relative;
+    width: calc(50% - 10px);
+    max-width: 200px;
+    height: 60px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background-color: transparent;
+    border-radius: 20px;
+    border: 2px solid #50fa82;
+    width: 200px;
+    margin-right: 30px;
+    color: #fff;
+    font-weight: bold;
+}
+
+.btn__primary {
+    background-color: #50fa82;
+    color: #000;
+}
+
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+}
+
+@tailwind base;
+@tailwind utilities;

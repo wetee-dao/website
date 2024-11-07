@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WeTEE</title>
+  <style>
+    @font-face {
+      font-family: "letter-font";
+      src: url('/fonts/DatDot-Light.woff2') format('woff2'),
+        url('/fonts/DatDot-Light.woff') format('woff'),
+        url('/fonts/DatDot-Light.ttf') format('truetype');
+    }
+
+    @font-face {
+      font-family: 'iconfont';
+      /* Project id 2738227 */
+      src: url('//at.alicdn.com/t/c/font_2738227_pill2ti35bl.woff2?t=1730880415884') format('woff2'),
+        url('//at.alicdn.com/t/c/font_2738227_pill2ti35bl.woff?t=1730880415884') format('woff'),
+        url('//at.alicdn.com/t/c/font_2738227_pill2ti35bl.ttf?t=1730880415884') format('truetype');
+    }
+
+    .iconfont {
+      font-family: "iconfont";
+      font-style: normal;
+    }
+
+    #app {
+      visibility: hidden;
+    }
+
+    body {
+      font-weight: 400;
+      /* background-image: linear-gradient(to right bottom,
+          #13111c,
+          #444464,
+          #817594,
+          #bfaac7,
+          #ffe4fc);
+      background-image: linear-gradient(90deg,
+          rgba(255, 255, 255, 0.03) 3%,
+          transparent 0),
+        linear-gradient(1turn, rgba(255, 255, 255, 0.03) 3%, transparent 0); */
+      background-size: 20px 20px;
+      background-position: 50%;
+      background-color: #090909;
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", "Ubuntu";
+    }
+
+    html.dark {
+      --g-primary-bg: #10110f;
+      --g-secondary-bg: #141512;
+      --g-primary-text: #50fa82;
+      --g-secondary-text: #ffffffd2;
+
+      --g-primary-bg-rgb: 16, 17, 15;
+      --g-secondary-bg-rgb: 20, 21, 18;
+      --g-primary-text-rgb: 80, 250, 130;
+      --g-secondary-text-rgb: 255, 255, 255;
+    }
+
+    html.light {
+      --g-primary-bg: #fafafa;
+      --g-secondary-bg: #ffffff;
+      --g-primary-text: #158436;
+      --g-secondary-text: #222222;
+
+      --g-primary-bg-rgb: 250, 250, 250;
+      --g-secondary-bg-rgb: 240, 240, 240;
+      --g-primary-text-rgb: 21, 132, 54;
+      --g-secondary-text-rgb: 34, 34, 34;
+    }
+
+    #loader {
+      position: absolute;
+      top: calc(50vh - 50Px);
+      left: calc(50vw - 150Px);
+      text-align: center;
+      display: flex;
+    }
+
+    .loader-logo {
+      width: 60Px;
+      height: 60Px;
+      color: var(--g-primary-text);
+      font-size: 30px;
+      position: relative;
+      left: -6px;
+    }
+
+    .loading-text {
+      margin-left: 10Px;
+      font-size: 28Px;
+      font-weight: bold;
+      line-height: 56Px;
+      color: rgba(var(--g-primary-text-rgb), 1);
+      font-family: "letter-font", Serif;
+    }
+
+    .loader-logo:before,
+    .loader-logo:after {
+      content: '';
+      display: block;
+      position: absolute;
+      background-color: currentcolor;
+      left: 50%;
+      right: 0;
+      top: 0;
+      bottom: 50%;
+      box-shadow: -.5em 0 0 currentcolor;
+      -webkit-animation: loader-logo 1s linear infinite;
+      animation: loader-logo 1s linear infinite;
+    }
+
+    .loader-logo:after {
+      top: 50%;
+      bottom: 0;
+      -webkit-animation-delay: .25s;
+      animation-delay: .25s;
+    }
+
+    @-webkit-keyframes loader-logo {
+
+      0%,
+      100% {
+        box-shadow: -.5em 0 0 transparent;
+        background-color: currentcolor;
+      }
+
+      50% {
+        box-shadow: -.5em 0 0 currentcolor;
+        background-color: transparent;
+      }
+    }
+
+    @keyframes loader-logo {
+
+      0%,
+      100% {
+        box-shadow: -.5em 0 0 transparent;
+        background-color: currentcolor;
+      }
+
+      50% {
+        box-shadow: -.5em 0 0 currentcolor;
+        background-color: transparent;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app"></div>
+  <div id="loader">
+    <div class="loader-logo"></div>
+    <div class="loading-text">Connecting to WeTEE</div>
+  </div>
+  <script src="https://dapp.wetee.app/config/apps.js"></script>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
+</html>
