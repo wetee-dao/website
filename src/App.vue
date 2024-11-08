@@ -30,8 +30,6 @@ onMounted(() => {
   }
 
   :deep(.active) {
-
-    // display: none !important;
     &:after {
       display: none;
     }

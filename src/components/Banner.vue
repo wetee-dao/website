@@ -1,21 +1,23 @@
 <template>
-  <div class="banner__content container">
-    <span class="banner__tagline">Based on substrate</span>
-    <h2 class="banner__title" style="font-size: 49px;">Secure and easy<br> Computational power</h2>
-    <p class="banner__text">
-      Utilizing decentralized trusted computing power in a cloud-like manner, providing hardware-level
-      security
-      assurance for Web3 applications and DeAI.
-    </p>
-    <div class="btns">
-      <a target="_blank" href="https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fxiaobai.asyou.me%3A30001#/explorer"
-        class="btn  btn--nephrite"><span>Chain Explorer</span>
-      </a>
-      <a target="_blank" href="https://dapp.wetee.app/" class="btn btn__primary "><span>Deploy Now</span>
-      </a>
+  <div class="banner__content container flex flex-col items-center md:flex-row md:justify-center md:items-center">
+    <div class="flex-1 flex flex-col items-center md:items-start">
+      <span class="banner__tagline ">Based on substrate</span>
+      <h2 class="banner__title text-center md:text-left">Secure and easy Computational power</h2>
+      <p class="banner__text text-center md:text-left">
+        Utilizing decentralized trusted computing power in a cloud-like manner, providing hardware-level
+        security
+        assurance for Web3 applications and DeAI.
+      </p>
+      <div class="btns flex justify-center md:justify-start">
+        <a target="_blank" href="https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fxiaobai.asyou.me%3A30001#/explorer"
+          class="btn  btn--nephrite"><span>Chain Explorer</span>
+        </a>
+        <a target="_blank" href="https://dapp.wetee.app/" class="btn btn__primary "><span>Deploy Now</span>
+        </a>
+      </div>
     </div>
 
-    <Chip>
+    <Chip class="chip">
       <div class="chip-text">Confidential computing, calculate trustworthy future</div>
     </Chip>
 
@@ -34,13 +36,12 @@ import Chip from './Chip.vue';
 
 <style lang="scss" scoped>
 .banner__content {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: start;
+  // display: flex;
+  // flex-direction: column;
+  // justify-content: center;
+  // align-items: start;
   height: calc(100vh - 190px);
   min-height: 400px;
-  max-height: 600px;
   border-radius: 20px;
   padding: 60px 40px;
   position: relative;
@@ -65,24 +66,25 @@ import Chip from './Chip.vue';
   font-weight: 700;
   font-size: 16px;
   line-height: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   text-align: center;
   position: relative;
   z-index: 3;
   background-color: rgb(84 84 84 / 30%);
   padding: 8px 16px;
   border-radius: 10px;
+  display: inline-block;
 }
 
 .banner__title {
-  font-size: 40px;
+  font-size: 49px;
   line-height: 54px;
   color: #fff;
   font-weight: 700;
   margin-bottom: 20px;
-  text-align: left;
   position: relative;
   z-index: 3;
+  word-break: break-word;
 }
 
 .banner__text {
@@ -93,8 +95,6 @@ import Chip from './Chip.vue';
   margin-bottom: 0;
   position: relative;
   z-index: 3;
-  text-align: left;
-  width: calc(100% - 430px);
 }
 
 .banner__canvas {
@@ -118,11 +118,16 @@ import Chip from './Chip.vue';
 }
 
 .chip {
-  margin: 0;
-  right: 134px;
-  top: 50%;
-  position: absolute;
-  transform: translateY(-50%);
   z-index: 10;
+}
+
+@media (max-width: 786px) {
+  .banner__content {
+    height: auto;
+  }
+
+  .chip {
+    margin-top: 100px;
+  }
 }
 </style>

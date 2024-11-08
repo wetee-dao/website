@@ -2,17 +2,19 @@
   <div>
     <SectionHead />
     <div class="container section flex">
-      <div class="flex-1 flex flex-col justify-center">
-        <div class="title">Confidential computing, calculate trustworthy future</div>
-        <div class="desc">Any web2 application can be directly deployed as a confidential container contract,
-          and can interact with ink! and EVM smart contracts, bringing security and trust to households and
-          factories everywhere.
+      <div class="flex flex-col items-center md:flex-row md:justify-center md:items-center">
+        <div class="flex-1 flex flex-col justify-center">
+          <div class="title">Confidential computing, calculate trustworthy future</div>
+          <div class="desc">Any web2 application can be directly deployed as a confidential container contract,
+            and can interact with ink! and EVM smart contracts, bringing security and trust to households and
+            factories everywhere.
+          </div>
         </div>
-      </div>
-      <div class="flex justify-center">
-        <Chip>
-          <div class="chip-text">Confidential computing, calculate trustworthy future</div>
-        </Chip>
+        <div class="flex justify-center  mt-10 md:mt-0">
+          <Chip>
+            <div class="chip-text">Confidential computing, calculate trustworthy future</div>
+          </Chip>
+        </div>
       </div>
     </div>
     <div class="container section-first">

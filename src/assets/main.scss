@@ -15,6 +15,18 @@ a {
     margin-right: 40px;
 }
 
+@media (max-width: 786px) {
+    .container {
+        width: calc(100% - 40px);
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    .section {
+        padding: 40px 0;
+    }
+}
+
 .section {
     position: relative;
     overflow: hidden;
@@ -30,35 +42,32 @@ a {
 }
 
 .btns {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-start;
-    width: 100%;
     margin-top: 40px;
     position: relative;
     z-index: 3;
-    justify-content: flex-start;
     width: auto;
+    max-width: 400px;
+    min-width: 320px;
 }
 
 .btn {
     position: relative;
-    width: calc(50% - 10px);
-    max-width: 200px;
     height: 60px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
+    line-height: 60px;
+    text-align: center;
+    display: inline-block;
     overflow: hidden;
     background-color: transparent;
     border-radius: 20px;
     border: 2px solid #50fa82;
-    width: 200px;
-    margin-right: 30px;
+    margin-right: 20px;
     color: #fff;
     font-weight: bold;
+    width: calc(50% - 20px);
+}
+
+.btns a:last-child {
+    margin-right: 0;
 }
 
 .btn__primary {

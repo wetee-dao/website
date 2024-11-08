@@ -2,7 +2,7 @@
   <div class="home">
     <Banner />
     <div class="container section">
-      <div class="grid grid-cols-3 grid-flow-row gap-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 grid-flow-row gap-6">
         <div class="features features--first">
           <h3 class="features__title">Confidential Cloud</h3>
           <p class="features__text">A stable platform for deploying
@@ -14,7 +14,7 @@
             contracts.</p>
         </div>
         <div class="features features--nephrite">
-          <h3 class="features__title">Decentralized Confidential AI</h3>
+          <h3 class="features__title">Confidential AI</h3>
           <p class="features__text">Provide a decentralized training and deployment solution for AI, ensuring
             confidential computing throughout the entire process of training and deployment.</p>
         </div>
@@ -211,10 +211,19 @@ const roadmaps = ref([
   }
 ])
 const slideoptions = ref({
-  rewind: true,
   gap: '1rem',
-  perPage: 3,
-  focus: roadmaps.value.length - 1,
+  perPage: 4,
+  breakpoints: {
+    1250: {
+      perPage: 3,
+    },
+    1024: {
+      perPage: 2,
+    },
+    640: {
+      perPage: 1,
+    },
+  },
 });
 </script>
 
@@ -369,7 +378,7 @@ const slideoptions = ref({
     }
 
     :deep(.splide__pagination) {
-      display: none;
+      bottom: -15px;
     }
 
     &::before {

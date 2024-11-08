@@ -44,14 +44,15 @@
 
 <style lang="scss" scoped>
 .chip {
-  width: 200px;
-  height: 200px;
-  margin: 55px;
-  border-radius: 6px;
+  font-size: 4px;
+  width: 50em;
+  height: 50em;
+  margin: 11em;
+  border-radius: 1.5em;
   display: flex;
   align-items: center;
   background-color: #000;
-  padding: 20px 30px;
+  padding: 5em 7.5em;
   // box-shadow: 0 0 30px rgba(132, 249, 79, 0.28);
   animation: chip_diffuse 2s 0s infinite;
   position: relative;
@@ -59,7 +60,7 @@
 
 @keyframes chip_diffuse {
   0% {
-    // margin-top: 50px;
+    // margin-top: 12.5em;
     box-shadow: 0 0 0px rgba(132, 249, 79, 0.28);
   }
 
@@ -74,17 +75,17 @@
 
 .chip-pins {
   width: 100%;
-  height: 50px;
+  height: 12.5em;
   position: absolute;
   left: 0;
-  top: -51px;
+  top: -12.75em;
   display: flex;
   justify-content: space-around;
 }
 
 .chip-pin {
-  width: 4px;
-  height: 50px;
+  width: 1em;
+  height: 12.5em;
   background-color: #2b352e;
   overflow: hidden;
 }
@@ -92,28 +93,28 @@
 .chip-pins .chip-pin::before {
   content: '';
   display: block;
-  height: 20px;
-  width: 4px;
+  height: 5em;
+  width: 1em;
   background: linear-gradient(to top, transparent, $primary-text);
   animation: bottom_to_top 2s 0s infinite;
 }
 
 @keyframes bottom_to_top {
   0% {
-    margin-top: 50px;
+    margin-top: 12.5em;
   }
 
   100% {
-    margin-top: -20px;
+    margin-top: -5em;
   }
 }
 
 .chip-pins-bottom {
   width: 100%;
-  height: 50px;
+  height: 12.5em;
   position: absolute;
   left: 0;
-  bottom: -51px;
+  bottom: -12.75em;
   display: flex;
   justify-content: space-around;
 }
@@ -121,27 +122,27 @@
 .chip-pins-bottom .chip-pin::before {
   content: '';
   display: block;
-  height: 20px;
-  width: 4px;
+  height: 5em;
+  width: 1em;
   background: linear-gradient(to bottom, transparent, $primary-text);
   animation: top_to_bottom 2s 0s infinite;
 }
 
 @keyframes top_to_bottom {
   0% {
-    margin-top: -20px;
+    margin-top: -5em;
   }
 
   100% {
-    margin-top: 50px;
+    margin-top: 12.5em;
   }
 }
 
 .chip-pins-left {
-  width: 50px;
+  width: 12.5em;
   height: 100%;
   position: absolute;
-  left: -51px;
+  left: -12.75em;
   bottom: 0px;
   display: flex;
   justify-content: space-around;
@@ -151,27 +152,27 @@
 .chip-pins-left .chip-pin::before {
   content: '';
   display: block;
-  height: 4px;
-  width: 20px;
+  height: 1em;
+  width: 5em;
   background: linear-gradient(to left, transparent, $primary-text);
   animation: right_to_left 2s 0s infinite;
 }
 
 @keyframes right_to_left {
   0% {
-    margin-left: 50px;
+    margin-left: 12.5em;
   }
 
   100% {
-    margin-left: -20px;
+    margin-left: -5em;
   }
 }
 
 .chip-pins-right {
-  width: 50px;
+  width: 12.5em;
   height: 100%;
   position: absolute;
-  right: -51px;
+  right: -12.75em;
   bottom: 0px;
   display: flex;
   justify-content: space-around;
@@ -181,25 +182,25 @@
 .chip-pins-right .chip-pin::before {
   content: '';
   display: block;
-  height: 4px;
-  width: 20px;
+  height: 1em;
+  width: 5em;
   background: linear-gradient(to right, transparent, $primary-text);
   animation: left_to_right 2s 0s infinite;
 }
 
 @keyframes left_to_right {
   0% {
-    margin-left: -20px;
+    margin-left: -5em;
   }
 
   100% {
-    margin-left: 50px;
+    margin-left: 12.5em;
   }
 }
 
 .chip-pins-right .chip-pin,
 .chip-pins-left .chip-pin {
-  width: 50px;
-  height: 4px;
+  width: 12.5em;
+  height: 1em;
 }
 </style>

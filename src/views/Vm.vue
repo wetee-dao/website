@@ -2,29 +2,31 @@
   <div>
     <SectionHead />
     <div class="container section flex">
-      <div class="flex-1 flex flex-col justify-center">
-        <div class="title">The world’s most secure and decentralized container deployment network</div>
-        <div class="desc">All WEB2 applications, once deployed, possess the characteristics of smart contracts.</div>
-        <div class="btns mt-10">
-          <a target="_blank" href="https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fxiaobai.asyou.me%3A30001#/explorer"
-            class="btn  btn--nephrite"><span>Build container</span>
-          </a>
-          <a target="_blank" href="https://dapp.wetee.app/" class="btn btn__primary "><span>Deploy container</span>
-          </a>
-        </div>
-      </div>
-      <div class="flex justify-center">
-        <Chip>
-          <div class="p-3">
-            <Shadow bg="#000">
-              <img src="/imgs/dc.svg" alt="" />
-            </Shadow>
+      <div class="flex flex-col items-center md:flex-row md:justify-center md:items-center">
+        <div class="flex-1">
+          <div class="title">The world’s most secure and decentralized container deployment network</div>
+          <div class="desc">All WEB2 applications, once deployed, possess the characteristics of smart contracts.</div>
+          <div class="btns mt-10">
+            <a target="_blank" href="https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fxiaobai.asyou.me%3A30001#/explorer"
+              class="btn  btn--nephrite"><span>Build container</span>
+            </a>
+            <a target="_blank" href="https://dapp.wetee.app/" class="btn btn__primary "><span>Deploy container</span>
+            </a>
           </div>
-        </Chip>
+        </div>
+        <div class="flex justify-center mt-10 md:mt-0">
+          <Chip>
+            <div class="p-3">
+              <Shadow bg="#000">
+                <img src="/imgs/dc.svg" alt="" />
+              </Shadow>
+            </div>
+          </Chip>
+        </div>
       </div>
     </div>
     <div class="container section-first">
-      <div class="grid grid-cols-3 grid-flow-row gap-6">
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 grid-flow-row gap-6">
         <div class="confidentials confidentials--first">
           <h3 class="confidentials__title">100% compatible with Docker</h3>
           <p class="confidentials__text">Can directly deploy using existing Docker images without needing to change any

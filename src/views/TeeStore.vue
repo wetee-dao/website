@@ -43,7 +43,7 @@
       <div class="app_type">
         <div @click="goType(t.value)" :class="ctype == t.value ? 'active' : ''" v-for="t in types">{{ t.name }}</div>
       </div>
-      <div class="grid grid-cols-4 gap-4 flex-1">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 grid-flow-row gap-4 flex-1">
         <div v-for="app in apps">
           <div class="app">
             <div class="app__head">

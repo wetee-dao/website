@@ -2,7 +2,8 @@
   <header class="header">
     <div class="header__content container">
       <!-- btn -->
-      <button class="header__btn" type="button" aria-label="header__nav">
+      <button :class="'header__btn  block md:hidden ' + (isActivce ? 'header__btn--active' : '')" type="button"
+        @click="toggleMenu()">
         <span></span>
         <span></span>
         <span></span>
@@ -20,7 +21,10 @@
       <!-- end tagline -->
 
       <!-- navigation -->
-      <ul class="header__nav" id="header__nav">
+      <ul :class="'header__nav ' + (isActivce ? 'header__nav--active' : '')">
+        <li :class="path == '/' ? 'active' : ''">
+          <RouterLink to="/">Home</RouterLink>
+        </li>
         <li :class="path == '/vm' ? 'active' : ''">
           <RouterLink to="/vm">TEE vm</RouterLink>
         </li>
@@ -84,8 +88,15 @@ const getPath = (paths: any) => {
   return paths[paths.length - 1].path
 }
 const path = ref(getPath(userStore.paths))
+const isActivce = ref(false)
+
+const toggleMenu = () => {
+  isActivce.value = !isActivce.value
+}
+
 userStore.$subscribe((mutation, state) => {
   path.value = getPath(state.paths)
+  isActivce.value = false
 }, { detached: true })
 
 </script>
@@ -126,11 +137,53 @@ userStore.$subscribe((mutation, state) => {
   }
 
   .header__btn {
-    position: absolute;
     width: 24px;
     height: 22px;
-    display: none;
-    left: 0;
+    margin-right: 10px;
+    position: relative;
+    top: 2px;
+
+    span {
+      position: absolute;
+      left: 0;
+      display: block;
+      width: 24px;
+      height: 2px;
+      background-color: #50fa82;
+      border-radius: 3px;
+      transition: 0.5s ease;
+    }
+
+    span:nth-child(1) {
+      top: 0;
+    }
+
+    span:nth-child(2) {
+      top: 10px;
+      width: 16px;
+    }
+
+    span:nth-child(3) {
+      top: 20px;
+      width: 8px;
+    }
+  }
+
+  .header__btn--active {
+    span:first-child {
+      transform: rotate(45deg);
+      top: 10px;
+    }
+
+    span:nth-child(2) {
+      opacity: 0;
+    }
+
+    span:last-child {
+      width: 24px;
+      transform: rotate(-45deg);
+      top: 10px;
+    }
   }
 
   .header__tagline {
@@ -171,6 +224,10 @@ userStore.$subscribe((mutation, state) => {
     margin-left: 20px;
     margin-bottom: 0;
 
+    &:first-child {
+      display: none;
+    }
+
     &.active {
       position: relative;
 
@@ -193,6 +250,8 @@ userStore.$subscribe((mutation, state) => {
     line-height: 24px;
     color: #cfcfcf !important;
     background: transparent !important;
+    width: 100%;
+    cursor: pointer;
   }
 
   .header__nav a svg {
@@ -255,6 +314,37 @@ userStore.$subscribe((mutation, state) => {
       // font-weight: 700;
       color: $primary-text;
       transition: 0.5s ease;
+    }
+  }
+
+
+  @media (max-width: 765px) {
+    .header__nav {
+      background-color: #090909;
+      position: fixed;
+      top: 80px;
+      left: 0;
+      height: 100vh;
+      padding: 25px 45px;
+      display: none;
+
+      li {
+        margin: 0;
+        width: 150px;
+
+        &:first-child {
+          display: block;
+        }
+
+
+        a {
+          padding: 10px;
+        }
+      }
+    }
+
+    .header__nav--active {
+      display: block;
     }
   }
 

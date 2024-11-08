@@ -2,42 +2,43 @@
   <footer class="footer">
     <div class="container">
       <div class="flex">
-        <div class="flex flex-col justify-center w-1/4">
+        <div class="flex flex-col justify-center w-1/3 md:w-1/4 ">
           <div class="footer__logo">
             <img src="/imgs/logo.png" alt="">
           </div>
           <p class="footer__tagline">Confidential computing, calculate trustworthy future</p>
         </div>
-
-        <div class="w-1/4 pl-5">
-          <h6 class="footer__title">Open Gov</h6>
-          <div class="footer__nav">
-            <a href="/#economics">Tokenomics</a>
-            <a href="/#roadmap">Roadmap</a>
+        <div class="flex-1 grid grid-cols-2 md:grid-cols-4 grid-flow-row gap-6">
+          <div class="">
+            <h6 class="footer__title">Open Gov</h6>
+            <div class="footer__nav">
+              <a href="/#economics">Tokenomics</a>
+              <a href="/#roadmap">Roadmap</a>
+            </div>
           </div>
-        </div>
 
-        <div class="w-1/4 pl-5">
-          <h6 class="footer__title">Docs</h6>
-          <div class="footer__nav">
-            <!-- <a href="/#economics">Tokenomics</a>
+          <div class="">
+            <h6 class="footer__title">Docs</h6>
+            <div class="footer__nav">
+              <!-- <a href="/#economics">Tokenomics</a>
             <a href="/#roadmap">Roadmap</a> -->
+            </div>
           </div>
-        </div>
 
-        <div class="w-1/4 pl-5">
-          <h6 class="footer__title">Use Cases</h6>
-          <div class="footer__nav">
-            <!-- a href="/docs/white_paper.html">White paper</a -->
-            <a href="http://explorer.tc.asyou.me/explorer">Explore</a>
-            <!-- <a href="/im.html">DTIM</a> -->
+          <div class="">
+            <h6 class="footer__title">Use Cases</h6>
+            <div class="footer__nav">
+              <!-- a href="/docs/white_paper.html">White paper</a -->
+              <a href="http://explorer.tc.asyou.me/explorer">Explore</a>
+              <!-- <a href="/im.html">DTIM</a> -->
+            </div>
           </div>
-        </div>
 
-        <div class="w-1/4">
-          <h6 class="footer__title">Support</h6>
-          <div class="footer__nav">
-            <a href="/contacts">Contacts</a>
+          <div class="">
+            <h6 class="footer__title">Support</h6>
+            <div class="footer__nav">
+              <a href="/contacts">Contacts</a>
+            </div>
           </div>
         </div>
       </div>
