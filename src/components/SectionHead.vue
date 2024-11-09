@@ -72,7 +72,7 @@ const paths = ref(userStore.paths)
     .breadcrumb__item {
       font-size: 14px;
       line-height: 22px;
-      color: #dedede;
+      color: #e6e6e6;
       transition: color 0.5s ease;
       position: relative;
       margin-right: 32px;
@@ -85,6 +85,7 @@ const paths = ref(userStore.paths)
         bottom: 0;
         width: 32px;
         background: url("/imgs/breadcrumb.svg") no-repeat center/16px auto;
+        opacity: 0.7;
       }
 
       &:last-child::before {

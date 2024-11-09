@@ -126,33 +126,33 @@ const options = ref({
 
 const tokens = ref([
   {
-    name: 'Team and Early Contributors',
-    amount: 9,
+    name: 'Staking-DOT',
+    amount: 35,
     color: '#e8c189',
   },
   {
-    name: 'Advisor & Accelerator',
-    amount: 6,
+    name: 'Staking-vETH',
+    amount: 15,
     color: '#8c7ad1',
   },
   {
-    name: 'Fundraising',
+    name: 'Staking-stETH',
     amount: 15,
     color: '#f3efbd',
   },
   {
-    name: 'Community',
+    name: 'TEE APP Mint',
     amount: 10,
     color: '#5d5d5d',
   },
   {
-    name: 'Foundation Operation',
+    name: 'TEE Mint',
     amount: 15,
     color: '#6378d6',
   },
   {
-    name: 'Treasury',
-    amount: 45,
+    name: 'Chain Node Mint',
+    amount: 10,
     color: '#e076b6',
   },
 ])

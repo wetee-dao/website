@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 
 <head>
   <meta charset="UTF-8">
@@ -16,7 +16,6 @@
 
     @font-face {
       font-family: 'iconfont';
-      /* Project id 2738227 */
       src: url('//at.alicdn.com/t/c/font_2738227_pill2ti35bl.woff2?t=1730880415884') format('woff2'),
         url('//at.alicdn.com/t/c/font_2738227_pill2ti35bl.woff?t=1730880415884') format('woff'),
         url('//at.alicdn.com/t/c/font_2738227_pill2ti35bl.ttf?t=1730880415884') format('truetype');
@@ -46,7 +45,7 @@
       background-size: 20px 20px;
       background-position: 50%;
       background-color: #090909;
-      color: #fff;
+      color: #ffffff;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", "Ubuntu";
     }
 
@@ -80,6 +79,7 @@
       left: calc(50vw - 150Px);
       text-align: center;
       display: flex;
+      align-items: center;
     }
 
     .loader-logo {
@@ -95,9 +95,10 @@
       margin-left: 10Px;
       font-size: 28Px;
       font-weight: bold;
-      line-height: 56Px;
-      color: rgba(var(--g-primary-text-rgb), 1);
+      line-height: 1;
+      color: var(--g-primary-text);
       font-family: "letter-font", Serif;
+      width: 180px;
     }
 
     .loader-logo:before,

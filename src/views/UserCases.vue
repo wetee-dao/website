@@ -81,6 +81,7 @@ import Container from '@/components/svg/Container.vue';
 
 .desc {
   font-size: 20px;
+  color: #e6e6e6;
 }
 
 .chip-text {
@@ -145,7 +146,8 @@ import Container from '@/components/svg/Container.vue';
     z-index: 3;
     font-size: 16px;
     line-height: 26px;
-    color: #dedede;
+    color: #e6e6e6;
+    ;
     margin-bottom: 0;
     word-break: break-all;
   }

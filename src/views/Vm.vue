@@ -38,9 +38,9 @@
           <p class="confidentials__text">It completely shields the complexity of privacy-preserving computation.</p>
         </div>
         <div class="confidentials confidentials--nephrite">
-          <h3 class="confidentials__title">Supports all main CPUs/GPUs</h3>
-          <p class="confidentials__text">Supports SGX/TDX/SEV/CXX confidential computing chips and computing
-            technologies.
+          <h3 class="confidentials__title">Affordable pricing</h3>
+          <p class="confidentials__text">users' idle computing power and edge computing power are lower and completely
+            transparent.
           </p>
         </div>
         <div class="confidentials confidentials--yellow">
@@ -127,6 +127,8 @@ import Container from '@/components/svg/Container.vue';
 
 .desc {
   font-size: 20px;
+  color: #e6e6e6;
+  ;
 }
 
 .confidentials {
@@ -168,7 +170,8 @@ import Container from '@/components/svg/Container.vue';
     z-index: 3;
     font-size: 16px;
     line-height: 26px;
-    color: #dedede;
+    color: #e6e6e6;
+    ;
     margin-bottom: 0;
     word-break: break-all;
   }
@@ -211,7 +214,7 @@ import Container from '@/components/svg/Container.vue';
     }
 
     .desc {
-      color: #dedede;
+      color: #e6e6e6;
       font-size: 20px;
       line-height: 26px;
       margin-bottom: 30px;
