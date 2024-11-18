@@ -9,7 +9,7 @@
             confidential applications, designed specifically for confidential computing.</p>
         </div>
         <div class="features features--yellow">
-          <h3 class="features__title">TEE container vm</h3>
+          <h3 class="features__title">WEB2 transition to WEB3</h3>
           <p class="features__text">All WEB2 applications, once deployed, possess the characteristics of smart
             contracts.</p>
         </div>
@@ -20,13 +20,14 @@
         </div>
       </div>
     </div>
+
     <div id="economics" class="section section--bt">
       <div class="container">
         <div class="flex flex-col md:flex-row">
           <!-- section title -->
           <div class="md:w-2/3 flex flex-col justify-center">
             <div class="token-title">
-              <strong>经济模型</strong>
+              <strong>100% fairlanch</strong>
               <h2>Token &amp; economics</h2>
               <p>
                 In the design of the economic model, the following principles are fundamentally adhered to:<br>
@@ -235,7 +236,7 @@ const slideoptions = ref({
 .features {
   background-color: #2121215c;
   padding: 30px 20px;
-  border-radius: 20px;
+  // border-radius: 20px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -271,7 +272,7 @@ const slideoptions = ref({
     z-index: 3;
     font-size: 16px;
     line-height: 26px;
-    color: #dedede;
+    color: $secondary-text;
     margin-bottom: 0;
     word-break: break-all;
   }
@@ -307,7 +308,7 @@ const slideoptions = ref({
   p {
     font-size: 16px;
     line-height: 26px;
-    color: #dedede;
+    color: $secondary-text;
     margin-bottom: 20px;
     text-align: left;
   }
@@ -351,14 +352,17 @@ const slideoptions = ref({
 
 .roadmaps {
   border: none;
-  background-color: rgb(15, 15, 15);
+  background-color: rgb(1, 11, 14);
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 5%, transparent 0),
+    radial-gradient(rgba(255, 255, 255, 0.05) 5%, transparent 0);
+  background-size: 20px 20px;
 
 
   .slides {
     position: relative;
-    background: #848c870a;
+    background: rgba(0, 0, 0, 0.35);
     padding: 30px;
-    border-radius: 20px;
+    // border-radius: 20px;
 
     .splide__arrows {
       position: absolute;
@@ -369,7 +373,7 @@ const slideoptions = ref({
 
     .splide__arrow {
       padding: 10px;
-      border-radius: 50%;
+      border-radius: 0;
       background-color: #5252525a;
       position: relative;
       transform: none;

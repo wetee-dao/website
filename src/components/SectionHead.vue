@@ -23,9 +23,9 @@
     </div>
 
     <!-- bg animation -->
-    <div class="section__canvas">
+    <!-- <div class="section__canvas">
       <AppCanvas />
-    </div>
+    </div> -->
     <!-- end bg animation -->
   </div>
   <!-- end section head -->
@@ -72,7 +72,7 @@ const paths = ref(userStore.paths)
     .breadcrumb__item {
       font-size: 14px;
       line-height: 22px;
-      color: #e6e6e6;
+      color: #fff;
       transition: color 0.5s ease;
       position: relative;
       margin-right: 32px;
@@ -98,8 +98,8 @@ const paths = ref(userStore.paths)
     margin-top: 5px;
 
     h1 {
-      font-size: 40px;
-      line-height: 54px;
+      font-size: 30px;
+      line-height: 40px;
       font-weight: bold;
     }
   }

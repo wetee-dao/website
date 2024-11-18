@@ -48,7 +48,6 @@
   width: 50em;
   height: 50em;
   margin: 11em;
-  border-radius: 1.5em;
   display: flex;
   align-items: center;
   background-color: #000;

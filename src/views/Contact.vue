@@ -69,8 +69,8 @@ import Footer from '@/components/Footer.vue';
     align-items: center;
     width: 40px;
     height: 40px;
-    border-radius: 14px;
-    background-color: rgba(69, 69, 69, 0.12);
+    // border-radius: 14px;
+    background-color: rgba(69, 69, 69, 0.3);
     position: relative;
     overflow: hidden;
     transition: 0.5s ease;
@@ -84,8 +84,8 @@ import Footer from '@/components/Footer.vue';
 }
 
 .contact__text {
-    padding-left: 20px;
-    color: #dedede;
+    padding-left: 10px;
+    color: $secondary-text;
     font-size: 18px;
     font-weight: 600;
     transition: color 0.5s ease;

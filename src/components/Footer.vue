@@ -140,7 +140,7 @@
       svg {
         width: 100%;
         height: auto;
-        fill: #dedede;
+        fill: $secondary-text;
         transition: fill 0.5s ease;
       }
     }
@@ -149,7 +149,7 @@
   .footer__copyright {
     display: block;
     font-size: 20px;
-    color: #dedede;
+    color: $secondary-text;
     font-weight: 400;
     font-family: "letter-font";
   }

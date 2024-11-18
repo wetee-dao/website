@@ -2,8 +2,8 @@
   <div>
     <SectionHead />
     <div class="container section flex">
-      <div class="flex flex-col items-center md:flex-row md:justify-center md:items-center">
-        <div class="flex-1 flex flex-col justify-center">
+      <div class="flex flex-col items-center md:flex-row md:justify-center md:items-center w-full">
+        <div class="flex-1 flex flex-col justify-center md:pr-20">
           <div class="title">Confidential computing, calculate trustworthy future</div>
           <div class="desc">Any web2 application can be directly deployed as a confidential container contract,
             and can interact with ink! and EVM smart contracts, bringing security and trust to households and
@@ -11,7 +11,7 @@
           </div>
         </div>
         <div class="flex justify-center  mt-10 md:mt-0">
-          <Chip>
+          <Chip class="chip">
             <div class="chip-text">Confidential computing, calculate trustworthy future</div>
           </Chip>
         </div>
@@ -81,13 +81,17 @@ import Container from '@/components/svg/Container.vue';
 
 .desc {
   font-size: 20px;
-  color: #e6e6e6;
+  color: $secondary-text;
+}
+
+.chip {
+  font-size: 3px;
 }
 
 .chip-text {
   color: #abdeba;
   text-shadow: 0 2px 2px rgba(196, 196, 196, 0.87);
-  font-size: 21px;
+  font-size: 14px;
   text-align: center;
   font-family: "letter-font";
   font-weight: bold;
@@ -96,7 +100,7 @@ import Container from '@/components/svg/Container.vue';
 .case {
   background-color: #2121215c;
   padding: 30px 20px;
-  border-radius: 20px;
+  // border-radius: 20px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -146,7 +150,7 @@ import Container from '@/components/svg/Container.vue';
     z-index: 3;
     font-size: 16px;
     line-height: 26px;
-    color: #e6e6e6;
+    color: $secondary-text;
     ;
     margin-bottom: 0;
     word-break: break-all;
@@ -190,7 +194,7 @@ import Container from '@/components/svg/Container.vue';
     }
 
     .desc {
-      color: #dedede;
+      color: $secondary-text;
       font-size: 20px;
       line-height: 26px;
       margin-bottom: 30px;

@@ -74,7 +74,7 @@
               </li>
               <li>App Code <span class="required"><a target="_blank" :href="app.github">Link</a></span></li>
               <li>Home Page<span class="required"><a target="_blank" :href="app.home">Link</a></span></li>
-              <li>Deploy Status <span class="process">Come soon</span></li>
+              <li>One click Deploy<span class="process">Come soon</span></li>
             </ul>
 
             <a href="#" class="app__more">
@@ -267,7 +267,7 @@ const renderTemps = (t: string) => {
       align-items: center;
       width: 100%;
       font-size: 16px;
-      color: #dedede;
+      color: $secondary-text;
       height: 20px;
       line-height: 20px;
     }
@@ -305,7 +305,7 @@ const renderTemps = (t: string) => {
       align-items: center;
       font-size: 15px;
       line-height: 24px;
-      color: #dedede;
+      color: $secondary-text;
       margin-bottom: 4px;
       width: 100%;
 

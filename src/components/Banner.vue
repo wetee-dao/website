@@ -1,8 +1,10 @@
 <template>
   <div class="banner__content container flex flex-col items-center md:flex-row md:justify-center md:items-center">
-    <div class="flex-1 flex flex-col items-center md:items-start">
+    <div class="flex-1 flex flex-col items-center md:items-start md:pr-20">
       <span class="banner__tagline ">Based on substrate</span>
-      <h2 class="banner__title text-center md:text-left">Secure and easy Computational power</h2>
+      <h2 class="banner__title text-center md:text-left">Make confidential computing decentralization and easy
+        and make WEB2 programs contract-like
+      </h2>
       <p class="banner__text text-center md:text-left">
         Utilizing decentralized trusted computing power in a cloud-like manner, providing hardware-level
         security
@@ -21,9 +23,9 @@
       <div class="chip-text">Confidential computing, calculate trustworthy future</div>
     </Chip>
 
-    <div class="banner__canvas">
+    <!-- <div class="banner__canvas">
       <AppCanvas />
-    </div>
+    </div> -->
     <!-- end bg animation -->
   </div>
 </template>
@@ -36,17 +38,12 @@ import Chip from './Chip.vue';
 
 <style lang="scss" scoped>
 .banner__content {
-  // display: flex;
-  // flex-direction: column;
-  // justify-content: center;
-  // align-items: start;
-  height: calc(100vh - 190px);
   min-height: 400px;
   border-radius: 20px;
-  padding: 60px 40px;
+  padding: 20px 0px;
   position: relative;
   overflow: hidden;
-  margin-top: 55px;
+  margin-top: 70px;
 }
 
 .banner__content::before {
@@ -56,7 +53,7 @@ import Chip from './Chip.vue';
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #13131390;
+  // background-color: #13131390;
   pointer-events: none;
   z-index: 3;
 }
@@ -70,10 +67,11 @@ import Chip from './Chip.vue';
   text-align: center;
   position: relative;
   z-index: 3;
-  background-color: rgb(84 84 84 / 30%);
-  padding: 8px 16px;
-  border-radius: 10px;
+  background-color: rgba(35, 41, 33, 0.7);
+  padding: 8px 12px;
+  border-radius: 6px;
   display: inline-block;
+  // border: 3px solid var(--g-primary-text);
 }
 
 .banner__title {
@@ -90,7 +88,8 @@ import Chip from './Chip.vue';
 .banner__text {
   font-size: 20px;
   line-height: 26px;
-  color: #dedede;
+  // color: $secondary-text;
+  color: $secondary-text;
   font-weight: 400;
   margin-bottom: 0;
   position: relative;

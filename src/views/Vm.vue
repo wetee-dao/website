@@ -2,9 +2,9 @@
   <div>
     <SectionHead />
     <div class="container section flex">
-      <div class="flex flex-col items-center md:flex-row md:justify-center md:items-center">
-        <div class="flex-1">
-          <div class="title">The world’s most secure and decentralized container deployment network</div>
+      <div class="flex flex-col items-center md:flex-row md:justify-center md:items-center w-full">
+        <div class="flex-1 md:pr-20">
+          <div class="title">Evolve WEB2 programs to contract-level</div>
           <div class="desc">All WEB2 applications, once deployed, possess the characteristics of smart contracts.</div>
           <div class="btns mt-10">
             <a target="_blank" href="https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fxiaobai.asyou.me%3A30001#/explorer"
@@ -15,7 +15,7 @@
           </div>
         </div>
         <div class="flex justify-center mt-10 md:mt-0">
-          <Chip>
+          <Chip class="chip">
             <div class="p-3">
               <Shadow bg="#000">
                 <img src="/imgs/dc.svg" alt="" />
@@ -127,14 +127,17 @@ import Container from '@/components/svg/Container.vue';
 
 .desc {
   font-size: 20px;
-  color: #e6e6e6;
-  ;
+  color: $secondary-text;
+}
+
+.chip {
+  font-size: 3px;
 }
 
 .confidentials {
   background-color: #2121215c;
   padding: 30px 20px;
-  border-radius: 20px;
+  // border-radius: 20px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -170,7 +173,7 @@ import Container from '@/components/svg/Container.vue';
     z-index: 3;
     font-size: 16px;
     line-height: 26px;
-    color: #e6e6e6;
+    color: $secondary-text;
     ;
     margin-bottom: 0;
     word-break: break-all;
@@ -194,7 +197,7 @@ import Container from '@/components/svg/Container.vue';
     position: relative;
     background: #151616;
     padding: 30px;
-    border-radius: 20px;
+    // border-radius: 20px;
   }
 
   .title {
@@ -214,7 +217,7 @@ import Container from '@/components/svg/Container.vue';
     }
 
     .desc {
-      color: #e6e6e6;
+      color: $secondary-text;
       font-size: 20px;
       line-height: 26px;
       margin-bottom: 30px;

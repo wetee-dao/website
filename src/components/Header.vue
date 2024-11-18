@@ -12,7 +12,7 @@
 
       <!-- logo -->
       <RouterLink to="/" class="header__logo">
-        <img src="/imgs/logo.png" alt="">
+        <img src="/imgs/logo.svg" alt="">
       </RouterLink>
       <!-- end logo -->
 
@@ -47,7 +47,7 @@
           <a class="trans" tkey="nav_white_paper" target="_blank" href="https://wetee.gitbook.io/docment">Docs</a>
         </li>
         <li :class="path == '/contacts' ? 'active' : ''">
-          <RouterLink class="trans" tkey="nav_contact" to="/contacts">Contact</RouterLink>
+          <RouterLink class="trans" tkey="nav_contact" to="/contacts">Contacts</RouterLink>
         </li>
       </ul>
       <!-- end navigation -->
@@ -108,10 +108,10 @@ userStore.$subscribe((mutation, state) => {
   top: 0;
   left: 0;
   z-index: 99;
-  border-bottom: 2px solid rgba(236, 236, 236, 0.05);
+  border-bottom: 1px solid rgba(236, 236, 236, 0.08);
   background-color: transparent;
   transition: background - color 0.5s ease;
-  background-image: radial - gradient(transparent 1px, #090909 1px);
+  background-image: radial - gradient(transparent 1px, #040406 1px);
   background-size: 4px 4px;
   backdrop-filter: saturate(50%) blur(4px);
 }
@@ -126,9 +126,9 @@ userStore.$subscribe((mutation, state) => {
 
   .header__logo {
     width: auto;
-    height: 22px;
+    height: 23px;
     align-items: center;
-    margin-left: 5px;
+    margin-bottom: 5px;
 
     img {
       height: 100%;
@@ -221,7 +221,7 @@ userStore.$subscribe((mutation, state) => {
 
   .header__nav li {
     display: block;
-    margin-left: 20px;
+    margin-left: 30px;
     margin-bottom: 0;
 
     &:first-child {
@@ -247,8 +247,9 @@ userStore.$subscribe((mutation, state) => {
   .header__nav a {
     display: inline-block;
     font-size: 15px;
+    font-weight: bold;
     line-height: 24px;
-    color: #cfcfcf !important;
+    color: #fff !important;
     background: transparent !important;
     width: 100%;
     cursor: pointer;
@@ -293,7 +294,7 @@ userStore.$subscribe((mutation, state) => {
     position: relative;
     height: 42px;
     background-color: transparent;
-    border-radius: 10px;
+    filter: grayscale(60%);
     overflow: hidden;
     margin-right: 0px;
     padding: 0 10px;
