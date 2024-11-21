@@ -29,6 +29,11 @@ const router = createRouter({
       path: '/contacts',
       name: 'Contacts',
       component: () => import('../views/Contact.vue')
+    },
+    {
+      path: '/tokens',
+      name: 'Token fair launch',
+      component: () => import('../views/Token.vue')
     }
   ]
 })

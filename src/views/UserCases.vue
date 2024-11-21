@@ -4,8 +4,8 @@
     <div class="container section flex">
       <div class="flex flex-col items-center md:flex-row md:justify-center md:items-center w-full">
         <div class="flex-1 flex flex-col justify-center md:pr-20">
-          <div class="title">Confidential computing, calculate trustworthy future</div>
-          <div class="desc">Any web2 application can be directly deployed as a confidential container contract,
+          <div class="top__title">Confidential computing, calculate trustworthy future</div>
+          <div class="top__desc">Any web2 application can be directly deployed as a confidential container contract,
             and can interact with ink! and EVM smart contracts, bringing security and trust to households and
             factories everywhere.
           </div>
@@ -72,18 +72,6 @@ import Container from '@/components/svg/Container.vue';
 </script>
 
 <style lang="scss" scoped>
-.title {
-  font-size: 55px;
-  line-height: 1.1;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
-.desc {
-  font-size: 20px;
-  color: $secondary-text;
-}
-
 .chip {
   font-size: 3px;
 }

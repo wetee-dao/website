@@ -4,11 +4,11 @@
     <div class="container section flex">
       <div class="flex flex-col items-center md:flex-row md:justify-center md:items-center w-full">
         <div class="flex-1 md:pr-20">
-          <div class="title">Evolve WEB2 programs to contract-level</div>
-          <div class="desc">All WEB2 applications, once deployed, possess the characteristics of smart contracts.</div>
+          <div class="top__title">Evolve WEB2 programs to contract-level</div>
+          <div class="top__text">All WEB2 applications, once deployed, possess the characteristics of smart contracts.
+          </div>
           <div class="btns mt-10">
-            <a target="_blank" href="https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fxiaobai.asyou.me%3A30001#/explorer"
-              class="btn  btn--nephrite"><span>Build container</span>
+            <a target="_blank" href="#" class="btn  btn--nephrite"><span>Build container</span>
             </a>
             <a target="_blank" href="https://dapp.wetee.app/" class="btn btn__primary "><span>Deploy container</span>
             </a>
@@ -67,7 +67,7 @@
       <div class="container  ">
         <div class="box flex">
           <div class=" md:w-2/3 flex flex-col justify-center">
-            <div class="title">Confidential container feature</div>
+            <div class="title">Confidential container contract-like feature</div>
             <div class="feature">
               <div class="name">Non-tamperable</div>
               <div class="desc">Confidential containers are built based on blockchain technology. Once uploaded to the
@@ -118,18 +118,6 @@ import Container from '@/components/svg/Container.vue';
 </script>
 
 <style lang="scss" scoped>
-.title {
-  font-size: 45px;
-  line-height: 1.1;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
-.desc {
-  font-size: 20px;
-  color: $secondary-text;
-}
-
 .chip {
   font-size: 3px;
 }

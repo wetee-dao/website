@@ -15,7 +15,7 @@
         <!-- end breadcrumb -->
 
         <!-- section title -->
-        <div class="section__title section__title--left section__title--page" style="text-indent: -3px;">
+        <div class="section__title section__title--left section__title--page" style="text-indent: -1px;">
           <h1>{{ paths[paths.length - 1].name }}</h1>
         </div>
         <!-- end section title -->
@@ -72,7 +72,7 @@ const paths = ref(userStore.paths)
     .breadcrumb__item {
       font-size: 14px;
       line-height: 22px;
-      color: #fff;
+      color: #d2d2d2;
       transition: color 0.5s ease;
       position: relative;
       margin-right: 32px;

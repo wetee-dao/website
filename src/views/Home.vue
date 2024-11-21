@@ -5,7 +5,7 @@
       <div class="grid grid-cols-1 md:grid-cols-3 grid-flow-row gap-6">
         <div class="features features--first">
           <h3 class="features__title">Confidential Cloud</h3>
-          <p class="features__text">A stable platform for deploying
+          <p class="features__text">A decentralized platform for deploying
             confidential applications, designed specifically for confidential computing.</p>
         </div>
         <div class="features features--yellow">
@@ -58,7 +58,7 @@
         </div>
       </div>
     </div>
-    <div id="roadmap" class="roadmaps section section--bt">
+    <div id="roadmap" class="roadmaps section section--bt tbg">
       <div class="container">
         <div class="section__title section__title--carousel">
           <h2 id="hash1366708796">Roadmap</h2>
@@ -345,18 +345,14 @@ const slideoptions = ref({
 }
 
 .section__chart {
-  // padding-top: 20px;
   width: 100%;
   min-height: 500px;
+  filter: grayscale(30%);
 }
 
 .roadmaps {
   border: none;
-  background-color: rgb(1, 11, 14);
-  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 5%, transparent 0),
-    radial-gradient(rgba(255, 255, 255, 0.05) 5%, transparent 0);
-  background-size: 20px 20px;
-
+  background-color: #0f0f0f;
 
   .slides {
     position: relative;

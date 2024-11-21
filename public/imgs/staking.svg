@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="90px" height="69px" viewBox="0 0 90 69" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>staking</title>
+    <defs>
+        <linearGradient x1="50%" y1="100%" x2="50%" y2="0%" id="linearGradient-1">
+            <stop stop-color="#5A25F0" offset="0%"></stop>
+            <stop stop-color="#5A25F0" stop-opacity="0" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="100%" x2="50%" y2="0%" id="linearGradient-2">
+            <stop stop-color="#50FA82" offset="0%"></stop>
+            <stop stop-color="#50FA82" stop-opacity="0" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="71.94%" x2="50%" y2="-36.8284229%" id="linearGradient-3">
+            <stop stop-color="#5A25F0" offset="0%"></stop>
+            <stop stop-color="#5A25F0" stop-opacity="0" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="71.94%" x2="50%" y2="-36.8284229%" id="linearGradient-4">
+            <stop stop-color="#50FA82" offset="0%"></stop>
+            <stop stop-color="#50FA82" stop-opacity="0" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="71.94%" x2="50%" y2="-36.8282857%" id="linearGradient-5">
+            <stop stop-color="#5A25F0" offset="0%"></stop>
+            <stop stop-color="#5A25F0" stop-opacity="0" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="71.94%" x2="50%" y2="-36.8282857%" id="linearGradient-6">
+            <stop stop-color="#50FA82" offset="0%"></stop>
+            <stop stop-color="#50FA82" stop-opacity="0" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="100%" x2="50%" y2="0%" id="linearGradient-7">
+            <stop stop-color="#5A25F0" offset="0%"></stop>
+            <stop stop-color="#5A25F0" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="100%" x2="50%" y2="0%" id="linearGradient-8">
+            <stop stop-color="#50FA82" offset="0%"></stop>
+            <stop stop-color="#50FA82" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="staking">
+            <ellipse id="椭圆形" fill="url(#linearGradient-2)" fill-rule="nonzero" opacity="0.1" cx="45" cy="54" rx="45" ry="15"></ellipse>
+            <path d="M77,23.5 L77,35 L76.9703,35 C76.99,35.1658 77,35.3325 77,35.5 C77,41.8513 62.6731,47 45,47 C27.3269,47 13,41.8513 13,35.5 C13,35.3325 13.01,35.1658 13.0297,35 L13,35 L13,23.5 L13,22 L13.2697,22 C15.315,16.3575 28.7415,12 45,12 C61.2585,12 74.685,16.3575 76.7303,22 L77,22 L77,23.5 Z" id="路径" fill="url(#linearGradient-4)" opacity="0.3"></path>
+            <path d="M77,35.5 L77,47 L76.9703,47 C76.99,47.1658 77,47.3325 77,47.5 C77,53.8513 62.6731,59 45,59 C27.3269,59 13,53.8513 13,47.5 C13,47.3325 13.01,47.1658 13.0297,47 L13,47 L13,35.5 L13,34 L13.2697,34 C15.315,28.3575 28.7415,24 45,24 C61.2585,24 74.685,28.3575 76.7303,34 L77,34 L77,35.5 Z" id="路径" fill="url(#linearGradient-6)" opacity="0.2"></path>
+            <path d="M77,11.5 L77,23 L76.9703,23 C76.99,23.1658 77,23.3325 77,23.5 C77,29.8513 62.6731,35 45,35 C27.3269,35 13,29.8513 13,23.5 C13,23.3325 13.01,23.1658 13.0297,23 L13,23 L13,11.5 L13,10 L13.2697,10 C15.315,4.35747 28.7415,0 45,0 C61.2585,0 74.685,4.35747 76.7303,10 L77,10 L77,11.5 Z" id="路径" fill="url(#linearGradient-6)" opacity="0.4"></path>
+            <ellipse id="椭圆形" fill="url(#linearGradient-8)" fill-rule="nonzero" opacity="0.4" cx="45" cy="11.5" rx="32" ry="11.5"></ellipse>
+        </g>
+    </g>
+</svg>

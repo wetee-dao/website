@@ -31,6 +31,9 @@
         <li :class="path == '/use-cases' ? 'active' : ''">
           <RouterLink to="/use-cases">Use Cases</RouterLink>
         </li>
+        <li :class="path == '/tokens' ? 'active' : ''">
+          <RouterLink to="/tokens">Tokens</RouterLink>
+        </li>
         <li :class="path == '/tee-store' ? 'active' : ''">
           <RouterLink to="/tee-store">TEE Store</RouterLink>
         </li>
@@ -233,7 +236,6 @@ userStore.$subscribe((mutation, state) => {
 
       &:after {
         content: ' ';
-        border-radius: 6px;
         width: 130%;
         height: 120%;
         background-color: rgba($secondary-text-rgb, 0.05);
@@ -248,7 +250,7 @@ userStore.$subscribe((mutation, state) => {
     display: inline-block;
     font-size: 15px;
     font-weight: bold;
-    line-height: 24px;
+    line-height: 16px;
     color: #fff !important;
     background: transparent !important;
     width: 100%;
