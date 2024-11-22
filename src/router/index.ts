@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
-import { useBreadcrumbStore } from '@/stores/global'
+import { useGlobalStore } from '@/stores/global'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -39,7 +39,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const userStore = useBreadcrumbStore()
+  const userStore = useGlobalStore()
   userStore.setPaths([
     { path: to.path, name: to.name }
   ])

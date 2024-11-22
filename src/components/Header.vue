@@ -34,17 +34,11 @@
         <li :class="path == '/tokens' ? 'active' : ''">
           <RouterLink to="/tokens">Tokens</RouterLink>
         </li>
-        <li :class="path == '/tee-store' ? 'active' : ''">
+        <!-- <li :class="path == '/tee-store' ? 'active' : ''">
           <RouterLink to="/tee-store">TEE Store</RouterLink>
-        </li>
-        <!-- <li class="dropdown">
-          <RouterLink to="/tee-store">Developers</RouterLink>
-        </li>
-        <li class="dropdown">
-          <RouterLink to="/tee-store">Token</RouterLink>
         </li> -->
         <!-- <li class="dropdown">
-          <a href="/tee-store">TEE Store</a>
+          <RouterLink to="/tee-store">Developers</RouterLink>
         </li> -->
         <li class="dropdown header__dropdown">
           <a class="trans" tkey="nav_white_paper" target="_blank" href="https://wetee.gitbook.io/docment">Docs</a>
@@ -66,15 +60,16 @@
           </path>
         </svg>
       </a>
-
       <!-- wallet -->
+      <div class="header__cta" @click="login" v-if="!userInfo">
+        <span class="trans" tkey="nav_connect">LOGIN</span>
+      </div>
+      <Identicon class="uicon" v-if="userInfo" :hash="ss58toHex(userInfo.addr)" :padding="0.2"
+        :foreground="[80, 250, 130, 255]" :background="[80, 255, 130, 0]" :size="16" />
+      &nbsp;&nbsp;&nbsp;
+      <!-- dapp -->
       <a target="_blank" href="https://dapp.wetee.app/" class="header__cta" title="Decentralization trust clooud">
-        <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="12882"
-          width="256" height="256">
-          <path
-            d="M836.7616 217.4976l-239.9744-142.9504a165.5296 165.5296 0 0 0-169.5744 0L187.1872 217.6C134.912 248.6272 102.4 306.688 102.4 368.9984v285.9008c0 62.3104 32.512 120.32 84.7872 151.552l239.9744 142.8992a165.5296 165.5296 0 0 0 169.6256 0l240.0256-142.8992c52.2752-31.232 84.7872-89.2416 84.7872-151.552V369.0496c0-62.3104-32.512-120.3712-84.8384-151.552zM723.456 440.8832l-165.2736 94.72-3.4304 214.4256a43.0592 43.0592 0 0 1-42.3936 43.008h-0.7168a43.1616 43.1616 0 0 1-41.6768-44.4416l3.3792-208.7424L300.544 440.832a44.4928 44.4928 0 0 1-16.4352-59.4944 41.728 41.728 0 0 1 57.6512-16.9984L512 461.9776l170.24-97.5872c20.48-11.7248 46.2848-4.096 57.6512 16.9984a44.544 44.544 0 0 1-16.4864 59.4944z"
-            p-id="12883"></path>
-        </svg>&nbsp;
+        <Container />&nbsp;
         <span class="trans" tkey="nav_connect">DAPP</span>
       </a>
     </div>
@@ -83,22 +78,34 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useBreadcrumbStore } from '@/stores/global';
+import { ss58toHex } from "@/utils/chain";
+import { useGlobalStore } from '@/stores/global';
+import useGlobelProperties from '@/plugins/globel';
+import Container from '@/components/svg/Container.vue';
+import Identicon from "./identicon.vue";
 
-const userStore = useBreadcrumbStore()
+const global = useGlobelProperties();
+const userStore = useGlobalStore()
 const getPath = (paths: any) => {
   if (paths.length === 0) return '/'
   return paths[paths.length - 1].path
 }
 const path = ref(getPath(userStore.paths))
+const userInfo = ref(userStore.userInfo)
 const isActivce = ref(false)
 
 const toggleMenu = () => {
   isActivce.value = !isActivce.value
 }
 
+const login = () => {
+  global.$Login()
+}
+
 userStore.$subscribe((mutation, state) => {
+  console.log(state.userInfo)
   path.value = getPath(state.paths)
+  userInfo.value = state.userInfo
   isActivce.value = false
 }, { detached: true })
 
@@ -238,7 +245,7 @@ userStore.$subscribe((mutation, state) => {
         content: ' ';
         width: 130%;
         height: 120%;
-        background-color: rgba($secondary-text-rgb, 0.05);
+        background-color: rgba($secondary-text-rgb, 0.1);
         position: absolute;
         bottom: -10%;
         left: -15%;
@@ -300,7 +307,8 @@ userStore.$subscribe((mutation, state) => {
     overflow: hidden;
     margin-right: 0px;
     padding: 0 10px;
-    border: 3px solid $primary-text;
+    border: 3Px solid $primary-text;
+    cursor: pointer;
 
     svg {
       width: 21px;
@@ -313,13 +321,18 @@ userStore.$subscribe((mutation, state) => {
       letter-spacing: 0.4px;
       text-transform: uppercase;
       font-size: 16px;
-      // font-family: "letter-font";
-      // font-weight: 700;
       color: $primary-text;
       transition: 0.5s ease;
     }
   }
 
+  .uicon {
+    width: 40px;
+    height: 40px;
+    border: 3Px solid $primary-text;
+    filter: grayscale(60%);
+    cursor: pointer;
+  }
 
   @media (max-width: 765px) {
     .header__nav {

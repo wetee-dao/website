@@ -33,9 +33,9 @@
 
 <script setup lang="ts">
 import AppCanvas from '@/components/AppsBg.vue'
-import { useBreadcrumbStore } from '@/stores/global';
+import { useGlobalStore } from '@/stores/global';
 import { ref } from 'vue';
-const userStore = useBreadcrumbStore()
+const userStore = useGlobalStore()
 const paths = ref(userStore.paths)
 </script>
 

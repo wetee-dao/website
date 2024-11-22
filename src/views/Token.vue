@@ -55,12 +55,12 @@
                     <img src="/imgs/vDOT.svg" alt=""></img>
                 </div>
                 <div class="title min-w-[100px] flex-1 flex flex-col justify-center ">
-                    <h1>vDOT</h1>
+                    <h1>wDOT</h1>
                     <p>Polkdot .</p>
                 </div>
                 <div class="title min-w-[100px] ">
                     <h1 class="!text-center">15%</h1>
-                    <p class="!text-center">-</p>
+                    <!-- <p class="!text-center">-</p> -->
                 </div>
                 <div class="staking min-w-[100px]  flex flex-col justify-center items-center">
                     $1000
@@ -88,12 +88,15 @@
 <style lang="scss" scoped>
 .tokens {
     padding-top: 100px;
+    height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .staking-box {
     padding: 30px 20px;
     margin-bottom: 20px;
-    background-color: rgba(33, 33, 33, 0.3607843137);
+    background-color: rgba(33, 33, 33, 0.5);
     font-size: 16px;
     min-width: 800px;
 
@@ -116,7 +119,7 @@
 
     .icon {
         margin-left: 15px;
-        margin-right: 45px;
+        margin-right: 38px;
         width: 50px;
 
         img {

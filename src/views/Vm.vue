@@ -67,7 +67,7 @@
       <div class="container  ">
         <div class="box flex">
           <div class=" md:w-2/3 flex flex-col justify-center">
-            <div class="title">Confidential container contract-like feature</div>
+            <div class="title">Contract-like confidential container</div>
             <div class="feature">
               <div class="name">Non-tamperable</div>
               <div class="desc">Confidential containers are built based on blockchain technology. Once uploaded to the
