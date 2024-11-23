@@ -12,7 +12,7 @@
         </div>
         <div class="flex justify-center  mt-10 md:mt-0">
           <Chip class="chip">
-            <div class="chip-text">Confidential computing, calculate trustworthy future</div>
+            <div class="chip-text">trustworthy future</div>
           </Chip>
         </div>
       </div>
@@ -62,12 +62,9 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
 import SectionHead from '@/components/SectionHead.vue';
-import Shadow from '@/components/Shadow.vue';
 import Chip from '@/components/Chip.vue';
 import Footer from '@/components/Footer.vue';
-import Container from '@/components/svg/Container.vue';
 
 </script>
 
@@ -79,10 +76,11 @@ import Container from '@/components/svg/Container.vue';
 .chip-text {
   color: #abdeba;
   text-shadow: 0 2px 2px rgba(196, 196, 196, 0.87);
-  font-size: 14px;
+  font-size: 20px;
   text-align: center;
   font-family: "letter-font";
   font-weight: bold;
+  margin-left: -10px;
 }
 
 .case {

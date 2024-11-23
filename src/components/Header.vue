@@ -64,7 +64,7 @@
       <div class="header__cta" @click="login" v-if="!userInfo">
         <span class="trans" tkey="nav_connect">LOGIN</span>
       </div>
-      <Identicon class="uicon" v-if="userInfo" :hash="ss58toHex(userInfo.addr)" :padding="0.2"
+      <Identicon class="uicon" v-if="userInfo" @click="login" :hash="ss58toHex(userInfo.addr)" :padding="0.2"
         :foreground="[80, 250, 130, 255]" :background="[80, 255, 130, 0]" :size="16" />
       &nbsp;&nbsp;&nbsp;
       <!-- dapp -->
@@ -103,7 +103,6 @@ const login = () => {
 }
 
 userStore.$subscribe((mutation, state) => {
-  console.log(state.userInfo)
   path.value = getPath(state.paths)
   userInfo.value = state.userInfo
   isActivce.value = false
@@ -138,7 +137,6 @@ userStore.$subscribe((mutation, state) => {
     width: auto;
     height: 23px;
     align-items: center;
-    margin-bottom: 5px;
 
     img {
       height: 100%;
@@ -151,7 +149,7 @@ userStore.$subscribe((mutation, state) => {
     height: 22px;
     margin-right: 10px;
     position: relative;
-    top: 2px;
+    top: 1px;
 
     span {
       position: absolute;
@@ -159,7 +157,7 @@ userStore.$subscribe((mutation, state) => {
       display: block;
       width: 24px;
       height: 2px;
-      background-color: #50fa82;
+      background-color: #ffffff;
       border-radius: 3px;
       transition: 0.5s ease;
     }
@@ -223,6 +221,8 @@ userStore.$subscribe((mutation, state) => {
     border-top: none;
     z-index: 2;
     height: 80px;
+    position: relative;
+    top: 2px;
   }
 
   .header__nav--active {
@@ -256,12 +256,15 @@ userStore.$subscribe((mutation, state) => {
   .header__nav a {
     display: inline-block;
     font-size: 15px;
+    line-height: 15px;
     font-weight: bold;
-    line-height: 16px;
+    text-align: center;
     color: #fff !important;
     background: transparent !important;
     width: 100%;
     cursor: pointer;
+    display: block;
+    padding: 6px 0;
   }
 
   .header__nav a svg {
@@ -346,6 +349,8 @@ userStore.$subscribe((mutation, state) => {
 
       li {
         margin: 0;
+        margin-top: 8px;
+        margin-bottom: 8px;
         width: 150px;
 
         &:first-child {

@@ -352,11 +352,11 @@ const slideoptions = ref({
 
 .roadmaps {
   border: none;
-  background-color: #0f0f0f;
+  // background-color: #0f0f0f;
 
   .slides {
     position: relative;
-    background: rgba(0, 0, 0, 0.35);
+    background: rgba(40, 40, 40, 0.35);
     padding: 30px;
     // border-radius: 20px;
 

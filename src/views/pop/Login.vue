@@ -2,9 +2,7 @@
   <div class="login-wrap">
     <div class="login-box">
       <div class="login-right-box">
-        <div class="top-logo">
-          <Logo :showName="true" />
-        </div>
+        <PopHeader title="Connect Wallet" @click="props.close()" />
         <div class="login-title">Polkadot Wallet</div>
         <div v-for="(w, index) in supportedWallets" @click="showWallet('Polkadot', w)"
           :class="w.installed ? 'wallet-box' : 'wallet-box wallet-box-disabled'">
@@ -35,7 +33,7 @@
         <img :src="LoginShow.logo.src" alt="Polkadotjs Logo" class="logo" />
         <div class="flex-1">{{
           LoginShow.title
-          }}Login</div>
+        }}Login</div>
         <i class="iconfont right" @click="LoginShow = null">&#xe601;</i>
       </div>
       <div class="login-content">
@@ -72,7 +70,8 @@ import { ss58toHex } from "@/utils/chain";
 import { keyring, shortAddress } from "@/utils/chain";
 import { useGlobalStore } from '@/stores/global';
 import useGlobelProperties from "@/plugins/globel";
-import Identicon from "./identicon.vue";
+import Identicon from "@/components/identicon.vue";
+import PopHeader from "@/components/PopHeader.vue";
 
 const props = defineProps(["router", "store", "close", "app"])
 const store = useGlobalStore();
@@ -215,4 +214,4 @@ watch(store.account, (newS, oldS) => {
 });
 </script>
 
-<style lang="scss" src="../assets/login.scss" scoped></style>
+<style lang="scss" src="@/assets/login.scss" scoped></style>

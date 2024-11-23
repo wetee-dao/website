@@ -1,15 +1,37 @@
 <template>
   <Header />
   <Header class="header-shadow" />
-  <RouterView />
+  <RouterView v-if="inited" />
 </template>
 
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
 import Header from '@/components/Header.vue'
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
+import useGlobelProperties from './plugins/globel';
+import { ApiPromise, WsProvider } from '@polkadot/api';
+import { chainType } from './utils/chain';
+import { chainUrl } from './plugins/chain';
 
-onMounted(() => {
+const global = useGlobelProperties();
+const inited = ref(false);
+
+onMounted(async () => {
+  try {
+    const wsProvider = new WsProvider(chainUrl);
+    const api = await ApiPromise.create({
+      provider: wsProvider,
+      types: chainType,
+    });
+
+    await api.rpc.chain.getFinalizedHead()
+    global.$setClient(api);
+    console.info("connect chain success")
+  } catch {
+    console.error("connect chain error")
+  }
+
+  inited.value = true;
   document.getElementById('loader')!.style.display = "none";
   document.getElementById('app')!.style.visibility = "visible";
 })

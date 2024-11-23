@@ -1,11 +1,16 @@
 import { createApp, defineAsyncComponent } from "vue"
 import LoadingBox from '../components/Loading.vue'
-import Login from "@/components/Login.vue";
+import Login from "@/views/pop/Login.vue";
+import VStake from "@/views/pop/VStake.vue";
 
 export default {
   install: function (app: any) {
     app.config.globalProperties.$Loading = (router: Object, store: Object, ps: any, close: Function) => {
       return openPop(app, router, store, LoadingBox, "Loading", ps, close)
+    };
+
+    app.config.globalProperties.$VStake = (router: Object, store: Object, ps: any, close: Function) => {
+      return openPop(app, router, store, VStake, "VStake", ps, close)
     };
 
     app.config.globalProperties.$Login = (router: Object, store: Object, ps: any, close: Function) => {
