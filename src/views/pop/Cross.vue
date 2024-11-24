@@ -1,50 +1,33 @@
 <template>
-  <div class="vstake-wrap">
-    <div class="vstake">
-      <PopHeader title="Vtoken stake" @click="props.close()" />
+  <div class="cross-wrap">
+    <div class="cross">
+      <PopHeader title="Cross chain in" @click="props.close()" />
       <div class="flex flex-col items-center">
-        <div class="w-full flex flex-col items-center relative text-center p-7">
-          <div class="flex justify-between items-center mb-4 w-full">
+        <div class="w-full flex items-center relative text-center p-7">
+          <div class="flex flex-col justify-between items-center mb-4 w-full">
             <span class="flex items-center token-title">
-              <img :src="'/imgs/' + assetInfo(vassetId).metadata.name + '.svg'" alt="" class="token-icon">
-              <span class="text-base">{{ assetInfo(vassetId).metadata.name }}</span>
-            </span>
-            <span class="space-x-2 flex items-center">
-              <span class="fonts-small-light-normal">Balance</span>
-              <span class="fonts-small">{{ vAmount.free }}</span>
-              <span class="cursor-pointer flex items-center cross-in" @click="corssIn">
-                <i class="iconfont">&#xe64a;</i>&nbsp;Cross in
-              </span>
+              <img src="/imgs/vDOT.svg" alt="" class="token-icon">
+              <div class="flex flex-col">
+                <span class="text-base text-left">vDOT</span>
+                <span class="text-sm text-left">
+                  Available&nbsp;&nbsp;{{ vAmount.free }}
+                </span>
+              </div>
             </span>
           </div>
-          <div class="flex w-full items-center in-input pb-4">
-            <input type="number" class="w-full" placeholder="0.0" :value="value" @input="onValue">
+          <div class=" flex w-full items-center in-input">
+            <input type="number" class="w-full text-right mr-2" placeholder="0.0" :value="value" @input="onValue">
             <div class="max-btn">
-              <button class="text-sm text-purple-normal font-medium" @click="max">Max</button>
+              Max
             </div>
           </div>
-          <NSlider class="pb-5" :value="valueSlider" :step="5" @UpdateValue="onValueSlider" />
         </div>
         <div class="split">
           <i class="iconfont">&#xe7d8;</i>
         </div>
-        <div class="flex-1 w-full flex flex-col items-center text-center p-7">
-          <div class="flex items-center justify-between mb-4 w-full">
-            <span class="flex items-center token-title">
-              <img :src="'/imgs/' + assetInfo(vtoken2token[0]).metadata.name + '.svg'" class="token-icon">
-              <span class="text-base">{{ assetInfo(vtoken2token[0]).metadata.name }}</span>
-            </span>
-            <span class="space-x-2 ">
-              <span class="fonts-small-light-normal">Balance</span>
-              <span class="fonts-small font-manrope">{{ dAmount.free }}</span>
-            </span>
-          </div>
-          <div class="flex w-full items-center in-input">
-            <input type="number" v-model="targetValue" placeholder="0.0" disabled>
-          </div>
-        </div>
+
         <div class="split"></div>
-        <button class="submit" type="button" @click="submit">
+        <button type="button" class="submit ">
           <div>Stake</div>
         </button>
       </div>
@@ -55,7 +38,6 @@
 
 <script lang="ts" setup>
 import { onMounted, ref } from "vue";
-import { NSlider } from 'naive-ui'
 
 import PopHeader from "@/components/PopHeader.vue";
 import type { ApiPromise } from "@polkadot/api";
@@ -67,9 +49,8 @@ const valueSlider = ref(0)
 const value = ref()
 const targetValue = ref()
 const vassetId = ref(5000)
-const assetsInfo = ref<any>({})
 const userStore = useGlobalStore()
-const vtoken2token = ref<any>([0, [1, 1]])
+const vtoken2token = ref()
 const vAmount = ref<any>({})
 const dAmount = ref<any>({})
 
@@ -80,71 +61,22 @@ const onValue = (e: any) => {
   targetValue.value = value.value * vtoken2token.value[1][0] / vtoken2token.value[1][1]
 }
 
-const onValueSlider = (e: any) => {
-  value.value = getNumberfromChain(vAmount.value.free) * e / 100
-  valueSlider.value = e
-
-  targetValue.value = value.value * vtoken2token.value[1][0] / vtoken2token.value[1][1]
-}
-
-const corssIn = () => {
-  //@ts-ignore
-  window.$app.$CrossIn()
-}
-
-const assetInfo = (id: number) => {
-  if (assetsInfo.value[id]) {
-    return assetsInfo.value[id]
-  }
-  return { metadata: {} }
-}
-
-const max = () => {
-  onValueSlider(100)
-}
-
-const submit = async () => {
-  const chain = getChain();
-  const client = chain.client;
-  const signer = userStore.userInfo.addr;
-
-  try {
-    const tx = client.tx.fairlanch.vStaking(vassetId.value, parseInt(value.value))
-    await chain.SignAndSend(tx, signer, () => {
-      props.close();
-    }, () => {
-      props.close();
-    })
-  } catch (e: any) {
-    console.log(e)
-    //@ts-ignore
-    window.$app.$notification["error"]({
-      content: 'Error',
-      meta: "" + e.toString(),
-      duration: 2500,
-      keepAliveOnHover: true
-    })
-  }
-}
-
 onMounted(async () => {
   let api: ApiPromise = getApi();
   let assetsList = await api.query.asset.assetsInfo.entries();
   let assets: any = {};
   assetsList.forEach(([key, exposure]: any) => {
     const item = exposure.toHuman();
-    assets[getNumberfromChain(key.toHuman()[0])] = item;
+    assets[key.toHuman()[0]] = item;
   });
-  assetsInfo.value = assets;
 
   let cvtoken2token: any = (await api.query.fairlanch.vtoken2token(vassetId.value)).toHuman()!;
-  cvtoken2token[0] = getNumberfromChain(cvtoken2token[0]);
   vtoken2token.value = cvtoken2token;
 
   let vamount = await api.query.tokens.accounts(userStore.userInfo.addr, vassetId.value);
   vAmount.value = vamount.toHuman();
 
-  let amount = await api.query.tokens.accounts(userStore.userInfo.addr, cvtoken2token[0]);
+  let amount = await api.query.tokens.accounts(userStore.userInfo.addr, getNumberfromChain(cvtoken2token[0]));
   dAmount.value = amount.toHuman();
 })
 
@@ -154,16 +86,10 @@ const getApi = (): ApiPromise => {
   const client = chain.client;
   return client
 }
-
-const getChain = (): any => {
-  const g = props.app!.config.globalProperties;
-  const chain = g.$getChain();
-  return chain
-}
 </script>
 
 <style lang="scss" scoped>
-.vstake-wrap {
+.cross-wrap {
   width: 100%;
   height: 100vh;
   background-size: cover;
@@ -171,12 +97,12 @@ const getChain = (): any => {
   top: 0;
   left: 0;
   z-index: 10;
-  background-color: rgba(0, 0, 0, 0.88);
+  background-color: rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
 
-  .vstake {
+  .cross {
     max-width: 450px;
     width: 100%;
     padding-bottom: 20px;
@@ -185,9 +111,7 @@ const getChain = (): any => {
     font-size: 15px;
   }
 
-  .fonts-small-light-normal {
-    color: rgba($secondary-text-rgb, 0.6);
-  }
+  .token-title {}
 
   .split {
     height: 1px;
@@ -209,19 +133,6 @@ const getChain = (): any => {
     }
   }
 
-  .token-title {
-    // background: #8686861a;
-    // padding: 9px 0px;
-    // border-radius: 42px;
-
-    span {
-      font-size: 17px;
-      font-weight: 700;
-      display: block;
-      margin-right: 5px;
-    }
-  }
-
   .token-icon {
     height: 39px;
     margin-right: 8px;
@@ -236,8 +147,7 @@ const getChain = (): any => {
     input {
       background-color: transparent;
       height: 40px;
-      font-size: 28px;
-      width: 100%;
+      font-size: 20px;
       outline: none;
       color: #ffffff;
     }
@@ -266,15 +176,13 @@ const getChain = (): any => {
     }
 
     .max-btn {
-      position: absolute;
-      right: 0;
-      top: 0;
-      bottom: 0;
       display: flex;
       align-items: center;
       justify-content: center;
       width: 40px;
       height: 40px;
+      font-size: 18px;
+      margin-left: 5px;
       background-color: rgba($primary-bg-rgb, $alpha: 1);
     }
   }

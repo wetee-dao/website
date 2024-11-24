@@ -1,7 +1,11 @@
 <template>
-  <Header />
-  <Header class="header-shadow" />
-  <RouterView v-if="inited" />
+  <NConfigProvider :theme="darkTheme">
+    <NNotificationProvider>
+      <Header />
+      <Header class="header-shadow" />
+      <RouterView v-if="inited" />
+    </NNotificationProvider>
+  </NConfigProvider>
 </template>
 
 <script setup lang="ts">
@@ -12,8 +16,16 @@ import useGlobelProperties from './plugins/globel';
 import { ApiPromise, WsProvider } from '@polkadot/api';
 import { chainType } from './utils/chain';
 import { chainUrl } from './plugins/chain';
+import { useGlobalStore } from "@/stores/global";
+import { Metamask } from './providers/MetaSnap';
+import { MetaMaskProvider } from './providers/metamask';
+import { SubstrateProvider } from './providers/substrate';
+import { getWallets, type Wallet } from '@talismn/connect-wallets';
+import { NNotificationProvider, NConfigProvider, darkTheme } from 'naive-ui';
+import { sleep } from './utils/time';
 
 const global = useGlobelProperties();
+const userStore = useGlobalStore()
 const inited = ref(false);
 
 onMounted(async () => {
@@ -25,10 +37,69 @@ onMounted(async () => {
     });
 
     await api.rpc.chain.getFinalizedHead()
+    await sleep(800)
+
+    if (userStore.userInfo.provider) {
+      if (userStore.userInfo.provider == "metamask") {
+        try {
+          const MataMaskSnap = await Metamask.enable!("WeTEE")
+          const chain = new MetaMaskProvider(MataMaskSnap)
+
+          chain.snap = MataMaskSnap
+          global.$setChain(chain)
+        } catch (e) {
+          global.$notification["error"]({
+            content: 'Error',
+            meta: "请安装 metamask 插件,错误 => " + JSON.stringify(e),
+            duration: 2500,
+            keepAliveOnHover: true
+          })
+          return;
+        }
+      } else if (userStore.userInfo.provider == "substrate") {
+        if (userStore.userInfo.type == "keyring") {
+          global.$setChain(new SubstrateProvider())
+        } else {
+          const wallet: Wallet | undefined = getWallets().find(wallet => wallet.extensionName === userStore.userInfo.wallet);
+          if (!wallet) {
+            global.$notification["error"]({
+              content: 'Error',
+              meta: "插件 " + userStore.userInfo.wallet + " 未安装",
+              duration: 2500,
+              keepAliveOnHover: true
+            })
+            return;
+          }
+        }
+
+        for (let i = 0; i < 10; i++) {
+          await sleep(800)
+          try {
+            global.$setChain(new SubstrateProvider())
+            i = 10
+          } catch (e) {
+            global.$notification["error"]({
+              content: 'Error',
+              meta: "请安装 polkadot 插件,错误 => " + JSON.stringify(e),
+              duration: 2500,
+              keepAliveOnHover: true
+            })
+            return;
+          }
+        }
+      }
+    }
+
     global.$setClient(api);
+
     console.info("connect chain success")
   } catch {
-    console.error("connect chain error")
+    // notification["error"]({
+    //   content: 'Error',
+    //   meta: "connect chain error",
+    //   duration: 2500,
+    //   keepAliveOnHover: true
+    // })
   }
 
   inited.value = true;
@@ -40,7 +111,7 @@ onMounted(async () => {
 
 <style lang="scss" scoped>
 .header-shadow {
-  z-index: 98;
+  z-index: 8;
   background: transparent;
   backdrop-filter: none;
   left: -4px;

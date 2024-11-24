@@ -64,8 +64,8 @@
       <div class="header__cta" @click="login" v-if="!userInfo">
         <span class="trans" tkey="nav_connect">LOGIN</span>
       </div>
-      <Identicon class="uicon" v-if="userInfo" @click="login" :hash="ss58toHex(userInfo.addr)" :padding="0.2"
-        :foreground="[80, 250, 130, 255]" :background="[80, 255, 130, 0]" :size="16" />
+      <Identicon class="uicon" :key="userInfo.addr" v-if="userInfo" @click="login" :hash="ss58toHex(userInfo.addr)"
+        :padding="0.2" :foreground="[80, 250, 130, 255]" :background="[80, 255, 130, 0]" :size="16" />
       &nbsp;&nbsp;&nbsp;
       <!-- dapp -->
       <a target="_blank" href="https://dapp.wetee.app/" class="header__cta" title="Decentralization trust clooud">
@@ -78,14 +78,16 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useNotification } from 'naive-ui'
 import { ss58toHex } from "@/utils/chain";
 import { useGlobalStore } from '@/stores/global';
 import useGlobelProperties from '@/plugins/globel';
 import Container from '@/components/svg/Container.vue';
 import Identicon from "./identicon.vue";
 
-const global = useGlobelProperties();
+const global = useGlobelProperties()
 const userStore = useGlobalStore()
+const notification = useNotification()
 const getPath = (paths: any) => {
   if (paths.length === 0) return '/'
   return paths[paths.length - 1].path
@@ -93,6 +95,9 @@ const getPath = (paths: any) => {
 const path = ref(getPath(userStore.paths))
 const userInfo = ref(userStore.userInfo)
 const isActivce = ref(false)
+
+
+global.$notification = notification;
 
 const toggleMenu = () => {
   isActivce.value = !isActivce.value
@@ -116,7 +121,7 @@ userStore.$subscribe((mutation, state) => {
   width: 100%;
   top: 0;
   left: 0;
-  z-index: 99;
+  z-index: 9;
   border-bottom: 1px solid rgba(236, 236, 236, 0.08);
   background-color: transparent;
   transition: background - color 0.5s ease;

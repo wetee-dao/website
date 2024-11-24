@@ -51,11 +51,13 @@ export class MetaMaskProvider {
           }
           loading.close();
           unsub();
-          // ElNotification({
-          //   title: 'Error',
-          //   message: error,
-          //   type: 'error',
-          // })
+          //@ts-ignore
+          window.$app.$notification["error"]({
+            content: 'Error',
+            meta: error,
+            duration: 2500,
+            keepAliveOnHover: true
+          })
           onError(error);
           return
         }
@@ -73,11 +75,13 @@ export class MetaMaskProvider {
       });
     } catch (e: any) {
       loading.close();
-      // ElNotification({
-      //   title: 'Error',
-      //   message: e.toString(),
-      //   type: 'error',
-      // })
+      //@ts-ignore
+      window.$app.$notification["error"]({
+        content: 'Error',
+        meta: e.toString(),
+        duration: 2500,
+        keepAliveOnHover: true
+      })
       onError(e)
     }
   }

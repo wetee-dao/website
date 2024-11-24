@@ -1,4 +1,3 @@
-// import { ElNotification } from "element-plus";
 import { Loading } from "@/plugins/pop";
 import { keyring } from "@/utils/chain";
 import { ApiPromise } from "@polkadot/api";
@@ -19,16 +18,22 @@ export class SubstrateProvider {
       const pair = keyring.addFromUri(keypair[signer], { name: 'x' }, 'sr25519');
       ps = [pair];
     } else {
-      // @ts-ignore
-      const wallet: Wallet | undefined = getWallets().find(wallet => wallet.extensionName === store.state.userInfo.wallet);
+      let userInfo = null
+      if (window.localStorage.getItem("userInfo")) {
+        userInfo = JSON.parse(window.localStorage.getItem("userInfo") || "{}")
+      }
+
+      const wallet: Wallet | undefined = getWallets().find(wallet => wallet.extensionName === userInfo.wallet);
       await wallet!.enable("WeTEE");
       const account = (await wallet!.getAccounts()).find(account => account.address === signer);
       if (!account) {
-        // ElNotification({
-        //   title: 'Error',
-        //   message: 'Account ' + signer + ' not found',
-        //   type: 'error',
-        // })
+        //@ts-ignore
+        window.$app.$notification["error"]({
+          content: 'Error',
+          meta: 'Account ' + signer + ' not found',
+          duration: 2500,
+          keepAliveOnHover: true
+        })
         return
       }
       ps = [signer, { signer: account!.wallet!.signer }];
@@ -50,11 +55,15 @@ export class SubstrateProvider {
           }
           loading.close();
           unsub();
-          // ElNotification({
-          //   title: 'Error',
-          //   message: error,
-          //   type: 'error',
-          // })
+
+          //@ts-ignore
+          window.$app.$notification["error"]({
+            content: 'Error',
+            meta: error,
+            duration: 2500,
+            keepAliveOnHover: true
+          })
+
           onError(error);
           return
         }
@@ -72,11 +81,14 @@ export class SubstrateProvider {
       });
     } catch (e: any) {
       loading.close();
-      // ElNotification({
-      //   title: 'Error',
-      //   message: e.toString(),
-      //   type: 'error',
-      // })
+
+      //@ts-ignore
+      window.$app.$notification["error"]({
+        content: 'Error',
+        meta: e.toString(),
+        duration: 2500,
+        keepAliveOnHover: true
+      })
       onError(e)
     }
   }

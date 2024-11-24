@@ -27,6 +27,10 @@ export const getSS5842 = (address: string) => {
   return hexToSS58(ss58toHex(address));
 }
 
+export const getNumberfromChain = (str: string) => {
+  return parseInt(str.split(",").join(""))
+}
+
 // export const web3Accounts = (cb: (accounts: any[]) => void) => {
 //   if ((window as any).electronWeb3) {
 //     (window as any).electronWeb3.web3AccountsSubscribe("DAO", (allAccounts: any[]) => {
@@ -138,7 +142,7 @@ export const chainType = {
       NONE: null,
     }
   },
-  TEEVersion:{
+  TEEVersion: {
     _enum: ["SGX", "CVM"]
   }
 }

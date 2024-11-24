@@ -5,7 +5,7 @@ if (window.localStorage.getItem("userInfo")) {
   userInfo = JSON.parse(window.localStorage.getItem("userInfo") || "{}")
 }
 
-export const useGlobalStore = defineStore('breadcrumb', {
+export const useGlobalStore = defineStore('global', {
   state: () => ({
     paths: [] as any[],
     account: [] as any[],

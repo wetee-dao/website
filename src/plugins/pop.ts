@@ -2,6 +2,7 @@ import { createApp, defineAsyncComponent } from "vue"
 import LoadingBox from '../components/Loading.vue'
 import Login from "@/views/pop/Login.vue";
 import VStake from "@/views/pop/VStake.vue";
+import Cross from "@/views/pop/Cross.vue";
 
 export default {
   install: function (app: any) {
@@ -15,6 +16,10 @@ export default {
 
     app.config.globalProperties.$Login = (router: Object, store: Object, ps: any, close: Function) => {
       return openPop(app, router, store, Login, "Login", ps, close)
+    };
+
+    app.config.globalProperties.$CrossIn = (router: Object, store: Object, ps: any, close: Function) => {
+      return openPop(app, router, store, Cross, "CrossIn", ps, close)
     };
   }
 }

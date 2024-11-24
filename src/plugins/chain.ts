@@ -37,7 +37,7 @@ export async function checkMetaData(ext: Injected): Promise<boolean> {
 }
 
 // 获取元数据
-export async function  getMetaData() {
+export async function getMetaData() {
   const api = client!
   let chainInfo = await api.rpc.system.chain()
   const chainName = chainInfo.toHuman()
