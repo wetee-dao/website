@@ -8,8 +8,7 @@
           <div class="top__text">All WEB2 applications, once deployed, possess the characteristics of smart contracts.
           </div>
           <div class="btns mt-10">
-            <a target="_blank" href="#" class="btn  btn--nephrite"><span>Build container</span>
-            </a>
+            <RouterLink to="/tee-store" class="btn  btn--nephrite"><span>TEE store</span></RouterLink>
             <a target="_blank" href="https://dapp.wetee.app/" class="btn btn__primary "><span>Deploy container</span>
             </a>
           </div>
@@ -108,7 +107,6 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
 import SectionHead from '@/components/SectionHead.vue';
 import Shadow from '@/components/Shadow.vue';
 import Chip from '@/components/Chip.vue';

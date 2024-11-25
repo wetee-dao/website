@@ -6,8 +6,9 @@
         <div class="w-full flex flex-col items-center relative text-center p-7">
           <div class="flex justify-between items-center mb-4 w-full">
             <span class="flex items-center token-title">
-              <img :src="'/imgs/' + assetInfo(vassetId).metadata.name + '.svg'" alt="" class="token-icon">
-              <span class="text-base">{{ assetInfo(vassetId).metadata.name }}</span>
+              <img :src="'/imgs/vStaking/' + assetInfo(vassetId.toString()).metadata.name + '.svg'" alt=""
+                class="token-icon">
+              <span class="text-base">{{ assetInfo(vassetId.toString()).metadata.name }}</span>
             </span>
             <span class="space-x-2 flex items-center">
               <span class="fonts-small-light-normal">Balance</span>
@@ -31,7 +32,7 @@
         <div class="flex-1 w-full flex flex-col items-center text-center p-7">
           <div class="flex items-center justify-between mb-4 w-full">
             <span class="flex items-center token-title">
-              <img :src="'/imgs/' + assetInfo(vtoken2token[0]).metadata.name + '.svg'" class="token-icon">
+              <img :src="'/imgs/vStaking/' + assetInfo(vtoken2token[0]).metadata.name + '.svg'" class="token-icon">
               <span class="text-base">{{ assetInfo(vtoken2token[0]).metadata.name }}</span>
             </span>
             <span class="space-x-2 ">
@@ -61,6 +62,7 @@ import PopHeader from "@/components/PopHeader.vue";
 import type { ApiPromise } from "@polkadot/api";
 import { useGlobalStore } from "@/stores/global";
 import { getNumberfromChain } from "@/utils/chain";
+import { BN } from "@polkadot/util";
 
 const props = defineProps(["router", "store", "close", "app"])
 const valueSlider = ref(0)
@@ -74,14 +76,14 @@ const vAmount = ref<any>({})
 const dAmount = ref<any>({})
 
 const onValue = (e: any) => {
-  valueSlider.value = getNumberfromChain(e.target.value) / getNumberfromChain(vAmount.value.free) * 100
+  valueSlider.value = getNumberfromChain(e.target.value).mul(new BN(100)).div(getNumberfromChain(vAmount.value.free)).toNumber()
   value.value = e.target.value
 
   targetValue.value = value.value * vtoken2token.value[1][0] / vtoken2token.value[1][1]
 }
 
 const onValueSlider = (e: any) => {
-  value.value = getNumberfromChain(vAmount.value.free) * e / 100
+  value.value = getNumberfromChain(vAmount.value.free).mul(new BN(e)).div(new BN(100))
   valueSlider.value = e
 
   targetValue.value = value.value * vtoken2token.value[1][0] / vtoken2token.value[1][1]
@@ -92,7 +94,7 @@ const corssIn = () => {
   window.$app.$CrossIn()
 }
 
-const assetInfo = (id: number) => {
+const assetInfo = (id: string) => {
   if (assetsInfo.value[id]) {
     return assetsInfo.value[id]
   }
@@ -133,7 +135,7 @@ onMounted(async () => {
   let assets: any = {};
   assetsList.forEach(([key, exposure]: any) => {
     const item = exposure.toHuman();
-    assets[getNumberfromChain(key.toHuman()[0])] = item;
+    assets[key.toHuman()[0].split(",").join("")] = item;
   });
   assetsInfo.value = assets;
 

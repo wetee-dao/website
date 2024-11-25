@@ -245,15 +245,19 @@
 .login-btn {
   width: 90%;
   height: 45px;
-  border-radius: 4px;
-  background-color: rgba($primary-text-rgb, $alpha: 0.2);
-  color: $secondary-text;
+  background-color: rgba($primary-text-rgb, $alpha: 0.8);
+  color: $primary-bg;
   font-size: 18px;
   line-height: 45px;
   text-align: center;
   margin: 20px auto;
   cursor: pointer;
   border: none;
+
+  &:disabled {
+    color: #747474;
+    background-color: rgba(40, 40, 40, 0.242);
+  }
 }
 
 .login-btn.is-disabled,

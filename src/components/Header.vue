@@ -60,18 +60,19 @@
           </path>
         </svg>
       </a>
+
+      <!-- dapp -->
+      <a target="_blank" href="https://dapp.wetee.app/" class="header__cta" title="Decentralization trust clooud">
+        <Container />&nbsp;
+        <span class="trans" tkey="nav_connect">DAPP</span>
+      </a>
+      &nbsp;&nbsp;&nbsp;
       <!-- wallet -->
       <div class="header__cta" @click="login" v-if="!userInfo">
         <span class="trans" tkey="nav_connect">LOGIN</span>
       </div>
       <Identicon class="uicon" :key="userInfo.addr" v-if="userInfo" @click="login" :hash="ss58toHex(userInfo.addr)"
         :padding="0.2" :foreground="[80, 250, 130, 255]" :background="[80, 255, 130, 0]" :size="16" />
-      &nbsp;&nbsp;&nbsp;
-      <!-- dapp -->
-      <a target="_blank" href="https://dapp.wetee.app/" class="header__cta" title="Decentralization trust clooud">
-        <Container />&nbsp;
-        <span class="trans" tkey="nav_connect">DAPP</span>
-      </a>
     </div>
   </header>
 </template>

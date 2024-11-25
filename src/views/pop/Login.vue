@@ -33,7 +33,7 @@
         <img :src="LoginShow.logo.src" alt="Polkadotjs Logo" class="logo" />
         <div class="flex-1">{{
           LoginShow.title
-        }}Login</div>
+          }}Login</div>
         <i class="iconfont right" @click="LoginShow = null">&#xe601;</i>
       </div>
       <div class="login-content">
@@ -50,7 +50,7 @@
           </div>
         </div>
       </div>
-      <button class="login-btn" :disabled="polkadotAccounts.findIndex((item) => item.selected) == -1"
+      <button tertiary class="login-btn" :disabled="polkadotAccounts.findIndex((item) => item.selected) == -1"
         @click="PolkadotLoginIn">Login</button>
     </div>
     <div class="login-pop-mask" v-if="LoginShow != null"></div>
@@ -60,6 +60,7 @@
 <script lang="ts" setup>
 import { ref, watch } from "vue";
 import { type Wallet, getWallets } from "@talismn/connect-wallets";
+import { NButton } from 'naive-ui'
 
 import { SubstrateProvider } from "@/providers/substrate";
 import { MetaMaskProvider } from "@/providers/metamask";

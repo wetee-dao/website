@@ -1,6 +1,6 @@
 // 区块链
 import { encodeAddress, decodeAddress } from '@polkadot/keyring';
-import { u8aToHex, hexToU8a, u8aWrapBytes } from '@polkadot/util';
+import { u8aToHex, hexToU8a, u8aWrapBytes, BN } from '@polkadot/util';
 import { Keyring } from '@polkadot/keyring';
 import { web3FromSource } from '@polkadot/extension-dapp';
 
@@ -28,7 +28,11 @@ export const getSS5842 = (address: string) => {
 }
 
 export const getNumberfromChain = (str: string) => {
-  return parseInt(str.split(",").join(""))
+  return new BN(str.split(",").join(""))
+}
+
+export const getNumstrfromChain = (str: string) => {
+  return str.split(",").join("")
 }
 
 // export const web3Accounts = (cb: (accounts: any[]) => void) => {

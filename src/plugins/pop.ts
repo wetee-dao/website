@@ -6,26 +6,26 @@ import Cross from "@/views/pop/Cross.vue";
 
 export default {
   install: function (app: any) {
-    app.config.globalProperties.$Loading = (router: Object, store: Object, ps: any, close: Function) => {
-      return openPop(app, router, store, LoadingBox, "Loading", ps, close)
+    app.config.globalProperties.$Loading = (router: Object, ps: any, close: Function) => {
+      return openPop(app, router, LoadingBox, "Loading", ps, close)
     };
 
-    app.config.globalProperties.$VStake = (router: Object, store: Object, ps: any, close: Function) => {
-      return openPop(app, router, store, VStake, "VStake", ps, close)
+    app.config.globalProperties.$VStake = (router: Object, ps: any, close: Function) => {
+      return openPop(app, router, VStake, "VStake", ps, close)
     };
 
-    app.config.globalProperties.$Login = (router: Object, store: Object, ps: any, close: Function) => {
-      return openPop(app, router, store, Login, "Login", ps, close)
+    app.config.globalProperties.$Login = (router: Object, ps: any, close: Function) => {
+      return openPop(app, router, Login, "Login", ps, close)
     };
 
-    app.config.globalProperties.$CrossIn = (router: Object, store: Object, ps: any, close: Function) => {
-      return openPop(app, router, store, Cross, "CrossIn", ps, close)
+    app.config.globalProperties.$CrossIn = (router: Object, ps: any, close: Function) => {
+      return openPop(app, router, Cross, "CrossIn", ps, close)
     };
   }
 }
 
 export const Loading = (title: string | null): any => {
-  return openPop(null, {}, {}, LoadingBox, "xLoading", { title: title }, () => {
+  return openPop(null, {}, LoadingBox, "xLoading", { title: title }, () => {
 
   })
 };
@@ -38,7 +38,7 @@ window.addEventListener('popstate', function (event) {
   pops = {};
 });
 
-function openPop(app: any, router: Object, store: Object, pop: any, popid: string, params: any, close: Function) {
+function openPop(app: any, router: Object, pop: any, popid: string, params: any, close: Function) {
   if (pops[popid]) {
     return
   }
@@ -62,7 +62,6 @@ function openPop(app: any, router: Object, store: Object, pop: any, popid: strin
   let message = createApp(pop, {
     close: closeFn,
     router,
-    store,
     app,
     params
   })
