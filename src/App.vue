@@ -39,7 +39,7 @@ onMounted(async () => {
     await api.rpc.chain.getFinalizedHead()
     await sleep(800)
 
-    if (userStore.userInfo.provider) {
+    if (userStore.userInfo && userStore.userInfo.provider) {
       if (userStore.userInfo.provider == "metamask") {
         try {
           const MataMaskSnap = await Metamask.enable!("WeTEE")
@@ -88,6 +88,8 @@ onMounted(async () => {
           }
         }
       }
+    } else {
+      global.$setChain(new SubstrateProvider())
     }
 
     global.$setClient(api);

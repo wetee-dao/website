@@ -92,6 +92,7 @@
 import useGlobelProperties from '@/plugins/globel';
 import { useGlobalStore } from '@/stores/global';
 import { getNumberfromChain, getNumstrfromChain } from '@/utils/chain';
+import { sleep } from '@/utils/time';
 import type { ApiPromise } from '@polkadot/api';
 import { BN } from '@polkadot/util';
 import { inject, onMounted, ref, watch } from 'vue';
@@ -103,7 +104,7 @@ const blockRewardData = ref<BN>(new BN(0));
 const stakingsData = ref<any>({});
 const toStakingsData = ref<any>({});
 const userStore = useGlobalStore();
-const address = ref<string>(userStore.userInfo.addr);
+const address = ref<string>(userStore.userInfo ? userStore.userInfo.addr : "");
 const StakeDesc = ref<any>({
   "wDOT": "Staking vDOT to earn WTE rewards",
   "Consensus": "Joining the consensus network to earn rewards",
@@ -122,7 +123,6 @@ const getStaking = (id: string, stakings: any) => {
 }
 
 const getStakingReward = (economic: any, stakings: any, reward: BN) => {
-  console.log(economic)
   const id = economic.id;
   const total = economic.metadata.total;
   if (total == 0) {
@@ -152,6 +152,11 @@ onMounted(async () => {
 })
 
 const initData = async () => {
+  if (!wetee().client) {
+    sleep(1000);
+    initData();
+  }
+
   let api: ApiPromise = wetee().client;
 
   // 获取每个区块的奖励

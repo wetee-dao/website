@@ -68,7 +68,7 @@ import Chip from './Chip.vue';
   z-index: 3;
   padding: 8px 12px;
   display: inline-block;
-  border: 2px solid rgba($primary-text-rgb, 0.25);
+  border: 3Px double rgba($primary-text-rgb, 0.3);
   filter: grayscale(60%);
 }
 
@@ -95,7 +95,7 @@ import Chip from './Chip.vue';
 
 
 .chip {
-  z-index: 10;
+  z-index: 5;
 }
 
 @media (max-width: 786px) {

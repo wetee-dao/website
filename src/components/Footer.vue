@@ -2,11 +2,11 @@
   <footer class="footer">
     <div class="container">
       <div class="flex">
-        <div class="flex flex-col justify-center w-1/3 md:w-1/4 pr-3">
+        <div class="flex flex-col justify-center w-1/3 md:w-1/4">
           <div class="footer__logo">
-            <img src="/imgs/logo.png" alt="">
+            <img src="/imgs/logo.svg" alt="">
           </div>
-          <p class="footer__tagline">Confidential computing, calculate trustworthy future</p>
+          <p class="footer__tagline pr-6">Confidential computing, calculate trustworthy future</p>
         </div>
         <div class="flex-1 grid grid-cols-2 md:grid-cols-4 grid-flow-row gap-6">
           <div class="">
@@ -20,17 +20,16 @@
           <div class="">
             <h6 class="footer__title">Docs</h6>
             <div class="footer__nav">
-              <!-- <a href="/#economics">Tokenomics</a>
-            <a href="/#roadmap">Roadmap</a> -->
+              <a target="_blank" href="https://wetee.gitbook.io/docment">Docs</a>
+              <a target="_blank" href="https://github.com/wetee-dao">Github</a>
+              <a href="https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fxiaobai.asyou.me%3A30001#/sudo">Explore</a>
             </div>
           </div>
 
           <div class="">
             <h6 class="footer__title">Use Cases</h6>
             <div class="footer__nav">
-              <!-- a href="/docs/white_paper.html">White paper</a -->
-              <a href="http://explorer.tc.asyou.me/explorer">Explore</a>
-              <!-- <a href="/im.html">DTIM</a> -->
+              <RouterLink to="/tee-store">TEE store</RouterLink>
             </div>
           </div>
 

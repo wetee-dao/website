@@ -30,6 +30,7 @@ export class MetaMaskProvider {
     const loading = Loading(null)
 
     try {
+      //@ts-ignore
       const signResult = await signPayload(payload);
       if (!signResult) {
         // ElMessage.warning("SignAndSend Invalid metamask signature");

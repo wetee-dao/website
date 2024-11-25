@@ -179,6 +179,7 @@ const metamaskSnap: InjectedExtension = {
   name: DEFAULT_SNAP_NAME,
   // provider?: InjectedProvider,
   signer: {
+    // @ts-ignore
     signPayload: requestSignJSON,
     signRaw: requestSignRaw
     // update?: (id: number, status: H256 | ISubmittableResult) => void
