@@ -12,23 +12,6 @@
   justify-content: center;
 }
 
-.login-img-title {
-  text-align: center;
-  margin-bottom: 30px;
-  height: 35px;
-
-  img {
-    height: 40px;
-    width: auto;
-  }
-}
-
-.login-img-desc {
-  text-align: center;
-  padding: 0 30px;
-  margin-bottom: 15px;
-}
-
 .login-mask {
   width: 100%;
   height: 100vh;
@@ -48,18 +31,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.login-left-box {
-  width: 40%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.login-right-box {
   max-width: 460px;
+  max-height: 90vh;
   background-color: rgba($primary-bg-rgb, $alpha: 1);
   border: 3px solid rgba($primary-text-rgb, 0.2);
   display: block;
@@ -75,6 +48,33 @@
   border-radius: 20px;
   margin-top: 10px;
   color: rgba($secondary-text-rgb, 0.6);
+}
+
+.connected {
+  border: 2px solid rgba($secondary-text-rgb, 0.2);
+
+  .uicon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .name {
+    font-size: 17px;
+    line-height: 1.2;
+  }
+
+  .addr {
+    font-size: 12px;
+    line-height: 1;
+    word-break: break-all;
+    color: rgba($secondary-text-rgb, 0.6);
+  }
+}
+
+.login-content {
+  height: calc(80vh - 80px);
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .wallet-box {

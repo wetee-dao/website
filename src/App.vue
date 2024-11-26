@@ -3,7 +3,7 @@
     <NNotificationProvider>
       <Header />
       <Header class="header-shadow" />
-      <RouterView v-if="inited" />
+      <RouterView />
     </NNotificationProvider>
   </NConfigProvider>
 </template>
@@ -14,7 +14,7 @@ import Header from '@/components/Header.vue'
 import { onMounted, ref } from 'vue';
 import useGlobelProperties from './plugins/globel';
 import { ApiPromise, WsProvider } from '@polkadot/api';
-import { chainType } from './utils/chain';
+import { chainJson } from './utils/chain';
 import { chainUrl } from './plugins/chain';
 import { useGlobalStore } from "@/stores/global";
 import { Metamask } from './providers/MetaSnap';
@@ -26,14 +26,15 @@ import { sleep } from './utils/time';
 
 const global = useGlobelProperties();
 const userStore = useGlobalStore()
-const inited = ref(false);
 
 onMounted(async () => {
+  document.getElementById('loader')!.style.display = "none";
+  document.getElementById('app')!.style.visibility = "visible";
   try {
     const wsProvider = new WsProvider(chainUrl);
     const api = await ApiPromise.create({
       provider: wsProvider,
-      types: chainType,
+      types: chainJson,
     });
 
     await api.rpc.chain.getFinalizedHead()
@@ -103,10 +104,6 @@ onMounted(async () => {
     //   keepAliveOnHover: true
     // })
   }
-
-  inited.value = true;
-  document.getElementById('loader')!.style.display = "none";
-  document.getElementById('app')!.style.visibility = "visible";
 })
 </script>
 

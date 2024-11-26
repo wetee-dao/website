@@ -1,8 +1,18 @@
 <template>
   <div class="login-wrap">
     <div class="login-box">
-      <div class="login-right-box">
-        <PopHeader title="Connect Wallet" @click="props.close()" />
+      <PopHeader title="Connect Wallet" @click="props.close()" />
+      <div class="login-content">
+        <div class=" login-title">Connected Wallet</div>
+        <div class="connected flex mx-6 p-1" v-if="userInfo">
+          <Identicon class="uicon mr-1" :hash="ss58toHex(userInfo.addr)" :padding="0.15"
+            :foreground="[80, 250, 130, 255]" :background="[80, 255, 130, 0]" :size="16" />
+          <div class="flex-1 flex flex-col justify-center items-start">
+            <div class="name">{{ userInfo.name }}</div>
+            <p class="addr text-left">{{ userInfo.addr }}</p>
+          </div>
+        </div>
+
         <div class="login-title">Polkadot Wallet</div>
         <div v-for="(w, index) in supportedWallets" @click="showWallet('Polkadot', w)"
           :class="w.installed ? 'wallet-box' : 'wallet-box wallet-box-disabled'">
@@ -60,7 +70,6 @@
 <script lang="ts" setup>
 import { ref, watch } from "vue";
 import { type Wallet, getWallets } from "@talismn/connect-wallets";
-import { NButton } from 'naive-ui'
 
 import { SubstrateProvider } from "@/providers/substrate";
 import { MetaMaskProvider } from "@/providers/metamask";
@@ -76,6 +85,7 @@ import PopHeader from "@/components/PopHeader.vue";
 
 const props = defineProps(["router", "store", "close", "app"])
 const store = useGlobalStore();
+const userInfo = ref<any>(store.userInfo);
 const polkadotAccounts = ref<any[]>([]);
 const LoginShow = ref<any>(null);
 const global = useGlobelProperties();
@@ -91,6 +101,13 @@ watch(
   () => store.account,
   (val) => {
     polkadotAccounts.value = val;
+  }
+);
+
+watch(
+  () => store.userInfo,
+  (val) => {
+    userInfo.value = val;
   }
 );
 

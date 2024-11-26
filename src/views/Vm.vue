@@ -13,7 +13,7 @@
             </a>
           </div>
         </div>
-        <div class="flex justify-center mt-10 md:mt-0">
+        <div class="hidden md:flex justify-center">
           <Chip class="chip">
             <div class="p-3">
               <Shadow bg="#000">

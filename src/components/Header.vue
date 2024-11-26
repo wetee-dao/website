@@ -320,11 +320,11 @@ userStore.$subscribe((mutation, state) => {
     position: relative;
     height: 42px;
     background-color: transparent;
-    filter: grayscale(60%);
+    filter: grayscale(75%);
     overflow: hidden;
     margin-right: 0px;
     padding: 0 6px;
-    border: 3Px double rgba($primary-text-rgb, 0.3);
+    border: 3Px double rgba($primary-text-rgb, 1);
     cursor: pointer;
 
     svg {
@@ -338,7 +338,7 @@ userStore.$subscribe((mutation, state) => {
       letter-spacing: 0.4px;
       text-transform: uppercase;
       font-size: 14px;
-      line-height: 15px;
+      line-height: 14px;
       color: $primary-text;
       transition: 0.5s ease;
       max-width: 70px;
@@ -349,6 +349,8 @@ userStore.$subscribe((mutation, state) => {
     width: 40px;
     height: 40px;
     cursor: pointer;
+    margin-left: -5px;
+    margin-right: -3px;
   }
 
   @media (max-width: 765px) {

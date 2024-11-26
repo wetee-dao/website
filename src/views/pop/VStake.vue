@@ -59,12 +59,11 @@ import { onMounted, ref } from "vue";
 import { NSlider } from 'naive-ui'
 
 import PopHeader from "@/components/PopHeader.vue";
-import type { ApiPromise } from "@polkadot/api";
 import { useGlobalStore } from "@/stores/global";
-import { getNumberfromChain } from "@/utils/chain";
+import { getNumberfromChain, getNumstrfromChain } from "@/utils/chain";
 import { BN } from "@polkadot/util";
 
-const props = defineProps(["router", "store", "close", "app"])
+const props = defineProps(["router", "close", "app"])
 const valueSlider = ref(0)
 const value = ref()
 const targetValue = ref()
@@ -130,37 +129,33 @@ const submit = async () => {
 }
 
 onMounted(async () => {
-  let api: ApiPromise = getApi();
-  let assetsList = await api.query.asset.assetsInfo.entries();
+  // 获取资产信息 
+  let assetsList = await weteeHttpApi().entries("asset", "assetsInfo");
   let assets: any = {};
-  assetsList.forEach(([key, exposure]: any) => {
-    const item = exposure.toHuman();
-    assets[key.toHuman()[0].split(",").join("")] = item;
+  assetsList.forEach(({ keys, value }: any) => {
+    assets[getNumstrfromChain(keys[0])] = value;
   });
   assetsInfo.value = assets;
 
-  let cvtoken2token: any = (await api.query.fairlanch.vtoken2token(vassetId.value)).toHuman()!;
-  cvtoken2token[0] = getNumberfromChain(cvtoken2token[0]);
+  let cvtoken2token: any = await weteeHttpApi().query("fairlanch", "vtoken2token", [vassetId.value]);
   vtoken2token.value = cvtoken2token;
 
-  let vamount = await api.query.tokens.accounts(userStore.userInfo.addr, vassetId.value);
-  vAmount.value = vamount.toHuman();
+  let vamount = await weteeHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, vassetId.value]);
+  vAmount.value = vamount;
 
-  let amount = await api.query.tokens.accounts(userStore.userInfo.addr, cvtoken2token[0]);
-  dAmount.value = amount.toHuman();
+  let amount = await weteeHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, getNumberfromChain(cvtoken2token[0])]);
+  dAmount.value = amount;
 })
-
-const getApi = (): ApiPromise => {
-  const g = props.app!.config.globalProperties;
-  const chain = g.$getChain();
-  const client = chain.client;
-  return client
-}
 
 const getChain = (): any => {
   const g = props.app!.config.globalProperties;
   const chain = g.$getChain();
   return chain
+}
+
+const weteeHttpApi = () => {
+  const g = props.app!.config.globalProperties;
+  return g.$getWeteeHttpApi();
 }
 </script>
 

@@ -10,12 +10,12 @@
           <p>100% fair launch staking, to fairly obtain WTE rewards.</p>
         </div>
         <!-- <div class="tstaking flex">
-                    <i class="iconfont">&#xe68a;</i>
-                    <div class="flex flex-col">
-                        <h1>My total Staking</h1>
-                        <p>1000 wDOT</p>
-                    </div>
-                </div> -->
+            <i class="iconfont">&#xe68a;</i>
+            <div class="flex flex-col">
+                <h1>My total Staking</h1>
+                <p>1000 wDOT</p>
+            </div>
+        </div> -->
         <div class="daily flex pl-10">
           <i class="iconfont">&#xe60d;</i>
           <div class="flex flex-col">
@@ -97,6 +97,7 @@ import type { ApiPromise } from '@polkadot/api';
 import { BN } from '@polkadot/util';
 import { inject, onMounted, ref, watch } from 'vue';
 const wetee: any = inject('wetee');
+const weteeHttpApi: any = inject('weteeHttpApi');
 
 const global = useGlobelProperties();
 const economicsData = ref<any[]>([]);
@@ -128,8 +129,9 @@ const getStakingReward = (economic: any, stakings: any, reward: BN) => {
   if (total == 0) {
     return "0"
   }
+
   if (stakings[id]) {
-    return reward.mul(new BN(stakings[id])).div(total).toString()
+    return reward.mul(new BN(stakings[id])).mul(new BN(economic.v)).div(new BN(100)).div(new BN(total)).div(new BN(1_000_000_000_000)).toString()
   }
 
   return "0"
@@ -152,66 +154,55 @@ onMounted(async () => {
 })
 
 const initData = async () => {
-  if (!wetee().client) {
-    sleep(1000);
-    initData();
-  }
-
-  let api: ApiPromise = wetee().client;
 
   // 获取每个区块的奖励
-  let blockReward: any = (await api.query.fairlanch.blockReward()).toHuman();
+  let blockReward: any = await weteeHttpApi().query("fairlanch", "blockReward");
   blockRewardData.value = getNumberfromChain(blockReward[2]).mul(new BN(14400));
 
-  // 获取资产信息
-  let assetsList = await api.query.asset.assetsInfo.entries();
+  // 获取资产信息 
+  let assetsList = await weteeHttpApi().entries("asset", "assetsInfo");
   let assets: any = {};
-  assetsList.forEach(([key, exposure]: any) => {
-    const item = exposure.toHuman();
-    assets[getNumstrfromChain(key.toHuman()[0])] = item;
+  assetsList.forEach(({ keys, value }: any) => {
+    assets[getNumstrfromChain(keys[0])] = value;
   });
 
   // 获取资产总量
-  let totalList = await api.query.fairlanch.stakingTotal.entries();
+  let totalList = await weteeHttpApi().entries("fairlanch", "stakingTotal");
   let totals: any = {};
-  totalList.forEach(([key, exposure]: any) => {
-    const item = exposure.toHuman();
-    totals[getNumstrfromChain(key.toHuman()[0])] = item;
+  totalList.forEach(({ keys, value }: any) => {
+    totals[getNumstrfromChain(keys[0])] = value;
   });
 
   // 获取质押列表
-  let stakingsList = await api.query.fairlanch.stakings.entries(address.value);
+  let stakingsList = await weteeHttpApi().entries("fairlanch", "stakings", [address.value]);
   let stakings: any = {};
-  stakingsList.forEach(([key, exposure]: any) => {
-    let item = exposure.toHuman();
-    let id = getNumstrfromChain(key.toHuman()[1]);
-    stakings[id] = item;
+  stakingsList.forEach(({ keys, value }: any) => {
+    let id = getNumstrfromChain(keys[1]);
+    stakings[id] = value;
   });
   stakingsData.value = stakings;
 
   // 获取链上经济模型
-  let economicsList = await api.query.fairlanch.economics.entries();
+  let economicsList = await weteeHttpApi().entries("fairlanch", "economics");
   let economics: any[] = [];
-  economicsList.forEach(([key, exposure]: any) => {
-    let item = exposure.toHuman();
-    let id = getNumstrfromChain(key.toHuman()[0]);
+  economicsList.forEach(({ keys, value }: any) => {
+    let id = getNumstrfromChain(keys[0]);
     const metadata = getAssetInfo(id, assets, totals);
     economics.push({
       id: id,
       metadata: metadata,
-      v: item,
+      v: value,
       staking: stakings[id],
     })
   });
   economicsData.value = economics.reverse();
 
   // 获取待质押列表
-  let toStakingsList = await api.query.fairlanch.toStakings.entries(address.value);
+  let toStakingsList = await weteeHttpApi().entries("fairlanch", "toStakings", [address.value]);
   let toStakings: any = {};
-  toStakingsList.forEach(([key, exposure]: any) => {
-    let item = exposure.toHuman();
-    let id = getNumstrfromChain(key.toHuman()[1]);
-    toStakings[id] = item;
+  toStakingsList.forEach(({ keys, value }: any) => {
+    let id = getNumstrfromChain(keys[1]);
+    toStakings[id] = value;
   });
   toStakingsData.value = toStakings;
 }
@@ -241,7 +232,7 @@ const getAssetInfo = (id: string, assets: any, total: any) => {
   let meta = assets[id].metadata;
   return {
     ...assets[id].metadata,
-    "total": total[id] ?? "0 ",
+    "total": getNumstrfromChain(total[id] ?? "0"),
     "staking_symbol": meta.name,
     "action": "Stake"
   };

@@ -141,11 +141,11 @@ const tokens = ref([
     amount: 15,
     color: '#f3efbd',
   },
-  {
-    name: 'TEE APP Mint',
-    amount: 10,
-    color: '#5d5d5d',
-  },
+  // {
+  //   name: 'TEE APP Mint',
+  //   amount: 10,
+  //   color: '#5d5d5d',
+  // },
   {
     name: 'TEE Mint',
     amount: 15,
