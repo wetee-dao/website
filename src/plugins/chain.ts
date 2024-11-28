@@ -94,7 +94,7 @@ export async function getMetaData() {
 export default {
   install: function (app: any) {
     app.provide('wetee', getChainExt)
-    app.provide('weteeHttpApi', getHttpApi)
+    // app.provide('weteeHttpApi', getHttpApi)
 
     // 获取全局区块链适配器
     app.config.globalProperties.$getClient = (): ApiPromise | null => {
@@ -104,11 +104,6 @@ export default {
     // 获取全局区块链适配器
     app.config.globalProperties.$getChain = () => {
       return chain
-    }
-
-    // 获取全局区块链适配器
-    app.config.globalProperties.$getWeteeHttpApi = () => {
-      return chainHttpClient
     }
 
     // 设置全局区块链适配器

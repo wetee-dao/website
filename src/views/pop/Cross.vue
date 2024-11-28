@@ -74,7 +74,8 @@ import { BN } from "@polkadot/util";
 
 import PopHeader from "@/components/PopHeader.vue";
 import { useGlobalStore } from "@/stores/global";
-import { getNumberfromChain, getNumstrfromChain } from "@/utils/chain";
+import { getBnFromChain, getNumstrfromChain } from "@/utils/chain";
+import { getHttpApi } from "@/plugins/chain";
 
 const props = defineProps(["router", "store", "close", "app"])
 const valueSlider = ref(0)
@@ -87,7 +88,7 @@ const vAmount = ref<any>({})
 const dAmount = ref<any>({})
 
 const onValue = (e: any) => {
-  valueSlider.value = getNumberfromChain(e.target.value).mul(new BN(100)).div(getNumberfromChain(vAmount.value.free)).toNumber()
+  valueSlider.value = getBnFromChain(e.target.value).mul(new BN(100)).div(getBnFromChain(vAmount.value.free)).toNumber()
   value.value = e.target.value
 
   targetValue.value = value.value * vtoken2token.value[1][0] / vtoken2token.value[1][1]
@@ -95,26 +96,21 @@ const onValue = (e: any) => {
 
 onMounted(async () => {
   // 获取资产信息 
-  let assetsList = await weteeHttpApi().entries("asset", "assetsInfo");
+  let assetsList = await getHttpApi().entries("asset", "assetsInfo", []);
   let assets: any = {};
   assetsList.forEach(({ keys, value }: any) => {
     assets[getNumstrfromChain(keys[0])] = value;
   });
 
-  let cvtoken2token: any = await weteeHttpApi().query("fairlanch", "vtoken2token", [vassetId.value]);
+  let cvtoken2token: any = await getHttpApi().query("fairlanch", "vtoken2token", [vassetId.value]);
   vtoken2token.value = cvtoken2token;
 
-  let vamount = await weteeHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, vassetId.value]);
-  vAmount.value = vamount.toHuman();
+  let vamount = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, vassetId.value]);
+  vAmount.value = vamount;
 
-  let amount = await weteeHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, getNumberfromChain(cvtoken2token[0])]);
-  dAmount.value = amount.toHuman();
+  let amount = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, getNumstrfromChain(cvtoken2token[0])]);
+  dAmount.value = amount;
 })
-
-const weteeHttpApi = () => {
-  const g = props.app!.config.globalProperties;
-  return g.$getWeteeHttpApi();
-}
 </script>
 
 <style lang="scss" scoped>

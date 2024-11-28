@@ -9,24 +9,25 @@
           <h1>Token staking</h1>
           <p>100% fair launch staking, to fairly obtain WTE rewards.</p>
         </div>
-        <!-- <div class="tstaking flex">
-            <i class="iconfont">&#xe68a;</i>
-            <div class="flex flex-col">
-                <h1>My total Staking</h1>
-                <p>1000 wDOT</p>
-            </div>
-        </div> -->
+        <div class="tstaking flex">
+          <i class="iconfont">&#xe68a;</i>
+          <div class="flex flex-col">
+            <h1>My total WTE</h1>
+            <p>{{ showWTE(getBnFromChain(amount.free)) }} <span class="total_unit">WTE</span></p>
+          </div>
+        </div>
         <div class="daily flex pl-10">
           <i class="iconfont">&#xe60d;</i>
           <div class="flex flex-col">
-            <h1>Est. Daily Reward</h1>
-            <p>{{ blockRewardData.div(new BN(1_000_000_000_000)) }} WTE</p>
+            <h1>My Daily Reward</h1>
+            <p>{{ showWTE(getTotalStakingReward(economicsData, stakingsData, blockRewardData)) }} <span
+                class="total_unit">WTE</span></p>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="container">
+    <div class="container" v-if="loader != 0">
       <div class="flex staking-box bg-transparent items-center">
         <div class="icon flex items-center">
           <!-- <img src="/imgs/vDOT.svg" alt="" /> -->
@@ -44,7 +45,7 @@
           My Staking / Pending Staking
         </div>
         <div class="daily min-w-[150px] flex-1 flex flex-col justify-center items-center">
-          Est. Daily Reward
+          Daily Reward
         </div>
         <div class="min-w-[100px]  flex-1 flex justify-around items-center">
           action
@@ -63,16 +64,16 @@
           <!-- <p class="!text-center">-</p> -->
         </div>
         <div class="staking min-w-[100px] flex-1 flex justify-center items-center">
-          {{ economic.metadata.total }} <span v-if="economic.metadata.staking_symbol" class="unit">{{
+          {{ showWTE(new BN(economic.metadata.total)) }} <span v-if="economic.metadata.staking_symbol" class="unit">{{
             economic.metadata.staking_symbol }}</span>
         </div>
         <div class="mstaking min-w-[140px] flex-1 flex justify-center items-center">
-          {{ getStaking(economic.id, stakingsData) }}/{{ getStaking(economic.id, toStakingsData) }}
+          {{ showWTE(getStaking(economic.id, stakingsData)) }} / {{ showWTE(getStaking(economic.id, toStakingsData)) }}
           <span v-if="economic.metadata.staking_symbol" class="unit">{{
             economic.metadata.staking_symbol }}</span>
         </div>
         <div class="daily min-w-[150px] flex-1 flex justify-center items-center">
-          {{ getStakingReward(economic, stakingsData, blockRewardData) }} <span class="unit">WTE</span>
+          {{ showWTE(getStakingReward(economic, stakingsData, blockRewardData)) }} <span class="unit">WTE</span>
         </div>
         <div class="min-w-[105px] flex-1 flex justify-center items-center">
           <div class="action flex justify-around items-center" @click="action(economic)">
@@ -82,6 +83,7 @@
         </div>
       </div>
     </div>
+    <loadingBox class="loader-wrapper" v-if="loader == 0" />
 
     <div class="bottom">
     </div>
@@ -89,15 +91,15 @@
 </template>
 
 <script setup lang="ts">
+import { getBnFromChain, getNumstrfromChain, WTE, showWTE } from '@/utils/chain';
+import { BN } from '@polkadot/util';
+import { onMounted, ref, watch } from 'vue';
+
+import loadingBox from "@/components/loading-box.vue";
+import { getHttpApi } from '@/plugins/chain';
 import useGlobelProperties from '@/plugins/globel';
 import { useGlobalStore } from '@/stores/global';
-import { getNumberfromChain, getNumstrfromChain } from '@/utils/chain';
-import { sleep } from '@/utils/time';
-import type { ApiPromise } from '@polkadot/api';
-import { BN } from '@polkadot/util';
-import { inject, onMounted, ref, watch } from 'vue';
-const wetee: any = inject('wetee');
-const weteeHttpApi: any = inject('weteeHttpApi');
+const loader = ref(0)
 
 const global = useGlobelProperties();
 const economicsData = ref<any[]>([]);
@@ -111,6 +113,9 @@ const StakeDesc = ref<any>({
   "Consensus": "Joining the consensus network to earn rewards",
   "TEE mint": "Providing TEE computing power to earn TOKEN",
 });
+const amount = ref<any>({
+  free: "0"
+});
 
 watch(userStore.userInfo, (newS: any, oldS: any) => {
   address.value = newS.addr;
@@ -118,23 +123,33 @@ watch(userStore.userInfo, (newS: any, oldS: any) => {
 
 const getStaking = (id: string, stakings: any) => {
   if (stakings[id]) {
-    return getNumberfromChain(stakings[id]).toString();
+    return getBnFromChain(stakings[id]);
   }
-  return "0"
+  return new BN(0);
 }
 
 const getStakingReward = (economic: any, stakings: any, reward: BN) => {
   const id = economic.id;
   const total = economic.metadata.total;
   if (total == 0) {
-    return "0"
+    return new BN(0);
   }
 
   if (stakings[id]) {
-    return reward.mul(new BN(stakings[id])).mul(new BN(economic.v)).div(new BN(100)).div(new BN(total)).div(new BN(1_000_000_000_000)).toString()
+    const staking = getBnFromChain(stakings[id]);
+    return reward.mul(new BN(staking)).mul(new BN(economic.v)).div(new BN(100)).div(new BN(total))
   }
 
-  return "0"
+  return new BN(0);
+}
+
+const getTotalStakingReward = (economics: any, stakings: any, reward: BN) => {
+  let all = new BN(0);
+  for (let i = 0; i < economics.length; i++) {
+    all = all.add(new BN(getStakingReward(economics[i], stakings, reward)))
+  }
+
+  return all
 }
 
 const action = (item: any) => {
@@ -154,27 +169,26 @@ onMounted(async () => {
 })
 
 const initData = async () => {
-
   // 获取每个区块的奖励
-  let blockReward: any = await weteeHttpApi().query("fairlanch", "blockReward");
-  blockRewardData.value = getNumberfromChain(blockReward[2]).mul(new BN(14400));
+  let blockReward: any = await getHttpApi().query("fairlanch", "blockReward", []);
+  blockRewardData.value = getBnFromChain(blockReward[2]).mul(new BN(14400));
 
   // 获取资产信息 
-  let assetsList = await weteeHttpApi().entries("asset", "assetsInfo");
+  let assetsList = await getHttpApi().entries("asset", "assetsInfo", []);
   let assets: any = {};
   assetsList.forEach(({ keys, value }: any) => {
     assets[getNumstrfromChain(keys[0])] = value;
   });
 
   // 获取资产总量
-  let totalList = await weteeHttpApi().entries("fairlanch", "stakingTotal");
+  let totalList = await getHttpApi().entries("fairlanch", "stakingTotal", []);
   let totals: any = {};
   totalList.forEach(({ keys, value }: any) => {
     totals[getNumstrfromChain(keys[0])] = value;
   });
 
   // 获取质押列表
-  let stakingsList = await weteeHttpApi().entries("fairlanch", "stakings", [address.value]);
+  let stakingsList = await getHttpApi().entries("fairlanch", "stakings", [address.value]);
   let stakings: any = {};
   stakingsList.forEach(({ keys, value }: any) => {
     let id = getNumstrfromChain(keys[1]);
@@ -183,7 +197,7 @@ const initData = async () => {
   stakingsData.value = stakings;
 
   // 获取链上经济模型
-  let economicsList = await weteeHttpApi().entries("fairlanch", "economics");
+  let economicsList = await getHttpApi().entries("fairlanch", "economics", []);
   let economics: any[] = [];
   economicsList.forEach(({ keys, value }: any) => {
     let id = getNumstrfromChain(keys[0]);
@@ -198,13 +212,16 @@ const initData = async () => {
   economicsData.value = economics.reverse();
 
   // 获取待质押列表
-  let toStakingsList = await weteeHttpApi().entries("fairlanch", "toStakings", [address.value]);
+  let toStakingsList = await getHttpApi().entries("fairlanch", "toStakings", [address.value]);
   let toStakings: any = {};
   toStakingsList.forEach(({ keys, value }: any) => {
     let id = getNumstrfromChain(keys[1]);
     toStakings[id] = value;
   });
   toStakingsData.value = toStakings;
+  loader.value = 1;
+
+  amount.value = (await getHttpApi().query("system", "account", [userStore.userInfo.addr])).data;
 }
 
 const getAssetInfo = (id: string, assets: any, total: any) => {
@@ -274,8 +291,8 @@ const getAssetInfo = (id: string, assets: any, total: any) => {
   .icon {
     margin-left: 16px;
     margin-right: 15px;
-    width: 45px;
-    height: 45px;
+    width: 40px;
+    height: 40px;
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center center;
@@ -327,6 +344,10 @@ const getAssetInfo = (id: string, assets: any, total: any) => {
     padding: 3px 4px;
     background-color: #5b4600;
     border-radius: 3px;
+  }
+
+  .total_unit {
+    color: #ffde71;
   }
 
   .action {

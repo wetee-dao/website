@@ -12,7 +12,7 @@
             </span>
             <span class="space-x-2 flex items-center">
               <span class="fonts-small-light-normal">Balance</span>
-              <span class="fonts-small">{{ vAmount.free }}</span>
+              <span class="fonts-small">{{ showWTE(new BN(vAmount.free)) }}</span>
               <span class="cursor-pointer flex items-center cross-in" @click="corssIn">
                 <i class="iconfont">&#xe64a;</i>&nbsp;Cross in
               </span>
@@ -45,7 +45,7 @@
           </div>
         </div>
         <div class="split"></div>
-        <button class="submit" type="button" @click="submit">
+        <button class="submit" type="button" :disabled="value == 0" @click="submit">
           <div>Stake</div>
         </button>
       </div>
@@ -55,13 +55,14 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
+import { nextTick, onMounted, ref } from "vue";
 import { NSlider } from 'naive-ui'
 
 import PopHeader from "@/components/PopHeader.vue";
 import { useGlobalStore } from "@/stores/global";
-import { getNumberfromChain, getNumstrfromChain } from "@/utils/chain";
+import { getBnFromChain, getNumstrfromChain, WTE, showWTE } from "@/utils/chain";
 import { BN } from "@polkadot/util";
+import { getHttpApi } from "@/plugins/chain";
 
 const props = defineProps(["router", "close", "app"])
 const valueSlider = ref(0)
@@ -75,16 +76,39 @@ const vAmount = ref<any>({})
 const dAmount = ref<any>({})
 
 const onValue = (e: any) => {
-  valueSlider.value = getNumberfromChain(e.target.value).mul(new BN(100)).div(getNumberfromChain(vAmount.value.free)).toNumber()
-  value.value = e.target.value
+  let v = removeNonNumericAndHandleMultipleDecimals(e.target.value);
+  if (v == "") {
+    nextTick(() => {
+      value.value = ""
+      valueSlider.value = 0
+      targetValue.value = 0
+    })
+    return
+  }
+
+  let slider = parseFloat(v) * 100 / showWTE(getBnFromChain(vAmount.value.free))
+  valueSlider.value = slider
+  if (v.indexOf(".")) {
+    value.value = "" + parseFloat(parseFloat(v).toFixed(5))
+  } else {
+    value.value = v
+  }
 
   targetValue.value = value.value * vtoken2token.value[1][0] / vtoken2token.value[1][1]
+
+  if (slider >= 100) {
+    nextTick(() => {
+      valueSlider.value = 100
+      value.value = ""
+      targetValue.value = value.value * vtoken2token.value[1][0] / vtoken2token.value[1][1]
+    })
+  }
 }
 
 const onValueSlider = (e: any) => {
-  value.value = getNumberfromChain(vAmount.value.free).mul(new BN(e)).div(new BN(100))
   valueSlider.value = e
 
+  value.value = showWTE(getBnFromChain(vAmount.value.free)) * parseFloat(e) / 100
   targetValue.value = value.value * vtoken2token.value[1][0] / vtoken2token.value[1][1]
 }
 
@@ -110,14 +134,15 @@ const submit = async () => {
   const signer = userStore.userInfo.addr;
 
   try {
-    const tx = client.tx.fairlanch.vStaking(vassetId.value, parseInt(value.value))
+    const unix = 1000000
+    const v = parseFloat(value.value) * unix
+    const tx = client.tx.fairlanch.vStaking(vassetId.value, new BN(v).mul(new BN(WTE)).div(new BN(unix)))
     await chain.SignAndSend(tx, signer, () => {
       props.close();
     }, () => {
       props.close();
     })
   } catch (e: any) {
-    console.log(e)
     //@ts-ignore
     window.$app.$notification["error"]({
       content: 'Error',
@@ -130,20 +155,20 @@ const submit = async () => {
 
 onMounted(async () => {
   // 获取资产信息 
-  let assetsList = await weteeHttpApi().entries("asset", "assetsInfo");
+  let assetsList = await getHttpApi().entries("asset", "assetsInfo", []);
   let assets: any = {};
   assetsList.forEach(({ keys, value }: any) => {
     assets[getNumstrfromChain(keys[0])] = value;
   });
   assetsInfo.value = assets;
 
-  let cvtoken2token: any = await weteeHttpApi().query("fairlanch", "vtoken2token", [vassetId.value]);
+  let cvtoken2token: any = await getHttpApi().query("fairlanch", "vtoken2token", [vassetId.value]);
   vtoken2token.value = cvtoken2token;
 
-  let vamount = await weteeHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, vassetId.value]);
+  let vamount = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, vassetId.value]);
   vAmount.value = vamount;
 
-  let amount = await weteeHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, getNumberfromChain(cvtoken2token[0])]);
+  let amount = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, getNumstrfromChain(cvtoken2token[0])]);
   dAmount.value = amount;
 })
 
@@ -153,10 +178,16 @@ const getChain = (): any => {
   return chain
 }
 
-const weteeHttpApi = () => {
-  const g = props.app!.config.globalProperties;
-  return g.$getWeteeHttpApi();
+function removeNonNumericAndHandleMultipleDecimals(str: string) {
+  let result = str.replace(/[^0-9\.]/g, '');
+
+  let decimalIndex = result.indexOf('.');
+  if (decimalIndex !== -1) {
+    result = result.substring(0, decimalIndex + 1) + result.substring(decimalIndex + 1).replace(/\./g, '');
+  }
+  return result;
 }
+
 </script>
 
 <style lang="scss" scoped>
@@ -295,6 +326,11 @@ const weteeHttpApi = () => {
     margin-top: 20px;
     font-weight: bold;
     font-size: 18px;
+
+    &:disabled {
+      color: #747474;
+      background-color: rgba(40, 40, 40, 0.242);
+    }
   }
 }
 </style>

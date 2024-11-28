@@ -1,6 +1,5 @@
 @forward './base.scss';
 
-
 .space {
     flex: 1;
 }
@@ -80,6 +79,11 @@ a {
     background-position: 0 0;
     background-size: 20px 20px;
     background-image: linear-gradient(90deg, rgba(var(--g-secondary-text-rgb), 0.08) 3%, transparent 0), linear-gradient(rgba(var(--g-secondary-text-rgb), 0.08) 3%, transparent 0);
+}
+
+.input .n-input {
+    background-color: transparent;
+    border: none;
 }
 
 *,
