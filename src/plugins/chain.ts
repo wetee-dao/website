@@ -15,7 +15,7 @@ export let getChainHttpApi = () => {
   return chainUrl.replace('ws', 'http').replace("ws", "")
 }
 
-
+// chain http client
 const chainHttpClient = {
   query: async (pallet: string, storageItem: string, keys: unknown[]) => {
     const response = await axios.get(getChainHttpApi() + "pallets/" + pallet + "/storage/" + storageItem, {

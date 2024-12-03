@@ -138,6 +138,13 @@ const submit = async () => {
     const v = parseFloat(value.value) * unix
     const tx = client.tx.fairlanch.vStaking(vassetId.value, new BN(v).mul(new BN(WTE)).div(new BN(unix)))
     await chain.SignAndSend(tx, signer, () => {
+      //@ts-ignore
+      window.$app.$notification["success"]({
+        content: 'Success',
+        meta: "Staking successful, the staking rewards will be calculated in the next cycle.",
+        duration: 2500,
+        keepAliveOnHover: true
+      })
       props.close();
     }, () => {
       props.close();

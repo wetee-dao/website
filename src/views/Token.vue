@@ -3,7 +3,7 @@
     <div class="container section-first">
       <div class="flex items-center staking-box !m-0">
         <div class="staking-icon flex items-center">
-          <img src="/imgs/staking.svg" alt=""></img>
+          <img src="/imgs/staking.svg"></img>
         </div>
         <div class="title flex-1">
           <h1>Token staking</h1>
@@ -21,7 +21,8 @@
           <div class="flex flex-col">
             <h1>My Daily Reward</h1>
             <p>{{ showWTE(getTotalStakingReward(economicsData, stakingsData, blockRewardData)) }} <span
-                class="total_unit">WTE</span></p>
+                class="total_unit">WTE</span>
+            </p>
           </div>
         </div>
       </div>
@@ -48,7 +49,7 @@
           Daily Reward
         </div>
         <div class="min-w-[100px]  flex-1 flex justify-around items-center">
-          action
+          Action
         </div>
       </div>
       <div class="flex staking-box items-center" v-for="(economic, _) in economicsData">
@@ -84,21 +85,21 @@
       </div>
     </div>
     <loadingBox class="loader-wrapper" v-if="loader == 0" />
-
     <div class="bottom">
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { getBnFromChain, getNumstrfromChain, WTE, showWTE } from '@/utils/chain';
+import { getBnFromChain, getNumstrfromChain, showWTE } from '@/utils/chain';
 import { BN } from '@polkadot/util';
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, onUnmounted, ref, watch } from 'vue';
 
 import loadingBox from "@/components/loading-box.vue";
 import { getHttpApi } from '@/plugins/chain';
 import useGlobelProperties from '@/plugins/globel';
 import { useGlobalStore } from '@/stores/global';
+import router from '@/router';
 const loader = ref(0)
 
 const global = useGlobelProperties();
@@ -139,7 +140,6 @@ const getStakingReward = (economic: any, stakings: any, reward: BN) => {
     const staking = getBnFromChain(stakings[id]);
     return reward.mul(new BN(staking)).mul(new BN(economic.v)).div(new BN(100)).div(new BN(total))
   }
-
   return new BN(0);
 }
 
@@ -159,13 +159,28 @@ const action = (item: any) => {
     case "1":
       break;
     default:
-      global.$VStake()
+      global.$VStake(router, {}, () => {
+        startInit();
+      })
       break;
   }
 }
 
+let timer: any = null;
+const startInit = () => {
+  // 设置新的定时器
+  timer = setInterval(async () => {
+    await initData();
+  }, 6000);
+}
+
 onMounted(async () => {
-  await initData();
+  // await initData();
+  startInit();
+})
+
+onUnmounted(async () => {
+  clearInterval(timer);
 })
 
 const initData = async () => {
