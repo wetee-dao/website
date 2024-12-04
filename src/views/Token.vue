@@ -7,7 +7,7 @@
         </div>
         <div class="title flex-1">
           <h1>Token staking</h1>
-          <p>100% fair launch staking, to fairly obtain WTE rewards.</p>
+          <p>100% fair launch economics, to fairly obtain WTE rewards.</p>
         </div>
         <div class="tstaking flex">
           <i class="iconfont">&#xe68a;</i>
@@ -380,5 +380,9 @@ const getAssetInfo = (id: string, assets: any, total: any) => {
 .bottom {
   height: 30px;
   width: 100%;
+}
+
+.loader-wrapper {
+  font-size: 5.2px;
 }
 </style>

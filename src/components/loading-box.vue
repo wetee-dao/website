@@ -14,23 +14,24 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 5px;
 
     .loader {
         width: fit-content;
-        font-family: "letter-font",Serif;
-        font-size: 20px;
-        letter-spacing: 5px;
+        font-family: "letter-font", Serif;
+        letter-spacing: 1em;
         background: linear-gradient(90deg, rgba($secondary-text-rgb, 0.04) 50%, #0000 0) right/200% 100%;
         animation: l21 2s infinite linear;
-        height: 50px;
-        line-height: 50px;
-        padding: 0 5px;
+        height: 8em;
+        line-height: 8em;
+        padding: 0 1em;
     }
 
     .loader::before {
         content: "Loading...";
         color: $primary-text;
-        padding: 0 5px;
+        font-size: 4.2em;
+        padding: 0 0.5em;
         -webkit-background-clip: text;
         background-clip: text;
     }

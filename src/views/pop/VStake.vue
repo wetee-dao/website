@@ -147,7 +147,6 @@ const submit = async () => {
       })
       props.close();
     }, () => {
-      props.close();
     })
   } catch (e: any) {
     //@ts-ignore

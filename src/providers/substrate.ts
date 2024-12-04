@@ -76,7 +76,7 @@ export class SubstrateProvider {
           console.log(`Transaction finalized at blockHash ${result.status.asFinalized}`);
           loading.close();
           unsub();
-          onError(result);
+          onSeccess(result);
         }
       });
     } catch (e: any) {
