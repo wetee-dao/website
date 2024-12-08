@@ -5,6 +5,7 @@
       <div class="login-content">
         <div class=" login-title">Connected Wallet</div>
         <div class="connected flex mx-6 p-1" v-if="userInfo">
+          <img :src="getWalletInfo(userInfo).icon" class="clogo" />
           <Identicon class="uicon mr-1" :hash="ss58toHex(userInfo.addr)" :padding="0.15"
             :foreground="[80, 250, 130, 255]" :background="[80, 255, 130, 0]" :size="16" />
           <div class="flex-1 flex flex-col justify-center items-start">
@@ -22,11 +23,12 @@
           </div>
           <i class="iconfont">&#xe602;</i>
         </div>
-        <div class="wallet-box" @click="loginDemo">
+
+        <!-- <div class="wallet-box" @click="demoLogin">
           <img src="/imgs/test.png" alt="MetaMask Logo" class="wlogo" />
           <div class="wtext">Demo Login</div>
           <i class="iconfont">&#xe602;</i>
-        </div>
+        </div> -->
 
         <div class="login-title">Ethereum Wallet</div>
         <div class="wallet-box" @click="showWallet('MetaMask', null)">
@@ -43,7 +45,7 @@
         <img :src="LoginShow.logo.src" alt="Polkadotjs Logo" class="logo" />
         <div class="flex-1">{{
           LoginShow.title
-          }}Login</div>
+        }}Login</div>
         <i class="iconfont right" @click="LoginShow = null">&#xe601;</i>
       </div>
       <div class="login-content">
@@ -76,7 +78,7 @@ import { MetaMaskProvider } from "@/providers/metamask";
 import { Metamask, setCustomChain } from "@/providers/MetaSnap";
 import { Loading } from "@/plugins/pop";
 import { chainUrl, getMetaData } from "@/plugins/chain";
-import { ss58toHex } from "@/utils/chain";
+import { ss58toHex, getWalletInfo } from "@/utils/chain";
 import { keyring, shortAddress } from "@/utils/chain";
 import { useGlobalStore } from '@/stores/global';
 import useGlobelProperties from "@/plugins/globel";
@@ -111,17 +113,16 @@ watch(
   }
 );
 
-const loginDemo = async () => {
+const demoLogin = async () => {
   const mnemonic = "pilot nurse frost vote fantasy then hello rookie member rhythm radar urban";
   const pair = keyring.addFromUri(mnemonic, { name: "first pair" }, "sr25519");
-  window.localStorage.setItem("token", "presign");
   let userInfo = {
     addr: pair.address,
     name: "Demo Account",
     type: "keyring",
     mnemonic: mnemonic,
     provider: "substrate",
-    wallet: "polkadot-js",
+    wallet: "demo-login",
   };
 
   let chain = new SubstrateProvider();
@@ -166,18 +167,15 @@ const showWallet = async (name: string, wallet: Wallet | null) => {
 
       // 获取账户信息
       const ac = metaAccounts[0];
-      window.localStorage.setItem("token", "presign");
-
       const userInfo = {
         addr: ac.address,
         name: ac.name!,
         provider: "metamask",
+        wallet: "metamask",
       };
 
       const chain = new MetaMaskProvider(MataMaskSnap);
       global.$setChain(chain);
-
-      window.localStorage.setItem("userInfo", JSON.stringify(userInfo));
       store.setUserInfo(userInfo);
 
       loading.close();
@@ -211,7 +209,6 @@ const PolkadotLoginIn = async () => {
 
   const wallet = LoginShow.value;
   // await checkMetaData(wallet!.extension);
-  window.localStorage.setItem("token", "presign");
   let userInfo = {
     addr: ac.address,
     name: ac.name,
@@ -221,8 +218,6 @@ const PolkadotLoginIn = async () => {
 
   // let chain = new SubstrateProvider();
   // global.$setChain(chain);
-
-  window.localStorage.setItem("userInfo", JSON.stringify(userInfo));
   store.setUserInfo(userInfo);
   props.close();
 };

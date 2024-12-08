@@ -320,7 +320,7 @@ userStore.$subscribe((mutation, state) => {
     position: relative;
     height: 42px;
     background-color: transparent;
-    filter: grayscale(75%);
+    filter: grayscale(60%);
     overflow: hidden;
     margin-right: 0px;
     padding: 0 6px;

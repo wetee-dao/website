@@ -37,7 +37,7 @@
             </span>
             <span class="space-x-2 ">
               <span class="fonts-small-light-normal">Balance</span>
-              <span class="fonts-small font-manrope">{{ dAmount.free }}</span>
+              <span class="fonts-small font-manrope">{{ dAmount.free ? showWTE(new BN(dAmount.free)) : "-" }}</span>
             </span>
           </div>
           <div class="flex w-full items-center in-input">

@@ -52,23 +52,21 @@
   align-items: center;
   background-color: #000;
   padding: 5em 7.5em;
-  // box-shadow: 0 0 30px rgba(132, 249, 79, 0.28);
-  animation: chip_diffuse 2s 0s infinite;
+  // animation: chip_diffuse 2s 0s infinite;
   position: relative;
 }
 
 @keyframes chip_diffuse {
   0% {
-    // margin-top: 12.5em;
-    box-shadow: 0 0 0px rgba(132, 249, 79, 0.28);
+    box-shadow: 0 0 0px rgba($primary-text-rgb, $alpha: 0.05);
   }
 
   80% {
-    box-shadow: 0 0 40px rgba(132, 249, 79, 0.28);
+    box-shadow: 0 0 40px rgba($primary-text-rgb, $alpha: 0.05);
   }
 
   100% {
-    box-shadow: 0 0 0px rgba(132, 249, 79, 0.28);
+    box-shadow: 0 0 0px rgba($primary-text-rgb, $alpha: 0.05);
   }
 }
 

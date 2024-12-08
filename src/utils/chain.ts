@@ -3,6 +3,7 @@ import { encodeAddress, decodeAddress } from '@polkadot/keyring';
 import { u8aToHex, hexToU8a, u8aWrapBytes, BN } from '@polkadot/util';
 import { Keyring } from '@polkadot/keyring';
 import { web3FromSource } from '@polkadot/extension-dapp';
+import { getWallets, type Wallet } from '@talismn/connect-wallets';
 
 export const keyring = new Keyring({ type: 'sr25519', ss58Format: 2 });
 keyring.setSS58Format(42)
@@ -136,4 +137,33 @@ export const chainJson = {
     "_enum": { "SH": "Vec<u8>", "BASH": "Vec<u8>", "ZSH": "Vec<u8>", "NONE": null }
   },
   "TEEVersion": { "_enum": ["SGX", "CVM"] }
+}
+
+export const getWalletInfo = (userInfo: any) => {
+  if (userInfo.wallet === "demo-login") {
+    return {
+      icon: "/imgs/test.png",
+    }
+  }
+  if (userInfo.wallet === "metamask") {
+    return {
+      icon: "/imgs/metamask.svg",
+    }
+  }
+  const wallet: Wallet | undefined = getWallets().find(wallet => wallet.extensionName === userInfo.wallet);
+  if (!wallet) {
+    //@ts-ignore
+    window.$app.$notification["error"]({
+      content: 'Error',
+      meta: "插件 " + userInfo.wallet + " 未安装",
+      duration: 2500,
+      keepAliveOnHover: true
+    })
+    return {
+
+    };
+  }
+  return {
+    icon: wallet.logo.src,
+  }
 }

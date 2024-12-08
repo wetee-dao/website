@@ -93,7 +93,7 @@
 <script setup lang="ts">
 import { getBnFromChain, getNumstrfromChain, showWTE } from '@/utils/chain';
 import { BN } from '@polkadot/util';
-import { onMounted, onUnmounted, ref, watch } from 'vue';
+import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 
 import loadingBox from "@/components/loading-box.vue";
 import { getHttpApi } from '@/plugins/chain';
@@ -118,9 +118,13 @@ const amount = ref<any>({
   free: "0"
 });
 
-watch(userStore.userInfo, (newS: any, oldS: any) => {
-  address.value = newS.addr;
-});
+userStore.$subscribe((mutation, state) => {
+  if (address.value != state.userInfo.addr) {
+    address.value = state.userInfo.addr;
+
+    initData();
+  }
+}, { detached: true })
 
 const getStaking = (id: string, stakings: any) => {
   if (stakings[id]) {
@@ -236,7 +240,7 @@ const initData = async () => {
   toStakingsData.value = toStakings;
   loader.value = 1;
 
-  amount.value = (await getHttpApi().query("system", "account", [userStore.userInfo.addr])).data;
+  amount.value = (await getHttpApi().query("system", "account", [address.value])).data;
 }
 
 const getAssetInfo = (id: string, assets: any, total: any) => {

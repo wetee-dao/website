@@ -52,6 +52,14 @@
 
 .connected {
   border: 2px solid rgba($secondary-text-rgb, 0.2);
+  position: relative;
+
+  .clogo {
+    width: 20px;
+    position: absolute;
+    left: 30px;
+    top: 30px;
+  }
 
   .uicon {
     width: 50px;
