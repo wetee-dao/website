@@ -159,8 +159,10 @@ const getTotalStakingReward = (economics: any, stakings: any, reward: BN) => {
 const action = (item: any) => {
   switch (item.id) {
     case "0":
+      window.open("https://wetee.gitbook.io/docment/mint/blockchain-mint", "_blank");
       break;
     case "1":
+      window.open("https://wetee.gitbook.io/docment/mint/tee-computing-mint", "_blank");
       break;
     default:
       global.$VStake(router, {}, () => {
@@ -246,7 +248,7 @@ const initData = async () => {
 const getAssetInfo = (id: string, assets: any, total: any) => {
   if (id == "0") {
     return {
-      "name": "Consensus",
+      "name": "Chain mint",
       "symbol": "WTE",
       "decimals": 12,
       "total": "-",

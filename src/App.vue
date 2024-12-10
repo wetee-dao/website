@@ -2,7 +2,7 @@
   <NConfigProvider :theme="darkTheme">
     <NNotificationProvider>
       <Header />
-      <Header class="header-shadow" />
+      <Header :shadow="true" />
       <RouterView />
     </NNotificationProvider>
   </NConfigProvider>
@@ -126,9 +126,5 @@ onMounted(async () => {
       display: none;
     }
   }
-}
-
-.header-shadow .header__nav a {
-  color: #fff !important;
 }
 </style>

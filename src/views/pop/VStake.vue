@@ -139,7 +139,7 @@ const submit = async () => {
     const tx = client.tx.fairlanch.vStaking(vassetId.value, new BN(v).mul(new BN(WTE)).div(new BN(unix)))
     await chain.SignAndSend(tx, signer, () => {
       //@ts-ignore
-      window.$app.$notification["success"]({
+      window.$notification["success"]({
         content: 'Success',
         meta: "Staking successful, the staking rewards will be calculated in the next cycle.",
         duration: 2500,
@@ -150,7 +150,7 @@ const submit = async () => {
     })
   } catch (e: any) {
     //@ts-ignore
-    window.$app.$notification["error"]({
+    window.$notification["error"]({
       content: 'Error',
       meta: "" + e.toString(),
       duration: 2500,

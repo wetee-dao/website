@@ -3,7 +3,7 @@
     <div class="login-box">
       <PopHeader title="Connect Wallet" @click="props.close()" />
       <div class="login-content">
-        <div class=" login-title">Connected Wallet</div>
+        <div class="login-title" v-if="userInfo">Connected Wallet</div>
         <div class="connected flex mx-6 p-1" v-if="userInfo">
           <img :src="getWalletInfo(userInfo).icon" class="clogo" />
           <Identicon class="uicon mr-1" :hash="ss58toHex(userInfo.addr)" :padding="0.15"
@@ -45,7 +45,7 @@
         <img :src="LoginShow.logo.src" alt="Polkadotjs Logo" class="logo" />
         <div class="flex-1">{{
           LoginShow.title
-        }}Login</div>
+          }}Login</div>
         <i class="iconfont right" @click="LoginShow = null">&#xe601;</i>
       </div>
       <div class="login-content">

@@ -53,7 +53,7 @@ export class MetaMaskProvider {
           loading.close();
           unsub();
           //@ts-ignore
-          window.$app.$notification["error"]({
+          window.$notification["error"]({
             content: 'Error',
             meta: error,
             duration: 2500,
@@ -77,7 +77,7 @@ export class MetaMaskProvider {
     } catch (e: any) {
       loading.close();
       //@ts-ignore
-      window.$app.$notification["error"]({
+      window.$notification["error"]({
         content: 'Error',
         meta: e.toString(),
         duration: 2500,

@@ -28,7 +28,7 @@ export class SubstrateProvider {
       const account = (await wallet!.getAccounts()).find(account => account.address === signer);
       if (!account) {
         //@ts-ignore
-        window.$app.$notification["error"]({
+        window.$notification["error"]({
           content: 'Error',
           meta: 'Account ' + signer + ' not found',
           duration: 2500,
@@ -57,7 +57,7 @@ export class SubstrateProvider {
           unsub();
 
           //@ts-ignore
-          window.$app.$notification["error"]({
+          window.$notification["error"]({
             content: 'Error',
             meta: error,
             duration: 2500,
@@ -83,7 +83,7 @@ export class SubstrateProvider {
       loading.close();
 
       //@ts-ignore
-      window.$app.$notification["error"]({
+      window.$notification["error"]({
         content: 'Error',
         meta: e.toString(),
         duration: 2500,

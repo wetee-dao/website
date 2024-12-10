@@ -1,5 +1,5 @@
 <template>
-  <header class="header">
+  <header :class="props.shadow ? 'header' : 'header header-shadow'">
     <div class="header__content container">
       <!-- btn -->
       <button :class="'header__btn  block md:hidden ' + (isActivce ? 'header__btn--active' : '')" type="button"
@@ -32,7 +32,7 @@
           <RouterLink to="/use-cases">Use Cases</RouterLink>
         </li>
         <li :class="path == '/tokens' ? 'active' : ''">
-          <RouterLink to="/tokens">Tokens</RouterLink>
+          <RouterLink to="/tokens">Fair Launch</RouterLink>
         </li>
         <!-- <li :class="path == '/tee-store' ? 'active' : ''">
           <RouterLink to="/tee-store">TEE Store</RouterLink>
@@ -71,7 +71,9 @@
         </svg>&nbsp;
         <span class="text" tkey="nav_connect">DAPP</span>
       </a>
+
       &nbsp;&nbsp;&nbsp;
+
       <!-- wallet -->
       <div class="header__cta" @click="login" v-if="!userInfo">
         <span class="text" tkey="nav_connect">LOGIN</span>
@@ -91,10 +93,9 @@ import { useNotification } from 'naive-ui'
 import { ss58toHex } from "@/utils/chain";
 import { useGlobalStore } from '@/stores/global';
 import useGlobelProperties from '@/plugins/globel';
-import Container from '@/components/svg/Container.vue';
 import Identicon from "./identicon.vue";
 
-const global = useGlobelProperties()
+const props = defineProps(["shadow"])
 const userStore = useGlobalStore()
 const notification = useNotification()
 const getPath = (paths: any) => {
@@ -104,9 +105,16 @@ const getPath = (paths: any) => {
 const path = ref(getPath(userStore.paths))
 const userInfo = ref(userStore.userInfo)
 const isActivce = ref(false)
+const global = useGlobelProperties()
 
 
-global.$notification = notification;
+if (!props.shadow) {
+  //@ts-ignore
+  window.$app = global;
+  //@ts-ignore
+  window.$notification = notification;
+  global.$notification = notification;
+}
 
 const toggleMenu = () => {
   isActivce.value = !isActivce.value
@@ -121,7 +129,6 @@ userStore.$subscribe((mutation, state) => {
   userInfo.value = state.userInfo
   isActivce.value = false
 }, { detached: true })
-
 </script>
 
 <style lang="scss" scoped>
@@ -137,6 +144,18 @@ userStore.$subscribe((mutation, state) => {
   background-image: radial - gradient(transparent 1px, #040406 1px);
   background-size: 4px 4px;
   backdrop-filter: saturate(50%) blur(4px);
+}
+
+.header-shadow {
+  .header__nav a {
+    color: #fff !important;
+  }
+
+  .active {
+    &:after {
+      display: none;
+    }
+  }
 }
 
 .header__content {
