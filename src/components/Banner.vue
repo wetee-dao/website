@@ -13,8 +13,7 @@
         <a target="_blank" href="https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fxiaobai.asyou.me%3A30001#/explorer"
           class="btn  btn--nephrite"><span>Chain Explorer</span>
         </a>
-        <a target="_blank" href="https://dapp.wetee.app/" class="btn btn__primary "><span>Deploy Now</span>
-        </a>
+        <a target="_blank" href="/dapp" class="btn btn__primary "><span>Deploy Now</span></a>
       </div>
     </div>
 

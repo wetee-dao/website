@@ -9,8 +9,7 @@
           </div>
           <div class="btns mt-10">
             <RouterLink to="/tee-store" class="btn  btn--nephrite"><span>TEE store</span></RouterLink>
-            <a target="_blank" href="https://dapp.wetee.app/" class="btn btn__primary "><span>Deploy container</span>
-            </a>
+            <a target="_blank" href="/dapp" class="btn btn__primary "><span>Deploy container</span></a>
           </div>
         </div>
         <div class="hidden md:flex justify-center">

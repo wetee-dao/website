@@ -18,7 +18,11 @@ export const useGlobalStore = defineStore('global', {
       this.account = account
     },
     setUserInfo(userInfo: any) {
-      window.localStorage.setItem("userInfo", JSON.stringify(userInfo));
+      if (!userInfo) {
+        window.localStorage.removeItem("userInfo");
+      } else {
+        window.localStorage.setItem("userInfo", JSON.stringify(userInfo));
+      }
       console.log("setUserInfo", userInfo)
       this.userInfo = userInfo
     }

@@ -62,13 +62,13 @@
         <span class="text" tkey="nav_connect">Connect</span>
       </div>
       <div class="header__cta" @click="login" v-if="userInfo">
-        <Identicon class="uicon" :key="userInfo.addr" @click="login" :hash="ss58toHex(userInfo.addr)" :padding="0.2"
+        <Identicon class="uicon" :key="userInfo.addr" @click="login" :hash="ss58toHex(userInfo.addr)" :padding="0.28"
           :foreground="[80, 250, 130, 255]" :background="[80, 255, 130, 0]" :size="16" />
         <span class="text" tkey="nav_connect">{{ userInfo.name }}</span>
       </div>
 
       <!-- dapp -->
-      <a target="_blank" href="/cloud" class="header__cta inverse" title="Decentralization trust clooud">
+      <a target="_blank" href="/dapp" class="header__cta inverse" title="Decentralization trust cloud">
         <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="12882"
           width="256" height="256">
           <path
@@ -357,11 +357,11 @@ userStore.$subscribe((mutation, state) => {
       height: 36px;
       cursor: pointer;
       margin-left: -3px;
-      margin-right: -1px;
+      margin-right: -2px;
     }
 
     svg {
-      width: 24px;
+      width: 23px;
       height: auto;
       fill: $primary-text;
     }
