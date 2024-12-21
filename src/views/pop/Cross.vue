@@ -70,13 +70,14 @@
 
 <script lang="ts" setup>
 import { onMounted, ref } from "vue";
-import { BN } from "@polkadot/util";
+import { BN, isFunction } from "@polkadot/util";
 
 import PopHeader from "@/components/PopHeader.vue";
 import { useGlobalStore } from "@/stores/global";
 import { getBnFromChain, getNumstrfromChain } from "@/utils/chain";
 import { getHttpApi } from "@/plugins/chain";
 
+const XCM_LOC = ['xcm', 'xcmPallet', 'polkadotXcm'];
 const props = defineProps(["router", "store", "close", "app"])
 const valueSlider = ref(0)
 const value = ref()
@@ -92,6 +93,67 @@ const onValue = (e: any) => {
   value.value = e.target.value
 
   targetValue.value = value.value * vtoken2token.value[1][0] / vtoken2token.value[1][1]
+}
+
+const isParaTeleport = true;
+const recipientParaId = 4545;
+const recipientId = ""
+const submit = async () => {
+  const chain = getChain();
+  const api = chain.client;
+  const signer = userStore.userInfo.addr;
+  const m = XCM_LOC.filter((x) => api.tx[x] && isFunction(api.tx[x].limitedTeleportAssets))[0];
+
+  let call = api.tx[m].limitedTeleportAssets(
+    // 资产接收链
+    {
+      V3: isParaTeleport
+        ? {
+          interior: 'Here',
+          parents: 1
+        }
+        : {
+          interior: {
+            X1: {
+              ParaChain: recipientParaId
+            }
+          },
+          parents: 0
+        }
+    },
+    // 用户
+    {
+      V3: {
+        interior: {
+          X1: {
+            AccountId32: {
+              id: api.createType('AccountId32', recipientId).toHex(),
+              network: null
+            }
+          }
+        },
+        parents: 0
+      }
+    },
+    // 资产
+    {
+      V3: [{
+        id: {
+          Concrete: {
+            interior: 'Here',
+            parents: isParaTeleport
+              ? 1
+              : 0
+          }
+        },
+        fun: {
+          Fungible: 100000
+        },
+      }]
+    },
+    0,
+    { Unlimited: null }
+  )
 }
 
 onMounted(async () => {
@@ -111,6 +173,13 @@ onMounted(async () => {
   let amount = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, getNumstrfromChain(cvtoken2token[0])]);
   dAmount.value = amount;
 })
+
+const getChain = (): any => {
+  const g = props.app!.config.globalProperties;
+  const chain = g.$getChain();
+  return chain
+}
+
 </script>
 
 <style lang="scss" scoped>

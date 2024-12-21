@@ -36,8 +36,8 @@
           <div class="wtext">MetaMask</div>
           <i class="iconfont">&#xe602;</i>
         </div>
-
         <div class="end"></div>
+        <button v-if="userInfo" tertiary class="login-btn" @click="disconnect">Disconnect wallet</button>
       </div>
     </div>
     <div class="pop-login-box" v-if="LoginShow != null">
@@ -221,6 +221,11 @@ const PolkadotLoginIn = async () => {
   store.setUserInfo(userInfo);
   props.close();
 };
+
+const disconnect = async () => {
+  store.setUserInfo(null);
+  props.close();
+}
 
 watch(store.account, (newS, oldS) => {
   polkadotAccounts.value = newS;

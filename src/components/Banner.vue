@@ -60,7 +60,7 @@ import Chip from './Chip.vue';
 .banner__tagline {
   color: $primary-text;
   font-weight: 700;
-  font-size: 16px;
+  font-size: 15px;
   line-height: 100%;
   margin-bottom: 10px;
   text-align: center;

@@ -81,10 +81,9 @@
 }
 
 .footer__logo {
-
   img {
     width: auto;
-    height: 22px;
+    height: 26px;
     display: block;
   }
 }
@@ -106,10 +105,11 @@
   margin-top: 8px;
   display: block;
   font-size: 14px;
-  line-height: 24px;
+  line-height: 18px;
   color: #b9b9b9;
   margin-bottom: 0;
   font-weight: bold;
+  word-break: break-all;
 }
 
 .footer__content {
