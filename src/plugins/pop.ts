@@ -1,8 +1,8 @@
 import { createApp, defineAsyncComponent } from "vue"
 import LoadingBox from '../components/Loading.vue'
-import Login from "@/views/pop/Login.vue";
-import VStake from "@/views/pop/VStake.vue";
-import Cross from "@/views/pop/Cross.vue";
+import Login from "@/pages/pop/Login.vue";
+import VStake from "@/pages/pop/VStake.vue";
+import Cross from "@/pages/pop/Cross.vue";
 
 export default {
   install: function (app: any) {
@@ -20,6 +20,20 @@ export default {
 
     app.config.globalProperties.$CrossIn = (router: Object, ps: any, close: Function) => {
       return openPop(app, router, Cross, "CrossIn", ps, close)
+    };
+
+    app.config.globalProperties.$CheckLogin = (callbak: Function) => {
+      if (window.localStorage.getItem("userInfo")) {
+        callbak()
+      } else {
+        //@ts-ignore
+        window.$notification["error"]({
+          content: 'Wallet not connected',
+          meta: 'Please connect your wallet before performing this action.',
+          duration: 2500,
+          keepAliveOnHover: true
+        })
+      }
     };
   }
 }

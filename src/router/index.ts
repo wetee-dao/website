@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from '../views/Home.vue'
+import Home from '../pages/Home.vue'
 import { useGlobalStore } from '@/stores/global'
 
 const router = createRouter({
@@ -13,27 +13,27 @@ const router = createRouter({
     {
       path: '/tee-store',
       name: 'TEE application store',
-      component: () => import('../views/TeeStore.vue')
+      component: () => import('../pages/TeeStore.vue')
     },
     {
       path: '/vm',
       name: 'TEE container vm',
-      component: () => import('../views/Vm.vue')
+      component: () => import('../pages/Vm.vue')
     },
     {
       path: '/use-cases',
       name: 'TEE container use cases',
-      component: () => import('../views/UserCases.vue')
+      component: () => import('../pages/UserCases.vue')
     },
     {
       path: '/contacts',
       name: 'Contacts',
-      component: () => import('../views/Contact.vue')
+      component: () => import('../pages/Contact.vue')
     },
     {
       path: '/tokens',
       name: 'Token fair launch',
-      component: () => import('../views/Token.vue')
+      component: () => import('../pages/Token.vue')
     }
   ]
 })

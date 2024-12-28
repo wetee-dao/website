@@ -29,9 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import AppCanvas from './AppsBg.vue';
 import Chip from './Chip.vue';
-
 </script>
 
 <style lang="scss" scoped>
@@ -51,7 +49,6 @@ import Chip from './Chip.vue';
   left: 0;
   right: 0;
   bottom: 0;
-  // background-color: #13131390;
   pointer-events: none;
   z-index: 3;
 }

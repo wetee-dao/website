@@ -59,13 +59,14 @@
 
       <!-- wallet -->
       <div class="header__cta" @click="login" v-if="!userInfo">
-        <span class="text" tkey="nav_connect">Connect</span>
+        <span class="text" tkey="nav_connect">&nbsp;Connect</span>
       </div>
       <div class="header__cta" @click="login" v-if="userInfo">
         <Identicon class="uicon" :key="userInfo.addr" @click="login" :hash="ss58toHex(userInfo.addr)" :padding="0.28"
           :foreground="[80, 250, 130, 255]" :background="[80, 255, 130, 0]" :size="16" />
         <span class="text" tkey="nav_connect">{{ userInfo.name }}</span>
       </div>
+      <!-- end wallet -->
 
       <!-- dapp -->
       <a target="_blank" href="/dapp" class="header__cta inverse" title="Decentralization trust cloud">
@@ -77,6 +78,7 @@
         </svg>
         <span class="text" tkey="nav_connect">DAPP</span>
       </a>
+      <!-- end dapp -->
     </div>
   </header>
 </template>
@@ -164,6 +166,7 @@ userStore.$subscribe((mutation, state) => {
     width: auto;
     height: 23px;
     align-items: center;
+    margin-left: 4px;
 
     img {
       height: 100%;

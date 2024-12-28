@@ -20,8 +20,8 @@
           <i class="iconfont">&#xe60d;</i>
           <div class="flex flex-col">
             <h1>My Daily Reward</h1>
-            <p>{{ showWTE(getTotalStakingReward(economicsData, stakingsData, blockRewardData)) }} <span
-                class="total_unit">WTE</span>
+            <p>{{ showWTE(getTotalStakingReward(economicsData, stakingsData, blockRewardData)) }}
+              <span class="total_unit">WTE</span>
             </p>
           </div>
         </div>
@@ -85,15 +85,14 @@
       </div>
     </div>
     <loadingBox class="loader-wrapper" v-if="loader == 0" />
-    <div class="bottom">
-    </div>
+    <div class="bottom"></div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { getBnFromChain, getNumstrfromChain, showWTE } from '@/utils/chain';
 import { BN } from '@polkadot/util';
-import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 
 import loadingBox from "@/components/loading-box.vue";
 import { getHttpApi } from '@/plugins/chain';
@@ -119,7 +118,10 @@ const amount = ref<any>({
 });
 
 userStore.$subscribe((mutation, state) => {
-  if (address.value != state.userInfo.addr) {
+  if (!state.userInfo) {
+    address.value = "";
+    initData();
+  } else if (address.value != state.userInfo.addr) {
     address.value = state.userInfo.addr;
 
     initData();
@@ -165,8 +167,10 @@ const action = (item: any) => {
       window.open("https://wetee.gitbook.io/docment/mint/tee-computing-mint", "_blank");
       break;
     default:
-      global.$VStake(router, {}, () => {
-        startInit();
+      global.$CheckLogin(() => {
+        global.$VStake(router, {}, () => {
+          startInit();
+        })
       })
       break;
   }
