@@ -11,11 +11,11 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
 import Header from '@/components/Header.vue'
-import { onMounted, ref } from 'vue';
+import { onMounted } from 'vue';
 import useGlobelProperties from './plugins/globel';
 import { ApiPromise, WsProvider } from '@polkadot/api';
 import { chainJson } from './utils/chain';
-import { chainUrl } from './plugins/chain';
+import { $setChain, $setClient, chainUrl } from './plugins/chain';
 import { useGlobalStore } from "@/stores/global";
 import { Metamask } from './providers/MetaSnap';
 import { MetaMaskProvider } from './providers/metamask';
@@ -30,6 +30,7 @@ const userStore = useGlobalStore()
 onMounted(async () => {
   document.getElementById('loader')!.style.display = "none";
   document.getElementById('app')!.style.visibility = "visible";
+
   try {
     const wsProvider = new WsProvider(chainUrl);
     const api = await ApiPromise.create({
@@ -47,7 +48,7 @@ onMounted(async () => {
           const chain = new MetaMaskProvider(MataMaskSnap)
 
           chain.snap = MataMaskSnap
-          global.$setChain(chain)
+          $setChain(chain)
         } catch (e) {
           global.$notification["error"]({
             content: 'Error',
@@ -59,7 +60,7 @@ onMounted(async () => {
         }
       } else if (userStore.userInfo.provider == "substrate") {
         if (userStore.userInfo.type == "keyring") {
-          global.$setChain(new SubstrateProvider())
+          $setChain(new SubstrateProvider())
         } else {
           const wallet: Wallet | undefined = getWallets().find(wallet => wallet.extensionName === userStore.userInfo.wallet);
           if (!wallet) {
@@ -76,7 +77,7 @@ onMounted(async () => {
         for (let i = 0; i < 10; i++) {
           await sleep(800)
           try {
-            global.$setChain(new SubstrateProvider())
+            $setChain(new SubstrateProvider())
             i = 10
           } catch (e) {
             global.$notification["error"]({
@@ -90,10 +91,10 @@ onMounted(async () => {
         }
       }
     } else {
-      global.$setChain(new SubstrateProvider())
+      $setChain(new SubstrateProvider())
     }
 
-    global.$setClient(api);
+    $setClient(api);
 
     console.info("connect chain success")
   } catch {

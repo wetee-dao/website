@@ -7,10 +7,7 @@ import axios from "axios";
 //@ts-ignore
 import qs from "qs";
 
-// 区块链链接
-let client: ApiPromise | null = null
-export let chainUrl = 'wss://xiaobai.asyou.me:30001/ws'
-export let chainIndexer = 'https://xiaobai.asyou.me:30006/gql'
+export let chainUrl = 'wss://paseo.asyou.me/ws'
 export let getChainHttpApi = () => {
   return chainUrl.replace('ws', 'http').replace("ws", "")
 }
@@ -18,13 +15,35 @@ export let getChainHttpApi = () => {
 // chain http client
 const chainHttpClient = {
   query: async (pallet: string, storageItem: string, keys: unknown[]) => {
+    let c = $getClient();
+    if (c != undefined) {
+      let resp = await c.query[pallet][storageItem](...keys);
+      return resp.toHuman()
+    }
     const response = await axios.get(getChainHttpApi() + "pallets/" + pallet + "/storage/" + storageItem, {
       params: { keys: keys },
       paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'brackets' }),
     })
     return response.data.value
   },
+
   entries: async (pallet: string, storageItem: string, keys: unknown[]) => {
+    let c = $getClient();
+    if (c != undefined) {
+      let resp = await c.query[pallet][storageItem].entries(...keys);
+
+      let values: any = []
+      resp.forEach(([key, exposure]) => {
+        const k = key.toHuman()
+        values.push({
+          keys: k,
+          value: exposure.toHuman()
+        })
+      });
+
+      return values
+    }
+
     const response = await axios.get(getChainHttpApi() + "pallets/" + pallet + "/storage/entries/" + storageItem, {
       params: { keys: keys },
       paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'brackets' }),
@@ -33,14 +52,21 @@ const chainHttpClient = {
   }
 }
 
-export const getHttpApi = () => {
-  return chainHttpClient
+// 链对象封装
+interface ChainWrap {
+  client: ApiPromise | undefined;
+  close: () => void;
 }
 
-
 // 链对象
-let chain: any = {
-  Close: () => { },
+let chain: ChainWrap = {
+  client: undefined,
+  close: (): void => { }
+}
+
+// 获取 http query api
+export const getHttpApi = () => {
+  return chainHttpClient
 }
 
 // 获取链对象
@@ -49,13 +75,13 @@ export const getChainExt = () => {
 }
 
 // 获取区块链连接
-export const getChainClient = () => {
-  return client
+export const getChainClient = (): ApiPromise | undefined => {
+  return chain.client
 }
 
 // 检测是否支持当前链
 export async function checkMetaData(ext: Injected): Promise<boolean> {
-  const api = client!
+  const api = getChainClient()!;
   const cmeta = (await ext.metadata!.get()).find((m) => m.genesisHash === api.genesisHash.toHex() && m.specVersion == api.runtimeVersion.specVersion.toNumber())
   if (cmeta) {
     return true
@@ -67,7 +93,7 @@ export async function checkMetaData(ext: Injected): Promise<boolean> {
 
 // 获取元数据
 export async function getMetaData() {
-  const api = client!
+  const api = getChainClient()!;
   let chainInfo = await api.rpc.system.chain()
   const chainName = chainInfo.toHuman()
 
@@ -90,32 +116,26 @@ export async function getMetaData() {
   return meta as MetadataDef
 }
 
+export const $setChain = (c: ChainWrap) => {
+  chain = c
+}
+
+export const $getChain = () => {
+  return chain
+}
+
+export const $setClient = (client: ApiPromise) => {
+  chain.client = client
+  return chain
+}
+
+export const $getClient = () => {
+  return chain.client
+}
+
 // vue 插件入口
 export default {
   install: function (app: any) {
-    app.provide('wetee', getChainExt)
-    // app.provide('weteeHttpApi', getHttpApi)
 
-    // 获取全局区块链适配器
-    app.config.globalProperties.$getClient = (): ApiPromise | null => {
-      return client
-    }
-
-    // 获取全局区块链适配器
-    app.config.globalProperties.$getChain = () => {
-      return chain
-    }
-
-    // 设置全局区块链适配器
-    app.config.globalProperties.$setClient = (cclient: ApiPromise) => {
-      client = cclient
-      chain.client = cclient
-    }
-
-    // 设置全局链状态
-    app.config.globalProperties.$setChain = (cchain: any) => {
-      cchain.client = client
-      chain = cchain
-    }
   }
 }

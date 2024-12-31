@@ -158,20 +158,20 @@ const submit = async () => {
 
 onMounted(async () => {
   // 获取资产信息 
-  let assetsList = await getHttpApi().entries("asset", "assetsInfo", []);
-  let assets: any = {};
-  assetsList.forEach(({ keys, value }: any) => {
-    assets[getNumstrfromChain(keys[0])] = value;
-  });
+  // let assetsList = await getHttpApi().entries("asset", "assetsInfo", []);
+  // let assets: any = {};
+  // assetsList.forEach(({ keys, value }: any) => {
+  //   assets[getNumstrfromChain(keys[0])] = value;
+  // });
 
-  let cvtoken2token: any = await getHttpApi().query("fairlanch", "vtoken2token", [vassetId.value]);
-  vtoken2token.value = cvtoken2token;
+  // let cvtoken2token: any = await getHttpApi().query("fairlanch", "vtoken2token", [vassetId.value]);
+  // vtoken2token.value = cvtoken2token;
 
-  let vamount = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, vassetId.value]);
-  vAmount.value = vamount;
+  // let vamount = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, vassetId.value]);
+  // vAmount.value = vamount;
 
-  let amount = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, getNumstrfromChain(cvtoken2token[0])]);
-  dAmount.value = amount;
+  // let amount = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, getNumstrfromChain(cvtoken2token[0])]);
+  // dAmount.value = amount;
 })
 
 const getChain = (): any => {
@@ -221,6 +221,7 @@ const getChain = (): any => {
   .chain-title {
     img {
       width: 38px;
+      height: 38px;
       border: 4px solid #5757577a;
       border-radius: 50%;
     }

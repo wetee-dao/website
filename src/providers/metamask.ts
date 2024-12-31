@@ -97,6 +97,10 @@ export class MetaMaskProvider {
 
     await this.SignAndSend(proxyTx, signer, onSeccess, onError)
   }
+
+  close() {
+
+  }
 }
 
 // 构建交易签名

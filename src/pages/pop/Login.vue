@@ -77,7 +77,7 @@ import { SubstrateProvider } from "@/providers/substrate";
 import { MetaMaskProvider } from "@/providers/metamask";
 import { Metamask, setCustomChain } from "@/providers/MetaSnap";
 import { Loading } from "@/plugins/pop";
-import { chainUrl, getMetaData } from "@/plugins/chain";
+import { $setChain, chainUrl, getMetaData } from "@/plugins/chain";
 import { ss58toHex, getWalletInfo } from "@/utils/chain";
 import { keyring, shortAddress } from "@/utils/chain";
 import { useGlobalStore } from '@/stores/global';
@@ -126,7 +126,7 @@ const demoLogin = async () => {
   };
 
   let chain = new SubstrateProvider();
-  global.$setChain(chain);
+  $setChain(chain);
   store.setUserInfo(userInfo);
   // store.dispatch("setKeypair", { address: pair.address, mnemonic: mnemonic });
 
@@ -175,7 +175,7 @@ const showWallet = async (name: string, wallet: Wallet | null) => {
       };
 
       const chain = new MetaMaskProvider(MataMaskSnap);
-      global.$setChain(chain);
+      $setChain(chain);
       store.setUserInfo(userInfo);
 
       loading.close();

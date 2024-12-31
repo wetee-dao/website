@@ -6,7 +6,7 @@
         <div class="w-full flex flex-col items-center relative text-center p-7">
           <div class="flex justify-between items-center mb-4 w-full">
             <span class="flex items-center token-title">
-              <img :src="'/imgs/vStaking/' + assetInfo(vassetId.toString()).metadata.name + '.svg'" alt=""
+              <img :src="'/imgs/vStaking/' + assetInfo(vassetId.toString()).metadata.symbol + '.svg'" alt=""
                 class="token-icon">
               <span class="text-base">{{ assetInfo(vassetId.toString()).metadata.name }}</span>
             </span>
@@ -32,7 +32,7 @@
         <div class="flex-1 w-full flex flex-col items-center text-center p-7">
           <div class="flex items-center justify-between mb-4 w-full">
             <span class="flex items-center token-title">
-              <img :src="'/imgs/vStaking/' + assetInfo(vtoken2token[0]).metadata.name + '.svg'" class="token-icon">
+              <img :src="'/imgs/vStaking/' + assetInfo(vtoken2token[0]).metadata.symbol + '.svg'" class="token-icon">
               <span class="text-base">{{ assetInfo(vtoken2token[0]).metadata.name }}</span>
             </span>
             <span class="space-x-2 ">
@@ -62,7 +62,7 @@ import PopHeader from "@/components/PopHeader.vue";
 import { useGlobalStore } from "@/stores/global";
 import { getBnFromChain, getNumstrfromChain, WTE, showWTE } from "@/utils/chain";
 import { BN } from "@polkadot/util";
-import { getHttpApi } from "@/plugins/chain";
+import { $getClient, getHttpApi } from "@/plugins/chain";
 
 const props = defineProps(["router", "close", "app"])
 const valueSlider = ref(0)
@@ -118,8 +118,8 @@ const corssIn = () => {
 }
 
 const assetInfo = (id: string) => {
-  if (assetsInfo.value[id]) {
-    return assetsInfo.value[id]
+  if (id && assetsInfo.value[getNumstrfromChain(id)]) {
+    return assetsInfo.value[getNumstrfromChain(id)]
   }
   return { metadata: {} }
 }
@@ -164,17 +164,23 @@ onMounted(async () => {
   let assetsList = await getHttpApi().entries("asset", "assetsInfo", []);
   let assets: any = {};
   assetsList.forEach(({ keys, value }: any) => {
-    assets[getNumstrfromChain(keys[0])] = value;
+    assets[getNumstrfromChain(keys[0].currencyId)] = value;
   });
   assetsInfo.value = assets;
 
   let cvtoken2token: any = await getHttpApi().query("fairlanch", "vtoken2token", [vassetId.value]);
   vtoken2token.value = cvtoken2token;
 
-  let vamount = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, vassetId.value]);
+  let vamount = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, {
+    paraId: 4545,
+    currencyId: vassetId.value
+  }]);
   vAmount.value = vamount;
 
-  let amount = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, getNumstrfromChain(cvtoken2token[0])]);
+  let amount = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, {
+    paraId: 4545,
+    currencyId: getNumstrfromChain(cvtoken2token[0]),
+  }]);
   dAmount.value = amount;
 })
 

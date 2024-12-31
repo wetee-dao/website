@@ -54,11 +54,11 @@
       </div>
       <div class="flex staking-box items-center" v-for="(economic, _) in economicsData">
         <div class="icon flex items-center"
-          :style="'background-image: url(\'/imgs/vStaking/' + economic.metadata.name + '.svg\')'">
+          :style="'background-image: url(\'/imgs/vStaking/' + economic.metadata.symbol + '.svg\')'">
         </div>
         <div class="title flex-[2_2_0%] min-w-[100px] flex flex-col justify-center ">
           <h1>{{ economic.metadata.name }}</h1>
-          <p>{{ StakeDesc[economic.metadata.name] }}</p>
+          <p>{{ StakeDesc[economic.metadata.symbol] }}</p>
         </div>
         <div class="title min-w-[100px] flex-1">
           <h1 class="!text-center">{{ economic.v }}%</h1>
@@ -202,26 +202,26 @@ const initData = async () => {
   let assetsList = await getHttpApi().entries("asset", "assetsInfo", []);
   let assets: any = {};
   assetsList.forEach(({ keys, value }: any) => {
-    assets[getNumstrfromChain(keys[0])] = value;
+    assets[getNumstrfromChain(keys[0].currencyId)] = value;
   });
 
   // 获取资产总量
   let totalList = await getHttpApi().entries("fairlanch", "stakingTotal", []);
   let totals: any = {};
   totalList.forEach(({ keys, value }: any) => {
-    totals[getNumstrfromChain(keys[0])] = value;
+    totals[getNumstrfromChain(keys[0].currencyId)] = value;
   });
 
   // 获取质押列表
   let stakingsList = await getHttpApi().entries("fairlanch", "stakings", [address.value]);
   let stakings: any = {};
   stakingsList.forEach(({ keys, value }: any) => {
-    let id = getNumstrfromChain(keys[1]);
+    let id = getNumstrfromChain(keys[1].currencyId);
     stakings[id] = value;
   });
   stakingsData.value = stakings;
 
-  // 获取链上经济模型
+  // // 获取链上经济模型
   let economicsList = await getHttpApi().entries("fairlanch", "economics", []);
   let economics: any[] = [];
   economicsList.forEach(({ keys, value }: any) => {
@@ -240,7 +240,7 @@ const initData = async () => {
   let toStakingsList = await getHttpApi().entries("fairlanch", "toStakings", [address.value]);
   let toStakings: any = {};
   toStakingsList.forEach(({ keys, value }: any) => {
-    let id = getNumstrfromChain(keys[1]);
+    let id = getNumstrfromChain(keys[1].currencyId);
     toStakings[id] = value;
   });
   toStakingsData.value = toStakings;
@@ -253,7 +253,7 @@ const getAssetInfo = (id: string, assets: any, total: any) => {
   if (id == "0") {
     return {
       "name": "Chain mint",
-      "symbol": "WTE",
+      "symbol": "Chain mint",
       "decimals": 12,
       "total": "-",
       "staking_symbol": "",
@@ -263,7 +263,7 @@ const getAssetInfo = (id: string, assets: any, total: any) => {
   if (id == "1") {
     return {
       "name": "TEE mint",
-      "symbol": "WTE",
+      "symbol": "TEE mint",
       "decimals": 12,
       "total": "-",
       "staking_symbol": "",
@@ -275,7 +275,7 @@ const getAssetInfo = (id: string, assets: any, total: any) => {
   return {
     ...assets[id].metadata,
     "total": getNumstrfromChain(total[id] ?? "0"),
-    "staking_symbol": meta.name,
+    "staking_symbol": meta.symbol,
     "action": "Stake"
   };
 }

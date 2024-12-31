@@ -104,7 +104,7 @@ export class SubstrateProvider {
     await this.SignAndSend(proxyTx, signer, onSeccess, onError)
   }
 
-  Close() {
+  close() {
     this.client?.disconnect();
     this.unsubscribe && this.unsubscribe();
   }
