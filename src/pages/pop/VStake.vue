@@ -64,11 +64,11 @@ import { getBnFromChain, getNumstrfromChain, WTE, showWTE } from "@/utils/chain"
 import { BN } from "@polkadot/util";
 import { $getClient, getHttpApi } from "@/plugins/chain";
 
-const props = defineProps(["router", "close", "app"])
+const props = defineProps(["router", "close", "app", "params"])
 const valueSlider = ref(0)
 const value = ref()
 const targetValue = ref()
-const vassetId = ref(5000)
+const vassetId = ref(parseInt(props.params.vassetId))
 const assetsInfo = ref<any>({})
 const userStore = useGlobalStore()
 const vtoken2token = ref<any>([0, [1, 1]])
@@ -161,26 +161,20 @@ const submit = async () => {
 
 onMounted(async () => {
   // 获取资产信息 
-  let assetsList = await getHttpApi().entries("asset", "assetsInfo", []);
+  let assetsList = await getHttpApi().entries("asset", "assetInfos", []);
   let assets: any = {};
   assetsList.forEach(({ keys, value }: any) => {
-    assets[getNumstrfromChain(keys[0].currencyId)] = value;
+    assets[getNumstrfromChain(keys[0])] = value;
   });
   assetsInfo.value = assets;
 
   let cvtoken2token: any = await getHttpApi().query("fairlanch", "vtoken2token", [vassetId.value]);
   vtoken2token.value = cvtoken2token;
 
-  let vamount = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, {
-    paraId: 4545,
-    currencyId: vassetId.value
-  }]);
+  let vamount = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, vassetId.value]);
   vAmount.value = vamount;
 
-  let amount = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, {
-    paraId: 4545,
-    currencyId: getNumstrfromChain(cvtoken2token[0]),
-  }]);
+  let amount = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, getNumstrfromChain(cvtoken2token[0])]);
   dAmount.value = amount;
 })
 

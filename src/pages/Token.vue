@@ -168,7 +168,9 @@ const action = (item: any) => {
       break;
     default:
       global.$CheckLogin(() => {
-        global.$VStake(router, {}, () => {
+        global.$VStake(router, {
+          vassetId: 5005
+        }, () => {
           startInit();
         })
       })
@@ -199,29 +201,29 @@ const initData = async () => {
   blockRewardData.value = getBnFromChain(blockReward[2]).mul(new BN(14400));
 
   // 获取资产信息 
-  let assetsList = await getHttpApi().entries("asset", "assetsInfo", []);
+  let assetsList = await getHttpApi().entries("asset", "assetInfos", []);
   let assets: any = {};
   assetsList.forEach(({ keys, value }: any) => {
-    assets[getNumstrfromChain(keys[0].currencyId)] = value;
+    assets[getNumstrfromChain(keys[0])] = value;
   });
 
   // 获取资产总量
   let totalList = await getHttpApi().entries("fairlanch", "stakingTotal", []);
   let totals: any = {};
   totalList.forEach(({ keys, value }: any) => {
-    totals[getNumstrfromChain(keys[0].currencyId)] = value;
+    totals[getNumstrfromChain(keys[0])] = value;
   });
 
   // 获取质押列表
   let stakingsList = await getHttpApi().entries("fairlanch", "stakings", [address.value]);
   let stakings: any = {};
   stakingsList.forEach(({ keys, value }: any) => {
-    let id = getNumstrfromChain(keys[1].currencyId);
+    let id = getNumstrfromChain(keys[1]);
     stakings[id] = value;
   });
   stakingsData.value = stakings;
 
-  // // 获取链上经济模型
+  // 获取链上经济模型
   let economicsList = await getHttpApi().entries("fairlanch", "economics", []);
   let economics: any[] = [];
   economicsList.forEach(({ keys, value }: any) => {
@@ -240,11 +242,11 @@ const initData = async () => {
   let toStakingsList = await getHttpApi().entries("fairlanch", "toStakings", [address.value]);
   let toStakings: any = {};
   toStakingsList.forEach(({ keys, value }: any) => {
-    let id = getNumstrfromChain(keys[1].currencyId);
+    let id = getNumstrfromChain(keys[1]);
     toStakings[id] = value;
   });
   toStakingsData.value = toStakings;
-  loader.value = 1;
+  // loader.value = 1;
 
   amount.value = (await getHttpApi().query("system", "account", [address.value])).data;
 }
@@ -315,9 +317,9 @@ const getAssetInfo = (id: string, assets: any, total: any) => {
 
   .icon {
     margin-left: 16px;
-    margin-right: 15px;
-    width: 40px;
-    height: 40px;
+    margin-right: 10px;
+    width: 65px;
+    height: 65px;
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center center;
@@ -325,12 +327,12 @@ const getAssetInfo = (id: string, assets: any, total: any) => {
 
   .title {
     h1 {
-      font-size: 16px;
+      font-size: 17px;
       font-weight: bold;
     }
 
     p {
-      font-size: 12px;
+      font-size: 13px;
       line-height: 14px;
       color: rgba($secondary-text-rgb, 0.6);
     }
@@ -394,5 +396,6 @@ const getAssetInfo = (id: string, assets: any, total: any) => {
 
 .loader-wrapper {
   font-size: 5.2px;
+  height: calc(100% - 150px);
 }
 </style>

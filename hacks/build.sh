@@ -21,6 +21,6 @@ fi
 # 编译
 npm run build
 
-ossutil64 -c ./hacks/.config rm -f oss://wetee-homeassets/ -r --all-versions
+ossutil64 -c ./hacks/.config rm -f oss://wetee-home/assets/ -r --all-versions
 ossutil64 -c ./hacks/.config -f --recursive cp dist/ oss://wetee-home
-ossutil64 -c ./hacks/.config set-meta oss://wetee-home/ Content-Type:application/javascript -f --update -r --include "*.js"
+ossutil64 -c ./hacks/.config set-meta oss://wetee-home/assets/ Content-Type:application/javascript -f --update -r --include "*.js"
