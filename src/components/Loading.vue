@@ -10,6 +10,7 @@
 <script setup lang="ts">
 import { defineProps,ref } from "vue";
 const props = defineProps(["params"])
+console.log(props.params)
 const title = ref(props.params.title || "Send transaction to chain");
 </script>
 
@@ -34,7 +35,7 @@ const title = ref(props.params.title || "Send transaction to chain");
         }
         .text{
             text-align: center;
-            color: rgba($primary-text-rgb, 0.6) ;
+            color: rgba($primary-text-rgb, 1) ;
             font-size: 22px;
             font-weight: 600;
             margin-left: 20px;

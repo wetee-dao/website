@@ -45,7 +45,7 @@
           </div>
         </div>
         <div class="split"></div>
-        <button class="submit" type="button" :disabled="value == 0" @click="submit">
+        <button class="submit" type="button" :disabled="!value" @click="submit">
           <div>Stake</div>
         </button>
       </div>
@@ -62,7 +62,7 @@ import PopHeader from "@/components/PopHeader.vue";
 import { useGlobalStore } from "@/stores/global";
 import { getBnFromChain, getNumstrfromChain, WTE, showWTE } from "@/utils/chain";
 import { BN } from "@polkadot/util";
-import { $getClient, getHttpApi } from "@/plugins/chain";
+import { $getChainProvider, getHttpApi } from "@/plugins/chain";
 
 const props = defineProps(["router", "close", "app", "params"])
 const valueSlider = ref(0)
@@ -113,7 +113,6 @@ const onValueSlider = (e: any) => {
 }
 
 const corssIn = () => {
-  //@ts-ignore
   window.$app.$CrossIn()
 }
 
@@ -129,16 +128,15 @@ const max = () => {
 }
 
 const submit = async () => {
-  const chain = getChain();
-  const client = chain.client;
+  const chain = await $getChainProvider();
+  const client = chain!.client!;
   const signer = userStore.userInfo.addr;
 
   try {
     const unix = 1000000
     const v = parseFloat(value.value) * unix
     const tx = client.tx.fairlanch.vStaking(vassetId.value, new BN(v).mul(new BN(WTE)).div(new BN(unix)))
-    await chain.SignAndSend(tx, signer, () => {
-      //@ts-ignore
+    await chain.signAndSend(tx, signer, () => {
       window.$notification["success"]({
         content: 'Success',
         meta: "Staking successful, the staking rewards will be calculated in the next cycle.",
@@ -147,9 +145,9 @@ const submit = async () => {
       })
       props.close();
     }, () => {
+
     })
   } catch (e: any) {
-    //@ts-ignore
     window.$notification["error"]({
       content: 'Error',
       meta: "" + e.toString(),
@@ -157,6 +155,8 @@ const submit = async () => {
       keepAliveOnHover: true
     })
   }
+
+  chain.close()
 }
 
 onMounted(async () => {
@@ -177,12 +177,6 @@ onMounted(async () => {
   let amount = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, getNumstrfromChain(cvtoken2token[0])]);
   dAmount.value = amount;
 })
-
-const getChain = (): any => {
-  const g = props.app!.config.globalProperties;
-  const chain = g.$getChain();
-  return chain
-}
 
 function removeNonNumericAndHandleMultipleDecimals(str: string) {
   let result = str.replace(/[^0-9\.]/g, '');

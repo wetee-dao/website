@@ -1,10 +1,16 @@
 <template>
     <div class="loading-box">
-        <div class="loader"></div>
+        <div class="loader">
+            <span class="loader-text">{{ text }}</span>
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
+
+const props = defineProps(["text"])
+const text = ref(props.text || "Loading...");
 </script>
 
 <style lang='scss' scoped>
@@ -27,8 +33,7 @@
         padding: 0 1em;
     }
 
-    .loader::before {
-        content: "Loading...";
+    .loader-text {
         color: $primary-text;
         font-size: 4.2em;
         padding: 0 0.5em;

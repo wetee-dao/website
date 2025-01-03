@@ -42,35 +42,6 @@ export const showWTE = (b: BN) => {
   return b.div(new BN(WTE / 1000)).toNumber() / 1000
 }
 
-// export const web3Accounts = (cb: (accounts: any[]) => void) => {
-//   if ((window as any).electronWeb3) {
-//     (window as any).electronWeb3.web3AccountsSubscribe("DAO", (allAccounts: any[]) => {
-//       cb(allAccounts)
-//     })
-//     return
-//   }
-
-//   if ((window as any).web3) {
-//     (window as any).web3.web3AccountsSubscribe("DAO", (allAccounts: any[]) => {
-//       cb(allAccounts)
-//     })
-//     return
-//   }
-
-//   // 获取区块链账户
-//   dapp.web3Enable('DAO').then(async (res) => {
-//     if (res.length > 0) {
-//       res[0].accounts.subscribe(async (as) => {
-//         const allAccounts = await dapp.web3Accounts();
-//         console.log(allAccounts)
-//         cb(allAccounts)
-//       })
-//     } else {
-//       cb([])
-//     }
-//   })
-// }
-
 export const bytesSign = async (account: any, token: string) => {
   const wrapped = u8aWrapBytes(token);
   // if ((window as any).electronWeb3) {
@@ -152,7 +123,6 @@ export const getWalletInfo = (userInfo: any) => {
   }
   const wallet: Wallet | undefined = getWallets().find(wallet => wallet.extensionName === userInfo.wallet);
   if (!wallet) {
-    //@ts-ignore
     window.$notification["error"]({
       content: 'Error',
       meta: "插件 " + userInfo.wallet + " 未安装",

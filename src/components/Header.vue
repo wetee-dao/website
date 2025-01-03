@@ -105,9 +105,7 @@ const global = useGlobelProperties()
 
 
 if (!props.shadow) {
-  //@ts-ignore
   window.$app = global;
-  //@ts-ignore
   window.$notification = notification;
   global.$notification = notification;
 }

@@ -14,5 +14,11 @@ app.use(createPinia())
 app.use(router)
 app.use(pop)
     .use(chain)
-
 app.mount('#app')
+
+declare global {
+    interface Window {
+        $notification: any;
+        $app: any;
+    }
+}

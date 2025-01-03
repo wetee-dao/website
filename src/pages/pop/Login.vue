@@ -77,7 +77,7 @@ import { SubstrateProvider } from "@/providers/substrate";
 import { MetaMaskProvider } from "@/providers/metamask";
 import { Metamask, setCustomChain } from "@/providers/MetaSnap";
 import { Loading } from "@/plugins/pop";
-import { $setChain, chainUrl, getMetaData } from "@/plugins/chain";
+import { chainUrl, getMetaData } from "@/plugins/chain";
 import { ss58toHex, getWalletInfo } from "@/utils/chain";
 import { keyring, shortAddress } from "@/utils/chain";
 import { useGlobalStore } from '@/stores/global';
@@ -125,8 +125,6 @@ const demoLogin = async () => {
     wallet: "demo-login",
   };
 
-  let chain = new SubstrateProvider();
-  $setChain(chain);
   store.setUserInfo(userInfo);
   // store.dispatch("setKeypair", { address: pair.address, mnemonic: mnemonic });
 
@@ -156,8 +154,6 @@ const showWallet = async (name: string, wallet: Wallet | null) => {
     try {
       // 安装启动snap
       const MataMaskSnap = await Metamask.enable!("WeTEE");
-      const meta = await getMetaData();
-      const _config = await setCustomChain(chainUrl, meta);
 
       const metaAccounts = await MataMaskSnap.accounts.get();
       if (metaAccounts.length == 0) {
@@ -174,8 +170,6 @@ const showWallet = async (name: string, wallet: Wallet | null) => {
         wallet: "metamask",
       };
 
-      const chain = new MetaMaskProvider(MataMaskSnap);
-      $setChain(chain);
       store.setUserInfo(userInfo);
 
       loading.close();

@@ -28,14 +28,12 @@
       </div>
     </div>
 
-    <div class="container" v-if="loader != 0">
+    <div class="container">
       <div class="flex staking-box bg-transparent items-center">
         <div class="icon flex items-center">
           <!-- <img src="/imgs/vDOT.svg" alt="" /> -->
         </div>
-        <div class="title min-w-[100px] flex-[2_2_0%] flex flex-col justify-center items-center">
-
-        </div>
+        <div class="title min-w-[100px] flex-[2_2_0%] flex flex-col justify-center items-center"></div>
         <div class="title min-w-[100px] flex-1 flex flex-col justify-center items-center">
           Reward Ratio
         </div>
@@ -52,6 +50,7 @@
           Action
         </div>
       </div>
+      <loadingBox class="loader-wrapper" text="Loading stakings ..." v-if="loader == 0" />
       <div class="flex staking-box items-center" v-for="(economic, _) in economicsData">
         <div class="icon flex items-center"
           :style="'background-image: url(\'/imgs/vStaking/' + economic.metadata.symbol + '.svg\')'">
@@ -65,7 +64,7 @@
           <!-- <p class="!text-center">-</p> -->
         </div>
         <div class="staking min-w-[100px] flex-1 flex justify-center items-center">
-          {{ showWTE(new BN(economic.metadata.total)) }} <span v-if="economic.metadata.staking_symbol" class="unit">{{
+          {{ showWTE(new BN(totalData[economic.id])) }} <span v-if="economic.metadata.staking_symbol" class="unit">{{
             economic.metadata.staking_symbol }}</span>
         </div>
         <div class="mstaking min-w-[140px] flex-1 flex justify-center items-center">
@@ -84,7 +83,6 @@
         </div>
       </div>
     </div>
-    <loadingBox class="loader-wrapper" v-if="loader == 0" />
     <div class="bottom"></div>
   </div>
 </template>
@@ -102,10 +100,14 @@ import router from '@/router';
 const loader = ref(0)
 
 const global = useGlobelProperties();
-const economicsData = ref<any[]>([]);
+const economicsData = ref<any[]>([
+  { "id": "1", "metadata": { "name": "TEE mint", "symbol": "TEE mint", "decimals": 12, "total": "-", "staking_symbol": "", "action": "TEE mint" }, "v": "25" },
+  { "id": "0", "metadata": { "name": "Chain mint", "symbol": "Chain mint", "decimals": 12, "total": "-", "staking_symbol": "", "action": "Chain Mint" }, "v": "10" },
+]);
 const blockRewardData = ref<BN>(new BN(0));
 const stakingsData = ref<any>({});
 const toStakingsData = ref<any>({});
+const totalData = ref<any>({});
 const userStore = useGlobalStore();
 const address = ref<string>(userStore.userInfo ? userStore.userInfo.addr : "");
 const StakeDesc = ref<any>({
@@ -187,7 +189,7 @@ const startInit = () => {
 }
 
 onMounted(async () => {
-  // await initData();
+  await initData();
   startInit();
 })
 
@@ -196,10 +198,6 @@ onUnmounted(async () => {
 })
 
 const initData = async () => {
-  // 获取每个区块的奖励
-  let blockReward: any = await getHttpApi().query("fairlanch", "blockReward", []);
-  blockRewardData.value = getBnFromChain(blockReward[2]).mul(new BN(14400));
-
   // 获取资产信息 
   let assetsList = await getHttpApi().entries("asset", "assetInfos", []);
   let assets: any = {};
@@ -207,12 +205,28 @@ const initData = async () => {
     assets[getNumstrfromChain(keys[0])] = value;
   });
 
+  // 获取链上经济模型
+  let economicsList = await getHttpApi().entries("fairlanch", "economics", []);
+  let economics: any[] = [];
+  economicsList.forEach(({ keys, value }: any) => {
+    let id = getNumstrfromChain(keys[0]);
+    const metadata = getAssetInfo(id, assets);
+    economics.push({
+      id: id,
+      metadata: metadata,
+      v: value,
+    })
+  });
+  economicsData.value = economics.reverse();
+  loader.value = 1;
+
   // 获取资产总量
   let totalList = await getHttpApi().entries("fairlanch", "stakingTotal", []);
   let totals: any = {};
   totalList.forEach(({ keys, value }: any) => {
     totals[getNumstrfromChain(keys[0])] = value;
   });
+  totalData.value = totals;
 
   // 获取质押列表
   let stakingsList = await getHttpApi().entries("fairlanch", "stakings", [address.value]);
@@ -223,21 +237,6 @@ const initData = async () => {
   });
   stakingsData.value = stakings;
 
-  // 获取链上经济模型
-  let economicsList = await getHttpApi().entries("fairlanch", "economics", []);
-  let economics: any[] = [];
-  economicsList.forEach(({ keys, value }: any) => {
-    let id = getNumstrfromChain(keys[0]);
-    const metadata = getAssetInfo(id, assets, totals);
-    economics.push({
-      id: id,
-      metadata: metadata,
-      v: value,
-      staking: stakings[id],
-    })
-  });
-  economicsData.value = economics.reverse();
-
   // 获取待质押列表
   let toStakingsList = await getHttpApi().entries("fairlanch", "toStakings", [address.value]);
   let toStakings: any = {};
@@ -246,12 +245,16 @@ const initData = async () => {
     toStakings[id] = value;
   });
   toStakingsData.value = toStakings;
-  // loader.value = 1;
 
+  // 获取用户 WTE 余额
   amount.value = (await getHttpApi().query("system", "account", [address.value])).data;
+
+  // 获取每个区块的奖励
+  let blockReward: any = await getHttpApi().query("fairlanch", "blockReward", []);
+  blockRewardData.value = getBnFromChain(blockReward[2]).mul(new BN(14400));
 }
 
-const getAssetInfo = (id: string, assets: any, total: any) => {
+const getAssetInfo = (id: string, assets: any) => {
   if (id == "0") {
     return {
       "name": "Chain mint",
@@ -262,6 +265,7 @@ const getAssetInfo = (id: string, assets: any, total: any) => {
       "action": "Chain Mint",
     }
   }
+
   if (id == "1") {
     return {
       "name": "TEE mint",
@@ -276,7 +280,6 @@ const getAssetInfo = (id: string, assets: any, total: any) => {
   let meta = assets[id].metadata;
   return {
     ...assets[id].metadata,
-    "total": getNumstrfromChain(total[id] ?? "0"),
     "staking_symbol": meta.symbol,
     "action": "Stake"
   };
@@ -316,7 +319,7 @@ const getAssetInfo = (id: string, assets: any, total: any) => {
   }
 
   .icon {
-    margin-left: 16px;
+    margin-left: 8px;
     margin-right: 10px;
     width: 65px;
     height: 65px;
@@ -396,6 +399,7 @@ const getAssetInfo = (id: string, assets: any, total: any) => {
 
 .loader-wrapper {
   font-size: 5.2px;
-  height: calc(100% - 150px);
+  height: 80px;
+  margin-top: -30px;
 }
 </style>

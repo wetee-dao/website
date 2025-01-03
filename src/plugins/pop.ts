@@ -26,7 +26,6 @@ export default {
       if (window.localStorage.getItem("userInfo")) {
         callbak()
       } else {
-        //@ts-ignore
         window.$notification["error"]({
           content: 'Wallet not connected',
           meta: 'Please connect your wallet before performing this action.',
@@ -39,6 +38,7 @@ export default {
 }
 
 export const Loading = (title: string | null): any => {
+  console.log(title)
   return openPop(null, {}, LoadingBox, "xLoading", { title: title }, () => {
 
   })

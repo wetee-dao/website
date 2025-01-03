@@ -4,6 +4,7 @@ import { ApiPromise } from "@polkadot/api";
 import type { SubmittableExtrinsic } from "@polkadot/api/types";
 import type { SignerPayloadJSON } from "@polkadot/types/types";
 import type { Injected } from "@polkadot/extension-inject/types";
+import type { onCallFn } from "@/plugins/chain";
 
 // MetaMask 交易对象
 export class MetaMaskProvider {
@@ -18,12 +19,12 @@ export class MetaMaskProvider {
   }
 
   // 提交交易
-  SignAndSend = async (tx: SubmittableExtrinsic<'promise'>, signer: string, onSeccess: onCallFn, onError: onCallFn) => {
+  signAndSend = async (tx: SubmittableExtrinsic<'promise'>, signer: string, onSeccess: onCallFn, onError: onCallFn) => {
     const payload = await buildPayload(this.client!, tx, signer);
     const signPayload = this.snap.signer.signPayload;
 
     if (!payload || !signPayload) {
-      // ElMessage.warning("SignAndSend Invalid metamask signPayload");
+      // ElMessage.warning("signAndSend Invalid metamask signPayload");
       return;
     }
 
@@ -33,7 +34,7 @@ export class MetaMaskProvider {
       //@ts-ignore
       const signResult = await signPayload(payload);
       if (!signResult) {
-        // ElMessage.warning("SignAndSend Invalid metamask signature");
+        // ElMessage.warning("signAndSend Invalid metamask signature");
         loading.close();
         return;
       }
@@ -76,7 +77,6 @@ export class MetaMaskProvider {
       });
     } catch (e: any) {
       loading.close();
-      //@ts-ignore
       window.$notification["error"]({
         content: 'Error',
         meta: e.toString(),
@@ -85,21 +85,22 @@ export class MetaMaskProvider {
       })
       onError(e)
     }
+    loading.close();
   }
 
   // 提交代理交易
-  ProxySignAndSend = async (tx: SubmittableExtrinsic<'promise'>, ProjectId: string, signer: string, onSeccess: onCallFn, onError: onCallFn) => {
+  proxysignAndSend = async (tx: SubmittableExtrinsic<'promise'>, ProjectId: string, signer: string, onSeccess: onCallFn, onError: onCallFn) => {
     // 构建代理交易
     const proxyTx = ProjectId != "-1" ? this.client!.tx.weTEEProject.proxyCall(
       parseInt(ProjectId),
       tx,
     ) : tx;
 
-    await this.SignAndSend(proxyTx, signer, onSeccess, onError)
+    await this.signAndSend(proxyTx, signer, onSeccess, onError)
   }
 
   close() {
-
+    this.client?.disconnect();
   }
 }
 
@@ -157,5 +158,5 @@ export const buildPayload = async (
   }
 };
 
-type onCallFn = (result: any) => void;
+
 
