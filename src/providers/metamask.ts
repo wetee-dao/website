@@ -4,7 +4,7 @@ import { ApiPromise } from "@polkadot/api";
 import type { SubmittableExtrinsic } from "@polkadot/api/types";
 import type { SignerPayloadJSON } from "@polkadot/types/types";
 import type { Injected } from "@polkadot/extension-inject/types";
-import type { onCallFn } from "@/plugins/chain";
+import { checkMetaData, type onCallFn } from "@/plugins/chain";
 
 // MetaMask 交易对象
 export class MetaMaskProvider {

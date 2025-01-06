@@ -6,7 +6,7 @@
           <img src="/imgs/staking.svg"></img>
         </div>
         <div class="title flex-1">
-          <h1>Token staking</h1>
+          <h1 class="page-title">Token staking</h1>
           <p>100% fair launch economics, to fairly obtain WTE rewards.</p>
         </div>
         <div class="tstaking flex">
@@ -75,9 +75,14 @@
         <div class="daily min-w-[150px] flex-1 flex justify-center items-center">
           {{ showWTE(getStakingReward(economic, stakingsData, blockRewardData)) }} <span class="unit">WTE</span>
         </div>
-        <div class="min-w-[105px] flex-1 flex justify-center items-center">
-          <div class="action flex justify-around items-center" @click="action(economic)">
+        <div class="min-w-[105px] flex-1 flex flex-col justify-center items-center">
+          <div class="action flex justify-center items-center" @click="action(economic)">
             {{ economic.metadata.action }}
+            <i class="iconfont">&#xe602;</i>
+          </div>
+          <div v-if="parseInt(economic.id) > 5000" class="unstaking action flex justify-center items-center"
+            @click="unStake(economic)">
+            Unstake
             <i class="iconfont">&#xe602;</i>
           </div>
         </div>
@@ -108,6 +113,7 @@ const blockRewardData = ref<BN>(new BN(0));
 const stakingsData = ref<any>({});
 const toStakingsData = ref<any>({});
 const totalData = ref<any>({});
+const vtoken2token = ref<any>([])
 const userStore = useGlobalStore();
 const address = ref<string>(userStore.userInfo ? userStore.userInfo.addr : "");
 const StakeDesc = ref<any>({
@@ -169,23 +175,34 @@ const action = (item: any) => {
       window.open("https://wetee.gitbook.io/docment/mint/tee-computing-mint", "_blank");
       break;
     default:
-      global.$CheckLogin(() => {
+      let vstakeItem = vtoken2token.value.find((v: any) => {
+        return getNumstrfromChain(v.value[0]) == item.id
+      })
+      if (vstakeItem) {
         global.$VStake(router, {
-          vassetId: 5005
+          vassetId: getNumstrfromChain(vstakeItem.keys[0])
         }, () => {
           startInit();
         })
-      })
+      }
       break;
   }
+}
+
+const unStake = (item: any) => {
+  global.$UnStake(router, {
+    assetId: getNumstrfromChain(item.id),
+  }, () => {
+    startInit();
+  })
 }
 
 let timer: any = null;
 const startInit = () => {
   // 设置新的定时器
-  timer = setInterval(async () => {
-    await initData();
-  }, 6000);
+  // timer = setInterval(async () => {
+  //   await initData();
+  // }, 6000);
 }
 
 onMounted(async () => {
@@ -219,6 +236,9 @@ const initData = async () => {
   });
   economicsData.value = economics.reverse();
   loader.value = 1;
+
+  let cvtoken2token: any = await getHttpApi().entries("fairlanch", "vtoken2token", []);
+  vtoken2token.value = cvtoken2token;
 
   // 获取资产总量
   let totalList = await getHttpApi().entries("fairlanch", "stakingTotal", []);
@@ -292,6 +312,10 @@ const getAssetInfo = (id: string, assets: any) => {
   height: 100vh;
   overflow-x: hidden;
   overflow-y: auto;
+}
+
+.page-title{
+  font-size: 24px !important;
 }
 
 .staking-box {
@@ -388,7 +412,13 @@ const getAssetInfo = (id: string, assets: any) => {
 
     .iconfont {
       font-size: 12px;
+      margin-left: 3px;
     }
+  }
+
+  .unstaking {
+    background-color: rgba($accent-color, 0.3);
+    margin-top: 5px;
   }
 }
 

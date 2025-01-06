@@ -30,12 +30,9 @@
         <li :class="path == '/tokens' ? 'active' : ''">
           <RouterLink to="/tokens">Fair Launch</RouterLink>
         </li>
-        <!-- <li :class="path == '/tee-store' ? 'active' : ''">
-          <RouterLink to="/tee-store">TEE Store</RouterLink>
-        </li> -->
-        <!-- <li class="dropdown">
-          <RouterLink to="/tee-store">Developers</RouterLink>
-        </li> -->
+        <li :class="path == '/cross' ? 'active' : ''">
+          <RouterLink to="/cross">Cross chain</RouterLink>
+        </li>
         <li class="dropdown header__dropdown">
           <a class="trans" tkey="nav_white_paper" target="_blank" href="https://wetee.gitbook.io/docment">Docs</a>
         </li>

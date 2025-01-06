@@ -85,7 +85,7 @@ import useGlobelProperties from "@/plugins/globel";
 import Identicon from "@/components/identicon.vue";
 import PopHeader from "@/components/PopHeader.vue";
 
-const props = defineProps(["router", "store", "close", "app"])
+const props = defineProps(["close", "params"])
 const store = useGlobalStore();
 const userInfo = ref<any>(store.userInfo);
 const polkadotAccounts = ref<any[]>([]);

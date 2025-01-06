@@ -10,7 +10,6 @@
 <script setup lang="ts">
 import { defineProps,ref } from "vue";
 const props = defineProps(["params"])
-console.log(props.params)
 const title = ref(props.params.title || "Send transaction to chain");
 </script>
 

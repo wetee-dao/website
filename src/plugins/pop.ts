@@ -1,49 +1,46 @@
 import { createApp, defineAsyncComponent } from "vue"
 import LoadingBox from '../components/Loading.vue'
 import Login from "@/pages/pop/Login.vue";
-import VStake from "@/pages/pop/VStake.vue";
-import Cross from "@/pages/pop/Cross.vue";
+import LoadingPop from "@/components/LoadingPop.vue";
 
 export default {
   install: function (app: any) {
-    app.config.globalProperties.$Loading = (router: Object, ps: any, close: Function) => {
-      return openPop(app, router, LoadingBox, "Loading", ps, close)
+    app.config.globalProperties.$Loading = (ps: any, close: Function) => {
+      return openPop(LoadingBox, "Loading", ps, close)
     };
 
-    app.config.globalProperties.$VStake = (router: Object, ps: any, close: Function) => {
-      return openPop(app, router, VStake, "VStake", ps, close)
+    app.config.globalProperties.$Login = (ps: any, close: Function) => {
+      return openPop(Login, "Login", ps, close)
     };
 
-    app.config.globalProperties.$Login = (router: Object, ps: any, close: Function) => {
-      return openPop(app, router, Login, "Login", ps, close)
+    app.config.globalProperties.$VStake = (ps: any, close: Function) => {
+      const VStake = AsyncComponentLoad(() => import('@/pages/pop/VStake.vue'));
+      return openPop(VStake, "VStake", ps, close)
     };
 
-    app.config.globalProperties.$CrossIn = (router: Object, ps: any, close: Function) => {
-      return openPop(app, router, Cross, "CrossIn", ps, close)
+    app.config.globalProperties.$UnStake = (ps: any, close: Function) => {
+      const UnStake = AsyncComponentLoad(() => import('@/pages/pop/UnStake.vue'))
+      return openPop(UnStake, "UnStake", ps, close)
     };
 
-    app.config.globalProperties.$CheckLogin = (callbak: Function) => {
-      if (window.localStorage.getItem("userInfo")) {
-        callbak()
-      } else {
-        window.$notification["error"]({
-          content: 'Wallet not connected',
-          meta: 'Please connect your wallet before performing this action.',
-          duration: 2500,
-          keepAliveOnHover: true
-        })
-      }
+    app.config.globalProperties.$CrossIn = (ps: any, close: Function) => {
+      const Cross = AsyncComponentLoad(() => import('@/pages/pop/CrossIn.vue'))
+      return openPop(Cross, "CrossIn", ps, close)
+    };
+
+    app.config.globalProperties.$CrossOut = (ps: any, close: Function) => {
+      const Cross = AsyncComponentLoad(() => import('@/pages/pop/CrossIn.vue'))
+      return openPop(Cross, "CrossIn", ps, close)
     };
   }
 }
 
+// 打开 loading 页面
 export const Loading = (title: string | null): any => {
-  console.log(title)
-  return openPop(null, {}, LoadingBox, "xLoading", { title: title }, () => {
-
-  })
+  return openPop(LoadingBox, "xLoading", { title: title }, undefined)
 };
 
+// 关闭所有弹窗
 let pops: any = {};
 window.addEventListener('popstate', function (event) {
   for (let i in pops) {
@@ -52,10 +49,12 @@ window.addEventListener('popstate', function (event) {
   pops = {};
 });
 
-function openPop(app: any, router: Object, pop: any, popid: string, params: any, close: Function) {
+// 打开弹窗
+function openPop(pop: any, popid: string, params: any, close: Function | undefined) {
   if (pops[popid]) {
     return
   }
+
   let messageInstance: any = null;
   let div = document.createElement("div")
   const closeFn = (ps: any) => {
@@ -75,8 +74,6 @@ function openPop(app: any, router: Object, pop: any, popid: string, params: any,
 
   let message = createApp(pop, {
     close: closeFn,
-    router,
-    app,
     params
   })
 
@@ -93,4 +90,25 @@ function openPop(app: any, router: Object, pop: any, popid: string, params: any,
     id: popid,
     close: closeFn
   }
+}
+
+
+// 异步组件加载
+function AsyncComponentLoad(c: any) {
+  const component = defineAsyncComponent({
+    loader: c,
+    delay: 0,
+    timeout: 3000,
+    loadingComponent: LoadingPop,
+    onError: (error: Error, retry: () => void, fail: () => void, attempts: number) => {
+      window.$notification["error"]({
+        content: 'Page loading error',
+        meta: error.message,
+        duration: 2500,
+        keepAliveOnHover: true
+      })
+    }
+  })
+
+  return component;
 }

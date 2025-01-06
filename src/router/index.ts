@@ -34,6 +34,11 @@ const router = createRouter({
       path: '/tokens',
       name: 'Token fair launch',
       component: () => import('../pages/Token.vue')
+    },
+    {
+      path: '/cross',
+      name: 'Cross asset',
+      component: () => import('../pages/Cross.vue')
     }
   ]
 })

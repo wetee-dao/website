@@ -42,6 +42,11 @@ export const showWTE = (b: BN) => {
   return b.div(new BN(WTE / 1000)).toNumber() / 1000
 }
 
+export const showToken = (b: BN, decimals: number) => {
+  let unit = new BN(10).pow(new BN(decimals));
+  return b.mul(new BN(1000)).div(unit).toNumber() / 1000
+}
+
 export const bytesSign = async (account: any, token: string) => {
   const wrapped = u8aWrapBytes(token);
   // if ((window as any).electronWeb3) {

@@ -1,16 +1,16 @@
 <template>
   <div class="cross-wrap">
     <div class="cross">
-      <PopHeader title="Cross chain in" @click="props.close()" />
+      <PopHeader :title="'Cross in from ' + from.name" @click="props.close()" />
       <div class="w-full flex items-center">
         <div class="w-full flex-1 p-7">
           <div class="chain-path">&nbsp;From</div>
           <div class="chain-title flex items-center">
-            <img src="/imgs/chainBifrost.svg" class="mr-3">
-            Biforst
+            <img :src="from.icon" class="mr-3">
+            {{ from.name }}
           </div>
         </div>
-        <i class="iconfont to-chain">&#xe7d8;</i>
+        <i class="iconfont to-chain">&#xe696;</i>
         <div class="w-full flex-1 p-7">
           <div class="chain-path text-right">To&nbsp;&nbsp;</div>
           <div class="chain-title flex justify-end items-center">
@@ -23,10 +23,10 @@
       <div class="w-full flex items-center relative text-center p-7">
         <div class="flex flex-col justify-between items-center">
           <span class="flex items-center token-title">
-            <img src="/imgs/vStaking/vDOT.svg" class="token-icon">
+            <img :src="'/imgs/vStaking/' + params.symbol + '.svg'" class="token-icon">
             <div class="flex flex-col">
-              <span class="text-left font-bold">vDOT</span>
-              <span class="text-left">
+              <span class="text-left font-bold">{{ params.symbol }}</span>
+              <span class="text-left amount-value">
                 Available&nbsp;&nbsp;{{ vAmount.free }}
               </span>
             </div>
@@ -59,7 +59,7 @@
       </div>
       <div class="split"></div>
       <div class="flex flex-col items-center justify-center">
-        <button type="button" class="submit ">
+        <button type="button" class="submit " @click="submit">
           <div>Cross in</div>
         </button>
       </div>
@@ -74,19 +74,21 @@ import { BN, isFunction } from "@polkadot/util";
 
 import PopHeader from "@/components/PopHeader.vue";
 import { useGlobalStore } from "@/stores/global";
-import { getBnFromChain, getNumstrfromChain } from "@/utils/chain";
-import { getHttpApi } from "@/plugins/chain";
+import { getBnFromChain, getNumstrfromChain, WTE } from "@/utils/chain";
+import { $getChainProvider, getConfig, getHttpApi } from "@/plugins/chain";
 
 const XCM_LOC = ['xcm', 'xcmPallet', 'polkadotXcm'];
-const props = defineProps(["router", "store", "close", "app"])
+const props = defineProps(["close", "params"])
+const params: any = ref(props.params);
+const chainId = ref("")
 const valueSlider = ref(0)
 const value = ref()
 const targetValue = ref()
-const vassetId = ref(5000)
 const userStore = useGlobalStore()
 const vtoken2token = ref()
 const vAmount = ref<any>({})
-const dAmount = ref<any>({})
+const config = getConfig()
+const from = ref(config.Chains[params.value.para_id])
 
 const onValue = (e: any) => {
   valueSlider.value = getBnFromChain(e.target.value).mul(new BN(100)).div(getBnFromChain(vAmount.value.free)).toNumber()
@@ -95,68 +97,87 @@ const onValue = (e: any) => {
   targetValue.value = value.value * vtoken2token.value[1][0] / vtoken2token.value[1][1]
 }
 
-const isParaTeleport = true;
-const recipientParaId = 4545;
-const recipientId = ""
 const submit = async () => {
-  const chain = getChain();
-  const api = chain.client;
-  const signer = userStore.userInfo.addr;
-  const m = XCM_LOC.filter((x) => api.tx[x] && isFunction(api.tx[x].limitedTeleportAssets))[0];
+  const chainConfig = config.Chains[params.value.para_id]
+  const recipientParaId = parseInt(chainId.value)
+  const isParaTeleport = chainConfig.isParaTeleport;
+  await $getChainProvider(async (chain): Promise<void> => {
+    const api = chain.client;
+    const signer = userStore.userInfo.addr;
+    const m = XCM_LOC.filter((x) => api!.tx[x] && isFunction(api!.tx[x].limitedTeleportAssets))[0];
 
-  let call = api.tx[m].limitedTeleportAssets(
-    // 资产接收链
-    {
-      V3: isParaTeleport
-        ? {
-          interior: 'Here',
-          parents: 1
-        }
-        : {
+    let call = api!.tx[m].reserveTransferAssets(
+      // 资产接收链
+      {
+        V2: {
+          parents: 0,
           interior: {
             X1: {
               ParaChain: recipientParaId
             }
-          },
-          parents: 0
+          }
         }
-    },
-    // 用户
-    {
-      V3: {
-        interior: {
-          X1: {
-            AccountId32: {
-              id: api.createType('AccountId32', recipientId).toHex(),
-              network: null
+      },
+      // 用户
+      {
+        V2: {
+          parents: 0,
+          interior: {
+            X1: {
+              AccountId32: {
+                id: api!.createType('AccountId32', signer).toHex(),
+                network: null
+              }
             }
-          }
-        },
-        parents: 0
-      }
-    },
-    // 资产
-    {
-      V3: [{
-        id: {
-          Concrete: {
-            interior: 'Here',
-            parents: isParaTeleport
-              ? 1
-              : 0
-          }
-        },
-        fun: {
-          Fungible: 100000
-        },
-      }]
-    },
-    0,
-    { Unlimited: null }
-  )
+          },
+        }
+      },
+      // 资产
+      {
+        V2: [{
+          id: {
+            Concrete: {
+              interior: 'Here',
+              parents: isParaTeleport
+                ? 0
+                : 1
+            }
+          },
+          fun: {
+            Fungible: 1*WTE/1000
+          },
+        }]
+      },
+      0,
+    )
+
+    try {
+      await chain.signAndSend(call, signer, () => {
+        window.$notification["success"]({
+          content: 'Success',
+          meta: "Staking successful, the staking rewards will be calculated in the next cycle.",
+          duration: 2500,
+          keepAliveOnHover: true
+        })
+        props.close();
+      }, () => {
+
+      })
+    } catch (e: any) {
+      window.$notification["error"]({
+        content: 'Error',
+        meta: "" + e.toString(),
+        duration: 2500,
+        keepAliveOnHover: true
+      })
+    }
+  }, chainConfig.api)
 }
 
 onMounted(async () => {
+  chainId.value = getNumstrfromChain(await getHttpApi().query("asset", "chainID", []));
+  console.log(chainId.value)
+
   // 获取资产信息 
   // let assetsList = await getHttpApi().entries("asset", "assetsInfo", []);
   // let assets: any = {};
@@ -173,12 +194,6 @@ onMounted(async () => {
   // let amount = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, getNumstrfromChain(cvtoken2token[0])]);
   // dAmount.value = amount;
 })
-
-const getChain = (): any => {
-  const g = props.app!.config.globalProperties;
-  const chain = g.$getChain();
-  return chain
-}
 
 </script>
 
@@ -205,6 +220,10 @@ const getChain = (): any => {
     font-size: 15px;
   }
 
+  .amount-value {
+    font-size: 12px;
+  }
+
   .chain-path {
     margin-bottom: 10px;
   }
@@ -213,9 +232,10 @@ const getChain = (): any => {
     font-size: 20px;
     width: 40px;
     height: 40px;
+    margin-top: 28px;
     text-align: center;
     line-height: 40px;
-    background: #5757572b;
+    background: rgba($secondary-text-rgb, 0.03);
   }
 
   .chain-title {

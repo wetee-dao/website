@@ -1,4 +1,4 @@
-import type { onCallFn } from "@/plugins/chain";
+import { checkMetaData, type onCallFn } from "@/plugins/chain";
 import { Loading } from "@/plugins/pop";
 import { keyring } from "@/utils/chain";
 import { ApiPromise } from "@polkadot/api";
@@ -12,7 +12,7 @@ export class SubstrateProvider {
   unsubscribe: any;
 
   // 提交交易
-  signAndSend = async (tx: SubmittableExtrinsic<'promise'>, signer: string, onSeccess: onCallFn, onError: onCallFn) => {
+  signAndSend = async (tx: SubmittableExtrinsic<'promise'>, signer: string, onSeccess: onCallFn, onError: onCallFn): Promise<void> => {
     let keypair = JSON.parse(window.localStorage.getItem("keypair") || "{}")
     let ps = [];
     if (keypair[signer]) {
@@ -24,8 +24,12 @@ export class SubstrateProvider {
         userInfo = JSON.parse(window.localStorage.getItem("userInfo") || "{}")
       }
 
+      // 获取钱包
       const wallet: Wallet | undefined = getWallets().find(wallet => wallet.extensionName === userInfo.wallet);
       await wallet!.enable("WeTEE");
+
+      // 检查元数据版本
+      await checkMetaData(this.client!,wallet!.extension)
       const account = (await wallet!.getAccounts()).find(account => account.address === signer);
       if (!account) {
         window.$notification["error"]({
@@ -41,55 +45,60 @@ export class SubstrateProvider {
 
     const loading = Loading(null)
 
-    try {
-      // @ts-ignore
-      const unsub = await tx.signAndSend(...ps, (result: any) => {
-        if (result.dispatchError) {
-          let error = "";
-          if (result.dispatchError.isModule) {
-            const decoded = this.client!.registry.findMetaError(result.dispatchError.asModule);
-            const { docs, name, section } = decoded;
-            error = `${section}.${name}: ${docs.join(' ')}`;
-          } else {
-            error = `client.dispatchError.toString())`
+    return new Promise(async (resolve, reject) => {
+      try {
+        // @ts-ignore
+        const unsub = await tx.signAndSend(...ps, ({ events = [], status,dispatchError }: any) => {
+          if (dispatchError) {
+            let error = "";
+            if (dispatchError.isModule) {
+              const decoded = this.client!.registry.findMetaError(dispatchError.asModule);
+              const { docs, name, section } = decoded;
+              error = `${section}.${name}: ${docs.join(' ')}`;
+            } else {
+              error = `client.dispatchError.toString())`
+            }
+            loading.close();
+            unsub();
+  
+            window.$notification["error"]({
+              content: 'Error',
+              meta: error,
+              duration: 2500,
+              keepAliveOnHover: true
+            })
+  
+            onError(error);
+            reject()
+            return
           }
-          loading.close();
-          unsub();
-
-          //@ts-ignore
-          window.$notification["error"]({
-            content: 'Error',
-            meta: error,
-            duration: 2500,
-            keepAliveOnHover: true
-          })
-
-          onError(error);
-          return
-        }
-        if (result.status.isInBlock) {
-          console.log(`Transaction included at blockHash ${result.status.asInBlock}`);
-          loading.close();
-          unsub();
-          onSeccess(result);
-        } else if (result.status.isFinalized) {
-          console.log(`Transaction finalized at blockHash ${result.status.asFinalized}`);
-          loading.close();
-          unsub();
-          onSeccess(result);
-        }
-      });
-    } catch (e: any) {
-      loading.close();
-
-      window.$notification["error"]({
-        content: 'Error',
-        meta: e.toString(),
-        duration: 2500,
-        keepAliveOnHover: true
-      })
-      onError(e)
-    }
+  
+          if (status.isInBlock) {
+            console.log(`Transaction included at blockHash ${status.asInBlock}`);
+            loading.close();
+            unsub();
+            onSeccess(status);
+            resolve(status);
+          } else if (status.isFinalized) {
+            console.log(`Transaction finalized at blockHash ${status.asFinalized}`);
+            loading.close();
+            unsub();
+            resolve(status);
+            onSeccess(status);
+          }
+        });
+      } catch (e: any) {
+        loading.close();
+        window.$notification["error"]({
+          content: 'Error',
+          meta: e.toString(),
+          duration: 2500,
+          keepAliveOnHover: true
+        })
+        onError(e)
+        reject()
+      }
+    })
   }
 
   // 提交代理交易

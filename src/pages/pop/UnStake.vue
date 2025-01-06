@@ -1,21 +1,18 @@
 <template>
   <div class="vstake-wrap">
     <div class="vstake">
-      <PopHeader :title="'Vtoken stake - ' + assetInfo(vassetId.toString()).metadata.symbol" @click="props.close()" />
+      <PopHeader :title="'Unstake - ' + assetInfo(assetId.toString()).metadata.symbol" @click="props.close()" />
       <div class="flex flex-col items-center">
         <div class="w-full flex flex-col items-center relative text-center p-7">
           <div class="flex justify-between items-center mb-4 w-full">
             <span class="flex items-center token-title">
-              <img :src="'/imgs/vStaking/' + assetInfo(vassetId.toString()).metadata.symbol + '.svg'" alt=""
+              <img :src="'/imgs/vStaking/' + assetInfo(assetId.toString()).metadata.symbol + '.svg'" alt=""
                 class="token-icon">
-              <span class="text-base">{{ assetInfo(vassetId.toString()).metadata.name }}</span>
+              <span class="text-base">{{ assetInfo(assetId.toString()).metadata.name }}</span>
             </span>
             <span class="space-x-2 flex items-center">
               <span class="fonts-small-light-normal">Balance</span>
-              <span class="fonts-small">{{ showWTE(new BN(vAmount.free)) }}</span>
-              <span class="cursor-pointer flex items-center cross-in" @click="corssIn">
-                <i class="iconfont">&#xe64a;</i>&nbsp;Cross in
-              </span>
+              <span class="fonts-small">{{ showWTE(new BN(Amount.free)) }}</span>
             </span>
           </div>
           <div class="flex w-full items-center in-input pb-4">
@@ -29,11 +26,11 @@
         <div class="split">
           <i class="iconfont">&#xe692;</i>
         </div>
-        <div class="flex-1 w-full flex flex-col items-center text-center p-7">
+        <div class="flex-1 w-full flex flex-col items-center text-center p-7" v-if="vassetId != -1">
           <div class="flex items-center justify-between mb-4 w-full">
             <span class="flex items-center token-title">
-              <img :src="'/imgs/vStaking/' + assetInfo(vtoken2token[0]).metadata.symbol + '.svg'" class="token-icon">
-              <span class="text-base">{{ assetInfo(vtoken2token[0]).metadata.name }}</span>
+              <img :src="'/imgs/vStaking/' + assetInfo(vassetId).metadata.symbol + '.svg'" class="token-icon">
+              <span class="text-base">{{ assetInfo(vassetId).metadata.name }}</span>
             </span>
             <span class="space-x-2 ">
               <span class="fonts-small-light-normal">Balance</span>
@@ -68,11 +65,12 @@ const props = defineProps(["close", "params"])
 const valueSlider = ref(0)
 const value = ref()
 const targetValue = ref()
-const vassetId = ref(parseInt(props.params.vassetId))
+const assetId = ref(parseInt(props.params.assetId))
+const vassetId = ref<any>(-1)
 const assetsInfo = ref<any>({})
 const userStore = useGlobalStore()
 const vtoken2token = ref<any>([0, [1, 1]])
-const vAmount = ref<any>({})
+const Amount = ref<any>({})
 const dAmount = ref<any>({})
 
 const onValue = (e: any) => {
@@ -86,7 +84,7 @@ const onValue = (e: any) => {
     return
   }
 
-  let slider = parseFloat(v) * 100 / showWTE(getBnFromChain(vAmount.value.free))
+  let slider = parseFloat(v) * 100 / showWTE(getBnFromChain(Amount.value.free))
   valueSlider.value = slider
   if (v.indexOf(".")) {
     value.value = "" + parseFloat(parseFloat(v).toFixed(5))
@@ -108,12 +106,8 @@ const onValue = (e: any) => {
 const onValueSlider = (e: any) => {
   valueSlider.value = e
 
-  value.value = showWTE(getBnFromChain(vAmount.value.free)) * parseFloat(e) / 100
+  value.value = showWTE(getBnFromChain(Amount.value.free)) * parseFloat(e) / 100
   targetValue.value = value.value * vtoken2token.value[1][0] / vtoken2token.value[1][1]
-}
-
-const corssIn = () => {
-  window.$app.$CrossIn()
 }
 
 const assetInfo = (id: string) => {
@@ -135,7 +129,7 @@ const submit = async () => {
     try {
       const unix = 1000000
       const v = parseFloat(value.value) * unix
-      const tx = client.tx.fairlanch.vStaking(vassetId.value, new BN(v).mul(new BN(WTE)).div(new BN(unix)))
+      const tx = client.tx.fairlanch.vStaking(assetId.value, new BN(v).mul(new BN(WTE)).div(new BN(unix)))
       await chain.signAndSend(tx, signer, () => {
         window.$notification["success"]({
           content: 'Success',
@@ -167,14 +161,19 @@ onMounted(async () => {
   });
   assetsInfo.value = assets;
 
-  let cvtoken2token: any = await getHttpApi().query("fairlanch", "vtoken2token", [vassetId.value]);
+  // 获取 vtoken2token
+  let cvtoken2token: any = await getHttpApi().entries("fairlanch", "vtoken2token", []);
   vtoken2token.value = cvtoken2token;
 
-  let vamount = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, vassetId.value]);
-  vAmount.value = vamount;
+  vassetId.value = getNumstrfromChain(vtoken2token.value.find((v: any) => {
+    return getNumstrfromChain(v.value[0]) == assetId.value.toString()
+  }).keys[0])
 
-  let amount = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, getNumstrfromChain(cvtoken2token[0])]);
-  dAmount.value = amount;
+  let damount = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, parseInt(vassetId.value)]);
+  dAmount.value = damount;
+
+  let amount = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, assetId.value]);
+  Amount.value = amount;
 })
 
 function removeNonNumericAndHandleMultipleDecimals(str: string) {

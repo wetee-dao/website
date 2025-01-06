@@ -60,6 +60,7 @@ export const getHttpApi = () => {
 // 检测是否支持当前链
 export async function checkMetaData(api: ApiPromise, ext: Injected): Promise<boolean> {
   const cmeta = (await ext.metadata!.get()).find((m) => m.genesisHash === api.genesisHash.toHex() && m.specVersion == api.runtimeVersion.specVersion.toNumber())
+
   if (cmeta) {
     return true
   }
@@ -92,20 +93,20 @@ export async function getMetaData(api: ApiPromise) {
   return meta as MetadataDef
 }
 
-export const $getChainProvider = async (): Promise<ChainWrap> => {
+// 获取链对象
+export const $getChainProvider = async (run: (chain: ChainWrap) => Promise<void>, url: string | undefined = undefined): Promise<void> => {
   const userStore = useGlobalStore()
   const loading = Loading("Connecting to chain...")
 
+  let chain = undefined;
   try {
-    const wsProvider = new WsProvider(chainUrl);
+    const wsProvider = new WsProvider(url || chainUrl);
     const api = await ApiPromise.create({
       provider: wsProvider,
       types: chainJson,
     });
 
-    await api.rpc.chain.getFinalizedHead()
-
-    let chain = undefined;
+    await api.rpc.chain.getFinalizedHead();
     if (userStore.userInfo && userStore.userInfo.provider) {
       if (userStore.userInfo.provider == "metamask") {
         try {
@@ -128,30 +129,70 @@ export const $getChainProvider = async (): Promise<ChainWrap> => {
         }
       }
     } else {
-      chain = new SubstrateProvider()
+      chain = new SubstrateProvider();
     }
 
-    chain!.client = api
-    console.info("connect chain success")
-    loading.close()
-    return chain!;
+    chain!.client = api;
+    console.info("connect chain success");
+    loading.close();
+
+    await run(chain!);
+    // chain!.close();
   } catch (e) {
-    loading.close()
+    loading.close();
     window.$notification["error"]({
       content: 'Error',
       meta: "connect chain error:" + e,
       duration: 2500,
       keepAliveOnHover: true
-    })
+    });
+    chain!.close();
     throw new Error("chain connect error");
   }
+}
 
-
+export const getConfig = ():any => {
+  return {
+    "Tokens": {
+      "PAS": [
+        "0"
+      ],
+      "vDOT": [
+        "2030"
+      ],
+    },
+    "Chains":{
+      "0":{
+        name: "Paseo",
+        icon: "/imgs/vStaking/PAS.svg",
+        api: "wss://api2.zondax.ch/pas/node/rpc",
+        isParaTeleport: true,
+      },
+      "2030":{
+        name: "Biforst",
+        icon: "/imgs/chainBifrost.svg",
+        api: "wss://bifrost-rpc.paseo.liebi.com/ws",
+        isParaTeleport: false,
+      }
+    }
+  }
 }
 
 
 // vue 插件入口
 export default {
   install: function (app: any) {
+    app.config.globalProperties.$CheckLogin = (callbak: Function) => {
+      if (window.localStorage.getItem("userInfo")) {
+        callbak()
+      } else {
+        window.$notification["error"]({
+          content: 'Wallet not connected',
+          meta: 'Please connect your wallet before performing this action.',
+          duration: 2500,
+          keepAliveOnHover: true
+        })
+      }
+    };
   }
 }
