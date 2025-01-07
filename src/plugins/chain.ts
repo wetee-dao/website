@@ -133,21 +133,16 @@ export const $getChainProvider = async (run: (chain: ChainWrap) => Promise<void>
     }
 
     chain!.client = api;
-    console.info("connect chain success");
+
+    console.info("connect chain success",api.registry.chainDecimals);
     loading.close();
 
     await run(chain!);
-    // chain!.close();
+    chain!.close();
   } catch (e) {
     loading.close();
-    window.$notification["error"]({
-      content: 'Error',
-      meta: "connect chain error:" + e,
-      duration: 2500,
-      keepAliveOnHover: true
-    });
     chain!.close();
-    throw new Error("chain connect error");
+    console.error("chain connect error :",e);
   }
 }
 
@@ -166,13 +161,13 @@ export const getConfig = ():any => {
         name: "Paseo",
         icon: "/imgs/vStaking/PAS.svg",
         api: "wss://api2.zondax.ch/pas/node/rpc",
-        isParaTeleport: true,
+        isParent: true,
       },
       "2030":{
         name: "Biforst",
         icon: "/imgs/chainBifrost.svg",
         api: "wss://bifrost-rpc.paseo.liebi.com/ws",
-        isParaTeleport: false,
+        isParent: false,
       }
     }
   }

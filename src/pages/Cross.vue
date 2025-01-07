@@ -101,31 +101,35 @@ const crossIn = (item: any) => {
   global.$CrossIn({
     asset_id: item.id,
     symbol: item.metadata.symbol.replaceAll(' ', ''),
-    para_id: item.paraId,
+    // para_id: item.paraId,
   }, () => {
-
+    startInit();
   })
 }
 
 const crossOut = (item: any) => {
-  window.$app.$CrossOut()
+  window.$app.$CrossOut({
+    asset_id: item.id,
+    symbol: item.metadata.symbol.replaceAll(' ', ''),
+    // para_id: item.paraId,
+  }, () => {
+    startInit();
+  })
 }
 
-let timer: any = null;
-const startInit = () => {
-  // 设置新的定时器
-  // timer = setInterval(async () => {
-  //   await initData();
-  // }, 6000);
+const startInit = async () => {
+  await initData();
+  setTimeout(() => {
+    initData();
+  }, 6000)
 }
 
 onMounted(async () => {
   await initData();
-  startInit();
 })
 
 onUnmounted(async () => {
-  clearInterval(timer);
+
 })
 
 const initData = async () => {

@@ -179,7 +179,7 @@ const action = (item: any) => {
         return getNumstrfromChain(v.value[0]) == item.id
       })
       if (vstakeItem) {
-        global.$VStake(router, {
+        global.$VStake({
           vassetId: getNumstrfromChain(vstakeItem.keys[0])
         }, () => {
           startInit();
@@ -190,7 +190,7 @@ const action = (item: any) => {
 }
 
 const unStake = (item: any) => {
-  global.$UnStake(router, {
+  global.$UnStake({
     assetId: getNumstrfromChain(item.id),
   }, () => {
     startInit();
@@ -199,15 +199,11 @@ const unStake = (item: any) => {
 
 let timer: any = null;
 const startInit = () => {
-  // 设置新的定时器
-  // timer = setInterval(async () => {
-  //   await initData();
-  // }, 6000);
+   initData();
 }
 
 onMounted(async () => {
   await initData();
-  startInit();
 })
 
 onUnmounted(async () => {
@@ -314,7 +310,7 @@ const getAssetInfo = (id: string, assets: any) => {
   overflow-y: auto;
 }
 
-.page-title{
+.page-title {
   font-size: 24px !important;
 }
 

@@ -64,7 +64,7 @@ export class SubstrateProvider {
             window.$notification["error"]({
               content: 'Error',
               meta: error,
-              duration: 2500,
+              duration: 10500,
               keepAliveOnHover: true
             })
   
@@ -83,8 +83,8 @@ export class SubstrateProvider {
             console.log(`Transaction finalized at blockHash ${status.asFinalized}`);
             loading.close();
             unsub();
-            resolve(status);
             onSeccess(status);
+            resolve(status);
           }
         });
       } catch (e: any) {

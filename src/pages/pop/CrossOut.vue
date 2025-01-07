@@ -1,21 +1,21 @@
 <template>
   <div class="cross-wrap">
     <div class="cross">
-      <PopHeader :title="'Cross in from ' + from.name" @click="props.close()" />
+      <PopHeader :title="'Cross out to ' + to.name" @click="props.close()" />
       <div class="w-full flex items-center">
         <div class="w-full flex-1 p-7">
           <div class="chain-path">&nbsp;From</div>
           <div class="chain-title flex items-center">
-            <img :src="from.icon" class="mr-3">
-            {{ from.name }}
+            <img src="/imgs/chainWetee.svg" class="mr-3">
+            WeTEE
           </div>
         </div>
         <i class="iconfont to-chain">&#xe696;</i>
         <div class="w-full flex-1 p-7">
           <div class="chain-path text-right">To&nbsp;&nbsp;&nbsp;</div>
           <div class="chain-title flex justify-end items-center">
-            WeTEE
-            <img src="/imgs/chainWetee.svg" class="ml-3">
+            {{ to.name }}
+            <img :src="to.icon" class="ml-3">
           </div>
         </div>
       </div>
@@ -35,7 +35,7 @@
         </div>
         <div class=" flex flex-1 items-center in-input">
           <input type="number" class="w-full text-right mr-2" placeholder="0.0" :value="value" @input="onValue">
-          <div class="max-btn">
+          <div class="max-btn" @click="max">
             Max
           </div>
         </div>
@@ -60,8 +60,8 @@
       </div>
       <div class="split"></div>
       <div class="flex flex-col items-center justify-center">
-        <button type="button" class="submit" :disabled="!value || parseFloat(value) < 0.1" @click="submit">
-          <div>Cross in</div>
+        <button type="button" :disabled="!value || parseFloat(value) < 0.1" class="submit " @click="submit">
+          <div>Cross out</div>
         </button>
       </div>
     </div>
@@ -71,14 +71,13 @@
 
 <script lang="ts" setup>
 import { onMounted, ref } from "vue";
-import { BN, isFunction } from "@polkadot/util";
+import { BN } from "@polkadot/util";
 
 import PopHeader from "@/components/PopHeader.vue";
 import { useGlobalStore } from "@/stores/global";
-import { getBnFromChain, getNumstrfromChain, WTE, showToken } from "@/utils/chain";
+import { getNumstrfromChain, WTE, showToken } from "@/utils/chain";
 import { $getChainProvider, getConfig, getHttpApi } from "@/plugins/chain";
 
-const XCM_LOC = ['xcm', 'xcmPallet', 'polkadotXcm'];
 const props = defineProps(["close", "params"])
 const params: any = ref(props.params);
 const chainId = ref("")
@@ -87,7 +86,7 @@ const userStore = useGlobalStore()
 const fromAmount = ref<any>({})
 const para_id = ref("0")
 const config = getConfig()
-const from = ref(config.Chains[para_id.value])
+const to = ref(config.Chains[para_id.value])
 const assetInfo = ref({
   metadata: { decimals: 0 }
 })
@@ -96,9 +95,12 @@ const onValue = (e: any) => {
   value.value = e.target.value
 }
 
+const max = () => {
+  value.value = showToken(new BN(fromAmount.value.free), assetInfo.value.metadata.decimals)
+}
+
 const submit = async () => {
   const chainConfig = config.Chains[para_id.value]
-  const recipientParaId = parseInt(chainId.value)
   const isParent = chainConfig.isParent;
 
   const unix = 1000000
@@ -108,51 +110,90 @@ const submit = async () => {
   await $getChainProvider(async (chain): Promise<void> => {
     const api = chain.client;
     const signer = userStore.userInfo.addr;
-    const m = XCM_LOC.filter((x) => api!.tx[x] && isFunction(api!.tx[x].limitedTeleportAssets))[0];
 
-    let call = api!.tx[m].reserveTransferAssets(
-      // 资产接收链
-      {
+    // let call = api!.tx.polkadotXcm.transferAssets(
+    //   // 资产接收链
+    //   {
+    //     V3: isParent ? {
+    //       parents: 1,
+    //       interior: "Here",
+    //     } : {
+    //       parents: 0,
+    //       interior: {
+    //         X1: {
+    //           ParaChain: parseInt(para_id.value)
+    //         }
+    //       }
+    //     }
+    //   },
+    //   // 用户
+    //   {
+    //     V3: {
+    //       parents: 0,
+    //       interior: {
+    //         X1: {
+    //           AccountId32: {
+    //             id: api!.createType('AccountId32', signer).toHex(),
+    //             network: null
+    //           }
+    //         }
+    //       },
+    //     }
+    //   },
+    //   // 资产
+    //   {
+    //     V3: [{
+    //       id: {
+    //         Concrete: {
+    //           interior: 'Here',
+    //           parents: isParent
+    //             ? 1
+    //             : 0
+    //         }
+    //       },
+    //       fun: {
+    //         Fungible: bnv
+    //       },
+    //     }]
+    //   },
+    //   0,
+    //   "Unlimited",
+    // )
+
+    let call = api!.tx.xTokens.transfer(
+      params.value.asset_id,
+      bnv,
+      isParent ? {
         V2: {
-          parents: 0,
-          interior: {
-            X1: {
-              ParaChain: recipientParaId
-            }
-          }
-        }
-      },
-      // 用户
-      {
-        V2: {
-          parents: 0,
+          parents: 1,
           interior: {
             X1: {
               AccountId32: {
+                network: null,
                 id: api!.createType('AccountId32', signer).toHex(),
-                network: null
               }
             }
           },
+        },
+      } : {
+        V2: {
+          parents: 0,
+          interior: {
+            X2: [
+              {
+                Parachain: parseInt(para_id.value)
+              },
+              {
+                AccountId32: {
+                  network: null,
+                  id: api!.createType('AccountId32', signer).toHex(),
+                }
+              }
+            ]
+          }
         }
       },
-      // 资产
-      {
-        V2: [{
-          id: {
-            Concrete: {
-              interior: 'Here',
-              parents: isParent
-                ? 0
-                : 1
-            }
-          },
-          fun: {
-            Fungible: bnv
-          },
-        }]
-      },
-      0,
+      "Unlimited"
     )
 
     try {
@@ -168,22 +209,18 @@ const submit = async () => {
 
       })
     } catch (e: any) {
-      window.$notification["error"]({
-        content: 'Error',
-        meta: "" + e.toString(),
-        duration: 2500,
-        keepAliveOnHover: true
-      })
+
     }
-  }, chainConfig.api)
+  })
 }
 
 onMounted(async () => {
+  // 获取资产的 ParaId
   let assetParaIds = await getHttpApi().entries("asset", "assetParaIds", []);
   assetParaIds.forEach(({ keys, value }: any) => {
     if (getNumstrfromChain(keys[0]) == params.value.asset_id) {
       para_id.value = getNumstrfromChain(value)
-      from.value = config.Chains[para_id.value]
+      to.value = config.Chains[para_id.value]
     }
   });
 
@@ -209,7 +246,7 @@ onMounted(async () => {
   top: 0;
   left: 0;
   z-index: 10;
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.93);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -219,7 +256,7 @@ onMounted(async () => {
     width: 100%;
     padding-bottom: 20px;
     background-color: rgba($primary-bg-rgb, $alpha: 1);
-    border: 3px solid rgba($primary-text-rgb, 0.2);
+    border: 3px solid rgba($accent-color, 0.33);
     font-size: 15px;
   }
 
@@ -257,7 +294,7 @@ onMounted(async () => {
 
   .dest {
     font-size: 14px;
-    color: rgba($primary-text-rgb, $alpha: 1);
+    color: rgba($accent-color, $alpha: 0.5);
     font-weight: bold;
   }
 
@@ -346,7 +383,7 @@ onMounted(async () => {
   }
 
   .submit {
-    background: rgba($primary-text-rgb, 0.2);
+    background: rgba($accent-color, 0.8);
     width: 88%;
     padding: 10px 10px;
     margin-top: 20px;

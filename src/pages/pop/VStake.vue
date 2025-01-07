@@ -45,7 +45,7 @@
           </div>
         </div>
         <div class="split"></div>
-        <button class="submit" type="button" :disabled="!value" @click="submit">
+        <button class="submit" type="button" :disabled="!value || parseFloat(value) < 0.1" @click="submit">
           <div>Stake</div>
         </button>
       </div>
@@ -112,8 +112,21 @@ const onValueSlider = (e: any) => {
   targetValue.value = value.value * vtoken2token.value[1][0] / vtoken2token.value[1][1]
 }
 
+const startInit = async () => {
+  await initData();
+  setTimeout(() => {
+    initData();
+  }, 6000)
+}
+
 const corssIn = () => {
-  window.$app.$CrossIn()
+  let item = assetInfo(vassetId.value.toString())
+  window.$app.$CrossIn({
+    asset_id: vassetId.value,
+    symbol: item.metadata.symbol.replaceAll(' ', ''),
+  }, () => {
+    startInit();
+  })
 }
 
 const assetInfo = (id: string) => {
@@ -128,13 +141,13 @@ const max = () => {
 }
 
 const submit = async () => {
-  await $getChainProvider(async (chain):Promise<void> => {
+  await $getChainProvider(async (chain): Promise<void> => {
     const client = chain!.client!;
     const signer = userStore.userInfo.addr;
+    const unix = 1000000
+    const v = parseFloat(value.value) * unix
 
     try {
-      const unix = 1000000
-      const v = parseFloat(value.value) * unix
       const tx = client.tx.fairlanch.vStaking(vassetId.value, new BN(v).mul(new BN(WTE)).div(new BN(unix)))
       await chain.signAndSend(tx, signer, () => {
         window.$notification["success"]({
@@ -158,7 +171,11 @@ const submit = async () => {
   });
 }
 
-onMounted(async () => {
+onMounted(() => {
+  initData();
+})
+
+const initData = async () => {
   // 获取资产信息 
   let assetsList = await getHttpApi().entries("asset", "assetInfos", []);
   let assets: any = {};
@@ -175,7 +192,7 @@ onMounted(async () => {
 
   let amount = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, getNumstrfromChain(cvtoken2token[0])]);
   dAmount.value = amount;
-})
+}
 
 function removeNonNumericAndHandleMultipleDecimals(str: string) {
   let result = str.replace(/[^0-9\.]/g, '');

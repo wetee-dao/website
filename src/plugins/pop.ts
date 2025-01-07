@@ -29,7 +29,7 @@ export default {
     };
 
     app.config.globalProperties.$CrossOut = (ps: any, close: Function) => {
-      const Cross = AsyncComponentLoad(() => import('@/pages/pop/CrossIn.vue'))
+      const Cross = AsyncComponentLoad(() => import('@/pages/pop/CrossOut.vue'))
       return openPop(Cross, "CrossIn", ps, close)
     };
   }
