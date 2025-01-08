@@ -12,7 +12,8 @@
             </span>
             <span class="space-x-2 flex items-center">
               <span class="fonts-small-light-normal">Balance</span>
-              <span class="fonts-small">{{ showWTE(new BN(vAmount.free)) }}</span>
+              <span class="fonts-small">{{ showToken(new
+                BN(vAmount.free), assetInfo(vassetId.toString()).metadata.decimals) }}</span>
               <span class="cursor-pointer flex items-center cross-in" @click="corssIn">
                 <i class="iconfont">&#xe64a;</i>&nbsp;Cross in
               </span>
@@ -37,7 +38,8 @@
             </span>
             <span class="space-x-2 ">
               <span class="fonts-small-light-normal">Balance</span>
-              <span class="fonts-small font-manrope">{{ dAmount.free ? showWTE(new BN(dAmount.free)) : "-" }}</span>
+              <span class="fonts-small font-manrope">{{ dAmount.free ? showToken(new
+                BN(dAmount.free), assetInfo(vtoken2token[0]).metadata.decimals) : "-" }}</span>
             </span>
           </div>
           <div class="flex w-full items-center in-input">
@@ -60,7 +62,7 @@ import { NSlider } from 'naive-ui'
 
 import PopHeader from "@/components/PopHeader.vue";
 import { useGlobalStore } from "@/stores/global";
-import { getBnFromChain, getNumstrfromChain, WTE, showWTE } from "@/utils/chain";
+import { getBnFromChain, getNumstrfromChain, showToken } from "@/utils/chain";
 import { BN } from "@polkadot/util";
 import { $getChainProvider, getHttpApi } from "@/plugins/chain";
 
@@ -86,7 +88,7 @@ const onValue = (e: any) => {
     return
   }
 
-  let slider = parseFloat(v) * 100 / showWTE(getBnFromChain(vAmount.value.free))
+  let slider = parseFloat(v) * 100 / showToken(getBnFromChain(vAmount.value.free), assetInfo(vassetId.toString()).metadata.decimals)
   valueSlider.value = slider
   if (v.indexOf(".")) {
     value.value = "" + parseFloat(parseFloat(v).toFixed(5))
@@ -108,7 +110,7 @@ const onValue = (e: any) => {
 const onValueSlider = (e: any) => {
   valueSlider.value = e
 
-  value.value = showWTE(getBnFromChain(vAmount.value.free)) * parseFloat(e) / 100
+  value.value = showToken(getBnFromChain(vAmount.value.free), assetInfo(vassetId.toString()).metadata.decimals) * parseFloat(e) / 100
   targetValue.value = value.value * vtoken2token.value[1][0] / vtoken2token.value[1][1]
 }
 
@@ -146,28 +148,20 @@ const submit = async () => {
     const signer = userStore.userInfo.addr;
     const unix = 1000000
     const v = parseFloat(value.value) * unix
+    const bv = new BN(v).mul(new BN(10).pow(new BN(assetInfo(vassetId.value.toString()).metadata.decimals))).div(new BN(unix))
 
-    try {
-      const tx = client.tx.fairlanch.vStaking(vassetId.value, new BN(v).mul(new BN(WTE)).div(new BN(unix)))
-      await chain.signAndSend(tx, signer, () => {
-        window.$notification["success"]({
-          content: 'Success',
-          meta: "Staking successful, the staking rewards will be calculated in the next cycle.",
-          duration: 2500,
-          keepAliveOnHover: true
-        })
-        props.close();
-      }, () => {
-
-      })
-    } catch (e: any) {
-      window.$notification["error"]({
-        content: 'Error',
-        meta: "" + e.toString(),
-        duration: 2500,
+    const tx = client.tx.fairlanch.vStaking(vassetId.value, bv)
+    await chain.signAndSend(tx, signer, () => {
+      window.$notification["success"]({
+        content: 'Success',
+        meta: "Staking successful, the staking rewards will be calculated in the next cycle.",
+        duration: 10500,
         keepAliveOnHover: true
       })
-    }
+      props.close();
+    }, () => {
+
+    })
   });
 }
 

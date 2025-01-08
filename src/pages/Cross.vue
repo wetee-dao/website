@@ -50,7 +50,7 @@
           <h1>{{ chainAsset.metadata.name }}</h1>
         </div>
         <div class="title min-w-[100px] flex justify-center items-center flex-1">
-          <h1 class="!text-center">{{ showToken(new BN(chainAsset.amount), chainAsset.metadata.decimals) }}</h1>
+          <h1 class="!text-center">{{ showToken(new BN(amounts[chainAsset.id]||0), chainAsset.metadata.decimals) }}</h1>
           <span class="unit">{{ chainAsset.metadata.symbol }}</span>
         </div>
         <div class="max-w-[250px] min-w-[250px] flex-1 flex justify-start items-center">
@@ -83,6 +83,7 @@ const global = useGlobelProperties();
 const loader = ref(0)
 
 const chainAssetsData = ref<any[]>([]);
+const amounts = ref<any>();
 const userStore = useGlobalStore();
 const address = ref<string>(userStore.userInfo ? userStore.userInfo.addr : "");
 
@@ -145,19 +146,19 @@ const initData = async () => {
   let cassets: any[] = [];
   assetParaIds.forEach(({ keys, value }: any) => {
     let assetId = getNumstrfromChain(keys[0]);
-    cassets.push({ id: assetId, amount: "0", paraId: getNumstrfromChain(value), ...assets[assetId] })
+    cassets.push({ id: assetId, paraId: getNumstrfromChain(value), ...assets[assetId] })
   });
   chainAssetsData.value = cassets;
   loader.value = 1;
 
   // 获取链上资产
+  let camounts: any = {};
   for (let i = 0; i < cassets.length; i++) {
     let item = cassets[i];
     let t = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, parseInt(item.id)]);
-    cassets[i].amount = t.free.toString();
+    camounts[item.id] = t.free.toString();
   }
-  console.log(cassets)
-  chainAssetsData.value = JSON.parse(JSON.stringify(cassets));
+  amounts.value = camounts;
 }
 
 </script>

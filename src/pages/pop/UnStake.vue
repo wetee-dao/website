@@ -12,7 +12,7 @@
             </span>
             <span class="space-x-2 flex items-center">
               <span class="fonts-small-light-normal">Balance</span>
-              <span class="fonts-small">{{ showWTE(new BN(Amount.free)) }}</span>
+              <span class="fonts-small">{{ showToken(new BN(Amount.free),assetInfo(assetId.toString()).metadata.decimals) }}</span>
             </span>
           </div>
           <div class="flex w-full items-center in-input pb-4">
@@ -34,7 +34,8 @@
             </span>
             <span class="space-x-2 ">
               <span class="fonts-small-light-normal">Balance</span>
-              <span class="fonts-small font-manrope">{{ dAmount.free ? showWTE(new BN(dAmount.free)) : "-" }}</span>
+              <span class="fonts-small font-manrope">{{ dAmount.free ? showToken(new
+                BN(dAmount.free), assetInfo(vassetId.toString()).metadata.decimals) : "-" }}</span>
             </span>
           </div>
           <div class="flex w-full items-center in-input">
@@ -57,7 +58,7 @@ import { NSlider } from 'naive-ui'
 
 import PopHeader from "@/components/PopHeader.vue";
 import { useGlobalStore } from "@/stores/global";
-import { getBnFromChain, getNumstrfromChain, WTE, showWTE } from "@/utils/chain";
+import { getBnFromChain, getNumstrfromChain, WTE,showToken } from "@/utils/chain";
 import { BN } from "@polkadot/util";
 import { $getChainProvider, getHttpApi } from "@/plugins/chain";
 
@@ -84,7 +85,7 @@ const onValue = (e: any) => {
     return
   }
 
-  let slider = parseFloat(v) * 100 / showWTE(getBnFromChain(Amount.value.free))
+  let slider = parseFloat(v) * 100 / showToken(getBnFromChain(Amount.value.free),assetInfo(assetId.value.toString()).metadata.decimals)
   valueSlider.value = slider
   if (v.indexOf(".")) {
     value.value = "" + parseFloat(parseFloat(v).toFixed(5))
@@ -106,7 +107,7 @@ const onValue = (e: any) => {
 const onValueSlider = (e: any) => {
   valueSlider.value = e
 
-  value.value = showWTE(getBnFromChain(Amount.value.free)) * parseFloat(e) / 100
+  value.value = showToken(getBnFromChain(Amount.value.free),assetInfo(assetId.value.toString()).metadata.decimals) * parseFloat(e) / 100
   targetValue.value = value.value * vtoken2token.value[1][0] / vtoken2token.value[1][1]
 }
 
@@ -129,7 +130,8 @@ const submit = async () => {
     try {
       const unix = 1000000
       const v = parseFloat(value.value) * unix
-      const tx = client.tx.fairlanch.vStaking(assetId.value, new BN(v).mul(new BN(WTE)).div(new BN(unix)))
+      const bv = new BN(v).mul(new BN(10).pow(new BN(assetInfo(vassetId.value.toString()).metadata.decimals))).div(new BN(unix))
+      const tx = client.tx.fairlanch.v_unstaking(assetId.value, bv)
       await chain.signAndSend(tx, signer, () => {
         window.$notification["success"]({
           content: 'Success',

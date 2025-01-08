@@ -64,11 +64,13 @@
           <!-- <p class="!text-center">-</p> -->
         </div>
         <div class="staking min-w-[100px] flex-1 flex justify-center items-center">
-          {{ showWTE(new BN(totalData[economic.id])) }} <span v-if="economic.metadata.staking_symbol" class="unit">{{
-            economic.metadata.staking_symbol }}</span>
+          {{ showToken(new BN(totalData[economic.id]), economic.metadata.decimals) }} <span
+            v-if="economic.metadata.staking_symbol" class="unit">{{
+              economic.metadata.staking_symbol }}</span>
         </div>
         <div class="mstaking min-w-[140px] flex-1 flex justify-center items-center">
-          {{ showWTE(getStaking(economic.id, stakingsData)) }} / {{ showWTE(getStaking(economic.id, toStakingsData)) }}
+          {{ showToken(getStaking(economic.id, stakingsData), economic.metadata.decimals) }} / {{
+            showToken(getStaking(economic.id, toStakingsData), economic.metadata.decimals) }}
           <span v-if="economic.metadata.staking_symbol" class="unit">{{
             economic.metadata.staking_symbol }}</span>
         </div>
@@ -93,7 +95,7 @@
 </template>
 
 <script setup lang="ts">
-import { getBnFromChain, getNumstrfromChain, showWTE } from '@/utils/chain';
+import { getBnFromChain, getNumstrfromChain, showWTE, showToken } from '@/utils/chain';
 import { BN } from '@polkadot/util';
 import { onMounted, onUnmounted, ref } from 'vue';
 
@@ -101,7 +103,6 @@ import loadingBox from "@/components/loading-box.vue";
 import { getHttpApi } from '@/plugins/chain';
 import useGlobelProperties from '@/plugins/globel';
 import { useGlobalStore } from '@/stores/global';
-import router from '@/router';
 const loader = ref(0)
 
 const global = useGlobelProperties();
@@ -199,7 +200,7 @@ const unStake = (item: any) => {
 
 let timer: any = null;
 const startInit = () => {
-   initData();
+  initData();
 }
 
 onMounted(async () => {
