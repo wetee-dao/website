@@ -94,9 +94,10 @@ export async function getMetaData(api: ApiPromise) {
 }
 
 // 获取链对象
-export const $getChainProvider = async (run: (chain: ChainWrap) => Promise<void>, url: string | undefined = undefined): Promise<void> => {
+export const $getChainProvider = async (run: (chain: ChainWrap) => Promise<void>, url: string | undefined = undefined,isTry: boolean = false): Promise<void> => {
   const userStore = useGlobalStore()
-  const loading = Loading("Connecting to chain...")
+  
+  const loading = !isTry? Loading("Connecting to chain..."):{close:()=>{}}
 
   let chain = undefined;
   try {
@@ -133,8 +134,6 @@ export const $getChainProvider = async (run: (chain: ChainWrap) => Promise<void>
     }
 
     chain!.client = api;
-
-    console.info("connect chain success",api.registry.chainDecimals);
     loading.close();
 
     await run(chain!);
@@ -160,7 +159,7 @@ export const getConfig = ():any => {
       "0":{
         name: "Paseo",
         icon: "/imgs/vStaking/PAS.svg",
-        api: "wss://api2.zondax.ch/pas/node/rpc",
+        api: "wss://paseo-rpc.dwellir.com",
         isParent: true,
       },
       "2030":{

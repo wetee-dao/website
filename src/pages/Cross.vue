@@ -70,7 +70,7 @@
 </template>
 
 <script setup lang="ts">
-import { getBnFromChain, getNumstrfromChain, showWTE, showToken } from '@/utils/chain';
+import { getNumstrfromChain, showToken } from '@/utils/chain';
 import { onMounted, onUnmounted, ref } from 'vue';
 
 import loadingBox from "@/components/loading-box.vue";
@@ -83,7 +83,7 @@ const global = useGlobelProperties();
 const loader = ref(0)
 
 const chainAssetsData = ref<any[]>([]);
-const amounts = ref<any>();
+const amounts = ref<any>({});
 const userStore = useGlobalStore();
 const address = ref<string>(userStore.userInfo ? userStore.userInfo.addr : "");
 

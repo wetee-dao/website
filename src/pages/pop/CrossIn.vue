@@ -26,10 +26,10 @@
             <img :src="'/imgs/vStaking/' + params.symbol + '.svg'" class="token-icon">
             <div class="flex flex-col">
               <span class="text-left font-bold">{{ params.symbol }}</span>
-              <span class="text-left amount-value">
+              <!-- <span class="text-left amount-value">
                 Available&nbsp;&nbsp; {{ showToken(new BN(fromAmount.free),
                   assetInfo.metadata.decimals) }}
-              </span>
+              </span> -->
             </div>
           </span>
         </div>
@@ -55,12 +55,12 @@
         </div>
         <div class="flex items-center">
           <div>Fee</div>
-          <div class="flex-1 text-right">0 DOT</div>
+          <div class="flex-1 text-right">{{ fee }}</div>
         </div>
       </div>
       <div class="split"></div>
       <div class="flex flex-col items-center justify-center">
-        <button type="button" class="submit" :disabled="!value || parseFloat(value) < 0.1" @click="submit">
+        <button type="button" class="submit" :disabled="!value || parseFloat(value) < 0.1" @click="submit(false)">
           <div>Cross in</div>
         </button>
       </div>
@@ -75,7 +75,7 @@ import { BN, isFunction } from "@polkadot/util";
 
 import PopHeader from "@/components/PopHeader.vue";
 import { useGlobalStore } from "@/stores/global";
-import { getBnFromChain, getNumstrfromChain, WTE, showToken } from "@/utils/chain";
+import { getNumstrfromChain, showToken } from "@/utils/chain";
 import { $getChainProvider, getConfig, getHttpApi } from "@/plugins/chain";
 
 const XCM_LOC = ['xcm', 'xcmPallet', 'polkadotXcm'];
@@ -91,12 +91,15 @@ const from = ref(config.Chains[para_id.value])
 const assetInfo = ref({
   metadata: { decimals: 0 }
 })
+const fee = ref("-")
 
 const onValue = (e: any) => {
   value.value = e.target.value
+
+  submit(true)
 }
 
-const submit = async () => {
+const submit = async (isTry: boolean = false) => {
   const chainConfig = config.Chains[para_id.value]
   const recipientParaId = parseInt(chainId.value)
   const isParent = chainConfig.isParent;
@@ -155,6 +158,14 @@ const submit = async () => {
       0,
     )
 
+    if (isTry) {
+      let info = await call.paymentInfo(signer)
+      let v = showToken(info.partialFee.toBn(), api!.registry.chainDecimals[0])
+
+      fee.value = v +" "+ api!.registry.chainTokens[0];
+      return
+    }
+
     try {
       await chain.signAndSend(call, signer, () => {
         window.$notification["success"]({
@@ -175,7 +186,7 @@ const submit = async () => {
         keepAliveOnHover: true
       })
     }
-  }, chainConfig.api)
+  }, chainConfig.api, isTry)
 }
 
 onMounted(async () => {

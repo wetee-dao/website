@@ -93,13 +93,13 @@ const onValue = (e: any) => {
     value.value = v
   }
 
-  targetValue.value = value.value * vtoken2token.value[1][0] / vtoken2token.value[1][1]
+  targetValue.value = value.value * vtoken2token.value[1][1] / vtoken2token.value[1][0]
 
   if (slider >= 100) {
     nextTick(() => {
       valueSlider.value = 100
       value.value = ""
-      targetValue.value = value.value * vtoken2token.value[1][0] / vtoken2token.value[1][1]
+      targetValue.value = value.value * vtoken2token.value[1][1] / vtoken2token.value[1][0]
     })
   }
 }
@@ -108,7 +108,8 @@ const onValueSlider = (e: any) => {
   valueSlider.value = e
 
   value.value = showToken(getBnFromChain(Amount.value.free),assetInfo(assetId.value.toString()).metadata.decimals) * parseFloat(e) / 100
-  targetValue.value = value.value * vtoken2token.value[1][0] / vtoken2token.value[1][1]
+  
+  targetValue.value = value.value * vtoken2token.value[1][1] / vtoken2token.value[1][0]
 }
 
 const assetInfo = (id: string) => {
@@ -165,15 +166,18 @@ onMounted(async () => {
 
   // 获取 vtoken2token
   let cvtoken2token: any = await getHttpApi().entries("fairlanch", "vtoken2token", []);
-  vtoken2token.value = cvtoken2token;
+  cvtoken2token.forEach((v:any) => {
+    if (getNumstrfromChain(v.value[0]) == assetId.value.toString()) {
+      vassetId.value = getNumstrfromChain(v.keys[0])
+      vtoken2token.value = [getNumstrfromChain(v.value[0]),[getNumstrfromChain(v.value[1][0]),getNumstrfromChain(v.value[1][1])]]
+    }
+  });
 
-  vassetId.value = getNumstrfromChain(vtoken2token.value.find((v: any) => {
-    return getNumstrfromChain(v.value[0]) == assetId.value.toString()
-  }).keys[0])
-
+  // 获取 target amount
   let damount = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, parseInt(vassetId.value)]);
   dAmount.value = damount;
 
+  // 获取 amount
   let amount = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, assetId.value]);
   Amount.value = amount;
 })

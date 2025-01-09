@@ -20,7 +20,8 @@
           <i class="iconfont">&#xe60d;</i>
           <div class="flex flex-col">
             <h1>My Daily Reward</h1>
-            <p>{{ showWTE(getTotalStakingReward(economicsData, stakingsData, blockRewardData)) }}
+            <p>
+              {{ showWTE(getTotalStakingReward(economicsData, stakingsData, blockRewardData)) }}
               <span class="total_unit">WTE</span>
             </p>
           </div>
@@ -63,10 +64,13 @@
           <h1 class="!text-center">{{ economic.v }}%</h1>
           <!-- <p class="!text-center">-</p> -->
         </div>
-        <div class="staking min-w-[100px] flex-1 flex justify-center items-center">
-          {{ showToken(new BN(totalData[economic.id]), economic.metadata.decimals) }} <span
+        <div class="staking min-w-[100px] flex-1 flex justify-center items-center" v-if="economic.id >= 5000">
+          {{ showToken(new BN(totalData[economic.id] || 0), economic.metadata.decimals) }} <span
             v-if="economic.metadata.staking_symbol" class="unit">{{
               economic.metadata.staking_symbol }}</span>
+        </div>
+        <div class="staking min-w-[100px] flex-1 flex justify-center items-center" v-if="economic.id < 5000">
+          -
         </div>
         <div class="mstaking min-w-[140px] flex-1 flex justify-center items-center">
           {{ showToken(getStaking(economic.id, stakingsData), economic.metadata.decimals) }} / {{
@@ -75,7 +79,8 @@
             economic.metadata.staking_symbol }}</span>
         </div>
         <div class="daily min-w-[150px] flex-1 flex justify-center items-center">
-          {{ showWTE(getStakingReward(economic, stakingsData, blockRewardData)) }} <span class="unit">WTE</span>
+          {{ showWTE(getStakingReward(economic, stakingsData, blockRewardData, totalData[economic.id])) }} <span
+            class="unit">WTE</span>
         </div>
         <div class="min-w-[105px] flex-1 flex flex-col justify-center items-center">
           <div class="action flex justify-center items-center" @click="action(economic)">
@@ -144,10 +149,9 @@ const getStaking = (id: string, stakings: any) => {
   return new BN(0);
 }
 
-const getStakingReward = (economic: any, stakings: any, reward: BN) => {
+const getStakingReward = (economic: any, stakings: any, reward: BN, total: string) => {
   const id = economic.id;
-  const total = economic.metadata.total;
-  if (total == 0) {
+  if (!total) {
     return new BN(0);
   }
 
@@ -161,7 +165,7 @@ const getStakingReward = (economic: any, stakings: any, reward: BN) => {
 const getTotalStakingReward = (economics: any, stakings: any, reward: BN) => {
   let all = new BN(0);
   for (let i = 0; i < economics.length; i++) {
-    all = all.add(new BN(getStakingReward(economics[i], stakings, reward)))
+    all = all.add(new BN(getStakingReward(economics[i], stakings, reward, totalData.value[economics[i].id])))
   }
 
   return all
@@ -241,7 +245,7 @@ const initData = async () => {
   let totalList = await getHttpApi().entries("fairlanch", "stakingTotal", []);
   let totals: any = {};
   totalList.forEach(({ keys, value }: any) => {
-    totals[getNumstrfromChain(keys[0])] = value;
+    totals[getNumstrfromChain(keys[0])] = getNumstrfromChain(value);
   });
   totalData.value = totals;
 
@@ -250,7 +254,7 @@ const initData = async () => {
   let stakings: any = {};
   stakingsList.forEach(({ keys, value }: any) => {
     let id = getNumstrfromChain(keys[1]);
-    stakings[id] = value;
+    stakings[id] = getNumstrfromChain(value);
   });
   stakingsData.value = stakings;
 
@@ -259,7 +263,7 @@ const initData = async () => {
   let toStakings: any = {};
   toStakingsList.forEach(({ keys, value }: any) => {
     let id = getNumstrfromChain(keys[1]);
-    toStakings[id] = value;
+    toStakings[id] = getNumstrfromChain(value);
   });
   toStakingsData.value = toStakings;
 

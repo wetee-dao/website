@@ -110,7 +110,7 @@ const onValue = (e: any) => {
 const onValueSlider = (e: any) => {
   valueSlider.value = e
 
-  value.value = showToken(getBnFromChain(vAmount.value.free), assetInfo(vassetId.toString()).metadata.decimals) * parseFloat(e) / 100
+  value.value = showToken(getBnFromChain(vAmount.value.free), assetInfo(vassetId.value.toString()).metadata.decimals) * parseFloat(e) / 100
   targetValue.value = value.value * vtoken2token.value[1][0] / vtoken2token.value[1][1]
 }
 

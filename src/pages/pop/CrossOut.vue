@@ -55,12 +55,12 @@
         </div>
         <div class="flex items-center">
           <div>Fee</div>
-          <div class="flex-1 text-right">0 DOT</div>
+          <div class="flex-1 text-right">{{ fee }}</div>
         </div>
       </div>
       <div class="split"></div>
       <div class="flex flex-col items-center justify-center">
-        <button type="button" :disabled="!value || parseFloat(value) < 0.1" class="submit " @click="submit">
+        <button type="button" :disabled="!value || parseFloat(value) < 0.1" class="submit " @click="submit(false)">
           <div>Cross out</div>
         </button>
       </div>
@@ -90,16 +90,19 @@ const to = ref(config.Chains[para_id.value])
 const assetInfo = ref({
   metadata: { decimals: 0 }
 })
+const fee = ref("-")
 
 const onValue = (e: any) => {
   value.value = e.target.value
+
+  submit(true)
 }
 
 const max = () => {
   value.value = showToken(new BN(fromAmount.value.free), assetInfo.value.metadata.decimals)
 }
 
-const submit = async () => {
+const submit = async (isTry: boolean = false) => {
   const chainConfig = config.Chains[para_id.value]
   const isParent = chainConfig.isParent;
 
@@ -196,6 +199,14 @@ const submit = async () => {
       "Unlimited"
     )
 
+    if (isTry) {
+      let info = await call.paymentInfo(signer)
+      let v = showToken(info.partialFee.toBn(), api!.registry.chainDecimals[0])
+
+      fee.value = v +" "+ api!.registry.chainTokens[0];
+      return
+    }
+
     try {
       await chain.signAndSend(call, signer, () => {
         window.$notification["success"]({
@@ -211,7 +222,7 @@ const submit = async () => {
     } catch (e: any) {
 
     }
-  })
+  },undefined,isTry)
 }
 
 onMounted(async () => {
