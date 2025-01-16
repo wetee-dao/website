@@ -16,8 +16,10 @@
       </RouterLink>
       <!-- end logo -->
 
+      <span class="space"></span>
+
       <!-- navigation -->
-      <ul :class="'header__nav ' + (isActivce ? 'header__nav--active' : '')">
+      <ul v-if="group=='main'" :class="'header__nav ' + (isActivce ? 'header__nav--active' : '')">
         <li :class="path == '/' ? 'active' : ''">
           <RouterLink to="/">Home</RouterLink>
         </li>
@@ -30,14 +32,25 @@
         <li :class="path == '/tokens' ? 'active' : ''">
           <RouterLink to="/tokens">Fair Launch</RouterLink>
         </li>
-        <li :class="path == '/cross' ? 'active' : ''">
-          <RouterLink to="/cross">Cross chain</RouterLink>
-        </li>
         <li class="dropdown header__dropdown">
           <a class="trans" tkey="nav_white_paper" target="_blank" href="https://wetee.gitbook.io/docment">Docs</a>
         </li>
         <li :class="path == '/contacts' ? 'active' : ''">
           <RouterLink class="trans" tkey="nav_contact" to="/contacts">Contacts</RouterLink>
+        </li>
+      </ul>
+      <!-- end navigation -->
+
+      <!-- navigation -->
+      <ul v-if="group=='lanch'" :class="'header__nav ' + (isActivce ? 'header__nav--active' : '')">
+        <li :class="path == '/economy' ? 'active' : ''">
+          <RouterLink to="/economy">Token Economy</RouterLink>
+        </li>
+        <li :class="path == '/tokens' ? 'active' : ''">
+          <RouterLink to="/tokens">Fair Launch</RouterLink>
+        </li>
+        <li :class="path == '/cross' ? 'active' : ''">
+          <RouterLink to="/cross">Cross chain</RouterLink>
         </li>
       </ul>
       <!-- end navigation -->
@@ -91,15 +104,23 @@ import Identicon from "./identicon.vue";
 const props = defineProps(["shadow"])
 const userStore = useGlobalStore()
 const notification = useNotification()
+
+const group = ref("main")
 const getPath = (paths: any) => {
+  group.value = "main"
   if (paths.length === 0) return '/'
+
+  const lpath = paths[paths.length - 1]
+  if (lpath.meta&&lpath.meta.group){
+    group.value = lpath.meta.group
+  }
+
   return paths[paths.length - 1].path
 }
 const path = ref(getPath(userStore.paths))
 const userInfo = ref(userStore.userInfo)
 const isActivce = ref(false)
 const global = useGlobelProperties()
-
 
 if (!props.shadow) {
   window.$app = global;
@@ -120,6 +141,7 @@ userStore.$subscribe((mutation, state) => {
   userInfo.value = state.userInfo
   isActivce.value = false
 }, { detached: true })
+
 </script>
 
 <style lang="scss" scoped>
@@ -259,9 +281,9 @@ userStore.$subscribe((mutation, state) => {
     margin-left: 2vw;
     margin-bottom: 0;
 
-    &:first-child {
-      display: none;
-    }
+    // &:first-child {
+    //   display: none;
+    // }
 
     &.active {
       position: relative;

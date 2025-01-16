@@ -331,7 +331,7 @@ function removeNonNumericAndHandleMultipleDecimals(str: string) {
   }
 
   .submit {
-    background: rgba($primary-text-rgb, 0.2);
+    background: rgba($primary-text-rgb, 0.7);
     width: 88%;
     padding: 10px 10px;
     margin-top: 20px;

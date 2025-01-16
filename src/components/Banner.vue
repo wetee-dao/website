@@ -10,7 +10,7 @@
         security assurance for WEB3 applications and DeAI.
       </p>
       <div class="btns flex justify-center md:justify-start">
-        <a target="_blank" href="https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fxiaobai.asyou.me%3A30001#/explorer"
+        <a target="_blank" href="https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fpaseo.asyou.me%2Fws#/explorer"
           class="btn  btn--nephrite"><span>Chain Explorer</span>
         </a>
         <a target="_blank" href="/dapp" class="btn btn__primary "><span>Deploy Now</span></a>

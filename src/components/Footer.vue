@@ -22,7 +22,7 @@
             <div class="footer__nav">
               <a target="_blank" href="https://wetee.gitbook.io/docment">Docs</a>
               <a target="_blank" href="https://github.com/wetee-dao">Github</a>
-              <a href="https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fxiaobai.asyou.me%3A30001#/sudo">Explore</a>
+              <a href="https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fpaseo.asyou.me%2Fws#/explorer">Explore</a>
             </div>
           </div>
 

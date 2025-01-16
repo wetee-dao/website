@@ -35,9 +35,9 @@
         </div>
         <div class=" flex flex-1 items-center in-input">
           <input type="number" class="w-full text-right mr-2" placeholder="0.0" :value="value" @input="onValue">
-          <div class="max-btn">
+          <!-- <div class="max-btn">
             Max
-          </div>
+          </div> -->
         </div>
       </div>
       <div class="split"></div>
@@ -58,7 +58,7 @@
           <div class="flex-1 text-right">{{ fee }}</div>
         </div>
       </div>
-      <div class="split"></div>
+      <!-- <div class="split"></div> -->
       <div class="flex flex-col items-center justify-center">
         <button type="button" class="submit" :disabled="!value || parseFloat(value) < 0.1" @click="submit(false)">
           <div>Cross in</div>
@@ -357,7 +357,7 @@ onMounted(async () => {
   }
 
   .submit {
-    background: rgba($primary-text-rgb, 0.2);
+    background: rgba($primary-text-rgb, 0.7);
     width: 88%;
     padding: 10px 10px;
     margin-top: 20px;

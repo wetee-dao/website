@@ -58,7 +58,7 @@
           <div class="flex-1 text-right">{{ fee }}</div>
         </div>
       </div>
-      <div class="split"></div>
+      <!-- <div class="split"></div> -->
       <div class="flex flex-col items-center justify-center">
         <button type="button" :disabled="!value || parseFloat(value) < 0.1" class="submit " @click="submit(false)">
           <div>Cross out</div>
@@ -75,7 +75,7 @@ import { BN } from "@polkadot/util";
 
 import PopHeader from "@/components/PopHeader.vue";
 import { useGlobalStore } from "@/stores/global";
-import { getNumstrfromChain, WTE, showToken } from "@/utils/chain";
+import { getNumstrfromChain, showToken } from "@/utils/chain";
 import { $getChainProvider, getConfig, getHttpApi } from "@/plugins/chain";
 
 const props = defineProps(["close", "params"])
@@ -113,55 +113,6 @@ const submit = async (isTry: boolean = false) => {
   await $getChainProvider(async (chain): Promise<void> => {
     const api = chain.client;
     const signer = userStore.userInfo.addr;
-
-    // let call = api!.tx.polkadotXcm.transferAssets(
-    //   // 资产接收链
-    //   {
-    //     V3: isParent ? {
-    //       parents: 1,
-    //       interior: "Here",
-    //     } : {
-    //       parents: 0,
-    //       interior: {
-    //         X1: {
-    //           ParaChain: parseInt(para_id.value)
-    //         }
-    //       }
-    //     }
-    //   },
-    //   // 用户
-    //   {
-    //     V3: {
-    //       parents: 0,
-    //       interior: {
-    //         X1: {
-    //           AccountId32: {
-    //             id: api!.createType('AccountId32', signer).toHex(),
-    //             network: null
-    //           }
-    //         }
-    //       },
-    //     }
-    //   },
-    //   // 资产
-    //   {
-    //     V3: [{
-    //       id: {
-    //         Concrete: {
-    //           interior: 'Here',
-    //           parents: isParent
-    //             ? 1
-    //             : 0
-    //         }
-    //       },
-    //       fun: {
-    //         Fungible: bnv
-    //       },
-    //     }]
-    //   },
-    //   0,
-    //   "Unlimited",
-    // )
 
     let call = api!.tx.xTokens.transfer(
       params.value.asset_id,
@@ -370,7 +321,9 @@ onMounted(async () => {
       height: 40px;
       font-size: 16px;
       margin-left: 5px;
-      background-color: rgba($primary-bg-rgb, $alpha: 1);
+      padding: 0 10px;
+      background-color: rgba($accent-color, $alpha: 0.2);
+      border-radius: 2px;
     }
   }
 
@@ -394,7 +347,7 @@ onMounted(async () => {
   }
 
   .submit {
-    background: rgba($accent-color, 0.8);
+    background: rgba($accent-color, 0.7);
     width: 88%;
     padding: 10px 10px;
     margin-top: 20px;

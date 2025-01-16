@@ -44,7 +44,7 @@
         </div>
         <div class="split"></div>
         <button class="submit" type="button" :disabled="!value" @click="submit">
-          <div>Stake</div>
+          <div>UnStake</div>
         </button>
       </div>
     </div>
@@ -132,7 +132,7 @@ const submit = async () => {
       const unix = 1000000
       const v = parseFloat(value.value) * unix
       const bv = new BN(v).mul(new BN(10).pow(new BN(assetInfo(vassetId.value.toString()).metadata.decimals))).div(new BN(unix))
-      const tx = client.tx.fairlanch.v_unstaking(assetId.value, bv)
+      const tx = client.tx.fairlanch.vUnstaking(vassetId.value, bv)
       await chain.signAndSend(tx, signer, () => {
         window.$notification["success"]({
           content: 'Success',
@@ -203,7 +203,7 @@ function removeNonNumericAndHandleMultipleDecimals(str: string) {
   top: 0;
   left: 0;
   z-index: 10;
-  background-color: rgba(0, 0, 0, 0.88);
+  background-color: rgba(0, 0, 0, 0.93);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -213,7 +213,7 @@ function removeNonNumericAndHandleMultipleDecimals(str: string) {
     width: 100%;
     padding-bottom: 20px;
     background-color: rgba($primary-bg-rgb, $alpha: 1);
-    border: 3px solid rgba($primary-text-rgb, 0.2);
+    border: 3px solid rgba($accent-color, 0.33);
     font-size: 15px;
   }
 
@@ -243,10 +243,6 @@ function removeNonNumericAndHandleMultipleDecimals(str: string) {
   }
 
   .token-title {
-    // background: #8686861a;
-    // padding: 9px 0px;
-    // border-radius: 42px;
-
     span {
       font-size: 17px;
       font-weight: 700;
@@ -312,20 +308,8 @@ function removeNonNumericAndHandleMultipleDecimals(str: string) {
     }
   }
 
-  .cross-in {
-    background: rgba($primary-text-rgb, 0.2);
-    padding: 0 6px;
-    font-size: 14px;
-    font-weight: bold;
-
-    .iconfont {
-      font-size: 18px;
-      display: inline-block;
-    }
-  }
-
   .submit {
-    background: rgba($primary-text-rgb, 0.2);
+    background: rgba($accent-color, 0.7);
     width: 88%;
     padding: 10px 10px;
     margin-top: 20px;

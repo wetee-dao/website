@@ -33,12 +33,23 @@ const router = createRouter({
     {
       path: '/tokens',
       name: 'Token fair launch',
+      meta: {
+        group: "lanch",
+      },
       component: () => import('../pages/Token.vue')
     },
     {
       path: '/cross',
       name: 'Cross asset',
+      meta: {
+        group: "lanch",
+      },
       component: () => import('../pages/Cross.vue')
+    },
+    {
+      path: '/chain-mint',
+      name: 'Chain mint',
+      component: () => import('../pages/Chainmint.vue')
     }
   ]
 })
@@ -46,19 +57,8 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const userStore = useGlobalStore()
   userStore.setPaths([
-    { path: to.path, name: to.name }
+    { path: to.path, name: to.name, meta: to.meta }
   ])
-  // //页面是否需要登录
-  // if (to.meta) {
-  //   //页面是否登录
-  //   if (localStorage.getItem("token")) {
-  //     //本地存储中是否有token(uid)数据
-  //     next();
-  //   } else {
-  //     next({ name: "Login" });
-  //   }
-  //   return
-  // }
   next()
 })
 
