@@ -10,7 +10,7 @@
             {{ from.name }}
           </div>
         </div>
-        <i class="iconfont to-chain">&#xe696;</i>
+        <i class="iconfont to-chain" @click="opposite()">&#xe696;</i>
         <div class="w-full flex-1 p-7">
           <div class="chain-path text-right">To&nbsp;&nbsp;&nbsp;</div>
           <div class="chain-title flex justify-end items-center">
@@ -97,6 +97,38 @@ const onValue = (e: any) => {
   value.value = e.target.value
 
   submit(true)
+}
+
+onMounted(async () => {
+  let assetParaIds = await getHttpApi().entries("asset", "assetParaIds", []);
+  assetParaIds.forEach(({ keys, value }: any) => {
+    if (getNumstrfromChain(keys[0]) == params.value.asset_id) {
+      para_id.value = getNumstrfromChain(value)
+      from.value = config.Chains[para_id.value]
+    }
+  });
+
+  // 获取资产余额
+  let t = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, parseInt(params.value.asset_id)]);
+  fromAmount.value = t;
+
+  // 获取链ID
+  chainId.value = getNumstrfromChain(await getHttpApi().query("asset", "chainID", []));
+
+  // 获取资产信息
+  assetInfo.value = await getHttpApi().query("asset", "assetInfos", [params.value.asset_id]);
+})
+
+const opposite = () =>{
+  const symbol = params.value.symbol;
+  const asset_id = params.value.asset_id;
+  props.close();
+  window.$app.$CrossOut({
+    asset_id: asset_id,
+    symbol: symbol,
+  }, () => {
+
+  })
 }
 
 const submit = async (isTry: boolean = false) => {
@@ -188,27 +220,6 @@ const submit = async (isTry: boolean = false) => {
     }
   }, chainConfig.api, isTry)
 }
-
-onMounted(async () => {
-  let assetParaIds = await getHttpApi().entries("asset", "assetParaIds", []);
-  assetParaIds.forEach(({ keys, value }: any) => {
-    if (getNumstrfromChain(keys[0]) == params.value.asset_id) {
-      para_id.value = getNumstrfromChain(value)
-      from.value = config.Chains[para_id.value]
-    }
-  });
-
-  // 获取资产余额
-  let t = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, parseInt(params.value.asset_id)]);
-  fromAmount.value = t;
-
-  // 获取链ID
-  chainId.value = getNumstrfromChain(await getHttpApi().query("asset", "chainID", []));
-
-  // 获取资产信息
-  assetInfo.value = await getHttpApi().query("asset", "assetInfos", [params.value.asset_id]);
-})
-
 </script>
 
 <style lang="scss" scoped>
@@ -250,6 +261,7 @@ onMounted(async () => {
     text-align: center;
     line-height: 40px;
     background: rgba($secondary-text-rgb, 0.03);
+    cursor: pointer;
   }
 
   .chain-title {

@@ -50,6 +50,14 @@ const router = createRouter({
       path: '/chain-mint',
       name: 'Chain mint',
       component: () => import('../pages/Chainmint.vue')
+    },
+    {
+      path: '/economy',
+      name: 'Token economy',
+      meta: {
+        group: "lanch",
+      },
+      component: () => import('../pages/Economy.vue')
     }
   ]
 })

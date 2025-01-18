@@ -28,7 +28,7 @@
           <NSlider class="pb-5" :value="valueSlider" :step="5" @UpdateValue="onValueSlider" />
         </div>
         <div class="split">
-          <i class="iconfont">&#xe692;</i>
+          <i class="iconfont" @click="opposite()">&#xe696;</i>
         </div>
         <div class="flex-1 w-full flex flex-col items-center text-center p-7">
           <div class="flex items-center justify-between mb-4 w-full">
@@ -142,6 +142,15 @@ const max = () => {
   onValueSlider(100)
 }
 
+const opposite = () =>{
+  props.close();
+  window.$app.$UnStake({
+    assetId: vtoken2token.value[0],
+  }, () => {
+
+  })
+}
+
 const submit = async () => {
   await $getChainProvider(async (chain): Promise<void> => {
     const client = chain!.client!;
@@ -241,23 +250,34 @@ function removeNonNumericAndHandleMultipleDecimals(str: string) {
       line-height: 60px;
       text-align: center;
       background-color: rgba($primary-bg-rgb, $alpha: 1);
-      color: rgba($secondary-text-rgb, 0.4);
+      color: rgba($secondary-text-rgb, 0.6);
       position: relative;
       top: -30px;
-      transform: rotate(180deg);
+      transform: rotate(90deg);
+      cursor: pointer;
     }
   }
 
   .token-title {
-    // background: #8686861a;
-    // padding: 9px 0px;
-    // border-radius: 42px;
-
     span {
       font-size: 17px;
       font-weight: 700;
       display: block;
       margin-right: 5px;
+    }
+
+    position: relative;
+    &::after {
+      content: ' ';
+      background-color: #222;
+      border-radius: 50%;
+      width: 39px;
+      height: 39px;
+      position: absolute;
+      z-index: 1;
+    }
+    img {
+      z-index: 2;
     }
   }
 

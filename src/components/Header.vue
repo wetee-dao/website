@@ -11,26 +11,27 @@
       <!-- end btn -->
 
       <!-- logo -->
-      <RouterLink to="/" class="header__logo">
-        <img src="/imgs/logo.svg" alt="">
-      </RouterLink>
+      <div class="header__logo" @click="home()">
+        <img v-if="group == 'main'" src="/imgs/logo.svg" />
+        <img v-if="group == 'lanch'" src="/imgs/logo-lanch.svg" />
+      </div>
       <!-- end logo -->
 
       <span class="space"></span>
 
       <!-- navigation -->
-      <ul v-if="group=='main'" :class="'header__nav ' + (isActivce ? 'header__nav--active' : '')">
+      <ul v-if="group == 'main'" :class="'header__nav ' + (isActivce ? 'header__nav--active' : '')">
         <li :class="path == '/' ? 'active' : ''">
           <RouterLink to="/">Home</RouterLink>
         </li>
         <li :class="path == '/vm' ? 'active' : ''">
-          <RouterLink to="/vm">TEE vm</RouterLink>
+          <RouterLink to="/vm">TEE Vm</RouterLink>
         </li>
         <li :class="path == '/use-cases' ? 'active' : ''">
           <RouterLink to="/use-cases">Use Cases</RouterLink>
         </li>
         <li :class="path == '/tokens' ? 'active' : ''">
-          <RouterLink to="/tokens">Fair Launch</RouterLink>
+          <a target="_blank" href="/tokens">Fair Launch</a>
         </li>
         <li class="dropdown header__dropdown">
           <a class="trans" tkey="nav_white_paper" target="_blank" href="https://wetee.gitbook.io/docment">Docs</a>
@@ -42,7 +43,7 @@
       <!-- end navigation -->
 
       <!-- navigation -->
-      <ul v-if="group=='lanch'" :class="'header__nav ' + (isActivce ? 'header__nav--active' : '')">
+      <ul v-if="group == 'lanch'" :class="'header__nav ' + (isActivce ? 'header__nav--active' : '')">
         <li :class="path == '/economy' ? 'active' : ''">
           <RouterLink to="/economy">Token Economy</RouterLink>
         </li>
@@ -50,7 +51,7 @@
           <RouterLink to="/tokens">Fair Launch</RouterLink>
         </li>
         <li :class="path == '/cross' ? 'active' : ''">
-          <RouterLink to="/cross">Cross chain</RouterLink>
+          <RouterLink to="/cross">Cross Chain</RouterLink>
         </li>
       </ul>
       <!-- end navigation -->
@@ -111,7 +112,7 @@ const getPath = (paths: any) => {
   if (paths.length === 0) return '/'
 
   const lpath = paths[paths.length - 1]
-  if (lpath.meta&&lpath.meta.group){
+  if (lpath.meta && lpath.meta.group) {
     group.value = lpath.meta.group
   }
 
@@ -142,6 +143,12 @@ userStore.$subscribe((mutation, state) => {
   isActivce.value = false
 }, { detached: true })
 
+const home = () => {
+  if(group.value=="main")
+    window.location.href = "/"
+  else
+    window.location.href = "/economy"
+}
 </script>
 
 <style lang="scss" scoped>
@@ -184,6 +191,7 @@ userStore.$subscribe((mutation, state) => {
     height: 23px;
     align-items: center;
     margin-left: 4px;
+    cursor: pointer;
 
     img {
       height: 100%;

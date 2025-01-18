@@ -102,7 +102,6 @@ const crossIn = (item: any) => {
   global.$CrossIn({
     asset_id: item.id,
     symbol: item.metadata.symbol.replaceAll(' ', ''),
-    // para_id: item.paraId,
   }, () => {
     startInit();
   })
@@ -112,7 +111,6 @@ const crossOut = (item: any) => {
   window.$app.$CrossOut({
     asset_id: item.id,
     symbol: item.metadata.symbol.replaceAll(' ', ''),
-    // para_id: item.paraId,
   }, () => {
     startInit();
   })

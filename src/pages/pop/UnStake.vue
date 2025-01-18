@@ -12,7 +12,8 @@
             </span>
             <span class="space-x-2 flex items-center">
               <span class="fonts-small-light-normal">Balance</span>
-              <span class="fonts-small">{{ showToken(new BN(Amount.free),assetInfo(assetId.toString()).metadata.decimals) }}</span>
+              <span class="fonts-small">{{ showToken(new
+                BN(Amount.free), assetInfo(assetId.toString()).metadata.decimals) }}</span>
             </span>
           </div>
           <div class="flex w-full items-center in-input pb-4">
@@ -24,7 +25,7 @@
           <NSlider class="pb-5" :value="valueSlider" :step="5" @UpdateValue="onValueSlider" />
         </div>
         <div class="split">
-          <i class="iconfont">&#xe692;</i>
+          <i class="iconfont" @click="opposite">&#xe696;</i>
         </div>
         <div class="flex-1 w-full flex flex-col items-center text-center p-7" v-if="vassetId != -1">
           <div class="flex items-center justify-between mb-4 w-full">
@@ -58,7 +59,7 @@ import { NSlider } from 'naive-ui'
 
 import PopHeader from "@/components/PopHeader.vue";
 import { useGlobalStore } from "@/stores/global";
-import { getBnFromChain, getNumstrfromChain, WTE,showToken } from "@/utils/chain";
+import { getBnFromChain, getNumstrfromChain, WTE, showToken } from "@/utils/chain";
 import { BN } from "@polkadot/util";
 import { $getChainProvider, getHttpApi } from "@/plugins/chain";
 
@@ -74,6 +75,33 @@ const vtoken2token = ref<any>([0, [1, 1]])
 const Amount = ref<any>({})
 const dAmount = ref<any>({})
 
+onMounted(async () => {
+  // 获取资产信息 
+  let assetsList = await getHttpApi().entries("asset", "assetInfos", []);
+  let assets: any = {};
+  assetsList.forEach(({ keys, value }: any) => {
+    assets[getNumstrfromChain(keys[0])] = value;
+  });
+  assetsInfo.value = assets;
+
+  // 获取 vtoken2token
+  let cvtoken2token: any = await getHttpApi().entries("fairlanch", "vtoken2token", []);
+  cvtoken2token.forEach((v: any) => {
+    if (getNumstrfromChain(v.value[0]) == assetId.value.toString()) {
+      vassetId.value = getNumstrfromChain(v.keys[0])
+      vtoken2token.value = [getNumstrfromChain(v.value[0]), [getNumstrfromChain(v.value[1][0]), getNumstrfromChain(v.value[1][1])]]
+    }
+  });
+
+  // 获取 target amount
+  let damount = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, parseInt(vassetId.value)]);
+  dAmount.value = damount;
+
+  // 获取 amount
+  let amount = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, assetId.value]);
+  Amount.value = amount;
+})
+
 const onValue = (e: any) => {
   let v = removeNonNumericAndHandleMultipleDecimals(e.target.value);
   if (v == "") {
@@ -85,7 +113,7 @@ const onValue = (e: any) => {
     return
   }
 
-  let slider = parseFloat(v) * 100 / showToken(getBnFromChain(Amount.value.free),assetInfo(assetId.value.toString()).metadata.decimals)
+  let slider = parseFloat(v) * 100 / showToken(getBnFromChain(Amount.value.free), assetInfo(assetId.value.toString()).metadata.decimals)
   valueSlider.value = slider
   if (v.indexOf(".")) {
     value.value = "" + parseFloat(parseFloat(v).toFixed(5))
@@ -107,8 +135,8 @@ const onValue = (e: any) => {
 const onValueSlider = (e: any) => {
   valueSlider.value = e
 
-  value.value = showToken(getBnFromChain(Amount.value.free),assetInfo(assetId.value.toString()).metadata.decimals) * parseFloat(e) / 100
-  
+  value.value = showToken(getBnFromChain(Amount.value.free), assetInfo(assetId.value.toString()).metadata.decimals) * parseFloat(e) / 100
+
   targetValue.value = value.value * vtoken2token.value[1][1] / vtoken2token.value[1][0]
 }
 
@@ -123,8 +151,17 @@ const max = () => {
   onValueSlider(100)
 }
 
+const opposite = () => {
+  props.close();
+  window.$app.$VStake({
+    vassetId: vassetId.value,
+  }, () => {
+
+  })
+}
+
 const submit = async () => {
-  await $getChainProvider(async (chain):Promise<void> => {
+  await $getChainProvider(async (chain): Promise<void> => {
     const client = chain!.client!;
     const signer = userStore.userInfo.addr;
 
@@ -155,33 +192,6 @@ const submit = async () => {
   });
 }
 
-onMounted(async () => {
-  // 获取资产信息 
-  let assetsList = await getHttpApi().entries("asset", "assetInfos", []);
-  let assets: any = {};
-  assetsList.forEach(({ keys, value }: any) => {
-    assets[getNumstrfromChain(keys[0])] = value;
-  });
-  assetsInfo.value = assets;
-
-  // 获取 vtoken2token
-  let cvtoken2token: any = await getHttpApi().entries("fairlanch", "vtoken2token", []);
-  cvtoken2token.forEach((v:any) => {
-    if (getNumstrfromChain(v.value[0]) == assetId.value.toString()) {
-      vassetId.value = getNumstrfromChain(v.keys[0])
-      vtoken2token.value = [getNumstrfromChain(v.value[0]),[getNumstrfromChain(v.value[1][0]),getNumstrfromChain(v.value[1][1])]]
-    }
-  });
-
-  // 获取 target amount
-  let damount = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, parseInt(vassetId.value)]);
-  dAmount.value = damount;
-
-  // 获取 amount
-  let amount = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, assetId.value]);
-  Amount.value = amount;
-})
-
 function removeNonNumericAndHandleMultipleDecimals(str: string) {
   let result = str.replace(/[^0-9\.]/g, '');
 
@@ -203,7 +213,7 @@ function removeNonNumericAndHandleMultipleDecimals(str: string) {
   top: 0;
   left: 0;
   z-index: 10;
-  background-color: rgba(0, 0, 0, 0.93);
+  background-color: rgba(0, 0, 0, 0.83);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -235,14 +245,31 @@ function removeNonNumericAndHandleMultipleDecimals(str: string) {
       line-height: 60px;
       text-align: center;
       background-color: rgba($primary-bg-rgb, $alpha: 1);
-      color: rgba($secondary-text-rgb, 0.4);
+      color: rgba($secondary-text-rgb, 0.6);
       position: relative;
       top: -30px;
-      transform: rotate(180deg);
+      transform: rotate(90deg);
+      cursor: pointer;
     }
   }
 
   .token-title {
+    position: relative;
+
+    &::after {
+      content: ' ';
+      background-color: #222;
+      border-radius: 50%;
+      width: 39px;
+      height: 39px;
+      position: absolute;
+      z-index: 1;
+    }
+
+    img {
+      z-index: 2;
+    }
+
     span {
       font-size: 17px;
       font-weight: 700;

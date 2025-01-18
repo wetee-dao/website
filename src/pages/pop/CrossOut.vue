@@ -10,7 +10,7 @@
             WeTEE
           </div>
         </div>
-        <i class="iconfont to-chain">&#xe696;</i>
+        <i class="iconfont to-chain" @click="opposite()">&#xe696;</i>
         <div class="w-full flex-1 p-7">
           <div class="chain-path text-right">To&nbsp;&nbsp;&nbsp;</div>
           <div class="chain-title flex justify-end items-center">
@@ -100,6 +100,18 @@ const onValue = (e: any) => {
 
 const max = () => {
   value.value = showToken(new BN(fromAmount.value.free), assetInfo.value.metadata.decimals)
+}
+
+const opposite = () =>{
+  const symbol = params.value.symbol;
+  const asset_id = params.value.asset_id;
+  props.close();
+  window.$app.$CrossIn({
+    asset_id: asset_id,
+    symbol: symbol,
+  }, () => {
+
+  })
 }
 
 const submit = async (isTry: boolean = false) => {
@@ -208,7 +220,7 @@ onMounted(async () => {
   top: 0;
   left: 0;
   z-index: 10;
-  background-color: rgba(0, 0, 0, 0.93);
+  background-color: rgba(0, 0, 0, 0.83);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -238,6 +250,7 @@ onMounted(async () => {
     text-align: center;
     line-height: 40px;
     background: rgba($secondary-text-rgb, 0.03);
+    cursor: pointer;
   }
 
   .chain-title {
