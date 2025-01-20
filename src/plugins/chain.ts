@@ -1,4 +1,4 @@
-import { ApiPromise, WsProvider } from "@polkadot/api"
+import { ApiPromise, HttpProvider, WsProvider } from "@polkadot/api"
 import { base64Encode } from "@polkadot/util-crypto";
 import { getSpecTypes } from '@polkadot/types-known';
 import type { Injected, MetadataDef } from '@polkadot/extension-inject/types';
@@ -16,16 +16,26 @@ import { useGlobalStore } from "@/stores/global";
 import type { SubmittableExtrinsic } from "@polkadot/api/types";
 import { Loading } from "./pop";
 
-export let chainUrl = 'wss://paseo.asyou.me/ws'
-export let getChainHttpApi = () => {
-  return chainUrl.replace('ws', 'http').replace("ws", "")
+export let chainUrl = ()=>{
+  if (localStorage.getItem("env") == "dev"){
+    return "ws://127.0.0.1:31945"
+  }
+  return 'wss://paseo.asyou.me/ws'
+}
+
+export let getChainHttpApi = (url: string) => {
+  return url.replace('ws', 'http').replace("ws", "")
+}
+
+export let getChainHttp = (url: string) => {
+  return url.replace('ws', 'http')
 }
 
 // chain http client
 const chainHttpClient = {
   // 查询链上状态
   query: async (pallet: string, storageItem: string, keys: unknown[]) => {
-    const response = await axios.get(getChainHttpApi() + "pallets/" + pallet + "/storage/" + storageItem, {
+    const response = await axios.get(getChainHttpApi(chainUrl()) + "pallets/" + pallet + "/storage/" + storageItem, {
       params: { keys: keys },
       paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'brackets' }),
     })
@@ -34,7 +44,7 @@ const chainHttpClient = {
 
   // 查询链上状态列表
   entries: async (pallet: string, storageItem: string, keys: unknown[]) => {
-    const response = await axios.get(getChainHttpApi() + "pallets/" + pallet + "/storage/entries/" + storageItem, {
+    const response = await axios.get(getChainHttpApi(chainUrl()) + "pallets/" + pallet + "/storage/entries/" + storageItem, {
       params: { keys: keys },
       paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'brackets' }),
     })
@@ -94,14 +104,16 @@ export async function getMetaData(api: ApiPromise) {
 }
 
 // 获取链对象
-export const $getChainProvider = async (run: (chain: ChainWrap) => Promise<void>, url: string | undefined = undefined,isTry: boolean = false): Promise<void> => {
+export const $getChainProvider = async (run: (chain: ChainWrap) => Promise<void>, url: string | undefined = undefined, isTry: boolean = false): Promise<void> => {
   const userStore = useGlobalStore()
-  
-  const loading = !isTry? Loading("Connecting to chain..."):{close:()=>{}}
+
+  const loading = !isTry ? Loading("Connecting to chain...") : { close: () => { } }
 
   let chain = undefined;
+  const curl = url || chainUrl();
+  console.log("chain url :", curl);
   try {
-    const wsProvider = new WsProvider(url || chainUrl);
+    const wsProvider = curl.includes("ws") ? new WsProvider(curl) : new HttpProvider(curl);
     const api = await ApiPromise.create({
       provider: wsProvider,
       types: chainJson,
@@ -141,11 +153,11 @@ export const $getChainProvider = async (run: (chain: ChainWrap) => Promise<void>
   } catch (e) {
     loading.close();
     chain!.close();
-    console.error("chain connect error :",e);
+    console.error("chain connect error :", e);
   }
 }
 
-export const getConfig = ():any => {
+export const getConfig = (): any => {
   return {
     "Tokens": {
       "PAS": [
@@ -155,14 +167,21 @@ export const getConfig = ():any => {
         "2030"
       ],
     },
-    "Chains":{
-      "0":{
+    "TokensAmount": {
+      "PAS_0": async (api: ApiPromise, addr: string) => {
+        let account: any = (await api.query.system.account(addr)).toHuman()
+        return account.data;
+      },
+      "vDOT_2030": (api: ApiPromise) => { },
+    },
+    "Chains": {
+      "0": {
         name: "Paseo",
         icon: "/imgs/vStaking/PAS.svg",
         api: "wss://paseo-rpc.dwellir.com",
         isParent: true,
       },
-      "2030":{
+      "2030": {
         name: "Biforst",
         icon: "/imgs/chainBifrost.svg",
         api: "wss://bifrost-rpc.paseo.liebi.com/ws",

@@ -27,7 +27,7 @@
         <div class="split">
           <i class="iconfont" @click="opposite">&#xe696;</i>
         </div>
-        <div class="flex-1 w-full flex flex-col items-center text-center p-7" v-if="vassetId != -1">
+        <div class="flex-1 w-full flex flex-col items-center text-center p-7">
           <div class="flex items-center justify-between mb-4 w-full">
             <span class="flex items-center token-title">
               <img :src="'/imgs/vStaking/' + assetInfo(vassetId).metadata.symbol + '.svg'" class="token-icon">
@@ -141,6 +141,10 @@ const onValueSlider = (e: any) => {
 }
 
 const assetInfo = (id: string) => {
+  console.log(id)
+  if (!id || id == "-1") {
+    return { metadata: {} }
+  }
   if (id && assetsInfo.value[getNumstrfromChain(id)]) {
     return assetsInfo.value[getNumstrfromChain(id)]
   }

@@ -27,7 +27,7 @@
             <div class="flex flex-col">
               <span class="text-left font-bold">{{ params.symbol }}</span>
               <span class="text-left amount-value">
-                Available&nbsp;&nbsp; {{ showToken(new BN(fromAmount.free),
+                available:&nbsp;{{ showToken(new BN(fromAmount.free),
                   assetInfo.metadata.decimals) }}
               </span>
             </div>
@@ -91,6 +91,27 @@ const assetInfo = ref({
   metadata: { decimals: 0 }
 })
 const fee = ref("-")
+
+onMounted(async () => {
+  // 获取资产的 ParaId
+  let assetParaIds = await getHttpApi().entries("asset", "assetParaIds", []);
+  assetParaIds.forEach(({ keys, value }: any) => {
+    if (getNumstrfromChain(keys[0]) == params.value.asset_id) {
+      para_id.value = getNumstrfromChain(value)
+      to.value = config.Chains[para_id.value]
+    }
+  });
+
+  // 获取资产余额
+  let t = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, parseInt(params.value.asset_id)]);
+  fromAmount.value = t;
+
+  // 获取链ID
+  chainId.value = getNumstrfromChain(await getHttpApi().query("asset", "chainID", []));
+
+  // 获取资产信息
+  assetInfo.value = await getHttpApi().query("asset", "assetInfos", [params.value.asset_id]);
+})
 
 const onValue = (e: any) => {
   value.value = e.target.value
@@ -187,28 +208,6 @@ const submit = async (isTry: boolean = false) => {
     }
   },undefined,isTry)
 }
-
-onMounted(async () => {
-  // 获取资产的 ParaId
-  let assetParaIds = await getHttpApi().entries("asset", "assetParaIds", []);
-  assetParaIds.forEach(({ keys, value }: any) => {
-    if (getNumstrfromChain(keys[0]) == params.value.asset_id) {
-      para_id.value = getNumstrfromChain(value)
-      to.value = config.Chains[para_id.value]
-    }
-  });
-
-  // 获取资产余额
-  let t = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, parseInt(params.value.asset_id)]);
-  fromAmount.value = t;
-
-  // 获取链ID
-  chainId.value = getNumstrfromChain(await getHttpApi().query("asset", "chainID", []));
-
-  // 获取资产信息
-  assetInfo.value = await getHttpApi().query("asset", "assetInfos", [params.value.asset_id]);
-})
-
 </script>
 
 <style lang="scss" scoped>

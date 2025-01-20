@@ -73,11 +73,8 @@
 import { ref, watch } from "vue";
 import { type Wallet, getWallets } from "@talismn/connect-wallets";
 
-import { SubstrateProvider } from "@/providers/substrate";
-import { MetaMaskProvider } from "@/providers/metamask";
-import { Metamask, setCustomChain } from "@/providers/MetaSnap";
+import { Metamask } from "@/providers/MetaSnap";
 import { Loading } from "@/plugins/pop";
-import { chainUrl, getMetaData } from "@/plugins/chain";
 import { ss58toHex, getWalletInfo } from "@/utils/chain";
 import { keyring, shortAddress } from "@/utils/chain";
 import { useGlobalStore } from '@/stores/global';

@@ -35,11 +35,11 @@
           <!-- <img src="/imgs/vDOT.svg" alt="" /> -->
         </div>
         <div class="title min-w-[100px] flex-[2_2_0%] flex flex-col justify-center items-center"></div>
+        <div class="staking min-w-[120px] flex-1  flex flex justify-start items-center">
+          Staking progress
+        </div>
         <div class="title min-w-[100px] flex-1 flex flex-col justify-center items-center">
           Reward Ratio
-        </div>
-        <div class="staking min-w-[100px] flex-1  flex flex-col justify-center items-center">
-          TVS
         </div>
         <div class="mstaking min-w-[150px] flex-1 flex flex-col justify-center items-center text-center">
           My Staking / Pending Staking
@@ -60,17 +60,19 @@
           <h1>{{ economic.metadata.name }}</h1>
           <p>{{ StakeDesc[economic.metadata.symbol] }}</p>
         </div>
-        <div class="title min-w-[100px] flex-1">
-          <h1 class="!text-center">{{ economic.v }}%</h1>
-          <!-- <p class="!text-center">-</p> -->
-        </div>
-        <div class="staking min-w-[100px] flex-1 flex justify-center items-center" v-if="economic.id >= 5000">
-          {{ showToken(new BN(totalData[economic.id] || 0), economic.metadata.decimals) }} <span
-            v-if="economic.metadata.staking_symbol" class="unit">{{
-              economic.metadata.staking_symbol }}</span>
+        <div class="staking min-w-[120px] flex-1 flex justify-start items-center" v-if="economic.id >= 5000">
+          <div class="lanch-line flex justify-start items-center">
+            &nbsp;&nbsp;{{ showToken(new BN(totalData[economic.id] || 0), economic.metadata.decimals) }}/{{ showToken(new BN(quotaData[economic.id]|| 0), economic.metadata.decimals) }}&nbsp;{{ economic.metadata.staking_symbol }}
+            <div class="inner" :style="'width: ' + new BN(totalData[economic.id]).mul(new BN(100)).div(new BN(quotaData[economic.id])).toString() + '%'"  v-if="quotaData[economic.id]&&totalData[economic.id]">
+            </div>
+          </div>
+          <!-- <span v-if="economic.metadata.staking_symbol" class="unit">{{ economic.metadata.staking_symbol }}</span> -->
         </div>
         <div class="staking min-w-[100px] flex-1 flex justify-center items-center" v-if="economic.id < 5000">
           -
+        </div>
+        <div class="title min-w-[100px] flex-1">
+          <h1 class="!text-center">{{ economic.v }}%</h1>
         </div>
         <div class="mstaking min-w-[140px] flex-1 flex justify-center items-center">
           {{ showToken(getStaking(economic.id, stakingsData), economic.metadata.decimals) }} / {{
@@ -120,6 +122,7 @@ const stakingsData = ref<any>({});
 const toStakingsData = ref<any>({});
 const totalData = ref<any>({});
 const vtoken2token = ref<any>([])
+const quotaData = ref<any>({});
 const userStore = useGlobalStore();
 const address = ref<string>(userStore.userInfo ? userStore.userInfo.addr : "");
 const StakeDesc = ref<any>({
@@ -273,6 +276,14 @@ const initData = async () => {
   // 获取每个区块的奖励
   let blockReward: any = await getHttpApi().query("fairlanch", "blockReward", []);
   blockRewardData.value = getBnFromChain(blockReward[2]).mul(new BN(14400));
+
+  // 获取质押限制
+  let quotaList: any = await getHttpApi().entries("fairlanch", "stakingQuota", []);
+  let quota: any = {};
+  quotaList.forEach(({ keys, value }: any) => {
+    quota[getNumstrfromChain(keys[0])] = getNumstrfromChain(value);
+  })
+  quotaData.value = quota;
 }
 
 const getAssetInfo = (id: string, assets: any) => {
@@ -326,10 +337,26 @@ const getAssetInfo = (id: string, assets: any) => {
   font-size: 16px;
   min-width: 800px;
 
+  .lanch-line{
+    background: rgba($secondary-text-rgb, 0.1);
+    font-size: 14px;
+    padding: 3px;
+    width: 100%;
+    border-radius: 2px;
+    position: relative;
+    .inner{
+      background: rgba($primary-text-rgb, 0.5);
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 100%;
+    }
+  }
 
   &.bg-transparent {
     background-color: transparent;
     margin-bottom: 0;
+    padding: 20px 20px;
     color: #878787;
   }
 
@@ -398,7 +425,7 @@ const getAssetInfo = (id: string, assets: any) => {
     font-weight: bold;
     padding: 3px 4px;
     background-color: #5b4600;
-    border-radius: 3px;
+    border-radius: 2px;
   }
 
   .total_unit {

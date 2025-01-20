@@ -26,7 +26,6 @@ export const hexToSS58 = (address: string) => {
 }
 
 export const getSS5842 = (address: string) => {
-  console.log(ss58toHex(address))
   return hexToSS58(ss58toHex(address));
 }
 

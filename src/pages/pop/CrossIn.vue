@@ -26,10 +26,10 @@
             <img :src="'/imgs/vStaking/' + params.symbol + '.svg'" class="token-icon">
             <div class="flex flex-col">
               <span class="text-left font-bold">{{ params.symbol }}</span>
-              <!-- <span class="text-left amount-value">
-                Available&nbsp;&nbsp; {{ showToken(new BN(fromAmount.free),
+              <span class="text-left amount-value">
+                available:&nbsp;{{ showToken(new BN(fromAmount),
                   assetInfo.metadata.decimals) }}
-              </span> -->
+              </span>
             </div>
           </span>
         </div>
@@ -76,7 +76,7 @@ import { BN, isFunction } from "@polkadot/util";
 import PopHeader from "@/components/PopHeader.vue";
 import { useGlobalStore } from "@/stores/global";
 import { getNumstrfromChain, showToken } from "@/utils/chain";
-import { $getChainProvider, getConfig, getHttpApi } from "@/plugins/chain";
+import { $getChainProvider, getChainHttp, getConfig, getHttpApi } from "@/plugins/chain";
 
 const XCM_LOC = ['xcm', 'xcmPallet', 'polkadotXcm'];
 const props = defineProps(["close", "params"])
@@ -84,7 +84,7 @@ const params: any = ref(props.params);
 const chainId = ref("")
 const value = ref()
 const userStore = useGlobalStore()
-const fromAmount = ref<any>({})
+const fromAmount = ref<any>("0")
 const para_id = ref("0")
 const config = getConfig()
 const from = ref(config.Chains[para_id.value])
@@ -92,12 +92,6 @@ const assetInfo = ref({
   metadata: { decimals: 0 }
 })
 const fee = ref("-")
-
-const onValue = (e: any) => {
-  value.value = e.target.value
-
-  submit(true)
-}
 
 onMounted(async () => {
   let assetParaIds = await getHttpApi().entries("asset", "assetParaIds", []);
@@ -108,18 +102,33 @@ onMounted(async () => {
     }
   });
 
-  // 获取资产余额
-  let t = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, parseInt(params.value.asset_id)]);
-  fromAmount.value = t;
-
   // 获取链ID
   chainId.value = getNumstrfromChain(await getHttpApi().query("asset", "chainID", []));
 
   // 获取资产信息
   assetInfo.value = await getHttpApi().query("asset", "assetInfos", [params.value.asset_id]);
+
+  // 获取资产余额
+  const chainConfig = config.Chains[para_id.value]
+  const tokenfn = config.TokensAmount[params.value.symbol + "_" + para_id.value]
+  if (tokenfn){
+    await $getChainProvider(async (chain): Promise<void> => {
+      const api = chain.client;
+      const t = await tokenfn(api, userStore.userInfo.addr)
+      console.log(t.free)
+
+      fromAmount.value = getNumstrfromChain(t.free);
+    }, getChainHttp(chainConfig.api), true)
+  }
 })
 
-const opposite = () =>{
+const onValue = (e: any) => {
+  value.value = e.target.value
+
+  submit(true)
+}
+
+const opposite = () => {
   const symbol = params.value.symbol;
   const asset_id = params.value.asset_id;
   props.close();
@@ -194,7 +203,7 @@ const submit = async (isTry: boolean = false) => {
       let info = await call.paymentInfo(signer)
       let v = showToken(info.partialFee.toBn(), api!.registry.chainDecimals[0])
 
-      fee.value = v +" "+ api!.registry.chainTokens[0];
+      fee.value = v + " " + api!.registry.chainTokens[0];
       return
     }
 
@@ -247,6 +256,7 @@ const submit = async (isTry: boolean = false) => {
 
   .amount-value {
     font-size: 12px;
+    opacity: 0.7;
   }
 
   .chain-path {
