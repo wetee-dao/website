@@ -50,7 +50,7 @@
           <h1>{{ chainAsset.metadata.name }}</h1>
         </div>
         <div class="title min-w-[100px] flex justify-center items-center flex-1">
-          <h1 class="!text-center">{{ showToken(new BN(amounts[chainAsset.id]||0), chainAsset.metadata.decimals) }}</h1>
+          <h1 class="!text-center">{{ showToken(new BN(amounts[chainAsset.id] || 0), chainAsset.metadata.decimals) }}</h1>
           <span class="unit">{{ chainAsset.metadata.symbol }}</span>
         </div>
         <div class="max-w-[250px] min-w-[250px] flex-1 flex justify-start items-center">
@@ -99,20 +99,24 @@ userStore.$subscribe((mutation, state) => {
 }, { detached: true })
 
 const crossIn = (item: any) => {
-  global.$CrossIn({
-    asset_id: item.id,
-    symbol: item.metadata.symbol.replaceAll(' ', ''),
-  }, () => {
-    startInit();
+  global.$CheckLogin(() => {
+    global.$CrossIn({
+      asset_id: item.id,
+      symbol: item.metadata.symbol.replaceAll(' ', ''),
+    }, () => {
+      startInit();
+    })
   })
 }
 
 const crossOut = (item: any) => {
-  window.$app.$CrossOut({
-    asset_id: item.id,
-    symbol: item.metadata.symbol.replaceAll(' ', ''),
-  }, () => {
-    startInit();
+  global.$CheckLogin(() => {
+    window.$app.$CrossOut({
+      asset_id: item.id,
+      symbol: item.metadata.symbol.replaceAll(' ', ''),
+    }, () => {
+      startInit();
+    })
   })
 }
 

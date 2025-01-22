@@ -88,7 +88,7 @@ const onValue = (e: any) => {
     return
   }
 
-  let slider = parseFloat(v) * 100 / showToken(getBnFromChain(vAmount.value.free), assetInfo(vassetId.toString()).metadata.decimals)
+  let slider = parseFloat(v) * 100 / showToken(getBnFromChain(vAmount.value.free), assetInfo(vassetId.value.toString()).metadata.decimals)
   valueSlider.value = slider
   if (v.indexOf(".")) {
     value.value = "" + parseFloat(parseFloat(v).toFixed(5))

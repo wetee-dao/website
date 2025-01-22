@@ -10,10 +10,10 @@
           <p>100% fair launch economics, to fairly obtain WTE rewards.</p>
         </div>
         <div class="tstaking flex">
-          <i class="iconfont">&#xe68a;</i>
+          <i class="iconfont">&#xe62b;</i>
           <div class="flex flex-col">
-            <h1>My total WTE</h1>
-            <p>{{ showWTE(getBnFromChain(amount.free)) }} <span class="total_unit">WTE</span></p>
+            <h1>Time till reward</h1>
+            <p>{{ formatCountdown(utilTime) }}</p>
           </div>
         </div>
         <div class="daily flex pl-10">
@@ -25,6 +25,13 @@
               <span class="total_unit">WTE</span>
             </p>
           </div>
+        <div class="tstaking flex pl-10">
+          <i class="iconfont">&#xe68a;</i>
+          <div class="flex flex-col">
+            <h1>My total WTE</h1>
+            <p>{{ showWTE(getBnFromChain(amount.free)) }} <span class="total_unit">WTE</span></p>
+          </div>
+        </div>
         </div>
       </div>
     </div>
@@ -62,8 +69,12 @@
         </div>
         <div class="staking min-w-[120px] flex-1 flex justify-start items-center" v-if="economic.id >= 5000">
           <div class="lanch-line flex justify-start items-center">
-            &nbsp;&nbsp;{{ showToken(new BN(totalData[economic.id] || 0), economic.metadata.decimals) }}/{{ showToken(new BN(quotaData[economic.id]|| 0), economic.metadata.decimals) }}&nbsp;{{ economic.metadata.staking_symbol }}
-            <div class="inner" :style="'width: ' + new BN(totalData[economic.id]).mul(new BN(100)).div(new BN(quotaData[economic.id])).toString() + '%'"  v-if="quotaData[economic.id]&&totalData[economic.id]">
+            &nbsp;&nbsp;{{ showToken(new BN(totalData[economic.id] || 0), economic.metadata.decimals) }}/{{
+              showToken(new BN(quotaData[economic.id] || 0), economic.metadata.decimals) }}&nbsp;{{
+              economic.metadata.staking_symbol }}
+            <div class="inner"
+              :style="'width: ' + new BN(totalData[economic.id]).mul(new BN(100)).div(new BN(quotaData[economic.id])).toString() + '%'"
+              v-if="quotaData[economic.id] && totalData[economic.id]">
             </div>
           </div>
           <!-- <span v-if="economic.metadata.staking_symbol" class="unit">{{ economic.metadata.staking_symbol }}</span> -->
@@ -133,6 +144,7 @@ const StakeDesc = ref<any>({
 const amount = ref<any>({
   free: "0"
 });
+const utilTime = ref<number>(0)
 
 userStore.$subscribe((mutation, state) => {
   if (!state.userInfo) {
@@ -187,10 +199,12 @@ const action = (item: any) => {
         return getNumstrfromChain(v.value[0]) == item.id
       })
       if (vstakeItem) {
-        global.$VStake({
-          vassetId: getNumstrfromChain(vstakeItem.keys[0])
-        }, () => {
-          startInit();
+        global.$CheckLogin(() => {
+          global.$VStake({
+            vassetId: getNumstrfromChain(vstakeItem.keys[0])
+          }, () => {
+            startInit();
+          })
         })
       }
       break;
@@ -212,22 +226,27 @@ const startInit = () => {
 
 onMounted(async () => {
   await initData();
+  timer = setInterval(() => {
+    utilTime.value = utilTime.value - 1
+  }, 1000)
 })
 
 onUnmounted(async () => {
-  clearInterval(timer);
+  if (timer) {
+    clearInterval(timer);
+  }
 })
 
 const initData = async () => {
   // 获取资产信息 
-  let assetsList = await getHttpApi().entries("asset", "assetInfos", []);
+  const assetsList = await getHttpApi().entries("asset", "assetInfos", []);
   let assets: any = {};
   assetsList.forEach(({ keys, value }: any) => {
     assets[getNumstrfromChain(keys[0])] = value;
   });
 
   // 获取链上经济模型
-  let economicsList = await getHttpApi().entries("fairlanch", "economics", []);
+  const economicsList = await getHttpApi().entries("fairlanch", "economics", []);
   let economics: any[] = [];
   economicsList.forEach(({ keys, value }: any) => {
     let id = getNumstrfromChain(keys[0]);
@@ -241,11 +260,11 @@ const initData = async () => {
   economicsData.value = economics.reverse();
   loader.value = 1;
 
-  let cvtoken2token: any = await getHttpApi().entries("fairlanch", "vtoken2token", []);
+  const cvtoken2token: any = await getHttpApi().entries("fairlanch", "vtoken2token", []);
   vtoken2token.value = cvtoken2token;
 
   // 获取资产总量
-  let totalList = await getHttpApi().entries("fairlanch", "stakingTotal", []);
+  const totalList = await getHttpApi().entries("fairlanch", "stakingTotal", []);
   let totals: any = {};
   totalList.forEach(({ keys, value }: any) => {
     totals[getNumstrfromChain(keys[0])] = getNumstrfromChain(value);
@@ -253,19 +272,19 @@ const initData = async () => {
   totalData.value = totals;
 
   // 获取质押列表
-  let stakingsList = await getHttpApi().entries("fairlanch", "stakings", [address.value]);
+  const stakingsList = await getHttpApi().entries("fairlanch", "stakings", [address.value]);
   let stakings: any = {};
   stakingsList.forEach(({ keys, value }: any) => {
-    let id = getNumstrfromChain(keys[1]);
+    const id = getNumstrfromChain(keys[1]);
     stakings[id] = getNumstrfromChain(value);
   });
   stakingsData.value = stakings;
 
   // 获取待质押列表
-  let toStakingsList = await getHttpApi().entries("fairlanch", "toStakings", [address.value]);
+  const toStakingsList = await getHttpApi().entries("fairlanch", "toStakings", [address.value]);
   let toStakings: any = {};
   toStakingsList.forEach(({ keys, value }: any) => {
-    let id = getNumstrfromChain(keys[1]);
+    const id = getNumstrfromChain(keys[1]);
     toStakings[id] = getNumstrfromChain(value);
   });
   toStakingsData.value = toStakings;
@@ -274,16 +293,36 @@ const initData = async () => {
   amount.value = (await getHttpApi().query("system", "account", [address.value])).data;
 
   // 获取每个区块的奖励
-  let blockReward: any = await getHttpApi().query("fairlanch", "blockReward", []);
+  const blockReward: any = await getHttpApi().query("fairlanch", "blockReward", []);
   blockRewardData.value = getBnFromChain(blockReward[2]).mul(new BN(14400));
 
   // 获取质押限制
-  let quotaList: any = await getHttpApi().entries("fairlanch", "stakingQuota", []);
+  const quotaList: any = await getHttpApi().entries("fairlanch", "stakingQuota", []);
   let quota: any = {};
   quotaList.forEach(({ keys, value }: any) => {
     quota[getNumstrfromChain(keys[0])] = getNumstrfromChain(value);
   })
   quotaData.value = quota;
+
+  // 获取最新区块
+  const lastBlock = await getHttpApi().lastBlock();
+  console.log(lastBlock.number);
+
+  utilTime.value = (14400 - new BN(lastBlock.number).mod(new BN(14400)).toNumber()) * 6;
+}
+
+function formatCountdown(seconds: number): string {
+  // 计算小时、分钟和秒数
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const remainingSeconds = seconds % 60;
+
+  // 格式化为两位数
+  const formattedHours = String(hours).padStart(2, '0');
+  const formattedMinutes = String(minutes).padStart(2, '0');
+  const formattedSeconds = String(remainingSeconds).padStart(2, '0');
+
+  return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
 }
 
 const getAssetInfo = (id: string, assets: any) => {
@@ -331,25 +370,27 @@ const getAssetInfo = (id: string, assets: any) => {
 }
 
 .staking-box {
-  padding: 30px 20px;
+  padding: 25px 20px;
   margin-bottom: 20px;
   background-color: rgba(33, 33, 33, 0.5);
   font-size: 16px;
   min-width: 800px;
 
-  .lanch-line{
+  .lanch-line {
     background: rgba($secondary-text-rgb, 0.1);
-    font-size: 14px;
-    padding: 3px;
+    font-size: 16px;
+    padding: 2px;
     width: 100%;
     border-radius: 2px;
     position: relative;
-    .inner{
+
+    .inner {
       background: rgba($primary-text-rgb, 0.5);
       position: absolute;
       left: 0;
       right: 0;
       height: 100%;
+      border-radius: 2px;
     }
   }
 
@@ -371,7 +412,7 @@ const getAssetInfo = (id: string, assets: any) => {
   }
 
   .icon {
-    margin-left: 8px;
+    margin-left: 7px;
     margin-right: 10px;
     width: 65px;
     height: 65px;
@@ -396,11 +437,11 @@ const getAssetInfo = (id: string, assets: any) => {
   .tstaking,
   .daily {
     .iconfont {
-      font-size: 14px;
+      font-size: 17px;
       line-height: 1.8;
       text-align: center;
       display: block;
-      padding: 5px;
+      padding: 4px;
       background-color: rgba($primary-text-rgb, 0.6);
       margin-right: 6px;
     }

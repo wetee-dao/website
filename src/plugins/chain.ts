@@ -16,11 +16,15 @@ import { useGlobalStore } from "@/stores/global";
 import type { SubmittableExtrinsic } from "@polkadot/api/types";
 import { Loading } from "./pop";
 
-export let chainUrl = ()=>{
-  if (localStorage.getItem("env") == "dev"){
-    return "ws://127.0.0.1:31945"
+export let chainUrl = () => {
+  if (localStorage.getItem("env") == "dev") {
+    return "wss://xiaobai.asyou.me:30001/ws"
   }
-  return 'wss://paseo.asyou.me/ws'
+  if (localStorage.getItem("env") == "paseo") {
+    return 'wss://paseo.asyou.me/ws'
+  }
+  // return 'wss://paseo.asyou.me/ws'
+  return "wss://xiaobai.asyou.me:30001/ws"
 }
 
 export let getChainHttpApi = (url: string) => {
@@ -49,6 +53,12 @@ const chainHttpClient = {
       paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'brackets' }),
     })
     return response.data.values
+  },
+
+  // 查询lastblock
+  lastBlock: async () => {
+    const response = await axios.get(getChainHttpApi(chainUrl()) + "blocks/head/header?finalized=false")
+    return response.data
   }
 }
 
@@ -158,35 +168,82 @@ export const $getChainProvider = async (run: (chain: ChainWrap) => Promise<void>
 }
 
 export const getConfig = (): any => {
+  if (localStorage.getItem("env") == "paseo") {
+    return {
+      "Tokens": {
+        "PAS": [
+          "0"
+        ],
+        "vDOT": [
+          "2030"
+        ],
+      },
+      "TokensAmount": {
+        "PAS_0": async (api: ApiPromise, addr: string) => {
+          let account: any = (await api.query.system.account(addr)).toHuman()
+          return account.data;
+        },
+        "vDOT_2030": (api: ApiPromise) => { },
+      },
+      "Chains": {
+        "0": {
+          name: "Paseo",
+          icon: "/imgs/vStaking/PAS.svg",
+          api: "wss://paseo-rpc.dwellir.com",
+          isParent: true,
+        },
+        "2030": {
+          name: "Biforst",
+          icon: "/imgs/chainBifrost.svg",
+          api: "wss://bifrost-rpc.paseo.liebi.com/ws",
+          isParent: false,
+        }
+      }
+    }
+  }
+  if (localStorage.getItem("env") == "dev") {
+    return {
+      "Tokens": {
+        "DEV": [
+          "0"
+        ],
+      },
+      "TokensAmount": {
+        "DEV_0": async (api: ApiPromise, addr: string) => {
+          let account: any = (await api.query.system.account(addr)).toHuman()
+          return account.data;
+        },
+      },
+      "Chains": {
+        "0": {
+          name: "DEV",
+          icon: "/imgs/vStaking/DEV.svg",
+          api: "wss://paseo-rpc.dwellir.com",
+          isParent: true,
+        },
+      }
+    }
+  }
+
   return {
     "Tokens": {
-      "PAS": [
+      "DEV": [
         "0"
-      ],
-      "vDOT": [
-        "2030"
       ],
     },
     "TokensAmount": {
-      "PAS_0": async (api: ApiPromise, addr: string) => {
+      "DEV_0": async (api: ApiPromise, addr: string) => {
         let account: any = (await api.query.system.account(addr)).toHuman()
         return account.data;
       },
-      "vDOT_2030": (api: ApiPromise) => { },
     },
     "Chains": {
       "0": {
-        name: "Paseo",
-        icon: "/imgs/vStaking/PAS.svg",
-        api: "wss://paseo-rpc.dwellir.com",
+        name: "DEV",
+        icon: "/imgs/vStaking/DEV.svg",
+        api: "ws://127.0.0.1:31946",
         isParent: true,
       },
-      "2030": {
-        name: "Biforst",
-        icon: "/imgs/chainBifrost.svg",
-        api: "wss://bifrost-rpc.paseo.liebi.com/ws",
-        isParent: false,
-      }
     }
   }
 }
