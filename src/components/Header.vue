@@ -11,9 +11,16 @@
       <!-- end btn -->
 
       <!-- logo -->
-      <div class="header__logo" @click="home()">
-        <img v-if="group == 'main'" src="/imgs/logo.svg" />
-        <img v-if="group == 'lanch'" src="/imgs/logo-lanch.svg" />
+      <div v-if="group == 'main'" class="header__logo" @click="home()">
+        <img src="/imgs/logo.svg" />
+      </div>
+      <!-- end logo -->
+
+      <!-- logo -->
+      <div v-if="group != 'main'" class="header_back_logo flex items-center" @click="home()">
+        <i class="iconfont">&#xe602;</i>
+        <img src="/imgs/logo.svg" />
+        <!-- img v-if="group == 'lanch'" src="/imgs/logo-lanch.svg" /-->
       </div>
       <!-- end logo -->
 
@@ -143,10 +150,10 @@ userStore.$subscribe((mutation, state) => {
 }, { detached: true })
 
 const home = () => {
-  if (group.value == "main")
-    router.push("/")
-  else
-    router.push("/economy")
+  // if (group.value == "main")
+  router.push("/")
+  // else
+  //   router.push("/economy")
 }
 </script>
 
@@ -196,6 +203,33 @@ const home = () => {
     img {
       height: 100%;
       width: auto;
+    }
+  }
+
+  .header_back_logo {
+    width: auto;
+    height: 38px;
+    align-items: center;
+    margin-left: 4px;
+    margin-right: 10px;
+    cursor: pointer;
+    background-color: rgba($secondary-text-rgb, 0.03);
+    border-radius: 3px;
+    padding: 10px;
+    font-size: 16px;
+
+    img {
+      height: 100%;
+      width: auto;
+      margin-right: 5px;
+      margin-left: 10px;
+    }
+
+    .iconfont{
+      display: inline-block;
+      font-size: 16px;
+      margin-right: 2px;
+      transform: rotate(180deg);
     }
   }
 

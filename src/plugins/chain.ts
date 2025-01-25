@@ -163,7 +163,7 @@ export const $getChainProvider = async (run: (chain: ChainWrap) => Promise<void>
   } catch (e) {
     loading.close();
     chain!.close();
-    console.error("chain connect error :", e);
+    console.log("chain connect error :", e);
   }
 }
 

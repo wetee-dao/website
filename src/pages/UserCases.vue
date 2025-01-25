@@ -10,10 +10,8 @@
             factories everywhere.
           </div>
         </div>
-        <div class="hidden md:flex justify-center">
-          <Chip class="chip">
-            <div class="chip-text">trustworthy future</div>
-          </Chip>
+        <div class="hidden icon md:block">
+          <Lego/>
         </div>
       </div>
     </div>
@@ -63,14 +61,17 @@
 
 <script setup lang="ts">
 import SectionHead from '@/components/SectionHead.vue';
-import Chip from '@/components/Chip.vue';
+import Lego from '@/components/Lego.vue';
 import Footer from '@/components/Footer.vue';
 
 </script>
 
 <style lang="scss" scoped>
-.chip {
-  font-size: 3px;
+.icon {
+  width: 300px;
+  height: 300px;
+  transform:scale(1.5, 1.5);
+  padding: 75px;
 }
 
 .chip-text {

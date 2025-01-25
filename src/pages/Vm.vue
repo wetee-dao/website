@@ -12,14 +12,8 @@
             <a target="_blank" href="/dapp" class="btn btn__primary "><span>Deploy container</span></a>
           </div>
         </div>
-        <div class="hidden md:flex justify-center">
-          <Chip class="chip">
-            <div class="p-3">
-              <Shadow bg="#000">
-                <img src="/imgs/dc.svg" alt="" />
-              </Shadow>
-            </div>
-          </Chip>
+        <div class="hidden icon md:block">
+          <Dbox/>
         </div>
       </div>
     </div>
@@ -108,15 +102,16 @@
 <script setup lang="ts">
 import SectionHead from '@/components/SectionHead.vue';
 import Shadow from '@/components/Shadow.vue';
-import Chip from '@/components/Chip.vue';
+import Dbox from '@/components/3Dbox.vue';
 import Footer from '@/components/Footer.vue';
 import Container from '@/components/svg/Container.vue';
 
 </script>
 
 <style lang="scss" scoped>
-.chip {
-  font-size: 3px;
+.icon {
+  width: 200px;
+  height: 200px;
 }
 
 .confidentials {
