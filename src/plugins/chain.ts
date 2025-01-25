@@ -248,7 +248,6 @@ export const getConfig = (): any => {
   }
 }
 
-
 // vue 插件入口
 export default {
   install: function (app: any) {

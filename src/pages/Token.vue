@@ -69,7 +69,7 @@
         </div>
         <div class="staking min-w-[120px] flex-1 flex justify-start items-center" v-if="economic.id >= 5000">
           <div class="lanch-line flex justify-start items-center">
-            &nbsp;&nbsp;{{ showToken(new BN(totalData[economic.id] || 0), economic.metadata.decimals) }}/{{
+            &nbsp;{{ showToken(new BN(totalData[economic.id] || 0), economic.metadata.decimals) }}<span class="text-split">/</span>{{
               showToken(new BN(quotaData[economic.id] || 0), economic.metadata.decimals) }}&nbsp;{{
               economic.metadata.staking_symbol }}
             <div class="inner"
@@ -86,7 +86,7 @@
           <h1 class="!text-center">{{ economic.v }}%</h1>
         </div>
         <div class="mstaking min-w-[140px] flex-1 flex justify-center items-center">
-          {{ showToken(getStaking(economic.id, stakingsData), economic.metadata.decimals) }} / {{
+          {{ showToken(getStaking(economic.id, stakingsData), economic.metadata.decimals) }}<span class="text-split">/</span>{{
             showToken(getStaking(economic.id, toStakingsData), economic.metadata.decimals) }}
           <span v-if="economic.metadata.staking_symbol" class="unit">{{
             economic.metadata.staking_symbol }}</span>
@@ -367,6 +367,11 @@ const getAssetInfo = (id: string, assets: any) => {
 
 .page-title {
   font-size: 24px !important;
+}
+
+.text-split{
+  display: inline-block;
+  margin: 0 3px;
 }
 
 .staking-box {
