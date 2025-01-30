@@ -4,6 +4,7 @@
         <div class="btn" @click="addPrantChainToken">addPrantChainToken</div>
         <div class="btn" @click="initToken">initToken</div>
         <div class="btn" @click="initToken">initRpc</div>
+        <div class="btn" @click="initDsecret">initDsecret</div>
     </div>
 </template>
 
@@ -58,6 +59,30 @@ const addPrantChainToken = async () => {
             })
         )
         await send(client, call, alice)
+    })
+}
+
+const initDsecret = async () => {
+    await $getChainProvider(async (chain): Promise<void> => {
+        const client = chain!.client!;
+
+        const keyring = new Keyring({ type: 'sr25519' });
+        const alice = keyring.addFromUri('//Alice');
+
+        let call = client.tx.sudo.sudo(
+            client.tx.dSecret.registerNode("5GmiTJQfjKQnmoVQBFTFoBVTqGyJb8vJQRx5FTGxySMbytkt")
+        )
+        await send(client, call, alice)
+
+        let call2 = client.tx.sudo.sudo(
+            client.tx.dSecret.registerNode("5Fk55vz7hXNKgize4yGoyqixiYbgj6djdDGHktw6ggKPePqE")
+        )
+        await send(client, call2, alice)
+
+        let call3 = client.tx.sudo.sudo(
+            client.tx.dSecret.registerNode("5FYJhLSqFRXRy17oHKgKjx7BvjMGXNu8ndAGt56ipwFSUNqu")
+        )
+        await send(client, call3, alice)
     })
 }
 

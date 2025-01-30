@@ -49,7 +49,7 @@ import Footer from '@/components/Footer.vue';
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    padding-top: 0;
+    padding-top: 30px;
     min-height: calc(100vh - 430px);
 }
 

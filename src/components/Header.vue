@@ -213,16 +213,16 @@ const home = () => {
     margin-left: 4px;
     margin-right: 10px;
     cursor: pointer;
-    background-color: rgba($secondary-text-rgb, 0.03);
+    background-color: rgba($secondary-text-rgb, 0.04);
     border-radius: 3px;
-    padding: 10px;
+    padding: 11px 10px;
     font-size: 16px;
 
     img {
       height: 100%;
       width: auto;
       margin-right: 5px;
-      margin-left: 10px;
+      margin-left: 5px;
     }
 
     .iconfont{

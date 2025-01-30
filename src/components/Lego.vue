@@ -44,7 +44,7 @@
   width: 150px;
   height: 150px;
   position: relative;
-  top: -80px;
+  top: -75px;
   opacity: 0.7;
 }
 

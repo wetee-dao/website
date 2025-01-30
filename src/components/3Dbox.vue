@@ -7,6 +7,7 @@
       <div class="left"></div>
       <div class="front"></div>
       <div class="back"></div>
+      <div class="text">TEE</div>
     </div>
   </div>
 </template>
@@ -33,10 +34,19 @@
   transform: rotateX(-37.5deg) rotateY(45deg);
 }
 
+.text{
+  font-size: 50px;
+  text-align: center;
+  line-height: 150px;
+  border: none !important;
+  background: none !important;
+  color: #ffffffd5;
+}
+
 .cube .sides * {
   box-sizing: border-box;
   background-color: rgba(5, 90, 30, 0.51);
-  border: 15px solid #ffffff3b;
+  border: 8px solid #ffffff3b;
 }
 
 .cube .sides .top {

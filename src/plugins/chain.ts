@@ -23,8 +23,7 @@ export let chainUrl = () => {
   if (localStorage.getItem("env") == "paseo") {
     return 'wss://paseo.asyou.me/ws'
   }
-  // return 'wss://paseo.asyou.me/ws'
-  return "wss://xiaobai.asyou.me:30001/ws"
+  return 'wss://paseo.asyou.me/ws'
 }
 
 export let getChainHttpApi = (url: string) => {
@@ -168,39 +167,7 @@ export const $getChainProvider = async (run: (chain: ChainWrap) => Promise<void>
 }
 
 export const getConfig = (): any => {
-  if (localStorage.getItem("env") == "paseo") {
-    return {
-      "Tokens": {
-        "PAS": [
-          "0"
-        ],
-        "vDOT": [
-          "2030"
-        ],
-      },
-      "TokensAmount": {
-        "PAS_0": async (api: ApiPromise, addr: string) => {
-          let account: any = (await api.query.system.account(addr)).toHuman()
-          return account.data;
-        },
-        "vDOT_2030": (api: ApiPromise) => { },
-      },
-      "Chains": {
-        "0": {
-          name: "Paseo",
-          icon: "/imgs/vStaking/PAS.svg",
-          api: "wss://paseo-rpc.dwellir.com",
-          isParent: true,
-        },
-        "2030": {
-          name: "Biforst",
-          icon: "/imgs/chainBifrost.svg",
-          api: "wss://bifrost-rpc.paseo.liebi.com/ws",
-          isParent: false,
-        }
-      }
-    }
-  }
+
   if (localStorage.getItem("env") == "dev") {
     return {
       "Tokens": {
@@ -227,23 +194,33 @@ export const getConfig = (): any => {
 
   return {
     "Tokens": {
-      "DEV": [
+      "PAS": [
         "0"
+      ],
+      "vDOT": [
+        "2030"
       ],
     },
     "TokensAmount": {
-      "DEV_0": async (api: ApiPromise, addr: string) => {
+      "PAS_0": async (api: ApiPromise, addr: string) => {
         let account: any = (await api.query.system.account(addr)).toHuman()
         return account.data;
       },
+      "vDOT_2030": (api: ApiPromise) => { },
     },
     "Chains": {
       "0": {
-        name: "DEV",
-        icon: "/imgs/vStaking/DEV.svg",
-        api: "ws://127.0.0.1:31946",
+        name: "Paseo",
+        icon: "/imgs/vStaking/PAS.svg",
+        api: "wss://paseo-rpc.dwellir.com",
         isParent: true,
       },
+      "2030": {
+        name: "Biforst",
+        icon: "/imgs/chainBifrost.svg",
+        api: "wss://bifrost-rpc.paseo.liebi.com/ws",
+        isParent: false,
+      }
     }
   }
 }

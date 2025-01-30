@@ -1,23 +1,78 @@
 <template>
   <div class="home">
-    <div id="economics" class="section section--bt">
-      <div class="container">
-        <div class="flex flex-col md:flex-row">
-          <!-- section title -->
-          <div class="md:w-2/3 flex flex-col justify-center">
-            <div class="token-title">
-              <strong>100% fairlanch</strong>
-              <h2>Token &amp; economics</h2>
-              <p>
-                In the design of the economic model, the following principles are fundamentally adhered to:<br>
-                1. Adopting the DAO model for issuing and maintaining tool software and blockchain<br>
-                2. Striving to achieve maximum decentralization<br>
-                3. Reducing user costs<br>
-                4. Attempting to minimize the entry barriers for block producers and node operation expenses<br>
-                5. Avoiding high consensus security maintenance costs
-              </p>
-            </div>
+    <div class="container">
+      <!-- section title -->
+      <div class="token-title">
+        <div class="flex">
+          <div class="iconfont plogo">&#xe612;</div>
+          <div class="flex-1 flex flex-col justify-center">
+            <strong>Token &amp; economics</strong>
+            <h2>
+              WeTEE is a non-profit-oriented decentralized project that issues and maintains tool software and blockchain using the DAO model. WTE is the core token behind WeTEE. Coordination between governance token holders and mining stakeholders is crucial for successful decentralized governance, and WTE serves as the tool to facilitate this coordination. WTE can be used to participate in WeTEE's OpenGov voting.
+            </h2>
+          </div>
+        </div>
+      </div>
+      <!-- end section title -->
 
+      <div class="token-item">
+        <div class="token-item-title">
+          Total Supply: 5,000,000
+        </div>
+        <div class="token-item-body">
+          100% fairlanch<br/>
+          No financing<br/>
+          No founding team token
+        </div>
+      </div>
+
+      <div class="token-item">
+        <div class="token-item-title">
+          WTE allocation has different proportions of vesting, as shown below:
+        </div>
+        <!-- chart -->
+        <div class="token-item-body flex flex-col md:flex-row">
+          <div class="md:w-2/3 flex flex-col justify-center">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th style="width:120px">Distribution of Tokens</th>
+                  <th style="width:120px">Share</th>
+                  <th>Vesting</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Chain Mint</td>
+                  <td>10%</td>
+                  <td>Nodes participating in the consensus of blockchain will receive 10% of the block reward after
+                    mining a block.</td>
+                </tr>
+                <tr>
+                  <td>App Mint</td>
+                  <td>10%</td>
+                  <td>Upload the application template to the TEE application repository, and the applications will
+                    share 5% of the current block's reward.</td>
+                </tr>
+                <tr>
+                  <td>TEE Mint</td>
+                  <td>40%</td>
+                  <td>By staking TOKEN and providing TEE hardware to connect to the network, all miners will share 40%
+                    of the current block's reward.</td>
+                </tr>
+                <tr>
+                  <td>Staking</td>
+                  <td>40%</td>
+                  <td>Users participating in staking with vDOT/vETH/vBNC will share 40% of the current block's reward.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="md:w-1/3 pl-12 flex flex-col justify-center items-center">
+            <div class="section__chart">
+              <Doughnut :data="tokenData" :options="options" />
+            </div>
             <ul class="tokenomics">
               <li v-for="t in tokens">
                 <div class="dot" :style="'background-color:' + t.color">
@@ -25,44 +80,40 @@
               </li>
             </ul>
           </div>
-          <!-- end section title -->
+        </div>
+        <!-- end chart -->
+      </div>
 
-          <!-- chart -->
-          <div class="md:w-1/3 flex justify-center items-center">
-            <div class="section__chart">
-              <Doughnut :data="tokenData" :options="options" />
-            </div>
-          </div>
-          <!-- end chart -->
+      <div class="token-item">
+        <div class="token-item-title">
+          Token Mint
+        </div>
+        <div class="token-item-body">
+          The reward for each block on the first day is 0.1645834 WTE.<br/>
+          The block reward decreases by 0.000474 (four ten-thousandths) every day (14400 blocks), meaning it halves in approximately four years, reducing to 0.08236 WTE (0.999526^1460=0.500471780053).<br/>
+          The total issuance approaches 50,000,018 WTE.
+          <img class="token-total" src="/public/imgs/token-total.png"/>
         </div>
       </div>
-    </div>
-    <div id="roadmap" class="roadmaps section section--bt tbg">
-      <div class="container">
-        <div class="section__title section__title--carousel">
-          <h2 id="hash1366708796">Roadmap</h2>
+
+      <div class="token-item">
+        <div class="token-item-title">
+          Staking Mint
         </div>
-        <div class="slides">
-          <Splide :options="slideoptions" :has-track="false">
-            <div class="splide__arrows">
-              <button class="splide__arrow splide__arrow--prev">
-                <i class="iconfont">&#xe602;</i>
-              </button>
-              <button class="splide__arrow splide__arrow--next">
-                <i class="iconfont">&#xe602;</i>
-              </button>
-            </div>
-            <SplideTrack>
-              <SplideSlide v-for="r in roadmaps">
-                <div class="roadmap roadmap--active">
-                  <h3 class="roadmap__title">{{ r.title }}</h3>
-                  <ul class="roadmap__list">
-                    <li v-for="item in r.list">{{ item }}</li>
-                  </ul>
-                </div>
-              </SplideSlide>
-            </SplideTrack>
-          </Splide>
+        <div class="token-item-body">
+          1. vDOT
+          2. vETH
+          3. vBNC
+        </div>
+      </div>
+
+      <div class="token-item">
+        <div class="token-item-title">
+          Treasury
+        </div>
+        <div class="token-item-body">
+          Treasury does not hold WTE, all proceeds will be channeled into the national treasury, which is managed
+    using an openGOV approach.
         </div>
       </div>
     </div>
@@ -73,10 +124,6 @@
 import { onUnmounted, ref } from 'vue';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
 import { Doughnut } from 'vue-chartjs'
-// @ts-ignore
-import { Splide, SplideSlide, SplideTrack } from '@splidejs/vue-splide';
-import '@splidejs/vue-splide/css';
-
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 onUnmounted(() => {
@@ -147,61 +194,6 @@ const tokenData = ref({
     }
   ]
 })
-
-const roadmaps = ref([
-  {
-    title: '2023 Q4',
-    list: [
-      'On-Chain worker mortgage / create',
-      'On-Chain TEE App create',
-      'On-Chain TEE task create',
-      'Worker K8S operator in TEE',
-      'Worker App deploy',
-      'Worker task deploy',
-      'TEE image build-tool',
-    ]
-  }, {
-    title: '2024 Q1',
-    list: [
-      'Worker sgx attestation',
-      'WeTEE Dapp front end',
-      'WeTEE test network',
-      'WeTEE main network',
-      'Auction Kusama slots',
-      'On-Chain App Store',
-    ]
-  }, {
-    title: '2024 Q2',
-    list: [
-      'Integrate paritytech frontier, compatible with ETH accounts and EVM',
-      'WeTEE & DTIM are compatible with Ethereum, achieving heterogeneous cross-chain functionality',
-      'Web Dapp login with metamask',
-    ]
-  }, {
-    title: '2024 Q3',
-    list: [
-      "Intel TDX's new libos proposal for a new solution",
-      "AMD SEV's new libos proposal for a new solution",
-      "Ink! and Solidity's runtime environment",
-      "TEE and contract invocation protocol",
-    ]
-  }
-])
-const slideoptions = ref({
-  gap: '1rem',
-  perPage: 4,
-  breakpoints: {
-    1250: {
-      perPage: 3,
-    },
-    1024: {
-      perPage: 2,
-    },
-    640: {
-      perPage: 1,
-    },
-  },
-});
 </script>
 
 <style lang="scss" scoped>
@@ -209,82 +201,50 @@ const slideoptions = ref({
   padding-top: 80px;
 }
 
-.features {
-  background-color: #2121215c;
-  padding: 30px 20px;
-  // border-radius: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  position: relative;
-  overflow: hidden;
-
-  .features__title {
-    font-size: 24px;
-    color: #fff;
-    font-weight: 600;
-    position: relative;
-    z-index: 3;
-    padding-top: 19px;
-    margin-bottom: 10px;
-
-    &::before {
-      content: '';
-      position: absolute;
-      display: block;
-      width: 60px;
-      height: 4px;
-      border-radius: 4px;
-      background-color: $primary-text;
-      top: 0;
-      left: 0;
-      transition: 0.5s ease;
-    }
-  }
-
-  .features__text {
-    position: relative;
-    z-index: 3;
-    font-size: 16px;
-    line-height: 26px;
-    color: $secondary-text;
-    margin-bottom: 0;
-    word-break: break-all;
-  }
-}
-
-.features--yellow .features__title::before {
-  background-color: #e8d189;
-}
-
-.features--nephrite .features__title::before {
-  background-color: #5d5d5d;
+.plogo {
+  font-size: 115px;
+  margin-left: -42px;
+  margin-right: -20px
 }
 
 .token-title {
+  margin-bottom: 20px;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    display: block;
+    width: 2px;
+    height: 50px;
+    background-color: #cecdcd;
+    bottom: -27px;
+    left: 56px;
+    transition: 0.5s ease;
+  }
+
   strong {
     color: $primary-text;
     text-transform: uppercase;
     font-weight: 700;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 100%;
-    margin-bottom: 15px;
+    margin-bottom: 8px;
+    display: block;
   }
 
   h2 {
-    font-size: 30px;
+    font-size: 18px;
     color: #fff;
-    font-weight: 600;
-    margin-bottom: 20px;
     text-align: left;
-    line-height: 44px;
+    line-height: 1.5;
+    font-weight: lighter;
   }
 
   p {
-    font-size: 16px;
+    font-size: 18px;
     line-height: 26px;
-    color: $secondary-text;
+    // color: $secondary-text;
     margin-bottom: 20px;
     text-align: left;
   }
@@ -293,19 +253,19 @@ const slideoptions = ref({
 .tokenomics {
   display: flex;
   flex-direction: row;
-  justify-content: start;
+  justify-content: center;
   align-items: center;
   flex-wrap: wrap;
   width: 100%;
   margin-top: 10px;
 
   li {
-    margin: 10px 25px 0 0;
+    margin: 5px 7px 0 7px;
     color: #fff;
-    font-size: 16px;
-    line-height: 26px;
+    font-size: 12px;
+    line-height: 14px;
     position: relative;
-    padding-left: 25px;
+    padding-left: 19px;
 
     .dot {
       background-color: #e8c189;
@@ -321,136 +281,77 @@ const slideoptions = ref({
 }
 
 .section__chart {
-  width: 100%;
-  min-height: 500px;
+  width: 80%;
+  // min-height: 500px;
   filter: grayscale(30%);
 }
 
-.roadmaps {
-  border: none;
-  // background-color: #0f0f0f;
+.token-item {
+  padding-left: 110px;
+  position: relative;
+  overflow: hidden;
 
-  .slides {
-    position: relative;
-    background: rgba(40, 40, 40, 0.35);
-    padding: 30px;
-    // border-radius: 20px;
-
-    .splide__arrows {
-      position: absolute;
-      right: -10px;
-      top: -105px;
-      display: flex;
-    }
-
-    .splide__arrow {
-      padding: 10px;
-      border-radius: 0;
-      background-color: #5252525a;
-      position: relative;
-      transform: none;
-      margin-left: 10px;
-      left: 0;
-    }
-
-    :deep(.splide__pagination) {
-      bottom: -15px;
-    }
-
-    &::before {
-      content: '';
-      position: absolute;
-      display: block;
-      height: 4px;
-      top: 82px;
-      right: 30px;
-      left: 30px;
-      background-color: $primary-text;
-    }
-
-    .splide__arrow--prev {
-      transform: rotate(180deg);
-    }
-  }
-
-  h2 {
-    font-size: 30px;
-    color: #fff;
-    font-weight: 600;
-    margin-bottom: 36px;
-    padding-top: 15px;
-    text-align: left;
-    line-height: 44px;
-  }
-
-  .roadmap::before {
-    width: 24px;
-    height: 24px;
-    left: 0;
-    top: 42px;
-    background-color: #fff;
-    opacity: 0.12;
-    z-index: 1;
+  &::before {
     content: '';
     position: absolute;
     display: block;
-    border-radius: 50%;
+    width: 30px;
+    height: 2px;
+    background-color: #cecdcd;
+    top: 13px;
+    left: 56px;
+    transition: 0.5s ease;
   }
 
-  .roadmap::after {
-    content: "";
+  &::after {
+    content: '';
     position: absolute;
     display: block;
-    border-radius: 50%;
-    width: 14px;
-    height: 14px;
-    left: 5px;
-    top: 47px;
-    background-color: $primary-text;
-    z-index: 2;
+    width: 2px;
+    height: 100%;
+    background-color: #cecdcd;
+    top: 0px;
+    left: 56px;
+    transition: 0.5s ease;
   }
 
-  .roadmap__title {
-    font-size: 20px;
-    color: #fff;
-    font-weight: 600;
-    display: block;
-    margin-bottom: 50px;
-    margin-left: 10px;
+  .token-item-title {
+    font-size: 18px;
   }
 
-  .roadmap__list {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    width: 100%;
-    margin-bottom: 0;
-    margin-top: 0;
-    padding: 0;
-    margin-left: 8px;
-
-    li {
-      color: #fff;
-      font-size: 16px;
-      line-height: 26px;
-      margin-bottom: 12px;
-      padding-left: 16px;
-      position: relative;
-
-      &::before {
-        content: '';
-        position: absolute;
-        width: 4px;
-        height: 4px;
-        background-color: $primary-text;
-        opacity: 1;
-        top: 50%;
-        margin-top: -1px;
-        left: 1px;
-        border-radius: 50%;
-      }
-    }
+  .token-item-body{
+    margin-bottom: 30px;
+    color: #8e8c8c;
+    font-size: 15px;
   }
+}
+
+.chart-title {
+  margin-bottom: 6px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+
+  &,
+  tr {
+    border: 1px solid #ffffff28;
+  }
+
+  th,
+  td {
+    padding: 10px;
+    text-align: left;
+    border-left: 1px solid #ffffff28;
+    text-align: center;
+  }
+}
+
+.token-total{
+  width: 100%;
+  max-width: 400px;
+  border: 5px solid #ffffffb8;
+  margin-top: 5px;
 }
 </style>

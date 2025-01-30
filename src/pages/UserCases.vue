@@ -3,11 +3,10 @@
     <SectionHead />
     <div class="container section flex">
       <div class="flex flex-col items-center md:flex-row md:justify-center md:items-center w-full">
-        <div class="flex-1 flex flex-col justify-center md:pr-20">
-          <div class="top__title">Confidential computing, calculate trustworthy future</div>
-          <div class="top__desc">Any web2 application can be directly deployed as a confidential container contract,
-            and can interact with ink! and EVM smart contracts, bringing security and trust to households and
-            factories everywhere.
+        <div class="flex-1 flex flex-col justify-center">
+          <div class="top__title">Migrate to WEB3 with absolutely no side effects. let trust enter every industry, everywhere</div>
+          <div class="top__desc">
+            Integrate blockchain with TEE to bring blockchain into every household and thousands of factories
           </div>
         </div>
         <div class="hidden icon md:block">
@@ -18,10 +17,10 @@
     <div class="container section-first">
       <div>
         <div class="case case--first">
-          <h3 class="case__title">Move to decentralized and confidential computing from cloud</h3>
-          <p class="case__text">Fully inheriting the advantages of cloud computing while maintaining unparalleled levels
-            of data security. By utilizing decentralized TEE solutions, it ensures the optimal security of data, making
-            it impossible for anyone to obtain user privacy.
+          <h3 class="case__title">Use AI with always-encrypted data</h3>
+          <p class="case__text">Using models similar to ChatGPT, while protecting your data from attacks by all parties
+            at all times. By using confidential computing orchestrated by smart contracts, you can technically ensure
+            that data is always encrypted.
           </p>
         </div>
         <div class="case case--yellow">
@@ -32,10 +31,10 @@
             party.</p>
         </div>
         <div class="case case--nephrite">
-          <h3 class="case__title">Use AI with always-encrypted data</h3>
-          <p class="case__text">Using models similar to ChatGPT, while protecting your data from attacks by all parties
-            at all times. By using confidential computing orchestrated by smart contracts, you can technically ensure
-            that data is always encrypted.
+          <h3 class="case__title">Move to decentralized and confidential computing from cloud</h3>
+          <p class="case__text">Fully inheriting the advantages of cloud computing while maintaining unparalleled levels
+            of data security. By utilizing decentralized TEE solutions, it ensures the optimal security of data, making
+            it impossible for anyone to obtain user privacy.
           </p>
         </div>
         <div class="case case--yellow">
@@ -72,6 +71,7 @@ import Footer from '@/components/Footer.vue';
   height: 300px;
   transform:scale(1.5, 1.5);
   padding: 75px;
+  margin-right: -20px;
 }
 
 .chip-text {

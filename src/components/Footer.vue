@@ -76,7 +76,7 @@
 
 <style lang="scss" scoped>
 .footer {
-  background-color: #000;
+  background-color: #0c0c0c;
   padding-top: 30px;
 }
 
