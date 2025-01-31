@@ -8,7 +8,10 @@
           <div class="flex-1 flex flex-col justify-center">
             <strong>Token &amp; economics</strong>
             <h2>
-              WeTEE is a non-profit-oriented decentralized project that issues and maintains tool software and blockchain using the DAO model. WTE is the core token behind WeTEE. Coordination between governance token holders and mining stakeholders is crucial for successful decentralized governance, and WTE serves as the tool to facilitate this coordination. WTE can be used to participate in WeTEE's OpenGov voting.
+              WeTEE is a non-profit-oriented decentralized project that issues and maintains tool software and
+              blockchain using the DAO model. WTE is the core token behind WeTEE. Coordination between governance token
+              holders and mining stakeholders is crucial for successful decentralized governance, and WTE serves as the
+              tool to facilitate this coordination. WTE can be used to participate in WeTEE's OpenGov voting.
             </h2>
           </div>
         </div>
@@ -20,8 +23,8 @@
           Total Supply: 5,000,000
         </div>
         <div class="token-item-body">
-          100% fairlanch<br/>
-          No financing<br/>
+          100% fairlanch<br />
+          No financing<br />
           No founding team token
         </div>
       </div>
@@ -37,7 +40,7 @@
               <thead>
                 <tr>
                   <th style="width:120px">Distribution of Tokens</th>
-                  <th style="width:120px">Share</th>
+                  <th style="width:120px">Reward Ratio</th>
                   <th>Vesting</th>
                 </tr>
               </thead>
@@ -51,7 +54,7 @@
                 <tr>
                   <td>App Mint</td>
                   <td>10%</td>
-                  <td>Upload the application template to the TEE application repository, and the applications will
+                  <td>Upload the application template to the TEE application store, and the applications will
                     share 5% of the current block's reward.</td>
                 </tr>
                 <tr>
@@ -86,24 +89,53 @@
 
       <div class="token-item">
         <div class="token-item-title">
-          Token Mint
+          Block Reward
         </div>
         <div class="token-item-body">
-          The reward for each block on the first day is 0.1645834 WTE.<br/>
-          The block reward decreases by 0.000474 (four ten-thousandths) every day (14400 blocks), meaning it halves in approximately four years, reducing to 0.08236 WTE (0.999526^1460=0.500471780053).<br/>
-          The total issuance approaches 50,000,018 WTE.
-          <img class="token-total" src="/public/imgs/token-total.png"/>
+          The reward for each block on the first day is 0.1645834 WTE.<br />
+          The block reward decreases by 0.000474 (four ten-thousandths) every day (14400 blocks), meaning it halves in
+          approximately four years, reducing to 0.08236 WTE (0.999526^1460=0.500471780053).<br />
+          The total issuance approaches 5,000,001.8878164 WTE.
+          <img class="token-total" src="/public/imgs/token-total.png" />
         </div>
       </div>
 
       <div class="token-item">
         <div class="token-item-title">
-          Staking Mint
+          Multiple token staking details <span style="color: #93805b">(The staked tokens and the staking rewards may be adjusted through openGov in the future)</span>
         </div>
+        <br/>
         <div class="token-item-body">
-          1. vDOT
-          2. vETH
-          3. vBNC
+          <table class="table">
+            <thead>
+              <tr>
+                <th style="width:120px">Token</th>
+                <th style="width:120px">Reward Ratio</th>
+                <th style="width:140px">Quota</th>
+                <th>Reward Explanation</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>vDOT</td>
+                <td>20%</td>
+                <td>58,000 DOT</td>
+                <td>The maximum staking amount is 58,000 DOT. The fewer the total stakes, the greater the earnings per unit of DOT. Each 1000 DOT will earn at least 8 WTE in rewards per day.</td>
+              </tr>
+              <tr>
+                <td>vETH</td>
+                <td>10%</td>
+                <td>228 ETH</td>
+                <td>The maximum staking amount is 228 ETH. The fewer the total stakes, the greater the earnings per unit of DOT. Each ETH will earn at least 1.03 WTE in rewards per day.</td>
+              </tr>
+              <tr>
+                <td>vBNC</td>
+                <td>10%</td>
+                <td>2,100,000 BNC</td>
+                <td>The maximum staking amount is 2,100,000 BNC. The fewer the total stakes, the greater the earnings per unit of DOT. Each 10000 BNC will earn at least 1.12 WTE in rewards per day.</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
 
@@ -113,7 +145,16 @@
         </div>
         <div class="token-item-body">
           Treasury does not hold WTE, all proceeds will be channeled into the national treasury, which is managed
-    using an openGOV approach.
+          using an openGOV approach.
+        </div>
+      </div>
+
+      <div class="token-item">
+        <div class="token-item-title">
+          Brun of WTE
+        </div>
+        <div class="token-item-body">
+          All WTE used for GAS will be permanently destroyed, making WTE increasingly scarce in the future.
         </div>
       </div>
     </div>
@@ -124,6 +165,7 @@
 import { onUnmounted, ref } from 'vue';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
 import { Doughnut } from 'vue-chartjs'
+import { tokenRatio } from '@/utils/tokens';
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 onUnmounted(() => {
@@ -148,38 +190,7 @@ const options = ref({
   },
 })
 
-const tokens = ref([
-  {
-    name: 'Staking-DOT',
-    amount: 35,
-    color: '#e8c189',
-  },
-  {
-    name: 'Staking-vETH',
-    amount: 15,
-    color: '#8c7ad1',
-  },
-  {
-    name: 'Staking-stETH',
-    amount: 15,
-    color: '#f3efbd',
-  },
-  // {
-  //   name: 'TEE APP Mint',
-  //   amount: 10,
-  //   color: '#5d5d5d',
-  // },
-  {
-    name: 'TEE Mint',
-    amount: 15,
-    color: '#6378d6',
-  },
-  {
-    name: 'Chain Node Mint',
-    amount: 10,
-    color: '#e076b6',
-  },
-])
+const tokens = ref(tokenRatio)
 const tokenLabels = tokens.value.map(t => t.name)
 const tokenValueData = tokens.value.map(t => t.amount)
 const tokenColors = tokens.value.map(t => t.color)
@@ -287,7 +298,7 @@ const tokenData = ref({
 }
 
 .token-item {
-  padding-left: 110px;
+  padding-left: 135px;
   position: relative;
   overflow: hidden;
 
@@ -295,10 +306,10 @@ const tokenData = ref({
     content: '';
     position: absolute;
     display: block;
-    width: 30px;
+    width: 40px;
     height: 2px;
     background-color: #cecdcd;
-    top: 13px;
+    top: 15px;
     left: 56px;
     transition: 0.5s ease;
   }
@@ -319,7 +330,7 @@ const tokenData = ref({
     font-size: 18px;
   }
 
-  .token-item-body{
+  .token-item-body {
     margin-bottom: 30px;
     color: #8e8c8c;
     font-size: 15px;
@@ -348,7 +359,7 @@ const tokenData = ref({
   }
 }
 
-.token-total{
+.token-total {
   width: 100%;
   max-width: 400px;
   border: 5px solid #ffffffb8;

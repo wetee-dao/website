@@ -31,7 +31,7 @@ const router = createRouter({
       component: () => import('../pages/Contact.vue')
     },
     {
-      path: '/tokens',
+      path: '/stake',
       name: 'Token fair launch',
       meta: {
         group: "lanch",

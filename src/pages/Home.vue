@@ -101,6 +101,7 @@ import { Splide, SplideSlide, SplideTrack } from '@splidejs/vue-splide';
 import '@splidejs/vue-splide/css';
 import Banner from '@/components/Banner.vue'
 import Footer from '@/components/Footer.vue'
+import { tokenRatio } from '@/utils/tokens';
 
 
 ChartJS.register(ArcElement, Tooltip, Legend)
@@ -126,38 +127,7 @@ const options = ref({
   },
 })
 
-const tokens = ref([
-  {
-    name: 'Staking-DOT',
-    amount: 35,
-    color: '#e8c189',
-  },
-  {
-    name: 'Staking-vETH',
-    amount: 15,
-    color: '#8c7ad1',
-  },
-  {
-    name: 'Staking-stETH',
-    amount: 15,
-    color: '#f3efbd',
-  },
-  // {
-  //   name: 'TEE APP Mint',
-  //   amount: 10,
-  //   color: '#5d5d5d',
-  // },
-  {
-    name: 'TEE Mint',
-    amount: 15,
-    color: '#6378d6',
-  },
-  {
-    name: 'Chain Node Mint',
-    amount: 10,
-    color: '#e076b6',
-  },
-])
+const tokens = ref(tokenRatio)
 const tokenLabels = tokens.value.map(t => t.name)
 const tokenValueData = tokens.value.map(t => t.amount)
 const tokenColors = tokens.value.map(t => t.color)

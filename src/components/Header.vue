@@ -35,8 +35,8 @@
         <li :class="path == '/use-cases' ? 'active' : ''">
           <RouterLink to="/use-cases">Use Cases</RouterLink>
         </li>
-        <li :class="path == '/tokens' ? 'active' : ''">
-          <a target="_blank" href="/tokens">Fair Launch</a>
+        <li :class="path == '/stake' ? 'active' : ''">
+          <a target="_blank" href="/stake">Fair Launch</a>
         </li>
         <li class="dropdown header__dropdown">
           <a class="trans" tkey="nav_white_paper" target="_blank" href="https://wetee.gitbook.io/docment">Docs</a>
@@ -52,8 +52,8 @@
         <li :class="path == '/economy' ? 'active' : ''">
           <RouterLink to="/economy">Token Economy</RouterLink>
         </li>
-        <li :class="path == '/tokens' ? 'active' : ''">
-          <RouterLink to="/tokens">Fair Launch</RouterLink>
+        <li :class="path == '/stake' ? 'active' : ''">
+          <RouterLink to="/stake">Fair Launch</RouterLink>
         </li>
         <li :class="path == '/cross' ? 'active' : ''">
           <RouterLink to="/cross">Cross Chain</RouterLink>
