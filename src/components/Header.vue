@@ -38,11 +38,11 @@
         <li :class="path == '/stake' ? 'active' : ''">
           <a target="_blank" href="/stake">Fair Launch</a>
         </li>
-        <li class="dropdown header__dropdown">
-          <a class="trans" tkey="nav_white_paper" target="_blank" href="https://wetee.gitbook.io/docment">Docs</a>
-        </li>
         <li :class="path == '/contacts' ? 'active' : ''">
           <RouterLink class="trans" tkey="nav_contact" to="/contacts">Contacts</RouterLink>
+        </li>
+        <li class="dropdown header__dropdown">
+          <a class="trans" tkey="nav_white_paper" target="_blank" href="https://wetee.gitbook.io/docment">Docs</a>
         </li>
       </ul>
       <!-- end navigation -->
