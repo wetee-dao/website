@@ -77,7 +77,6 @@
               v-if="quotaData[economic.id] && totalData[economic.id]">
             </div>
           </div>
-          <!-- <span v-if="economic.metadata.staking_symbol" class="unit">{{ economic.metadata.staking_symbol }}</span> -->
         </div>
         <div class="staking min-w-[100px] flex-1 flex justify-center items-center" v-if="economic.id < 5000">
           -
@@ -85,7 +84,13 @@
         <div class="title min-w-[100px] flex-1">
           <h1 class="!text-center">{{ economic.v }}%</h1>
         </div>
-        <div class="mstaking min-w-[140px] flex-1 flex justify-center items-center">
+        <div class="mstaking min-w-[140px] flex-1 flex justify-center items-center" v-if="economic.id < 5000">
+          {{ getStaking(economic.id, stakingsData) }}<span class="text-split">/</span>{{
+            getStaking(economic.id, toStakingsData) }}
+          <span v-if="economic.metadata.staking_symbol" class="unit">{{
+            economic.metadata.staking_symbol }}</span>
+        </div>
+        <div class="mstaking min-w-[140px] flex-1 flex justify-center items-center" v-if="economic.id >= 5000">
           {{ showToken(getStaking(economic.id, stakingsData), economic.metadata.decimals) }}<span class="text-split">/</span>{{
             showToken(getStaking(economic.id, toStakingsData), economic.metadata.decimals) }}
           <span v-if="economic.metadata.staking_symbol" class="unit">{{
@@ -95,9 +100,27 @@
           {{ showWTE(getStakingReward(economic, stakingsData, blockRewardData, totalData[economic.id])) }} <span
             class="unit">WTE</span>
         </div>
-        <div class="min-w-[105px] flex-1 flex flex-col justify-center items-center">
+        <div class="min-w-[105px] flex-1 flex flex-col justify-center items-center" v-if="economic.id == 0">
           <div class="action flex justify-center items-center" @click="action(economic)">
-            {{ economic.metadata.action }}
+            Mint
+            <i class="iconfont">&#xe602;</i>
+          </div>
+        </div>
+        <div class="min-w-[105px] flex-1 flex flex-col justify-center items-center" v-if="economic.id == 1">
+          <div class="action flex justify-center items-center" @click="action(economic)">
+            Mint
+            <i class="iconfont">&#xe602;</i>
+          </div>
+        </div>
+        <div class="min-w-[105px] flex-1 flex flex-col justify-center items-center" v-if="economic.id == 2">
+          <div class="action flex justify-center items-center" @click="action(economic)">
+            Mint
+            <i class="iconfont">&#xe602;</i>
+          </div>
+        </div>
+        <div class="min-w-[105px] flex-1 flex flex-col justify-center items-center" v-if="economic.id > 5000">
+          <div class="action flex justify-center items-center" @click="action(economic)">
+            Stake
             <i class="iconfont">&#xe602;</i>
           </div>
           <div v-if="parseInt(economic.id) > 5000" class="unstaking action flex justify-center items-center"
@@ -125,7 +148,6 @@ const loader = ref(0)
 
 const global = useGlobelProperties();
 const economicsData = ref<any[]>([
-  { "id": "1", "metadata": { "name": "TEE mint", "symbol": "TEE mint", "decimals": 12, "total": "-", "staking_symbol": "", "action": "TEE mint" }, "v": "25" },
   { "id": "0", "metadata": { "name": "Chain mint", "symbol": "Chain mint", "decimals": 12, "total": "-", "staking_symbol": "", "action": "Chain Mint" }, "v": "10" },
 ]);
 const blockRewardData = ref<BN>(new BN(0));
@@ -138,8 +160,9 @@ const userStore = useGlobalStore();
 const address = ref<string>(userStore.userInfo ? userStore.userInfo.addr : "");
 const StakeDesc = ref<any>({
   "wDOT": "Staking vDOT to earn WTE rewards",
-  "Consensus": "Joining the consensus network to earn rewards",
+  "Chain mint": "Joining the consensus network to earn WTE rewards",
   "TEE mint": "Providing TEE computing power to earn TOKEN",
+  "wAPP": "Upload container to earn WTE rewards",
 });
 const amount = ref<any>({
   free: "0"
@@ -192,6 +215,9 @@ const action = (item: any) => {
       window.open("https://wetee.gitbook.io/docment/mint/blockchain-mint", "_blank");
       break;
     case "1":
+      window.open("https://wetee.gitbook.io/docment/mint/tee-computing-mint", "_blank");
+      break;
+    case "2":
       window.open("https://wetee.gitbook.io/docment/mint/tee-computing-mint", "_blank");
       break;
     default:
@@ -306,7 +332,6 @@ const initData = async () => {
 
   // 获取最新区块
   const lastBlock = await getHttpApi().lastBlock();
-  console.log(lastBlock.number);
 
   utilTime.value = (14400 - new BN(lastBlock.number).mod(new BN(14400)).toNumber()) * 6;
 }
