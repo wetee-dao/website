@@ -12,18 +12,44 @@ import { chainJson } from '@/utils/chain';
 import { Metamask } from '@/providers/MetaSnap';
 import { MetaMaskProvider } from '@/providers/metamask';
 import { SubstrateProvider } from '@/providers/substrate';
-import { useGlobalStore } from "@/stores/global";
+import { store, useGlobalStore } from "@/stores/global";
 import type { SubmittableExtrinsic } from "@polkadot/api/types";
 import { Loading } from "./pop";
+import { getNetworkLatency } from "@/utils/net";
+
+export async function chainNetPing():Promise<number> {
+  const chainNodes = chainUrls();
+  const results = await Promise.all(chainNodes.map(node => getNetworkLatency(getChainHttpApi(node.url)+"node/network")));
+  const rs = results.map((v,i)=>{
+    return {i:i,v:v}
+  } ).filter((result:any) => result.v != null)
+
+
+
+  return rs[Math.floor(Math.random() * rs.length)].i
+}
+
+export const chainUrls = () => {
+  return [
+    {
+      name: 'TEST-HK',
+      url: 'wss://paseo.asyou.me/ws',
+      env: "paseo"
+    },
+    {
+      name: 'TEST-CHINA',
+      url: 'wss://china.asyou.me:89/ws',
+      env: "paseo"
+    },
+  ]
+}
 
 export let chainUrl = () => {
-  if (localStorage.getItem("env") == "dev") {
-    return "wss://xiaobai.asyou.me:30001/ws"
+  const ins = useGlobalStore(store)
+  if (!ins.chainUrl) {
+    return JSON.parse(window.localStorage.getItem("chainUrl")||"{}").url;
   }
-  if (localStorage.getItem("env") == "paseo") {
-    return 'wss://paseo.asyou.me/ws'
-  }
-  return 'wss://paseo.asyou.me/ws'
+  return ins.chainUrl.url
 }
 
 export let getChainHttpApi = (url: string) => {

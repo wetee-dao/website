@@ -1,7 +1,7 @@
 <template>
   <div class="banner__content container flex flex-col items-center md:flex-row md:justify-center md:items-center">
     <div class="flex-1 flex flex-col items-center md:items-start md:pr-10">
-      <span class="banner__tagline ">Based on substrate</span>
+      <span class="banner__tagline ">Secured by&nbsp;&nbsp; <img src="/imgs/by_polkadot.svg"/></span>
       <h2 class="top__title text-center md:text-left">Make confidential computing decentralization and easy
         , Make WEB2 programs contract-like
       </h2>
@@ -54,7 +54,7 @@ import Chip from './Chip.vue';
 }
 
 .banner__tagline {
-  color: $primary-text;
+  color: #fff;
   font-weight: 700;
   font-size: 15px;
   line-height: 100%;
@@ -62,10 +62,16 @@ import Chip from './Chip.vue';
   text-align: center;
   position: relative;
   z-index: 3;
-  padding: 8px 12px;
+  padding: 10px 12px 8px 12px;
   display: inline-block;
-  border: 3Px double rgba($primary-text-rgb, 0.3);
+  border: 2px solid rgba($primary-text-rgb, 0.3);
+  background-color: rgba($primary-text-rgb, 0.15);
   filter: grayscale(60%);
+  img{
+    display: inline-block;
+    position: relative;
+    top: -2px;
+  }
 }
 
 

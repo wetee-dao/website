@@ -84,13 +84,7 @@
         <div class="title min-w-[100px] flex-1">
           <h1 class="!text-center">{{ economic.v }}%</h1>
         </div>
-        <div class="mstaking min-w-[140px] flex-1 flex justify-center items-center" v-if="economic.id < 5000">
-          {{ getStaking(economic.id, stakingsData) }}<span class="text-split">/</span>{{
-            getStaking(economic.id, toStakingsData) }}
-          <span v-if="economic.metadata.staking_symbol" class="unit">{{
-            economic.metadata.staking_symbol }}</span>
-        </div>
-        <div class="mstaking min-w-[140px] flex-1 flex justify-center items-center" v-if="economic.id >= 5000">
+        <div class="mstaking min-w-[140px] flex-1 flex justify-center items-center">
           {{ showToken(getStaking(economic.id, stakingsData), economic.metadata.decimals) }}<span class="text-split">/</span>{{
             showToken(getStaking(economic.id, toStakingsData), economic.metadata.decimals) }}
           <span v-if="economic.metadata.staking_symbol" class="unit">{{
@@ -131,6 +125,7 @@
         </div>
       </div>
     </div>
+    
     <div class="bottom"></div>
   </div>
 </template>
