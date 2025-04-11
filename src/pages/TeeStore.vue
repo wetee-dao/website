@@ -1,6 +1,6 @@
 <template>
-  <section class="section section--first">
-    <SectionHead />
+  <section class="store section--first">
+    <!-- <SectionHead /> -->
     <!-- filter -->
     <!--div class="filter">
       <div class="container">
@@ -39,11 +39,11 @@
     <!-- end filter -->
 
     <!-- apps -->
-    <div class="container" style="display: flex;flex-direction: row;">
+    <div class="app-wrap" style="display: flex;flex-direction: row;">
       <div class="app_type">
         <div @click="goType(t.value)" :class="ctype == t.value ? 'active' : ''" v-for="t in types">{{ t.name }}</div>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 grid-flow-row gap-4 flex-1">
+      <div class="apps grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 grid-flow-row gap-x-4 flex-1">
         <div v-for="app in apps">
           <div class="app">
             <div class="app__head">
@@ -168,18 +168,37 @@ const renderTemps = (t: string) => {
 </script>
 
 <style lang="scss" scoped>
+.store {
+  padding-top: 80px;
+  min-height: 100vh;
+  box-sizing: border-box;
+  background-image: linear-gradient(196.83deg,
+      #00000000 30vw,
+      rgba(255, 255, 255, 0.02) 40vw,
+      rgba(255, 255, 255, 0.06) 45vw,
+      rgba(255, 255, 255, 0.02) 50vw,
+      rgba(0, 0, 0, 0) 70vw,
+    );
+}
+
+.app-wrap {
+  .apps {
+    height: calc(100vh - 80px);
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 0 20px;
+  }
+}
+
 .app_type {
   min-width: 220px;
   border-right: 1px solid rgba(170, 114, 206, 0.12);
-  margin-right: 20px;
+  // margin-right: 20px;
+  margin-left: 20px;
   color: #fff;
   padding-top: 25px;
   padding-right: 10px;
   font-size: 17px;
-}
-
-#apps {
-  width: calc(100% - 220px);
 }
 
 @media (max-width: 992px) {
@@ -209,12 +228,12 @@ const renderTemps = (t: string) => {
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  margin-top: 20px;
-  border-radius: 20px;
   background-color: #5555552e;
   padding: 20px;
+  margin-top: 20px;
+  margin-bottom: 5px;
   width: 100%;
-
+  box-sizing: border-box;
 
   .app__head {
     display: flex;

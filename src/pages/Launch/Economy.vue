@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home gradient-body">
     <div class="container">
       <!-- section title -->
       <div class="token-title">
@@ -209,7 +209,7 @@ const tokenData = ref({
 
 <style lang="scss" scoped>
 .home {
-  padding-top: 80px;
+  padding-top: 100px;
 }
 
 .plogo {

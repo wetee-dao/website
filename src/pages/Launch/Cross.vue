@@ -1,5 +1,5 @@
 <template>
-  <div class="tokens">
+  <div class="tokens gradient-body">
     <div class="container section-first">
       <div class="flex items-center bg-transparent mt-7">
         <div class="cross-icon flex items-center">
@@ -168,9 +168,7 @@ const initData = async () => {
 <style lang="scss" scoped>
 .tokens {
   padding-top: 100px;
-  height: 100vh;
-  overflow-x: hidden;
-  overflow-y: auto;
+  min-height: 100vh;
 }
 
 .page-title {

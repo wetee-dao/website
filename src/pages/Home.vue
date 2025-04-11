@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home gradient-body">
     <Banner />
     <div class="container section">
       <div class="grid grid-cols-1 md:grid-cols-3 grid-flow-row gap-6">

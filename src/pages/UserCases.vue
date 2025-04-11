@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="gradient-body">
     <SectionHead />
     <div class="container section flex">
       <div class="flex flex-col items-center md:flex-row md:justify-center md:items-center w-full">

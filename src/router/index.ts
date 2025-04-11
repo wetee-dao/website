@@ -16,9 +16,9 @@ const router = createRouter({
       component: () => import('../pages/TeeStore.vue')
     },
     {
-      path: '/vm',
-      name: 'TEE container vm',
-      component: () => import('../pages/Vm.vue')
+      path: '/products/cloud',
+      name: 'Decentralized TEE cloud',
+      component: () => import('../pages/Products/Cloud.vue')
     },
     {
       path: '/use-cases',
@@ -31,20 +31,28 @@ const router = createRouter({
       component: () => import('../pages/Contact.vue')
     },
     {
-      path: '/stake',
+      path: '/launch/stake',
       name: 'Token fair launch',
       meta: {
         group: "lanch",
       },
-      component: () => import('../pages/Token.vue')
+      component: () => import('../pages/Launch/Launch.vue')
     },
     {
-      path: '/cross',
+      path: '/launch/cross',
       name: 'Cross asset',
       meta: {
         group: "lanch",
       },
-      component: () => import('../pages/Cross.vue')
+      component: () => import('../pages/Launch/Cross.vue')
+    },
+    {
+      path: '/launch/economy',
+      name: 'Token economy',
+      meta: {
+        group: "lanch",
+      },
+      component: () => import('../pages/Launch/Economy.vue')
     },
     {
       path: '/chain-mint',
@@ -56,14 +64,6 @@ const router = createRouter({
       name: 'Dev start',
       component: () => import('../pages/DevStart.vue')
     },
-    {
-      path: '/economy',
-      name: 'Token economy',
-      meta: {
-        group: "lanch",
-      },
-      component: () => import('../pages/Economy.vue')
-    }
   ]
 })
 

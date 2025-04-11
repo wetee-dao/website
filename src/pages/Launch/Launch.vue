@@ -1,5 +1,5 @@
 <template>
-  <div class="tokens">
+  <div class="tokens gradient-body">
     <div class="container section-first">
       <div class="flex items-center staking-box !m-0">
         <div class="staking-icon flex items-center">
@@ -380,9 +380,6 @@ const getAssetInfo = (id: string, assets: any) => {
 <style lang="scss" scoped>
 .tokens {
   padding-top: 100px;
-  height: 100vh;
-  overflow-x: hidden;
-  overflow-y: auto;
 }
 
 .page-title {

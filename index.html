@@ -9,17 +9,17 @@
   <style>
     @font-face {
       font-family: "letter-font";
-      src: url('fonts/DatDot-Light.woff2') format('woff2'),
-        url('fonts/DatDot-Light.woff') format('woff'),
-        url('fonts/DatDot-Light.ttf') format('truetype');
+      src: url('/fonts/DatDot-Light.woff2') format('woff2'),
+        url('/fonts/DatDot-Light.woff') format('woff'),
+        url('/fonts/DatDot-Light.ttf') format('truetype');
     }
 
     @font-face {
       font-family: 'iconfont';
       /* Project id 2738227 */
-      src: url('fonts/iconfont/iconfont.woff2?t=1732372047336') format('woff2'),
-        url('fonts/iconfont/iconfont.woff?t=1732372047336') format('woff'),
-        url('fonts/iconfont/iconfont.ttf?t=1732372047336') format('truetype');
+      src: url('/fonts/iconfont/iconfont.woff2?t=1732372047336') format('woff2'),
+        url('/fonts/iconfont/iconfont.woff?t=1732372047336') format('woff'),
+        url('/fonts/iconfont/iconfont.ttf?t=1732372047336') format('truetype');
     }
 
     .iconfont {
@@ -29,6 +29,17 @@
 
     #app {
       visibility: hidden;
+    }
+    
+    .gradient-body{
+      background-image: linear-gradient(
+        196.83deg,
+        #00000000 500px,
+        rgba(255, 255, 255, 0.129) 800px,
+        rgba(255, 255, 255, 0.22) 1200px,
+        rgba(255, 255, 255, 0.129) 1800px,
+        rgba(0,0,0,0) 2000px
+      );
     }
 
     body {
@@ -81,7 +92,8 @@
     .tbg {
       background-position: 0 0;
       background-size: 20px 20px;
-      background-image: linear-gradient(90deg, rgba(var(--g-secondary-text-rgb), 0.08) 3%, transparent 0), linear-gradient(rgba(var(--g-secondary-text-rgb), 0.08) 3%, transparent 0);
+      background-image: linear-gradient(90deg, rgba(var(--g-secondary-text-rgb), 0.03) 3%, transparent 0),
+       linear-gradient(rgba(var(--g-secondary-text-rgb), 0.03) 3%, transparent 0);
     }
 
     #loader {
@@ -137,7 +149,6 @@
     }
 
     @-webkit-keyframes loader-logo {
-
       0%,
       100% {
         box-shadow: -.5em 0 0 transparent;
@@ -151,7 +162,6 @@
     }
 
     @keyframes loader-logo {
-
       0%,
       100% {
         box-shadow: -.5em 0 0 transparent;

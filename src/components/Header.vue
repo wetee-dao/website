@@ -26,22 +26,35 @@
 
       <!-- navigation -->
       <ul v-if="group == 'main'" :class="'header__nav ' + (isActivce ? 'header__nav--active' : '')">
-        <li :class="path == '/' ? 'active' : ''">
+        <!-- <li :class="path == '/' ? 'active' : ''">
           <RouterLink to="/">Home</RouterLink>
-        </li>
-        <li :class="path == '/vm' ? 'active' : ''">
-          <RouterLink to="/vm">TEE Vm</RouterLink>
+        </li> -->
+        <li :class="path.indexOf('/products')>-1 ? 'active' : ''">
+          <RouterLink to="/products/cloud">Products <i class="iconfont">&#xe68f;</i></RouterLink>
+          <ul v-if="props.shadow" class="header__dropdown">
+            <li>
+              <RouterLink to="/products/cloud">TEE Cloud</RouterLink>
+            </li>
+            <li>
+              <RouterLink to="/products/bridge">TEE Bridge</RouterLink>
+            </li>
+            <li>
+              <RouterLink to="/products/miner">TEE Miner</RouterLink>
+            </li>
+          </ul>
         </li>
         <li :class="path == '/use-cases' ? 'active' : ''">
-          <RouterLink to="/use-cases">Use Cases</RouterLink>
+          <RouterLink to="/use-cases">Solutions 
+            <!-- <i class="iconfont">&#xe68f;</i> -->
+          </RouterLink>
         </li>
-        <li :class="path == '/stake' ? 'active' : ''">
-          <a target="_blank" href="/stake">Fair Launch</a>
+        <li :class="path == '/launch/stake' ? 'active' : ''">
+          <a target="_blank" href="/launch/stake">Fair Launch</a>
         </li>
         <li :class="path == '/contacts' ? 'active' : ''">
           <RouterLink class="trans" tkey="nav_contact" to="/contacts">Contacts</RouterLink>
         </li>
-        <li class="dropdown header__dropdown">
+        <li>
           <a class="trans" tkey="nav_white_paper" target="_blank" href="https://wetee.gitbook.io/docment">Docs</a>
         </li>
       </ul>
@@ -49,14 +62,14 @@
 
       <!-- navigation -->
       <ul v-if="group == 'lanch'" :class="'header__nav ' + (isActivce ? 'header__nav--active' : '')">
-        <li :class="path == '/economy' ? 'active' : ''">
-          <RouterLink to="/economy">Token Economy</RouterLink>
+        <li :class="path == '/launch/economy' ? 'active' : ''">
+          <RouterLink to="/launch/economy">Token Economy</RouterLink>
         </li>
-        <li :class="path == '/stake' ? 'active' : ''">
-          <RouterLink to="/stake">Fair Launch</RouterLink>
+        <li :class="path == '/launch/stake' ? 'active' : ''">
+          <RouterLink to="/launch/stake">Fair Launch</RouterLink>
         </li>
-        <li :class="path == '/cross' ? 'active' : ''">
-          <RouterLink to="/cross">Cross Chain</RouterLink>
+        <li :class="path == '/launch/cross' ? 'active' : ''">
+          <RouterLink to="/launch/cross">Cross Chain</RouterLink>
         </li>
       </ul>
       <!-- end navigation -->
@@ -173,6 +186,23 @@ const home = () => {
 }
 
 .header-shadow {
+  z-index: 8;
+  backdrop-filter: none;
+  left: -4px;
+  top: 2px;
+  border: none;
+  background: transparent;
+
+  :deep(.header__logo) {
+    height: 23px;
+  }
+
+  :deep(.active) {
+    &:after {
+      display: none;
+    }
+  }
+  
   .header__nav a {
     color: #fff !important;
   }
@@ -318,26 +348,55 @@ const home = () => {
     transform: translate3d(0, 0, 0);
   }
 
-  .header__nav li {
+  .header__nav>li {
     display: block;
     margin-left: 2vw;
     margin-bottom: 0;
+    position: relative;
+    padding: 10px 0;
 
     // &:first-child {
     //   display: none;
     // }
 
     &.active {
-      position: relative;
-
       &:after {
         content: ' ';
         width: 130%;
-        height: 120%;
+        height: 70%;
         background-color: rgba($secondary-text-rgb, 0.1);
         position: absolute;
-        bottom: -10%;
+        bottom: 15%;
         left: -15%;
+      }
+    }
+
+    &:hover {
+      .header__dropdown{
+        display: block;
+      }
+    }
+
+    .iconfont{
+      font-size: 11px;
+    }
+
+    .header__dropdown{
+      display: none;
+      position: absolute;
+      top: 45px;
+      background-color: rgba($primary-bg-rgb, 1);
+      border: 1px solid rgba($secondary-text-rgb, 0.2);
+      border-bottom: none;
+      z-index: 10;
+      left: -15%;
+      li {
+        border-bottom: 1px solid rgba($secondary-text-rgb, 0.2);
+        width: 150px;
+        padding: 8px 10px;
+        a{
+          text-align: left;
+        }
       }
     }
   }
@@ -461,9 +520,31 @@ const home = () => {
           display: block;
         }
 
+        &.active {
+          &:after {
+            width: 120%;
+            left: -10%;
+            height: 100%;
+            bottom: 0;
+          }
+        }
 
         a {
           padding: 10px;
+        }
+
+        .header__dropdown{
+          background-color: rgba($primary-bg-rgb, 0.3);
+          display: block;
+          position: relative;
+          top: 0;
+          left: 0;
+          li {
+            width: 100%;
+            a {
+              text-align: center;
+            }
+          }
         }
       }
     }

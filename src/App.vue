@@ -21,22 +21,5 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
-.header-shadow {
-  z-index: 8;
-  background: transparent;
-  backdrop-filter: none;
-  left: -4px;
-  top: 2px;
-  border: none;
 
-  :deep(.header__logo) {
-    height: 23px;
-  }
-
-  :deep(.active) {
-    &:after {
-      display: none;
-    }
-  }
-}
 </style>
