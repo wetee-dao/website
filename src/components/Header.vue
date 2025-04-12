@@ -29,22 +29,22 @@
         <!-- <li :class="path == '/' ? 'active' : ''">
           <RouterLink to="/">Home</RouterLink>
         </li> -->
-        <li :class="path.indexOf('/products')>-1 ? 'active' : ''">
+        <li :class="path.indexOf('/products') > -1 ? 'active' : ''">
           <RouterLink to="/products/cloud">Products <i class="iconfont">&#xe68f;</i></RouterLink>
           <ul v-if="props.shadow" class="header__dropdown">
             <li>
               <RouterLink to="/products/cloud">TEE Cloud</RouterLink>
             </li>
             <li>
-              <RouterLink to="/products/bridge">TEE Bridge</RouterLink>
+              <RouterLink to="/not404">TEE Bridge</RouterLink>
             </li>
             <li>
-              <RouterLink to="/products/miner">TEE Miner</RouterLink>
+              <RouterLink to="/not404">TEE Miner</RouterLink>
             </li>
           </ul>
         </li>
         <li :class="path == '/use-cases' ? 'active' : ''">
-          <RouterLink to="/use-cases">Solutions 
+          <RouterLink to="/use-cases">Solutions
             <!-- <i class="iconfont">&#xe68f;</i> -->
           </RouterLink>
         </li>
@@ -163,10 +163,7 @@ userStore.$subscribe((mutation, state) => {
 }, { detached: true })
 
 const home = () => {
-  // if (group.value == "main")
   router.push("/")
-  // else
-  //   router.push("/economy")
 }
 </script>
 
@@ -202,7 +199,7 @@ const home = () => {
       display: none;
     }
   }
-  
+
   .header__nav a {
     color: #fff !important;
   }
@@ -255,7 +252,7 @@ const home = () => {
       margin-left: 5px;
     }
 
-    .iconfont{
+    .iconfont {
       display: inline-block;
       font-size: 16px;
       margin-right: 2px;
@@ -372,16 +369,16 @@ const home = () => {
     }
 
     &:hover {
-      .header__dropdown{
+      .header__dropdown {
         display: block;
       }
     }
 
-    .iconfont{
+    .iconfont {
       font-size: 11px;
     }
 
-    .header__dropdown{
+    .header__dropdown {
       display: none;
       position: absolute;
       top: 45px;
@@ -390,11 +387,13 @@ const home = () => {
       border-bottom: none;
       z-index: 10;
       left: -15%;
+
       li {
         border-bottom: 1px solid rgba($secondary-text-rgb, 0.2);
         width: 150px;
         padding: 8px 10px;
-        a{
+
+        a {
           text-align: left;
         }
       }
@@ -533,14 +532,16 @@ const home = () => {
           padding: 10px;
         }
 
-        .header__dropdown{
+        .header__dropdown {
           background-color: rgba($primary-bg-rgb, 0.3);
           display: block;
           position: relative;
           top: 0;
           left: 0;
+
           li {
             width: 100%;
+
             a {
               text-align: center;
             }
