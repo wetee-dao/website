@@ -4,59 +4,38 @@
     <div class="container section flex">
       <div class="flex flex-col items-center md:flex-row md:justify-center md:items-center w-full">
         <div class="flex-1 md:pr-20">
-          <div class="top__title">Evolve WEB2 programs to contract-level</div>
-          <div class="top__text">All WEB2 applications, once deployed, possess the characteristics of smart contracts.
-          </div>
-          <div class="btns mt-10">
-            <RouterLink to="/tee-store" class="btn  btn--nephrite"><span>TEE store</span></RouterLink>
-            <a target="_blank" href="/dapp" class="btn btn__primary "><span>Deploy container</span></a>
+          <div class="top__title">TEE-protected and cryptography-secured on-chain decentralized public/private data disk</div>
+          <div class="top__text">Used independently or as storage for TEE programs</div>
+          <div class="mt-10">
+            <a href="javascript:void(0)" class="btn btn__primary start"><span>Create an encrypted disk</span></a>
           </div>
         </div>
         <div class="hidden icon md:block">
-          <Dbox/>
+          <Ring/>
         </div>
       </div>
     </div>
     <div class="container section-first">
       <div class="grid md:grid-cols-2 lg:grid-cols-3 grid-flow-row gap-6">
         <div class="confidentials confidentials--first">
-          <h3 class="confidentials__title">100% compatible with Docker</h3>
-          <p class="confidentials__text">Can directly deploy using existing Docker images without needing to change any
-            code.
+          <h3 class="confidentials__title">High Privacy</h3>
+          <p class="confidentials__text">TEE provides a secure execution environment, with data always being encrypted and stored.
           </p>
         </div>
         <div class="confidentials confidentials--yellow">
-          <h3 class="confidentials__title">0-cost confidential computing</h3>
-          <p class="confidentials__text">It completely shields the complexity of privacy-preserving computation.</p>
+          <h3 class="confidentials__title">Decentralized</h3>
+          <p class="confidentials__text">Smart contracts control, preventing data from being read by centralized programs.</p>
         </div>
         <div class="confidentials confidentials--nephrite">
           <h3 class="confidentials__title">Affordable pricing</h3>
-          <p class="confidentials__text">users' idle computing power and edge computing power are lower and completely
+          <p class="confidentials__text">Users' idle computing power and edge computing power are lower and completely
             transparent.
-          </p>
-        </div>
-        <div class="confidentials confidentials--yellow">
-          <h3 class="confidentials__title">Fully cloud-native capabilities</h3>
-          <p class="confidentials__text">Fully leveraging the mature technologies of cloud and the core advantages of
-            meta-native.
-          </p>
-        </div>
-        <div class="confidentials confidentials--nephrite">
-          <h3 class="confidentials__title">Supports all main CPUs/GPUs</h3>
-          <p class="confidentials__text">Supports SGX/TDX/SEV/CXX confidential computing chips and computing
-            technologies.
-          </p>
-        </div>
-        <div class="confidentials confidentials--first">
-          <h3 class="confidentials__title">Devops</h3>
-          <p class="confidentials__text">Provides DevOps, enabling developers to continuously integrate and deploy their
-            programs.
           </p>
         </div>
       </div>
     </div>
     <div class="features section section--bt">
-      <div class="container  ">
+      <!-- <div class="container  ">
         <div class="box flex">
           <div class=" md:w-2/3 flex flex-col justify-center">
             <div class="title">Contract-like confidential container</div>
@@ -93,7 +72,7 @@
             </Shadow>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
     <Footer />
   </div>
@@ -102,9 +81,9 @@
 <script setup lang="ts">
 import SectionHead from '@/components/SectionHead.vue';
 import Shadow from '@/components/Shadow.vue';
-import Dbox from '@/components/anim/3Dbox.vue';
 import Footer from '@/components/Footer.vue';
 import Container from '@/components/svg/Container.vue';
+import Ring from '@/components/anim/Ring.vue';
 
 </script>
 
@@ -114,10 +93,13 @@ import Container from '@/components/svg/Container.vue';
   height: 200px;
 }
 
+.start{
+  width: 260px;
+}
+
 .confidentials {
   background-color: #2121215c;
   padding: 30px 20px;
-  // border-radius: 20px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

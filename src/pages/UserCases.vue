@@ -60,7 +60,7 @@
 
 <script setup lang="ts">
 import SectionHead from '@/components/SectionHead.vue';
-import Lego from '@/components/Lego.vue';
+import Lego from '@/components/anim/Lego.vue';
 import Footer from '@/components/Footer.vue';
 
 </script>

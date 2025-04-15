@@ -1,7 +1,12 @@
 <template>
   <div class="banner__content container flex flex-col items-center md:flex-row md:justify-center md:items-center">
     <div class="flex-1 flex flex-col items-center md:items-start md:pr-10">
-      <span class="banner__tagline ">Build on&nbsp; <span class="trust">Blockchain + TEE</span></span>
+      <div class="banner__tagline ">
+        <span>Build on&nbsp;&nbsp;</span>
+        <img src="/imgs/by_polkadot.svg" />
+        <span>&nbsp;+&nbsp;</span>
+        <span class="trust">TEE</span>
+      </div>
       <h2 class="top__title text-center md:text-left">Make confidential computing decentralization and easy
         , Make WEB2 programs contract-like
       </h2>
@@ -29,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import Chip from './Chip.vue';
+import Chip from './anim/Chip.vue';
 </script>
 
 <style lang="scss" scoped>
@@ -57,20 +62,30 @@ import Chip from './Chip.vue';
   color: #fff;
   font-weight: 700;
   font-size: 15px;
-  line-height: 100%;
   margin-bottom: 10px;
-  text-align: center;
   position: relative;
   z-index: 3;
-  padding: 10px 12px 8px 12px;
+  padding: 10px 12px 8px 10px;
   display: inline-block;
   border: 2Px solid rgba($primary-text-rgb, 0.5);
-  // background-color: rgba($primary-text-rgb, 0.15);
-  // filter: grayscale(60%);
-  img{
-    display: inline-block;
+  display: flex;
+  align-items: center;
+
+  span {
+    display: block;
+  }
+
+  img {
+    display: block;
     position: relative;
-    top: -2px;
+    top: -1px;
+  }
+
+  .trust {
+    color: rgba($primary-text-rgb, 1);
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 15px;
   }
 }
 
@@ -98,11 +113,6 @@ import Chip from './Chip.vue';
 
 .chip {
   z-index: 5;
-}
-
-.trust{
-  color: rgba($primary-text-rgb, 1);
-  font-weight: bold;
 }
 
 @media (max-width: 786px) {

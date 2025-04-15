@@ -380,6 +380,7 @@ const getAssetInfo = (id: string, assets: any) => {
 <style lang="scss" scoped>
 .tokens {
   padding-top: 100px;
+  min-height: 100vh;
 }
 
 .page-title {

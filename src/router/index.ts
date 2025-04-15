@@ -17,8 +17,28 @@ const router = createRouter({
     },
     {
       path: '/products/cloud',
-      name: 'Decentralized TEE cloud',
+      name: 'Decentralized cloud of confidential containers',
       component: () => import('../pages/Products/Cloud.vue')
+    },
+    {
+      path: '/products/store',
+      name: 'Decentralized encrypted storage',
+      component: () => import('../pages/Products/Store.vue')
+    },
+    {
+      path: '/products/miner',
+      name: 'Decentralized computing power miner',
+      component: () => import('../pages/Products/Miner.vue')
+    },
+    {
+      path: '/products/bridge',
+      name: 'Trustless TEE Oracle',
+      component: () => import('../pages/Products/Bridge.vue')
+    },
+    {
+      path: '/products/mpc',
+      name: 'Decentralized TEE MPC',
+      component: () => import('../pages/Products/MPC.vue')
     },
     {
       path: '/use-cases',
@@ -77,8 +97,20 @@ router.beforeEach((to, from, next) => {
   userStore.setPaths([
     { path: to.path, name: to.name, meta: to.meta }
   ])
+  document.getElementById('loader')!.style.display = "flex";
   next()
 })
 
+
+router.afterEach((to, from, failure) => {
+  window.scrollTo({
+    top: 0,
+    left: 0,
+    behavior: 'smooth'
+  });
+  setTimeout(() => {
+    document.getElementById('loader')!.style.display = "none";
+  }, 200);
+})
 
 export default router

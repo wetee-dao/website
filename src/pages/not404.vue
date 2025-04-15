@@ -1,5 +1,7 @@
 <template>
-  <div class="tips">Service setup is in progress, please be patient...</div>
+  <div class="p gradient-body">
+    <div class="tips">Service setup is in progress, please be patient...</div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -23,6 +25,11 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.p{
+  height: 100vh;
+  overflow: hidden;
+}
+
 .tips {
   margin-top: 20%;
   text-align: center;

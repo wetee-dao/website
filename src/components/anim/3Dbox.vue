@@ -45,8 +45,8 @@
 
 .cube .sides * {
   box-sizing: border-box;
-  background-color: rgba(5, 90, 30, 0.51);
-  border: 8px solid #ffffff3b;
+  background-color: rgba(5, 90, 31, 0.709);
+  border: 8px solid #ffffff54;
 }
 
 .cube .sides .top {

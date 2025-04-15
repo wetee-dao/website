@@ -210,6 +210,7 @@ const tokenData = ref({
 <style lang="scss" scoped>
 .home {
   padding-top: 100px;
+  min-height: 100vh;
 }
 
 .plogo {

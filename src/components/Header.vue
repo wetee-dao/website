@@ -2,7 +2,7 @@
   <header :class="props.shadow ? 'header' : 'header header-shadow'">
     <div class="header__content container">
       <!-- btn -->
-      <button :class="'header__btn  block md:hidden ' + (isActivce ? 'header__btn--active' : '')" type="button"
+      <button v-if="group == 'main'" :class="'header__btn  block md:hidden ' + (isActivce ? 'header__btn--active' : '')" type="button"
         @click="toggleMenu()">
         <span></span>
         <span></span>
@@ -26,25 +26,68 @@
 
       <!-- navigation -->
       <ul v-if="group == 'main'" :class="'header__nav ' + (isActivce ? 'header__nav--active' : '')">
-        <!-- <li :class="path == '/' ? 'active' : ''">
-          <RouterLink to="/">Home</RouterLink>
-        </li> -->
         <li :class="path.indexOf('/products') > -1 ? 'active' : ''">
-          <RouterLink to="/products/cloud">Products <i class="iconfont">&#xe68f;</i></RouterLink>
-          <ul v-if="props.shadow" class="header__dropdown">
+          <a href="javascript:void(0)">Products <i class="iconfont">&#xe68f;</i></a>
+          <ul v-if="props.shadow && showSub" class="header__dropdown">
             <li>
-              <RouterLink to="/products/cloud">TEE Cloud</RouterLink>
+              <RouterLink to="/products/cloud" @click="unfocus">
+                <div class="flex items-center ">
+                  <Cloud />
+                  <div class="title-wrap">
+                    <div class="title">TEE Vm Cloud</div>
+                    <div class="subtitle">Decentralized confidential containers</div>
+                  </div>
+                </div>
+              </RouterLink>
             </li>
             <li>
-              <RouterLink to="/not404">TEE Bridge</RouterLink>
+              <RouterLink to="/products/bridge" @click="unfocus">
+                <div class="flex items-center">
+                  <Bridge/>
+                  <div class="title-wrap">
+                    <div class="title">TEE Oracle</div>
+                    <div class="subtitle">Trustless channel between WEB3 and WEB2</div>
+                  </div>
+                </div>
+              </RouterLink>
             </li>
             <li>
-              <RouterLink to="/not404">TEE Miner</RouterLink>
+              <RouterLink to="/products/miner" @click="unfocus">
+                <div class="flex items-center">
+                  <Miner />
+                  <div class="title-wrap">
+                    <div class="title">TEE Miner</div>
+                    <div class="subtitle">Provide computing power to earn</div>
+                  </div>
+                </div>
+              </RouterLink>
+            </li>
+            <li>
+              <RouterLink to="/products/store" @click="unfocus">
+                <div class="flex items-center">
+                  <Store/>
+                  <div class="title-wrap">
+                    <div class="title">TEE Storage</div>
+                    <div class="subtitle">Decentralized encrypted storage</div>
+                  </div>
+                </div>
+              </RouterLink>
+            </li>
+            <li>
+              <RouterLink to="/products/mpc" @click="unfocus">
+                <div class="flex items-center">
+                  <MPC class="icon" />
+                  <div class="title-wrap">
+                    <div class="title">TEE MPC</div>
+                    <div class="subtitle">MPC base on blockchain and TEE</div>
+                  </div>
+                </div>
+              </RouterLink>
             </li>
           </ul>
         </li>
         <li :class="path == '/use-cases' ? 'active' : ''">
-          <RouterLink to="/use-cases">Solutions
+          <RouterLink to="/use-cases">Use Cases
             <!-- <i class="iconfont">&#xe68f;</i> -->
           </RouterLink>
         </li>
@@ -86,10 +129,10 @@
         </a>
 
         <!-- wallet -->
-        <div class="header__cta" @click="login" v-if="!userInfo">
+        <div class="header__cta connect" @click="login" v-if="!userInfo">
           <span class="text" tkey="nav_connect">&nbsp;Connect</span>
         </div>
-        <div class="header__cta" @click="login" v-if="userInfo">
+        <div class="header__cta connect" @click="login" v-if="userInfo">
           <Identicon class="uicon" :key="userInfo.addr" @click="login" :hash="ss58toHex(userInfo.addr)" :padding="0.28"
             :foreground="[80, 250, 130, 255]" :background="[80, 255, 130, 0]" :size="16" />
           <span class="text" tkey="nav_connect">{{ userInfo.name }}</span>
@@ -113,19 +156,26 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { nextTick, ref } from 'vue';
 import { useNotification } from 'naive-ui'
 import { ss58toHex } from "@/utils/chain";
 import { useGlobalStore } from '@/stores/global';
 import useGlobelProperties from '@/plugins/globel';
 import Identicon from "./identicon.vue";
 import router from '@/router';
+import MPC from './svg/MPC.vue';
+import Miner from './svg/Miner.vue';
+import Bridge from './svg/Bridge.vue';
+import Store from './svg/Store.vue';
+import Cloud from './svg/Cloud.vue';
 
 const props = defineProps(["shadow"])
 const userStore = useGlobalStore()
 const notification = useNotification()
 
 const group = ref("main")
+const showSub = ref(true)
+
 const getPath = (paths: any) => {
   group.value = "main"
   if (paths.length === 0) return '/'
@@ -164,6 +214,13 @@ userStore.$subscribe((mutation, state) => {
 
 const home = () => {
   router.push("/")
+}
+
+const unfocus = () => {
+  showSub.value = false
+  setTimeout(() => {
+    showSub.value = true
+  }, 200)
 }
 </script>
 
@@ -352,10 +409,6 @@ const home = () => {
     position: relative;
     padding: 10px 0;
 
-    // &:first-child {
-    //   display: none;
-    // }
-
     &.active {
       &:after {
         content: ' ';
@@ -381,20 +434,37 @@ const home = () => {
     .header__dropdown {
       display: none;
       position: absolute;
-      top: 45px;
-      background-color: rgba($primary-bg-rgb, 1);
-      border: 1px solid rgba($secondary-text-rgb, 0.2);
+      top: 43px;
+      background-color: rgba($secondary-text-rgb, 0.07);
       border-bottom: none;
       z-index: 10;
       left: -15%;
+      padding: 5px;
 
       li {
-        border-bottom: 1px solid rgba($secondary-text-rgb, 0.2);
-        width: 150px;
-        padding: 8px 10px;
+        background-color: rgba($primary-bg-rgb, 1);
+        border-bottom: 1px solid rgba($secondary-text-rgb, 0.1);
+        width: 330px;
+        padding: 15px 15px;
 
         a {
           text-align: left;
+        }
+
+        .icon{
+          height: 35px;
+          width: 35px;
+          margin-right: 10px;
+        }
+
+        .title{
+          font-size: 16px;
+          margin-bottom: 2px;
+        }
+
+        .subtitle{
+          font-size: 12px;
+          color: rgba($secondary-text-rgb, 0.5);
         }
       }
     }
@@ -412,15 +482,6 @@ const home = () => {
     cursor: pointer;
     display: block;
     padding: 6px 0;
-  }
-
-  .header__nav a svg {
-    fill: #fff;
-    width: 14px;
-    height: auto;
-    transition: 0.5s ease;
-    margin-left: 1px;
-    margin-top: 2px;
   }
 
   .header__nav a:hover,
@@ -508,12 +569,11 @@ const home = () => {
       height: 100vh;
       padding: 25px 45px;
       display: none;
+      width: 100vw;
 
       li {
-        margin: 0;
-        margin-top: 8px;
-        margin-bottom: 8px;
-        width: 150px;
+        width: 250px;
+        margin: 0 auto;
 
         &:first-child {
           display: block;
@@ -533,7 +593,7 @@ const home = () => {
         }
 
         .header__dropdown {
-          background-color: rgba($primary-bg-rgb, 0.3);
+          background-color: transparent;
           display: block;
           position: relative;
           top: 0;
@@ -547,6 +607,29 @@ const home = () => {
             }
           }
         }
+      }
+    }
+
+    .connect{
+      display: none;
+    }
+
+    .header__dropdown{
+      li{
+        padding: 0 !important;
+      }
+      .icon{
+        display: none;
+      }
+      .title-wrap{
+        width: 100%;
+      }
+      .title{
+        width: 100%;
+        text-align: center;
+      }
+      .subtitle{
+        display: none;
       }
     }
 
