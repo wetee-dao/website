@@ -103,7 +103,7 @@
       </ul>
       <!-- end navigation -->
 
-      <!-- navigation -->
+      <!-- lanch navigation -->
       <ul v-if="group == 'lanch'" :class="'header__nav ' + (isActivce ? 'header__nav--active' : '')">
         <li :class="path == '/launch/economy' ? 'active' : ''">
           <RouterLink to="/launch/economy">Token Economy</RouterLink>
@@ -115,7 +115,7 @@
           <RouterLink to="/launch/cross">Cross Chain</RouterLink>
         </li>
       </ul>
-      <!-- end navigation -->
+      <!-- end lanch navigation -->
 
       <div class="space flex justify-end items-center">
         <a target="_blank" href="https://github.com/wetee-dao" class="coin__btn hidden md:block" title="github code">
@@ -434,7 +434,7 @@ const unfocus = () => {
     .header__dropdown {
       display: none;
       position: absolute;
-      top: 43px;
+      top: 45px;
       background-color: rgba($secondary-text-rgb, 0.07);
       border-bottom: none;
       z-index: 10;
