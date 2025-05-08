@@ -519,6 +519,7 @@ const unfocus = () => {
     padding: 0 9px 0 3px;
     border: 2Px solid rgba($primary-text-rgb, 1);
     cursor: pointer;
+    filter: grayscale(50%);
 
     &.inverse {
       background-color: rgba($primary-text-rgb, 1);
