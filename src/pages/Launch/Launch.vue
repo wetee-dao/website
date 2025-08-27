@@ -395,7 +395,7 @@ const getAssetInfo = (id: string, assets: any) => {
 .staking-box {
   padding: 25px 20px;
   margin-bottom: 20px;
-  background-color: rgba(33, 33, 33, 0.5);
+  background-color: rgba(33, 33, 33, 0.22);
   font-size: 16px;
   min-width: 800px;
 

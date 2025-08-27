@@ -18,8 +18,8 @@
     <div class="container section-first">
       <div class="grid md:grid-cols-2 lg:grid-cols-3 grid-flow-row gap-6">
         <div class="confidentials confidentials--first">
-          <h3 class="confidentials__title">Enterprise oracle</h3>
-          <p class="confidentials__text">Decentralized node clusters and TEE ensure Oracle efficiency and security.
+          <h3 class="confidentials__title">Enterprise bridge</h3>
+          <p class="confidentials__text">Decentralized node clusters and TEE ensure bridge efficiency and security.
           </p>
         </div>
         <div class="confidentials confidentials--yellow">

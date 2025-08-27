@@ -18,15 +18,14 @@ import { Loading } from "./pop";
 import { getNetworkLatency } from "@/utils/net";
 
 export async function chainNetPing():Promise<number> {
-  const chainNodes = chainUrls();
-  const results = await Promise.all(chainNodes.map(node => getNetworkLatency(getChainHttpApi(node.url)+"node/network")));
-  const rs = results.map((v,i)=>{
-    return {i:i,v:v}
-  } ).filter((result:any) => result.v != null)
+  // const chainNodes = chainUrls();
+  // const results = await Promise.all(chainNodes.map(node => getNetworkLatency(getChainHttpApi(node.url)+"node/network")));
+  // const rs = results.map((v,i)=>{
+  //   return {i:i,v:v}
+  // } ).filter((result:any) => result.v != null)
 
-
-
-  return rs[Math.floor(Math.random() * rs.length)].i
+  // return rs[Math.floor(Math.random() * rs.length)].i
+  return 0
 }
 
 export const chainUrls = () => {

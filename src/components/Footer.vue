@@ -45,7 +45,7 @@
     <div class="footer__content flex items-center">
       <div class="container">
         <div class="flex items-center">
-          <small class="footer__copyright flex-1">© WeTEE DAO, 2024.</small>
+          <small class="footer__copyright flex-1">© WeTEE DAO, 2025.</small>
           <div class="footer__social">
             <a href="https://twitter.com/Wetee_DAO" target="_blank">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -76,7 +76,7 @@
 
 <style lang="scss" scoped>
 .footer {
-  background-color: #0c0c0c;
+  background-color: $primary-bg;
   padding-top: 30px;
 }
 

@@ -103,7 +103,6 @@ import Banner from '@/components/Banner.vue'
 import Footer from '@/components/Footer.vue'
 import { tokenRatio } from '@/utils/tokens';
 
-
 ChartJS.register(ArcElement, Tooltip, Legend)
 onUnmounted(() => {
   ChartJS.unregister(ArcElement, Tooltip, Legend)
@@ -182,6 +181,7 @@ const roadmaps = ref([
     ]
   }
 ])
+
 const slideoptions = ref({
   gap: '1rem',
   perPage: 4,
@@ -323,7 +323,7 @@ const slideoptions = ref({
 
 .roadmaps {
   border: none;
-  // background-color: #0f0f0f;
+  background-color: #14181a;
 
   .slides {
     position: relative;

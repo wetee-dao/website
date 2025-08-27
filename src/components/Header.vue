@@ -45,7 +45,7 @@
                 <div class="flex items-center">
                   <Bridge/>
                   <div class="title-wrap">
-                    <div class="title">TEE Oracle</div>
+                    <div class="title">TEE Bridge</div>
                     <div class="subtitle">Trustless channel between WEB3 and WEB2</div>
                   </div>
                 </div>
@@ -234,7 +234,7 @@ const unfocus = () => {
   border-bottom: 1px solid rgba(236, 236, 236, 0.08);
   background-color: transparent;
   transition: background - color 0.5s ease;
-  background-image: radial - gradient(transparent 1px, #040406 1px);
+  background-image: radial - gradient(transparent 1px, $primary-bg 1px);
   background-size: 4px 4px;
   backdrop-filter: saturate(50%) blur(4px);
 }
@@ -242,8 +242,8 @@ const unfocus = () => {
 .header-shadow {
   z-index: 8;
   backdrop-filter: none;
-  left: -4px;
-  top: 2px;
+  left: -3px;
+  top: 1.5px;
   border: none;
   background: transparent;
 
@@ -519,7 +519,7 @@ const unfocus = () => {
     padding: 0 9px 0 3px;
     border: 2Px solid rgba($primary-text-rgb, 1);
     cursor: pointer;
-    filter: grayscale(50%);
+    // filter: grayscale(50%);
 
     &.inverse {
       background-color: rgba($primary-text-rgb, 1);
