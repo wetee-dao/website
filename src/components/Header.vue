@@ -12,14 +12,14 @@
 
       <!-- logo -->
       <div v-if="group == 'main'" class="header__logo" @click="home()">
-        <img src="/imgs/logo.svg" />
+        <img src="/imgs/TTE.svg" />
       </div>
       <!-- end logo -->
 
       <!-- logo -->
       <div v-if="group != 'main'" class="header_back_logo flex items-center" @click="home()">
         <i class="iconfont">&#xe602;</i>
-        <img src="/imgs/logo.svg" />
+        <img src="/imgs/TTE.svg" />
         <!-- img v-if="group == 'lanch'" src="/imgs/logo-lanch.svg" /-->
       </div>
       <!-- end logo -->
@@ -141,12 +141,6 @@
 
         <!-- dapp -->
         <a target="_blank" href="/dapp" class="header__cta inverse" title="Decentralization trust cloud">
-          <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="12882"
-            width="256" height="256">
-            <path
-              d="M836.7616 217.4976l-239.9744-142.9504a165.5296 165.5296 0 0 0-169.5744 0L187.1872 217.6C134.912 248.6272 102.4 306.688 102.4 368.9984v285.9008c0 62.3104 32.512 120.32 84.7872 151.552l239.9744 142.8992a165.5296 165.5296 0 0 0 169.6256 0l240.0256-142.8992c52.2752-31.232 84.7872-89.2416 84.7872-151.552V369.0496c0-62.3104-32.512-120.3712-84.8384-151.552zM723.456 440.8832l-165.2736 94.72-3.4304 214.4256a43.0592 43.0592 0 0 1-42.3936 43.008h-0.7168a43.1616 43.1616 0 0 1-41.6768-44.4416l3.3792-208.7424L300.544 440.832a44.4928 44.4928 0 0 1-16.4352-59.4944 41.728 41.728 0 0 1 57.6512-16.9984L512 461.9776l170.24-97.5872c20.48-11.7248 46.2848-4.096 57.6512 16.9984a44.544 44.544 0 0 1-16.4864 59.4944z"
-              p-id="12883"></path>
-          </svg>
           <span class="text" tkey="nav_connect">DAPP</span>
         </a>
         <!-- end dapp -->
@@ -248,7 +242,13 @@ const unfocus = () => {
   background: transparent;
 
   :deep(.header__logo) {
-    height: 23px;
+    img{
+      filter: grayscale(100%);
+      transform: scale(1.2);
+      position: relative;
+      top: -2px;
+      left: 3px;
+    }
   }
 
   :deep(.active) {
@@ -278,7 +278,7 @@ const unfocus = () => {
 
   .header__logo {
     width: auto;
-    height: 23px;
+    height: 24px;
     align-items: center;
     margin-left: 4px;
     margin-right: 10px;
@@ -287,6 +287,7 @@ const unfocus = () => {
     img {
       height: 100%;
       width: auto;
+      // filter: grayscale(100%) brightness(100);
     }
   }
 
@@ -416,7 +417,7 @@ const unfocus = () => {
         height: 70%;
         background-color: rgba($secondary-text-rgb, 0.1);
         position: absolute;
-        bottom: 15%;
+        bottom: 16%;
         left: -15%;
       }
     }
@@ -472,11 +473,11 @@ const unfocus = () => {
 
   .header__nav a {
     display: inline-block;
-    font-size: 15px;
-    line-height: 15px;
+    font-size: 16px;
+    line-height: 16px;
     font-weight: bold;
     text-align: center;
-    color: #fff !important;
+    color: #b7b7b7 !important;
     background: transparent !important;
     width: 100%;
     cursor: pointer;
@@ -512,22 +513,18 @@ const unfocus = () => {
     justify-content: center;
     align-items: center;
     position: relative;
-    height: 38px;
+    height: 30px;
     background-color: transparent;
     overflow: hidden;
     margin-right: 0px;
     padding: 0 9px 0 3px;
-    border: 2Px solid rgba($primary-text-rgb, 1);
+    border: 1Px solid rgba($primary-text-rgb, 0.2);
     cursor: pointer;
+    filter: grayscale(100%);
     // filter: grayscale(50%);
 
     &.inverse {
       background-color: rgba($primary-text-rgb, 1);
-
-      svg {
-        fill: #040406;
-      }
-
       span {
         color: #040406;
         letter-spacing: -1px;

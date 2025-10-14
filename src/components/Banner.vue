@@ -7,7 +7,7 @@
         <span>&nbsp;+&nbsp;</span>
         <span class="trust">TEE</span>
       </div>
-      <h2 class="top__title text-center md:text-left">Make confidential computing decentralization and easy
+      <h2 class="top__title text-center md:text-left">Make confidential computing decentralization and trustless
         , Make WEB2 programs contract-like
       </h2>
       <p class="top__text text-center md:text-left">
@@ -23,7 +23,7 @@
     </div>
 
     <Chip class="chip">
-      <div class="chip-text">Confidential computing, calculate trustworthy future</div>
+      <div class="chip-text">Trusted Trustless Computing Network</div>
     </Chip>
 
     <!-- <div class="banner__canvas">

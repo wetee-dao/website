@@ -4,9 +4,9 @@
       <div class="flex">
         <div class="flex flex-col justify-center w-1/3 md:w-1/4">
           <div class="footer__logo">
-            <img src="/imgs/logo.svg" alt="">
+            <img src="/imgs/TTE.svg" alt="">
           </div>
-          <p class="footer__tagline pr-6">Confidential computing, calculate trustworthy future</p>
+          <p class="footer__tagline pr-6">Trusted Trustless Computing Network</p>
         </div>
         <div class="flex-1 grid grid-cols-2 md:grid-cols-4 grid-flow-row gap-6">
           <div class="">
@@ -85,6 +85,7 @@
     width: auto;
     height: 26px;
     display: block;
+    filter: grayscale(100%);
   }
 }
 

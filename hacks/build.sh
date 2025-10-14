@@ -18,9 +18,10 @@ if [ $# -gt 0 ]; then
   TAG="$1.$current"
 fi
 
-# 编译
+# build
 npm run build
 
+# upload
 ossutil64 -c ./hacks/.config rm -f oss://wetee-home/assets/ -r --all-versions
 ossutil64 -c ./hacks/.config -f --recursive cp dist/ oss://wetee-home
 ossutil64 -c ./hacks/.config set-meta oss://wetee-home/assets/ Content-Type:application/javascript -f --update -r --include "*.js"
