@@ -75,6 +75,16 @@ const router = createRouter({
       component: () => import('../pages/Launch/Economy.vue')
     },
     {
+      path: '/chain/blocks',
+      name: 'Blocks',
+      component: () => import('../pages/Chain/Blocks.vue')
+    },
+    {
+      path: '/chain/txs',
+      name: 'Txs',
+      component: () => import('../pages/Chain/Txs.vue')
+    },
+    {
       path: '/chain-mint',
       name: 'Chain mint',
       component: () => import('../pages/Chainmint.vue')

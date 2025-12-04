@@ -43,7 +43,7 @@
               </RouterLink>
             </li>
             <li>
-              <RouterLink to="/chain/transfers" @click="unfocus">
+              <RouterLink to="/chain/txs" @click="unfocus">
                 <div class="flex items-center">
                   <Svgimg class="w-10 h-10 mr-2" color="#50fa82" name="transfer" />
                   <div class="title-wrap">
