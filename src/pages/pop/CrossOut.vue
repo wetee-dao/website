@@ -76,7 +76,7 @@ import { BN } from "@polkadot/util";
 import PopHeader from "@/components/PopHeader.vue";
 import { useGlobalStore } from "@/stores/global";
 import { getNumstrfromChain, showToken } from "@/utils/chain";
-import { $getChainProvider, getConfig, getHttpApi } from "@/plugins/chain";
+import { getConfig } from "@/plugins/chain";
 
 const props = defineProps(["close", "params"])
 const params: any = ref(props.params);
@@ -93,24 +93,24 @@ const assetInfo = ref({
 const fee = ref("-")
 
 onMounted(async () => {
-  // 获取资产的 ParaId
-  let assetParaIds = await getHttpApi().entries("asset", "assetParaIds", []);
-  assetParaIds.forEach(({ keys, value }: any) => {
-    if (getNumstrfromChain(keys[0]) == params.value.asset_id) {
-      para_id.value = getNumstrfromChain(value)
-      to.value = config.Chains[para_id.value]
-    }
-  });
+  // // 获取资产的 ParaId
+  // let assetParaIds = await getHttpApi().entries("asset", "assetParaIds", []);
+  // assetParaIds.forEach(({ keys, value }: any) => {
+  //   if (getNumstrfromChain(keys[0]) == params.value.asset_id) {
+  //     para_id.value = getNumstrfromChain(value)
+  //     to.value = config.Chains[para_id.value]
+  //   }
+  // });
 
-  // 获取资产余额
-  let t = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, parseInt(params.value.asset_id)]);
-  fromAmount.value = t;
+  // // 获取资产余额
+  // let t = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, parseInt(params.value.asset_id)]);
+  // fromAmount.value = t;
 
-  // 获取链ID
-  chainId.value = getNumstrfromChain(await getHttpApi().query("asset", "chainID", []));
+  // // 获取链ID
+  // chainId.value = getNumstrfromChain(await getHttpApi().query("asset", "chainID", []));
 
-  // 获取资产信息
-  assetInfo.value = await getHttpApi().query("asset", "assetInfos", [params.value.asset_id]);
+  // // 获取资产信息
+  // assetInfo.value = await getHttpApi().query("asset", "assetInfos", [params.value.asset_id]);
 })
 
 const onValue = (e: any) => {
@@ -143,70 +143,70 @@ const submit = async (isTry: boolean = false) => {
   const v = parseFloat(value.value) * unix
   const bnv = new BN(v).mul(new BN(10).pow(new BN(assetInfo.value.metadata.decimals))).div(new BN(unix))
 
-  await $getChainProvider(async (chain): Promise<void> => {
-    const api = chain.client;
-    const signer = userStore.userInfo.addr;
+  // await $getChainProvider(async (chain): Promise<void> => {
+  //   const api = chain.client;
+  //   const signer = userStore.userInfo.addr;
 
-    let call = api!.tx.xTokens.transfer(
-      params.value.asset_id,
-      bnv,
-      isParent ? {
-        V2: {
-          parents: 1,
-          interior: {
-            X1: {
-              AccountId32: {
-                network: null,
-                id: api!.createType('AccountId32', signer).toHex(),
-              }
-            }
-          },
-        },
-      } : {
-        V2: {
-          parents: 0,
-          interior: {
-            X2: [
-              {
-                Parachain: parseInt(para_id.value)
-              },
-              {
-                AccountId32: {
-                  network: null,
-                  id: api!.createType('AccountId32', signer).toHex(),
-                }
-              }
-            ]
-          }
-        }
-      },
-      "Unlimited"
-    )
+  //   let call = api!.tx.xTokens.transfer(
+  //     params.value.asset_id,
+  //     bnv,
+  //     isParent ? {
+  //       V2: {
+  //         parents: 1,
+  //         interior: {
+  //           X1: {
+  //             AccountId32: {
+  //               network: null,
+  //               id: api!.createType('AccountId32', signer).toHex(),
+  //             }
+  //           }
+  //         },
+  //       },
+  //     } : {
+  //       V2: {
+  //         parents: 0,
+  //         interior: {
+  //           X2: [
+  //             {
+  //               Parachain: parseInt(para_id.value)
+  //             },
+  //             {
+  //               AccountId32: {
+  //                 network: null,
+  //                 id: api!.createType('AccountId32', signer).toHex(),
+  //               }
+  //             }
+  //           ]
+  //         }
+  //       }
+  //     },
+  //     "Unlimited"
+  //   )
 
-    if (isTry) {
-      let info = await call.paymentInfo(signer)
-      let v = showToken(info.partialFee.toBn(), api!.registry.chainDecimals[0])
+  //   if (isTry) {
+  //     let info = await call.paymentInfo(signer)
+  //     let v = showToken(info.partialFee.toBn(), api!.registry.chainDecimals[0])
 
-      fee.value = v +" "+ api!.registry.chainTokens[0];
-      return
-    }
+  //     fee.value = v +" "+ api!.registry.chainTokens[0];
+  //     return
+  //   }
 
-    try {
-      await chain.signAndSend(call, signer, () => {
-        window.$notification["success"]({
-          content: 'Success',
-          meta: "Staking successful, the staking rewards will be calculated in the next cycle.",
-          duration: 2500,
-          keepAliveOnHover: true
-        })
-        props.close();
-      }, () => {
+  //   try {
+  //     await chain.signAndSend(call, signer, () => {
+  //       window.$notification["success"]({
+  //         content: 'Success',
+  //         meta: "Staking successful, the staking rewards will be calculated in the next cycle.",
+  //         duration: 2500,
+  //         keepAliveOnHover: true
+  //       })
+  //       props.close();
+  //     }, () => {
 
-      })
-    } catch (e: any) {
+  //     })
+  //   } catch (e: any) {
 
-    }
-  },undefined,isTry)
+  //   }
+  // },undefined,isTry)
 }
 </script>
 

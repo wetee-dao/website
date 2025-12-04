@@ -15,7 +15,7 @@ import { onMounted } from 'vue';
 import { NNotificationProvider, NConfigProvider, darkTheme } from 'naive-ui';
 
 onMounted(async () => {
-  document.getElementById('loader')!.style.display = "none";
+  // document.getElementById('loader')!.style.display = "none";
   document.getElementById('app')!.style.visibility = "visible";
 })
 </script>

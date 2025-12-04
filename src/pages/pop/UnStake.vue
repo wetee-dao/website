@@ -61,7 +61,7 @@ import PopHeader from "@/components/PopHeader.vue";
 import { useGlobalStore } from "@/stores/global";
 import { getBnFromChain, getNumstrfromChain, WTE, showToken } from "@/utils/chain";
 import { BN } from "@polkadot/util";
-import { $getChainProvider, getHttpApi } from "@/plugins/chain";
+// import { $getChainProvider, getHttpApi } from "@/plugins/chain";
 
 const props = defineProps(["close", "params"])
 const valueSlider = ref(0)
@@ -76,30 +76,30 @@ const Amount = ref<any>({})
 const dAmount = ref<any>({})
 
 onMounted(async () => {
-  // 获取资产信息 
-  let assetsList = await getHttpApi().entries("asset", "assetInfos", []);
-  let assets: any = {};
-  assetsList.forEach(({ keys, value }: any) => {
-    assets[getNumstrfromChain(keys[0])] = value;
-  });
-  assetsInfo.value = assets;
+  // // 获取资产信息 
+  // let assetsList = await getHttpApi().entries("asset", "assetInfos", []);
+  // let assets: any = {};
+  // assetsList.forEach(({ keys, value }: any) => {
+  //   assets[getNumstrfromChain(keys[0])] = value;
+  // });
+  // assetsInfo.value = assets;
 
-  // 获取 vtoken2token
-  let cvtoken2token: any = await getHttpApi().entries("fairlanch", "vtoken2token", []);
-  cvtoken2token.forEach((v: any) => {
-    if (getNumstrfromChain(v.value[0]) == assetId.value.toString()) {
-      vassetId.value = getNumstrfromChain(v.keys[0])
-      vtoken2token.value = [getNumstrfromChain(v.value[0]), [getNumstrfromChain(v.value[1][0]), getNumstrfromChain(v.value[1][1])]]
-    }
-  });
+  // // 获取 vtoken2token
+  // let cvtoken2token: any = await getHttpApi().entries("fairlanch", "vtoken2token", []);
+  // cvtoken2token.forEach((v: any) => {
+  //   if (getNumstrfromChain(v.value[0]) == assetId.value.toString()) {
+  //     vassetId.value = getNumstrfromChain(v.keys[0])
+  //     vtoken2token.value = [getNumstrfromChain(v.value[0]), [getNumstrfromChain(v.value[1][0]), getNumstrfromChain(v.value[1][1])]]
+  //   }
+  // });
 
-  // 获取 target amount
-  let damount = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, parseInt(vassetId.value)]);
-  dAmount.value = damount;
+  // // 获取 target amount
+  // let damount = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, parseInt(vassetId.value)]);
+  // dAmount.value = damount;
 
-  // 获取 amount
-  let amount = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, assetId.value]);
-  Amount.value = amount;
+  // // 获取 amount
+  // let amount = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, assetId.value]);
+  // Amount.value = amount;
 })
 
 const onValue = (e: any) => {
@@ -165,35 +165,35 @@ const opposite = () => {
 }
 
 const submit = async () => {
-  await $getChainProvider(async (chain): Promise<void> => {
-    const client = chain!.client!;
-    const signer = userStore.userInfo.addr;
+  // await $getChainProvider(async (chain): Promise<void> => {
+  //   const client = chain!.client!;
+  //   const signer = userStore.userInfo.addr;
 
-    try {
-      const unix = 1000000
-      const v = parseFloat(value.value) * unix
-      const bv = new BN(v).mul(new BN(10).pow(new BN(assetInfo(vassetId.value.toString()).metadata.decimals))).div(new BN(unix))
-      const tx = client.tx.fairlanch.vUnstaking(vassetId.value, bv)
-      await chain.signAndSend(tx, signer, () => {
-        window.$notification["success"]({
-          content: 'Success',
-          meta: "Staking successful, the staking rewards will be calculated in the next cycle.",
-          duration: 2500,
-          keepAliveOnHover: true
-        })
-        props.close();
-      }, () => {
+  //   try {
+  //     const unix = 1000000
+  //     const v = parseFloat(value.value) * unix
+  //     const bv = new BN(v).mul(new BN(10).pow(new BN(assetInfo(vassetId.value.toString()).metadata.decimals))).div(new BN(unix))
+  //     const tx = client.tx.fairlanch.vUnstaking(vassetId.value, bv)
+  //     await chain.signAndSend(tx, signer, () => {
+  //       window.$notification["success"]({
+  //         content: 'Success',
+  //         meta: "Staking successful, the staking rewards will be calculated in the next cycle.",
+  //         duration: 2500,
+  //         keepAliveOnHover: true
+  //       })
+  //       props.close();
+  //     }, () => {
 
-      })
-    } catch (e: any) {
-      window.$notification["error"]({
-        content: 'Error',
-        meta: "" + e.toString(),
-        duration: 2500,
-        keepAliveOnHover: true
-      })
-    }
-  });
+  //     })
+  //   } catch (e: any) {
+  //     window.$notification["error"]({
+  //       content: 'Error',
+  //       meta: "" + e.toString(),
+  //       duration: 2500,
+  //       keepAliveOnHover: true
+  //     })
+  //   }
+  // });
 }
 
 function removeNonNumericAndHandleMultipleDecimals(str: string) {

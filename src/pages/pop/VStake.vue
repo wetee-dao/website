@@ -64,7 +64,7 @@ import PopHeader from "@/components/PopHeader.vue";
 import { useGlobalStore } from "@/stores/global";
 import { getBnFromChain, getNumstrfromChain, showToken } from "@/utils/chain";
 import { BN } from "@polkadot/util";
-import { $getChainProvider, getHttpApi } from "@/plugins/chain";
+// import { $getChainProvider, getHttpApi } from "@/plugins/chain";
 
 const props = defineProps(["close", "params"])
 const valueSlider = ref(0)
@@ -152,26 +152,26 @@ const opposite = () =>{
 }
 
 const submit = async () => {
-  await $getChainProvider(async (chain): Promise<void> => {
-    const client = chain!.client!;
-    const signer = userStore.userInfo.addr;
-    const unix = 1000000
-    const v = parseFloat(value.value) * unix
-    const bv = new BN(v).mul(new BN(10).pow(new BN(assetInfo(vassetId.value.toString()).metadata.decimals))).div(new BN(unix))
+  // await $getChainProvider(async (chain): Promise<void> => {
+  //   const client = chain!.client!;
+  //   const signer = userStore.userInfo.addr;
+  //   const unix = 1000000
+  //   const v = parseFloat(value.value) * unix
+  //   const bv = new BN(v).mul(new BN(10).pow(new BN(assetInfo(vassetId.value.toString()).metadata.decimals))).div(new BN(unix))
 
-    const tx = client.tx.fairlanch.vStaking(vassetId.value, bv)
-    await chain.signAndSend(tx, signer, () => {
-      window.$notification["success"]({
-        content: 'Success',
-        meta: "Staking successful, the staking rewards will be calculated in the next cycle.",
-        duration: 10500,
-        keepAliveOnHover: true
-      })
-      props.close();
-    }, () => {
+  //   const tx = client.tx.fairlanch.vStaking(vassetId.value, bv)
+  //   await chain.signAndSend(tx, signer, () => {
+  //     window.$notification["success"]({
+  //       content: 'Success',
+  //       meta: "Staking successful, the staking rewards will be calculated in the next cycle.",
+  //       duration: 10500,
+  //       keepAliveOnHover: true
+  //     })
+  //     props.close();
+  //   }, () => {
 
-    })
-  });
+  //   })
+  // });
 }
 
 onMounted(() => {
@@ -179,22 +179,22 @@ onMounted(() => {
 })
 
 const initData = async () => {
-  // 获取资产信息 
-  let assetsList = await getHttpApi().entries("asset", "assetInfos", []);
-  let assets: any = {};
-  assetsList.forEach(({ keys, value }: any) => {
-    assets[getNumstrfromChain(keys[0])] = value;
-  });
-  assetsInfo.value = assets;
+  // // 获取资产信息 
+  // let assetsList = await getHttpApi().entries("asset", "assetInfos", []);
+  // let assets: any = {};
+  // assetsList.forEach(({ keys, value }: any) => {
+  //   assets[getNumstrfromChain(keys[0])] = value;
+  // });
+  // assetsInfo.value = assets;
 
-  let cvtoken2token: any = await getHttpApi().query("fairlanch", "vtoken2token", [vassetId.value]);
-  vtoken2token.value = cvtoken2token;
+  // let cvtoken2token: any = await getHttpApi().query("fairlanch", "vtoken2token", [vassetId.value]);
+  // vtoken2token.value = cvtoken2token;
 
-  let vamount = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, vassetId.value]);
-  vAmount.value = vamount;
+  // let vamount = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, vassetId.value]);
+  // vAmount.value = vamount;
 
-  let amount = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, getNumstrfromChain(cvtoken2token[0])]);
-  dAmount.value = amount;
+  // let amount = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, getNumstrfromChain(cvtoken2token[0])]);
+  // dAmount.value = amount;
 }
 
 function removeNonNumericAndHandleMultipleDecimals(str: string) {

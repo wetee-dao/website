@@ -1,12 +1,12 @@
 import { createPinia, defineStore } from 'pinia'
 
 let userInfo = null
-let chainUrl: any = null;
+let chainId: string | null = "";
 if (window.localStorage.getItem("userInfo")) {
   userInfo = JSON.parse(window.localStorage.getItem("userInfo") || "{}")
 }
-if (window.localStorage.getItem("chainUrl")) {
-  chainUrl = window.localStorage.getItem("chainUrl") ? JSON.parse(window.localStorage.getItem("chainUrl")||"{}"): null;
+if (window.localStorage.getItem("chainId")) {
+  chainId = window.localStorage.getItem("chainId") ? window.localStorage.getItem("chainId") : "";
 }
 
 export const useGlobalStore = defineStore('global', {
@@ -14,7 +14,7 @@ export const useGlobalStore = defineStore('global', {
     paths: [] as any[],
     account: [] as any[],
     userInfo: userInfo as any,
-    chainUrl: chainUrl as any,
+    chainId: chainId,
   }), actions: {
     setPaths(paths: any[]) {
       this.paths = paths
@@ -31,16 +31,16 @@ export const useGlobalStore = defineStore('global', {
       console.log("setUserInfo", userInfo)
       this.userInfo = userInfo
     },
-    setChainUrl(param:any) {
-      if (!param) {
-        window.localStorage.removeItem("chainUrl");
-      }else{
-        window.localStorage.setItem("chainUrl", JSON.stringify(param));
+    setChain(id: any) {
+      if (!id) {
+        window.localStorage.removeItem("chainId");
+      } else {
+        window.localStorage.setItem("chainId", id);
       }
-      
-      this.chainUrl = param;
+
+      this.chainId = id;
     },
   },
 })
 
-export const store  = createPinia();
+export const store = createPinia();

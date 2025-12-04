@@ -76,7 +76,7 @@ import { BN, isFunction } from "@polkadot/util";
 import PopHeader from "@/components/PopHeader.vue";
 import { useGlobalStore } from "@/stores/global";
 import { getNumstrfromChain, showToken } from "@/utils/chain";
-import { $getChainProvider, getChainHttp, getConfig, getHttpApi } from "@/plugins/chain";
+import { getConfig } from "@/plugins/chain";
 
 const XCM_LOC = ['xcm', 'xcmPallet', 'polkadotXcm'];
 const props = defineProps(["close", "params"])
@@ -94,32 +94,32 @@ const assetInfo = ref({
 const fee = ref("-")
 
 onMounted(async () => {
-  let assetParaIds = await getHttpApi().entries("asset", "assetParaIds", []);
-  assetParaIds.forEach(({ keys, value }: any) => {
-    if (getNumstrfromChain(keys[0]) == params.value.asset_id) {
-      para_id.value = getNumstrfromChain(value)
-      from.value = config.Chains[para_id.value]
-    }
-  });
+  // let assetParaIds = await getHttpApi().entries("asset", "assetParaIds", []);
+  // assetParaIds.forEach(({ keys, value }: any) => {
+  //   if (getNumstrfromChain(keys[0]) == params.value.asset_id) {
+  //     para_id.value = getNumstrfromChain(value)
+  //     from.value = config.Chains[para_id.value]
+  //   }
+  // });
 
-  // 获取链ID
-  chainId.value = getNumstrfromChain(await getHttpApi().query("asset", "chainID", []));
+  // // 获取链ID
+  // chainId.value = getNumstrfromChain(await getHttpApi().query("asset", "chainID", []));
 
-  // 获取资产信息
-  assetInfo.value = await getHttpApi().query("asset", "assetInfos", [params.value.asset_id]);
+  // // 获取资产信息
+  // assetInfo.value = await getHttpApi().query("asset", "assetInfos", [params.value.asset_id]);
 
-  // 获取资产余额
-  const chainConfig = config.Chains[para_id.value]
-  const tokenfn = config.TokensAmount[params.value.symbol + "_" + para_id.value]
-  if (tokenfn){
-    await $getChainProvider(async (chain): Promise<void> => {
-      const api = chain.client;
-      const t = await tokenfn(api, userStore.userInfo.addr)
-      console.log(t.free)
+  // // 获取资产余额
+  // const chainConfig = config.Chains[para_id.value]
+  // const tokenfn = config.TokensAmount[params.value.symbol + "_" + para_id.value]
+  // if (tokenfn){
+  //   await $getChainProvider(async (chain): Promise<void> => {
+  //     const api = chain.client;
+  //     const t = await tokenfn(api, userStore.userInfo.addr)
+  //     console.log(t.free)
 
-      fromAmount.value = getNumstrfromChain(t.free);
-    }, getChainHttp(chainConfig.api), true)
-  }
+  //     fromAmount.value = getNumstrfromChain(t.free);
+  //   }, getChainHttp(chainConfig.api), true)
+  // }
 })
 
 const onValue = (e: any) => {
@@ -149,85 +149,85 @@ const submit = async (isTry: boolean = false) => {
   const v = parseFloat(value.value) * unix
   const bnv = new BN(v).mul(new BN(10).pow(new BN(assetInfo.value.metadata.decimals))).div(new BN(unix))
 
-  await $getChainProvider(async (chain): Promise<void> => {
-    const api = chain.client;
-    const signer = userStore.userInfo.addr;
-    const m = XCM_LOC.filter((x) => api!.tx[x] && isFunction(api!.tx[x].limitedTeleportAssets))[0];
+  // await $getChainProvider(async (chain): Promise<void> => {
+  //   const api = chain.client;
+  //   const signer = userStore.userInfo.addr;
+  //   const m = XCM_LOC.filter((x) => api!.tx[x] && isFunction(api!.tx[x].limitedTeleportAssets))[0];
 
-    let call = api!.tx[m].reserveTransferAssets(
-      // 资产接收链
-      {
-        V2: {
-          parents: 0,
-          interior: {
-            X1: {
-              ParaChain: recipientParaId
-            }
-          }
-        }
-      },
-      // 用户
-      {
-        V2: {
-          parents: 0,
-          interior: {
-            X1: {
-              AccountId32: {
-                id: api!.createType('AccountId32', signer).toHex(),
-                network: null
-              }
-            }
-          },
-        }
-      },
-      // 资产
-      {
-        V2: [{
-          id: {
-            Concrete: {
-              interior: 'Here',
-              parents: isParent
-                ? 0
-                : 1
-            }
-          },
-          fun: {
-            Fungible: bnv
-          },
-        }]
-      },
-      0,
-    )
+  //   let call = api!.tx[m].reserveTransferAssets(
+  //     // 资产接收链
+  //     {
+  //       V2: {
+  //         parents: 0,
+  //         interior: {
+  //           X1: {
+  //             ParaChain: recipientParaId
+  //           }
+  //         }
+  //       }
+  //     },
+  //     // 用户
+  //     {
+  //       V2: {
+  //         parents: 0,
+  //         interior: {
+  //           X1: {
+  //             AccountId32: {
+  //               id: api!.createType('AccountId32', signer).toHex(),
+  //               network: null
+  //             }
+  //           }
+  //         },
+  //       }
+  //     },
+  //     // 资产
+  //     {
+  //       V2: [{
+  //         id: {
+  //           Concrete: {
+  //             interior: 'Here',
+  //             parents: isParent
+  //               ? 0
+  //               : 1
+  //           }
+  //         },
+  //         fun: {
+  //           Fungible: bnv
+  //         },
+  //       }]
+  //     },
+  //     0,
+  //   )
 
-    if (isTry) {
-      let info = await call.paymentInfo(signer)
-      let v = showToken(info.partialFee.toBn(), api!.registry.chainDecimals[0])
+  //   if (isTry) {
+  //     let info = await call.paymentInfo(signer)
+  //     let v = showToken(info.partialFee.toBn(), api!.registry.chainDecimals[0])
 
-      fee.value = v + " " + api!.registry.chainTokens[0];
-      return
-    }
+  //     fee.value = v + " " + api!.registry.chainTokens[0];
+  //     return
+  //   }
 
-    try {
-      await chain.signAndSend(call, signer, () => {
-        window.$notification["success"]({
-          content: 'Success',
-          meta: "Staking successful, the staking rewards will be calculated in the next cycle.",
-          duration: 2500,
-          keepAliveOnHover: true
-        })
-        props.close();
-      }, () => {
+  //   try {
+  //     await chain.signAndSend(call, signer, () => {
+  //       window.$notification["success"]({
+  //         content: 'Success',
+  //         meta: "Staking successful, the staking rewards will be calculated in the next cycle.",
+  //         duration: 2500,
+  //         keepAliveOnHover: true
+  //       })
+  //       props.close();
+  //     }, () => {
 
-      })
-    } catch (e: any) {
-      window.$notification["error"]({
-        content: 'Error',
-        meta: "" + e.toString(),
-        duration: 2500,
-        keepAliveOnHover: true
-      })
-    }
-  }, chainConfig.api, isTry)
+  //     })
+  //   } catch (e: any) {
+  //     window.$notification["error"]({
+  //       content: 'Error',
+  //       meta: "" + e.toString(),
+  //       duration: 2500,
+  //       keepAliveOnHover: true
+  //     })
+  //   }
+  // }, chainConfig.api, isTry)
 }
 </script>
 

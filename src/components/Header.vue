@@ -12,20 +12,49 @@
 
       <!-- logo -->
       <div v-if="group == 'main'" class="header__logo" @click="home()">
-        <img src="/imgs/TTE.svg" />
+        <!-- <img src="/imgs/TTE.svg" /> -->
+        <Logo />
       </div>
       <!-- end logo -->
 
       <!-- logo -->
       <div v-if="group != 'main'" class="header_back_logo flex items-center" @click="home()">
         <i class="iconfont">&#xe602;</i>
-        <img src="/imgs/TTE.svg" />
+        <!-- <img src="/imgs/TTE.svg" /> -->
+        <Logo :fill="true" />
         <!-- img v-if="group == 'lanch'" src="/imgs/logo-lanch.svg" /-->
       </div>
       <!-- end logo -->
 
       <!-- navigation -->
       <ul v-if="group == 'main'" :class="'header__nav ' + (isActivce ? 'header__nav--active' : '')">
+        <li :class="path.indexOf('/chain') > -1 ? 'active' : ''">
+          <a href="javascript:void(0)">Blockchain <i class="iconfont">&#xe68f;</i></a>
+          <ul v-if="props.shadow && showSub" class="header__dropdown">
+            <li>
+              <RouterLink to="/chain/blocks" @click="unfocus">
+                <div class="flex items-center ">
+                  <Svgimg class="w-10 h-10 mr-2" color="#50fa82" name="block" />
+                  <div class="title-wrap">
+                    <div class="title">Blocks</div>
+                    <div class="subtitle">Decentralized confidential containers</div>
+                  </div>
+                </div>
+              </RouterLink>
+            </li>
+            <li>
+              <RouterLink to="/chain/transfers" @click="unfocus">
+                <div class="flex items-center">
+                  <Svgimg class="w-10 h-10 mr-2" color="#50fa82" name="transfer" />
+                  <div class="title-wrap">
+                    <div class="title">Transfers</div>
+                    <div class="subtitle">Trustless channel between WEB3 and WEB2</div>
+                  </div>
+                </div>
+              </RouterLink>
+            </li>
+          </ul>
+        </li>
         <li :class="path.indexOf('/products') > -1 ? 'active' : ''">
           <a href="javascript:void(0)">Products <i class="iconfont">&#xe68f;</i></a>
           <ul v-if="props.shadow && showSub" class="header__dropdown">
@@ -87,9 +116,7 @@
           </ul>
         </li>
         <li :class="path == '/use-cases' ? 'active' : ''">
-          <RouterLink to="/use-cases">Use Cases
-            <!-- <i class="iconfont">&#xe68f;</i> -->
-          </RouterLink>
+          <RouterLink to="/use-cases">Use Cases</RouterLink>
         </li>
         <li :class="path == '/launch/stake' ? 'active' : ''">
           <a target="_blank" href="/launch/stake">Fair Launch</a>
@@ -141,7 +168,7 @@
 
         <!-- dapp -->
         <a target="_blank" href="/dapp" class="header__cta inverse" title="Decentralization trust cloud">
-          <span class="text" tkey="nav_connect">DAPP</span>
+          <span class="text" tkey="nav_connect">Dashboard</span>
         </a>
         <!-- end dapp -->
       </div>
@@ -157,11 +184,13 @@ import { useGlobalStore } from '@/stores/global';
 import useGlobelProperties from '@/plugins/globel';
 import Identicon from "./identicon.vue";
 import router from '@/router';
+import Svgimg from "@/components/svg/SvgImg.vue"
 import MPC from './svg/MPC.vue';
 import Miner from './svg/Miner.vue';
 import Bridge from './svg/Bridge.vue';
 import Store from './svg/Store.vue';
 import Cloud from './svg/Cloud.vue';
+import Logo from './svg/Logo.vue';
 
 const props = defineProps(["shadow"])
 const userStore = useGlobalStore()
@@ -242,8 +271,8 @@ const unfocus = () => {
   background: transparent;
 
   :deep(.header__logo) {
-    img{
-      filter: grayscale(100%);
+    svg{
+      // filter: grayscale(100%);
       transform: scale(1.2);
       position: relative;
       top: -2px;
@@ -278,13 +307,12 @@ const unfocus = () => {
 
   .header__logo {
     width: auto;
-    height: 24px;
+    height: 21px;
     align-items: center;
-    margin-left: 4px;
-    margin-right: 10px;
     cursor: pointer;
+    margin: 3px 10px 3px 4px;
 
-    img {
+    svg {
       height: 100%;
       width: auto;
       // filter: grayscale(100%) brightness(100);
@@ -520,11 +548,11 @@ const unfocus = () => {
     padding: 0 9px 0 3px;
     border: 1Px solid rgba($primary-text-rgb, 0.2);
     cursor: pointer;
-    filter: grayscale(100%);
+    // filter: grayscale(100%);
     // filter: grayscale(50%);
 
     &.inverse {
-      background-color: rgba($primary-text-rgb, 1);
+      background-color: rgba($primary-text-rgb, 0.45);
       span {
         color: #040406;
         letter-spacing: -1px;
@@ -548,7 +576,7 @@ const unfocus = () => {
     span {
       display: block;
       letter-spacing: 0.4px;
-      text-transform: uppercase;
+      // text-transform: uppercase;
       font-size: 16px;
       font-weight: bold;
       line-height: 16px;

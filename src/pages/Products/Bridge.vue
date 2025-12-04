@@ -33,8 +33,8 @@
         </div>
       </div>
     </div>
-    <div class="features section section--bt">
-      <!-- <div class="container  ">
+    <!-- <div class="features section section--bt">
+      <div class="container  ">
         <div class="box flex">
           <div class=" md:w-2/3 flex flex-col justify-center">
             <div class="title">Contract-like confidential container</div>
@@ -71,8 +71,8 @@
             </Shadow>
           </div>
         </div>
-      </div> -->
-    </div>
+      </div>
+    </div> -->
     <Footer />
   </div>
 </template>
@@ -91,7 +91,7 @@ import Footer from '@/components/Footer.vue';
 }
 
 .confidentials {
-  background-color: #2121215c;
+  background-color: $primary-bg;
   padding: 30px 20px;
   // border-radius: 20px;
   display: flex;
@@ -146,7 +146,7 @@ import Footer from '@/components/Footer.vue';
 
 .features {
   border: none;
-  background-color: rgb(15, 15, 15);
+  background-color: rgb(0, 13, 0);
   margin-top: 60px;
 
   .box {

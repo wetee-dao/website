@@ -1,11 +1,12 @@
 import './assets/main.scss'
 
 import { createApp } from 'vue'
+import 'virtual:svg-icons-register' 
 
 import App from './App.vue'
 import router from './router'
 import pop from './plugins/pop'
-import chain, { chainNetPing, chainUrls } from './plugins/chain'
+import chain, { chainNetPing, initChainApi } from './plugins/chain'
 import { store, useGlobalStore } from './stores/global'
 
 const m = () => {
@@ -19,14 +20,17 @@ const m = () => {
 }
 
 const ins = useGlobalStore(store)
-if (ins.chainUrl) {
-    m()
+if (ins.chainId) {
+  initChainApi(ins.chainId)
+  m()
+
+  chainNetPing()
 } else {
-    chainNetPing().then((index) => {
-        console.log("index ", index)
-        ins.setChainUrl(chainUrls()[index])
-        m()
-    })
+  chainNetPing().then((id) => {
+    ins.setChain(id)
+    initChainApi(id)
+    m()
+  })
 }
 
 

@@ -74,7 +74,7 @@ import { getNumstrfromChain, showToken } from '@/utils/chain';
 import { onMounted, onUnmounted, ref } from 'vue';
 
 import loadingBox from "@/components/loading-box.vue";
-import { getHttpApi } from '@/plugins/chain';
+// import { getHttpApi } from '@/plugins/chain';
 import { useGlobalStore } from '@/stores/global';
 import Cross from "@/components/svg/Cross.vue";
 import useGlobelProperties from '@/plugins/globel';
@@ -136,31 +136,31 @@ onUnmounted(async () => {
 })
 
 const initData = async () => {
-  // 获取资产信息 
-  let assetsList = await getHttpApi().entries("asset", "assetInfos", []);
-  let assets: any = {};
-  assetsList.forEach(({ keys, value }: any) => {
-    assets[getNumstrfromChain(keys[0])] = value;
-  });
+  // // 获取资产信息 
+  // let assetsList = await getHttpApi().entries("asset", "assetInfos", []);
+  // let assets: any = {};
+  // assetsList.forEach(({ keys, value }: any) => {
+  //   assets[getNumstrfromChain(keys[0])] = value;
+  // });
 
-  // 获取链上资产 ParaId
-  let assetParaIds = await getHttpApi().entries("asset", "assetParaIds", []);
-  let cassets: any[] = [];
-  assetParaIds.forEach(({ keys, value }: any) => {
-    let assetId = getNumstrfromChain(keys[0]);
-    cassets.push({ id: assetId, paraId: getNumstrfromChain(value), ...assets[assetId] })
-  });
-  chainAssetsData.value = cassets;
-  loader.value = 1;
+  // // 获取链上资产 ParaId
+  // let assetParaIds = await getHttpApi().entries("asset", "assetParaIds", []);
+  // let cassets: any[] = [];
+  // assetParaIds.forEach(({ keys, value }: any) => {
+  //   let assetId = getNumstrfromChain(keys[0]);
+  //   cassets.push({ id: assetId, paraId: getNumstrfromChain(value), ...assets[assetId] })
+  // });
+  // chainAssetsData.value = cassets;
+  // loader.value = 1;
 
-  // 获取链上资产
-  let camounts: any = {};
-  for (let i = 0; i < cassets.length; i++) {
-    let item = cassets[i];
-    let t = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, parseInt(item.id)]);
-    camounts[item.id] = t.free.toString();
-  }
-  amounts.value = camounts;
+  // // 获取链上资产
+  // let camounts: any = {};
+  // for (let i = 0; i < cassets.length; i++) {
+  //   let item = cassets[i];
+  //   let t = await getHttpApi().query("tokens", "accounts", [userStore.userInfo.addr, parseInt(item.id)]);
+  //   camounts[item.id] = t.free.toString();
+  // }
+  // amounts.value = camounts;
 }
 
 </script>

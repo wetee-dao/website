@@ -50,7 +50,7 @@
   margin: 11em;
   display: flex;
   align-items: center;
-  background-color: #000;
+  background-color: #101010;
   padding: 5em 7.5em;
   // animation: chip_diffuse 2s 0s infinite;
   position: relative;
@@ -75,7 +75,7 @@
   height: 12.5em;
   position: absolute;
   left: 0;
-  top: -12.75em;
+  top: -13em;
   display: flex;
   justify-content: space-around;
 }
@@ -83,7 +83,7 @@
 .chip-pin {
   width: 1em;
   height: 12.5em;
-  background-color: #2b352e;
+  background-color: rgba(255, 255, 255, 0.0588235294);
   overflow: hidden;
 }
 
@@ -111,7 +111,7 @@
   height: 12.5em;
   position: absolute;
   left: 0;
-  bottom: -12.75em;
+  bottom: -13em;
   display: flex;
   justify-content: space-around;
 }
@@ -139,7 +139,7 @@
   width: 12.5em;
   height: 100%;
   position: absolute;
-  left: -12.75em;
+  left: -13em;
   bottom: 0px;
   display: flex;
   justify-content: space-around;
@@ -169,7 +169,7 @@
   width: 12.5em;
   height: 100%;
   position: absolute;
-  right: -12.75em;
+  right: -13.2em;
   bottom: 0px;
   display: flex;
   justify-content: space-around;

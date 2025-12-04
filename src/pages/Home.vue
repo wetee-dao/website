@@ -1,202 +1,170 @@
 <template>
   <div class="home gradient-body">
-    <Banner />
-    <div class="container section">
-      <div class="grid grid-cols-1 md:grid-cols-3 grid-flow-row gap-6">
-        <div class="features features--first">
-          <h3 class="features__title">Confidential Cloud</h3>
-          <p class="features__text">A decentralized platform for deploying
-            confidential applications, designed specifically for confidential computing.</p>
+    <!-- <Banner /> -->
+    <div class="chain-box border-rgb overflow-hidden container flex mt-6 mb-4 lg: flex-col lg:flex-row">
+      <div class="chain wetee flex  lg:mb-0 flex-row flex-1">
+        <div class=" p-[15px] lg:p-5 w-full flex-1 flex-col flex items-stretch justify-center gap-2.5">
+          <div class="title flex flex-wrap justify-between items-center">
+            <div class="flex overflow-hidden items-center">
+              <LogoMini class="chain-logo mr-3" />
+              <div class="inline truncate">Trusted Trustless Computing Network</div>
+            </div>
+            <div class="flex"></div>
+          </div>
+          <WeTEE />
         </div>
-        <div class="features features--yellow">
-          <h3 class="features__title">WEB2 transition to WEB3</h3>
-          <p class="features__text">All WEB2 applications, once deployed, possess the characteristics of smart
-            contracts.</p>
-        </div>
-        <div class="features features--nephrite">
-          <h3 class="features__title">Confidential AI</h3>
-          <p class="features__text">Provide a decentralized training and deployment solution for AI, ensuring
-            confidential computing throughout the entire process of training and deployment.</p>
+      </div>
+      <Chip class="chip">
+        <div class="chip-text">Network for WEB5</div>
+      </Chip>
+      <div class="chain polkadot flex  lg:mb-0 flex-row flex-1">
+        <div class="p-[15px] lg:p-5 w-full flex-1 flex-col flex items-stretch justify-center gap-2.5">
+          <div class="flex flex-wrap justify-between items-center">
+            <div class="flex"></div>
+            <div class="title flex overflow-hidden items-center">
+              <div class="inline truncate">Polkadot network</div>
+              <img class="chain-logo ml-3" src="/imgs/polkadot_mini.svg" />
+            </div>
+          </div>
+          <Polkadot />
         </div>
       </div>
     </div>
-
-    <div id="economics" class="section section--bt">
-      <div class="container">
-        <div class="flex flex-col md:flex-row">
-          <!-- section title -->
-          <div class="md:w-2/3 flex flex-col justify-center">
-            <div class="token-title">
-              <strong>100% fairlanch</strong>
-              <h2>Token &amp; economics</h2>
-              <p>
-                In the design of the economic model, the following principles are fundamentally adhered to:<br>
-                1. Adopting the DAO model for issuing and maintaining tool software and blockchain<br>
-                2. Striving to achieve maximum decentralization<br>
-                3. Reducing user costs<br>
-                4. Attempting to minimize the entry barriers for block producers and node operation expenses<br>
-                5. Avoiding high consensus security maintenance costs
-              </p>
-            </div>
-
-            <ul class="tokenomics">
-              <li v-for="t in tokens">
-                <div class="dot" :style="'background-color:' + t.color">
-                </div>{{ t.name }} – {{ t.amount }}%
-              </li>
-            </ul>
+    <div class="container border-rgb flex mb-4 flex-col lg:flex-row">
+      <div class="chain-box flex lg:mb-0 flex-col flex-1 border-r overflow-y-auto">
+        <div class="title-wrap flex p-[15px] lg:p-5 flex-wrap justify-between items-center">
+          <div class="title flex overflow-hidden">
+            <Svgimg class="chain-logo animate-ping-rotate mr-2 flex-shrink-0" color="#50fa82" name="block" />
+            <div class="inline truncate">Latest Blocks</div>
           </div>
-          <!-- end section title -->
-
-          <!-- chart -->
-          <div class="md:w-1/3 flex justify-center items-center">
-            <div class="section__chart">
-              <Doughnut :data="tokenData" :options="options" />
-            </div>
+          <div class="flex">
+            <a class="outline-none" href="/block">
+              <button type="button"
+                class=" border outline-none whitespace-nowrap border-none px-[10px] py-[10px] text-xs clickable link-bg">
+                View All
+              </button>
+            </a>
           </div>
-          <!-- end chart -->
         </div>
-      </div>
-    </div>
-    
-    <div id="roadmap" class="roadmaps section section--bt tbg">
-      <div class="container">
-        <div class="section__title section__title--carousel">
-          <h2 id="hash1366708796">Roadmap</h2>
-        </div>
-        <div class="slides">
-          <Splide :options="slideoptions" :has-track="false">
-            <div class="splide__arrows">
-              <button class="splide__arrow splide__arrow--prev">
-                <i class="iconfont">&#xe602;</i>
-              </button>
-              <button class="splide__arrow splide__arrow--next">
-                <i class="iconfont">&#xe602;</i>
-              </button>
+        <div class="flex flex-col divide-y w-full h-[390px] overflow-y-auto overflow-x-hidden">
+          <div class="flex justify-between p-5 block" v-for="block in blocks">
+            <div class="flex flex-col">
+              <div class="flex space-x-2 mb-1 items-center">
+                <div class="text-sm inline">Block#</div><a class="outline-none font-semibold !text-base number"
+                  href="/block/31157453">{{ block.header.height }}</a>
+              </div>
+              <div class="flex space-x-2">
+                <div class="text-sm inline">Includes</div><a class="outline-none text-sm link"
+                  href="/block/31157453?tab=extrinsic">{{ block.num_txs }} Txs</a>
+              </div>
             </div>
-            <SplideTrack>
-              <SplideSlide v-for="r in roadmaps">
-                <div class="roadmap roadmap--active">
-                  <h3 class="roadmap__title">{{ r.title }}</h3>
-                  <ul class="roadmap__list">
-                    <li v-for="item in r.list">{{ item }}</li>
-                  </ul>
+            <div class="flex items-center">
+              <div class="flex whitespace-nowrap text-sm mr-2">
+                <div data-state="closed" class="inline-block leading-none">{{ formatTimeDiff(block.header.time) }}</div>
+              </div>
+              <div class="flex items-center">
+                <div class="flex w-[21.34px] h-[21.34px] justify-center items-center">
+                  <div class="Waiting_loader__jL6XM" style="width: 20px; aspect-ratio: 1 / 1;"></div>
                 </div>
-              </SplideSlide>
-            </SplideTrack>
-          </Splide>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="chain-box flex  lg:mb-0 flex-col flex-1 overflow-y-auto">
+        <div class="title-wrap flex p-[15px] lg:p-5 flex-wrap justify-between items-center">
+          <div class="title flex overflow-hidden">
+            <Svgimg class="chain-logo mr-2 flex-shrink-0" color="#50fa82" name="transfer" />
+            <div class="inline truncate">Transfers</div>
+          </div>
+          <div class="flex">
+            <div class="flex space-x-3">
+              <a class="outline-none text-sm" href="/transfer">
+                <button type="button"
+                  class="outline-none whitespace-nowrap border-none px-[10px] py-[10px] text-xs clickable link-bg">View
+                  All</button>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-col divide-y w-full h-[390px] overflow-y-auto overflow-x-hidden">
+          <div class="flex justify-between p-5 block" v-for="tx in txs">
+            <div class="flex flex-col">
+              <div class="flex space-x-2 mb-1 items-center">
+                <div class="text-sm inline">Tx#</div><a
+                  class="outline-none text-sm whitespace-nowrap font-semibold !text-base number"
+                  href="/extrinsic/31119512-2">{{ tx.height }}-{{ tx.index }}</a>
+              </div>
+              <div class="flex flex-col md:space-x-2 md:items-center md:flex-row">
+                <div class="flex space-x-2 items-center">
+                  <div class="text-sm inline">Hash</div>
+                  <div class="flex items-center space-x-1 text-xs">
+                    <div class="flex flex-col ">
+                      <div class="flex items-center space-x-1">
+                        <div data-state="closed" class="inline-block leading-none">
+                          <a class="outline-none text-sm"
+                            href="/account/G8rzt5C9NnqvBQuwacuQRj4Pi2WUyV3jEveWgkjp8SDeR3Q">
+                            <div class="text-sm inline">{{ tx.hash }}</div>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            <div class="flex flex-col items-end justify-center">
+              <div class="flex items-center mb-1">
+                <div class="inline-flex whitespace-nowrap items-center mr-2">
+                  <div data-state="closed" class="inline-block leading-none">
+                    <div class="text-sm inline"></div>
+                  </div>
+                  <div class="text-sm inline ml-1"></div>
+                </div>
+                <svg viewBox="0 0 30 30" fill="currentColor" aria-hidden="true" class="w-6 textsuccess">
+                  <circle cx="15" cy="15" r="15" opacity="0.1"
+                    style="fill: color(display-p3 0.4196 0.7569 0.0549); fill-opacity: 1;">
+                  </circle>
+                  <path
+                    d="M21.4218 9.95697C21.9978 9.36173 22.9475 9.3459 23.5429 9.92181C24.1381 10.4979 24.1539 11.4476 23.578 12.0429L14.8681 21.0429C14.5855 21.3349 14.1963 21.4999 13.7899 21.4999C13.3837 21.4999 12.9953 21.3348 12.7128 21.0429L7.92176 16.0927C7.34595 15.4974 7.36171 14.5476 7.95692 13.9716C8.55225 13.3958 9.502 13.4116 10.078 14.0068L13.7899 17.8427L21.4218 9.95697Z"
+                    style="fill: color(display-p3 0.4196 0.7569 0.0549); fill-opacity: 1;">
+                  </path>
+                </svg>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+    <div class="mb-4"></div>
     <Footer />
   </div>
 </template>
 
 <script setup lang="ts">
-import { onUnmounted, ref } from 'vue';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
-import { Doughnut } from 'vue-chartjs'
-// @ts-ignore
-import { Splide, SplideSlide, SplideTrack } from '@splidejs/vue-splide';
-import '@splidejs/vue-splide/css';
-import Banner from '@/components/Banner.vue'
+import { onMounted, onUnmounted, ref } from 'vue';
 import Footer from '@/components/Footer.vue'
-import { tokenRatio } from '@/utils/tokens';
+import Chip from '@/components/anim/Chip.vue';
+import Svgimg from "@/components/svg/SvgImg.vue"
+import LogoMini from '@/components/svg/LogoMini.vue';
+import Polkadot from '@/components/chains/polkadot.vue';
+import WeTEE from '@/components/chains/wetee.vue';
+import { GetNowBlocks, GetNowTx } from '@/apis/side';
+import { formatTimeDiff } from "@/utils/time"
 
-ChartJS.register(ArcElement, Tooltip, Legend)
-onUnmounted(() => {
-  ChartJS.unregister(ArcElement, Tooltip, Legend)
+const blocks = ref<any[]>([])
+const txs = ref<any[]>([])
+
+onMounted(() => {
+  GetNowBlocks().then(async datas => {
+    blocks.value = datas.block_metas
+    const txResult = await GetNowTx(datas.last_height)
+    console.log(txResult)
+    txs.value = txResult.txs
+  })
 })
 
-const options = ref({
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    legend: {
-      display: false
-    },
-    tooltip: {
-      caretSize: 0,
-      callbacks: {
-        label: function (context: any) {
-          return context.raw + "%"
-        },
-      }
-    }
-  },
-})
-
-const tokens = ref(tokenRatio)
-const tokenLabels = tokens.value.map(t => t.name)
-const tokenValueData = tokens.value.map(t => t.amount)
-const tokenColors = tokens.value.map(t => t.color)
-const tokenData = ref({
-  labels: tokenLabels,
-  datasets: [
-    {
-      backgroundColor: tokenColors,
-      data: tokenValueData,
-      pointLabel: false,
-      borderWidth: 0,
-    }
-  ]
-})
-
-const roadmaps = ref([
-  {
-    title: '2023 Q4',
-    list: [
-      'On-Chain worker mortgage / create',
-      'On-Chain TEE App create',
-      'On-Chain TEE task create',
-      'Worker K8S operator in TEE',
-      'Worker App deploy',
-      'Worker task deploy',
-      'TEE image build-tool',
-    ]
-  }, {
-    title: '2024 Q1',
-    list: [
-      'Worker sgx attestation',
-      'WeTEE Dapp front end',
-      'WeTEE test network',
-      'WeTEE main network',
-      'Auction Kusama slots',
-      'On-Chain App Store',
-    ]
-  }, {
-    title: '2024 Q2',
-    list: [
-      'Integrate paritytech frontier, compatible with ETH accounts and EVM',
-      'WeTEE & DTIM are compatible with Ethereum, achieving heterogeneous cross-chain functionality',
-      'Web Dapp login with metamask',
-    ]
-  }, {
-    title: '2024 Q3',
-    list: [
-      "Intel TDX's new libos proposal for a new solution",
-      "AMD SEV's new libos proposal for a new solution",
-      "Ink! and Solidity's runtime environment",
-      "TEE and contract invocation protocol",
-    ]
-  }
-])
-
-const slideoptions = ref({
-  gap: '1rem',
-  perPage: 4,
-  breakpoints: {
-    1250: {
-      perPage: 3,
-    },
-    1024: {
-      perPage: 2,
-    },
-    640: {
-      perPage: 1,
-    },
-  },
-});
 </script>
 
 <style lang="scss" scoped>
@@ -204,248 +172,125 @@ const slideoptions = ref({
   padding-top: 80px;
 }
 
-.features {
-  background-color: #2121215c;
-  padding: 30px 20px;
-  // border-radius: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  position: relative;
-  overflow: hidden;
+.border-rgb {
+  border-width: 4px;
+  border-color: #ffffff0f;
+}
 
-  .features__title {
-    font-size: 24px;
-    color: #fff;
-    font-weight: 600;
-    position: relative;
-    z-index: 3;
-    padding-top: 19px;
-    margin-bottom: 10px;
+.chain-box {
+  background-color: $primary-bg;
+  // border: 1Px solid rgba($primary-text-rgb, 0.3);
+  border-color: #ffffff0f;
 
-    &::before {
-      content: '';
-      position: absolute;
-      display: block;
-      width: 60px;
-      height: 4px;
-      border-radius: 4px;
-      background-color: $primary-text;
-      top: 0;
-      left: 0;
-      transition: 0.5s ease;
+  .title-wrap {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.0588235294);
+  }
+
+  .title {
+    font-size: 16px;
+    font-weight: bold;
+
+    &>.inline {
+      line-height: 31px;
+    }
+
+    .chain-logo {
+      width: 30px;
+      height: 30px;
     }
   }
-
-  .features__text {
-    position: relative;
-    z-index: 3;
-    font-size: 16px;
-    line-height: 26px;
-    color: $secondary-text;
-    margin-bottom: 0;
-    word-break: break-all;
-  }
 }
 
-.features--yellow .features__title::before {
-  background-color: #e8d189;
-}
+.chip {
+  margin: 15px 90px;
+  font-size: 3.8px;
+  border: 1Px solid rgba($secondary-text-rgb, 0.1);
+  background-color: transparent;
 
-.features--nephrite .features__title::before {
-  background-color: #5d5d5d;
-}
-
-.token-title {
-  strong {
+  .chip-text {
     color: $primary-text;
-    text-transform: uppercase;
-    font-weight: 700;
-    font-size: 14px;
-    line-height: 100%;
-    margin-bottom: 15px;
+    font-size: 26px;
+    text-align: center;
+    font-family: "letter-font";
+    font-weight: bold;
   }
+}
 
-  h2 {
-    font-size: 30px;
-    color: #fff;
-    font-weight: 600;
-    margin-bottom: 20px;
-    text-align: left;
-    line-height: 44px;
-  }
+.link-bg {
+  background-color: #ffffff1f;
+}
 
-  p {
+.chain {
+  .title {
     font-size: 16px;
-    line-height: 26px;
-    color: $secondary-text;
-    margin-bottom: 20px;
-    text-align: left;
+    font-weight: bold;
+
+    .chain-logo {
+      width: 20px;
+      height: 20px;
+    }
   }
-}
 
-.tokenomics {
-  display: flex;
-  flex-direction: row;
-  justify-content: start;
-  align-items: center;
-  flex-wrap: wrap;
-  width: 100%;
-  margin-top: 10px;
+  .data {
+    color: #c0c0c0;
 
-  li {
-    margin: 10px 25px 0 0;
-    color: #fff;
-    font-size: 16px;
-    line-height: 26px;
-    position: relative;
-    padding-left: 25px;
+    &>div {
+      border: 2px solid rgba(60, 60, 60, 0.25);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin: 5px;
+    }
+  }
 
-    .dot {
-      background-color: #e8c189;
-      position: absolute;
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      left: 0;
-      top: 50%;
-      transform: translateY(-50%);
+  &.wetee {
+    .title {
+      color: #00d37a;
+    }
+  }
+
+  &.polkadot {
+    .title {
+      color: #e6007a;
     }
   }
 }
 
-.section__chart {
-  width: 100%;
-  min-height: 500px;
-  filter: grayscale(30%);
+.block {
+  color: #858585;
+  border-color: #ffffff08;
+
+  .number {
+    color: $primary-text;
+  }
+
+  .link {
+    color: rgba($primary-text-rgb, 0.5)
+  }
 }
 
-.roadmaps {
-  border: none;
-  background-color: #14181a;
-
-  .slides {
-    position: relative;
-    background: rgba(40, 40, 40, 0.35);
-    padding: 30px;
-    // border-radius: 20px;
-
-    .splide__arrows {
-      position: absolute;
-      right: -10px;
-      top: -105px;
-      display: flex;
-    }
-
-    .splide__arrow {
-      padding: 10px;
-      border-radius: 0;
-      background-color: #5252525a;
-      position: relative;
-      transform: none;
-      margin-left: 10px;
-      left: 0;
-    }
-
-    :deep(.splide__pagination) {
-      bottom: -15px;
-    }
-
-    &::before {
-      content: '';
-      position: absolute;
-      display: block;
-      height: 4px;
-      top: 82px;
-      right: 30px;
-      left: 30px;
-      background-color: $primary-text;
-    }
-
-    .splide__arrow--prev {
-      transform: rotate(180deg);
-    }
+@keyframes pingrotate {
+  0% {
+    transform: rotate(0deg)
   }
 
-  h2 {
-    font-size: 30px;
-    color: #fff;
-    font-weight: 600;
-    margin-bottom: 36px;
-    padding-top: 15px;
-    text-align: left;
-    line-height: 44px;
+  25% {
+    transform: rotate(90deg)
   }
 
-  .roadmap::before {
-    width: 24px;
-    height: 24px;
-    left: 0;
-    top: 42px;
-    background-color: #fff;
-    opacity: 0.12;
-    z-index: 1;
-    content: '';
-    position: absolute;
-    display: block;
-    border-radius: 50%;
+  50% {
+    transform: rotate(180deg)
   }
 
-  .roadmap::after {
-    content: "";
-    position: absolute;
-    display: block;
-    border-radius: 50%;
-    width: 14px;
-    height: 14px;
-    left: 5px;
-    top: 47px;
-    background-color: $primary-text;
-    z-index: 2;
+  75% {
+    transform: rotate(270deg)
   }
 
-  .roadmap__title {
-    font-size: 20px;
-    color: #fff;
-    font-weight: 600;
-    display: block;
-    margin-bottom: 50px;
-    margin-left: 10px;
+  to {
+    transform: rotate(1turn)
   }
+}
 
-  .roadmap__list {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    width: 100%;
-    margin-bottom: 0;
-    margin-top: 0;
-    padding: 0;
-    margin-left: 8px;
-
-    li {
-      color: #fff;
-      font-size: 16px;
-      line-height: 26px;
-      margin-bottom: 12px;
-      padding-left: 16px;
-      position: relative;
-
-      &::before {
-        content: '';
-        position: absolute;
-        width: 4px;
-        height: 4px;
-        background-color: $primary-text;
-        opacity: 1;
-        top: 50%;
-        margin-top: -1px;
-        left: 1px;
-        border-radius: 50%;
-      }
-    }
-  }
+.animate-ping-rotate {
+  animation: pingrotate 4s infinite;
 }
 </style>

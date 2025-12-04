@@ -80,11 +80,6 @@ const router = createRouter({
       component: () => import('../pages/Chainmint.vue')
     },
     {
-      path: '/dev-start',
-      name: 'Dev start',
-      component: () => import('../pages/DevStart.vue')
-    },
-    {
       path: '/not404',
       name: 'Not404',
       component: () => import('../pages/not404.vue')

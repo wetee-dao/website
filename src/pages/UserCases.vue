@@ -85,7 +85,7 @@ import Footer from '@/components/Footer.vue';
 }
 
 .case {
-  background-color: #2121215c;
+  background-color: $primary-bg;
   padding: 30px 20px;
   // border-radius: 20px;
   display: flex;
@@ -154,7 +154,7 @@ import Footer from '@/components/Footer.vue';
 
 .features {
   border: none;
-  background-color: rgb(15, 15, 15);
+  background-color: rgb(0, 13, 0);
   margin-top: 60px;
 
   .box {

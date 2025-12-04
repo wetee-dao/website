@@ -136,7 +136,7 @@ import { BN } from '@polkadot/util';
 import { onMounted, onUnmounted, ref } from 'vue';
 
 import loadingBox from "@/components/loading-box.vue";
-import { getHttpApi } from '@/plugins/chain';
+// import { getHttpApi } from '@/plugins/chain';
 import useGlobelProperties from '@/plugins/globel';
 import { useGlobalStore } from '@/stores/global';
 const loader = ref(0)
@@ -259,76 +259,76 @@ onUnmounted(async () => {
 })
 
 const initData = async () => {
-  // 获取资产信息 
-  const assetsList = await getHttpApi().entries("asset", "assetInfos", []);
-  let assets: any = {};
-  assetsList.forEach(({ keys, value }: any) => {
-    assets[getNumstrfromChain(keys[0])] = value;
-  });
+  // // 获取资产信息 
+  // const assetsList = await getHttpApi().entries("asset", "assetInfos", []);
+  // let assets: any = {};
+  // assetsList.forEach(({ keys, value }: any) => {
+  //   assets[getNumstrfromChain(keys[0])] = value;
+  // });
 
-  // 获取链上经济模型
-  const economicsList = await getHttpApi().entries("fairlanch", "economics", []);
-  let economics: any[] = [];
-  economicsList.forEach(({ keys, value }: any) => {
-    let id = getNumstrfromChain(keys[0]);
-    const metadata = getAssetInfo(id, assets);
-    economics.push({
-      id: id,
-      metadata: metadata,
-      v: value,
-    })
-  });
-  economicsData.value = economics.reverse();
-  loader.value = 1;
+  // // 获取链上经济模型
+  // const economicsList = await getHttpApi().entries("fairlanch", "economics", []);
+  // let economics: any[] = [];
+  // economicsList.forEach(({ keys, value }: any) => {
+  //   let id = getNumstrfromChain(keys[0]);
+  //   const metadata = getAssetInfo(id, assets);
+  //   economics.push({
+  //     id: id,
+  //     metadata: metadata,
+  //     v: value,
+  //   })
+  // });
+  // economicsData.value = economics.reverse();
+  // loader.value = 1;
 
-  const cvtoken2token: any = await getHttpApi().entries("fairlanch", "vtoken2token", []);
-  vtoken2token.value = cvtoken2token;
+  // const cvtoken2token: any = await getHttpApi().entries("fairlanch", "vtoken2token", []);
+  // vtoken2token.value = cvtoken2token;
 
-  // 获取资产总量
-  const totalList = await getHttpApi().entries("fairlanch", "stakingTotal", []);
-  let totals: any = {};
-  totalList.forEach(({ keys, value }: any) => {
-    totals[getNumstrfromChain(keys[0])] = getNumstrfromChain(value);
-  });
-  totalData.value = totals;
+  // // 获取资产总量
+  // const totalList = await getHttpApi().entries("fairlanch", "stakingTotal", []);
+  // let totals: any = {};
+  // totalList.forEach(({ keys, value }: any) => {
+  //   totals[getNumstrfromChain(keys[0])] = getNumstrfromChain(value);
+  // });
+  // totalData.value = totals;
 
-  // 获取质押列表
-  const stakingsList = await getHttpApi().entries("fairlanch", "stakings", [address.value]);
-  let stakings: any = {};
-  stakingsList.forEach(({ keys, value }: any) => {
-    const id = getNumstrfromChain(keys[1]);
-    stakings[id] = getNumstrfromChain(value);
-  });
-  stakingsData.value = stakings;
+  // // 获取质押列表
+  // const stakingsList = await getHttpApi().entries("fairlanch", "stakings", [address.value]);
+  // let stakings: any = {};
+  // stakingsList.forEach(({ keys, value }: any) => {
+  //   const id = getNumstrfromChain(keys[1]);
+  //   stakings[id] = getNumstrfromChain(value);
+  // });
+  // stakingsData.value = stakings;
 
-  // 获取待质押列表
-  const toStakingsList = await getHttpApi().entries("fairlanch", "toStakings", [address.value]);
-  let toStakings: any = {};
-  toStakingsList.forEach(({ keys, value }: any) => {
-    const id = getNumstrfromChain(keys[1]);
-    toStakings[id] = getNumstrfromChain(value);
-  });
-  toStakingsData.value = toStakings;
+  // // 获取待质押列表
+  // const toStakingsList = await getHttpApi().entries("fairlanch", "toStakings", [address.value]);
+  // let toStakings: any = {};
+  // toStakingsList.forEach(({ keys, value }: any) => {
+  //   const id = getNumstrfromChain(keys[1]);
+  //   toStakings[id] = getNumstrfromChain(value);
+  // });
+  // toStakingsData.value = toStakings;
 
-  // 获取用户 WTE 余额
-  amount.value = (await getHttpApi().query("system", "account", [address.value])).data;
+  // // 获取用户 WTE 余额
+  // amount.value = (await getHttpApi().query("system", "account", [address.value])).data;
 
-  // 获取每个区块的奖励
-  const blockReward: any = await getHttpApi().query("fairlanch", "blockReward", []);
-  blockRewardData.value = getBnFromChain(blockReward[2]).mul(new BN(14400));
+  // // 获取每个区块的奖励
+  // const blockReward: any = await getHttpApi().query("fairlanch", "blockReward", []);
+  // blockRewardData.value = getBnFromChain(blockReward[2]).mul(new BN(14400));
 
-  // 获取质押限制
-  const quotaList: any = await getHttpApi().entries("fairlanch", "stakingQuota", []);
-  let quota: any = {};
-  quotaList.forEach(({ keys, value }: any) => {
-    quota[getNumstrfromChain(keys[0])] = getNumstrfromChain(value);
-  })
-  quotaData.value = quota;
+  // // 获取质押限制
+  // const quotaList: any = await getHttpApi().entries("fairlanch", "stakingQuota", []);
+  // let quota: any = {};
+  // quotaList.forEach(({ keys, value }: any) => {
+  //   quota[getNumstrfromChain(keys[0])] = getNumstrfromChain(value);
+  // })
+  // quotaData.value = quota;
 
-  // 获取最新区块
-  const lastBlock = await getHttpApi().lastBlock();
+  // // 获取最新区块
+  // const lastBlock = await getHttpApi().lastBlock();
 
-  utilTime.value = (14400 - new BN(lastBlock.number).mod(new BN(14400)).toNumber()) * 6;
+  // utilTime.value = (14400 - new BN(lastBlock.number).mod(new BN(14400)).toNumber()) * 6;
 }
 
 function formatCountdown(seconds: number): string {

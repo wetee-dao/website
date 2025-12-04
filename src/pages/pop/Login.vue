@@ -73,7 +73,6 @@
 import { ref, watch } from "vue";
 import { type Wallet, getWallets } from "@talismn/connect-wallets";
 
-import { Metamask } from "@/providers/MetaSnap";
 import { Loading } from "@/plugins/pop";
 import { ss58toHex, getWalletInfo } from "@/utils/chain";
 import { keyring, shortAddress } from "@/utils/chain";
@@ -141,41 +140,7 @@ const showWallet = async (name: string, wallet: Wallet | null) => {
       return;
     }
   } else if (name == "MetaMask") {
-    if (!(window as any).ethereum || !(window as any).ethereum.isMetaMask) {
-      // ElMessage.warning("请安装 MetaMask 插件");
-      return;
-    }
 
-    const loading = Loading("Connecting to metamask...");
-
-    try {
-      // 安装启动snap
-      const MataMaskSnap = await Metamask.enable!("WeTEE");
-
-      const metaAccounts = await MataMaskSnap.accounts.get();
-      if (metaAccounts.length == 0) {
-        // ElMessage.warning("请安装 MetaMask 插件，并创建账户");
-        return;
-      }
-
-      // 获取账户信息
-      const ac = metaAccounts[0];
-      const userInfo = {
-        addr: ac.address,
-        name: ac.name!,
-        provider: "metamask",
-        wallet: "metamask",
-      };
-
-      store.setUserInfo(userInfo);
-
-      loading.close();
-      props.close();
-    } catch (err) {
-      loading.close();
-      // ElMessage.warning("MetaMask connect erorr " + JSON.stringify(err));
-      return false;
-    }
   }
 };
 

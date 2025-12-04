@@ -1,6 +1,6 @@
 <template>
   <footer class="footer">
-    <div class="container">
+    <!-- <div class="container">
       <div class="flex">
         <div class="flex flex-col justify-center w-1/3 md:w-1/4">
           <div class="footer__logo">
@@ -41,7 +41,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="footer__content flex items-center">
       <div class="container">
         <div class="flex items-center">
@@ -77,7 +77,8 @@
 <style lang="scss" scoped>
 .footer {
   background-color: $primary-bg;
-  padding-top: 30px;
+  // padding-top: 30px;
+  // border-top: 1px solid rgba(158, 158, 158, 0.15);
 }
 
 .footer__logo {
