@@ -38,7 +38,8 @@ class ChainNode {
   queryUrl: string;
   secretUrl: string;
   rpcUrl: string;
-  constructor(name: string, type: string, chainId: string, chainUrl: string, queryUrl: string, secretUrl: string, rpcUrl: string) {
+  rpcWs: string
+  constructor(name: string, type: string, chainId: string, chainUrl: string, queryUrl: string, secretUrl: string, rpcUrl: string, rpcWs:string) {
     this.name = name
     this.type = type
     this.chainId = chainId
@@ -46,6 +47,7 @@ class ChainNode {
     this.queryUrl = queryUrl
     this.secretUrl = secretUrl
     this.rpcUrl = rpcUrl
+    this.rpcWs = rpcWs
   }
 }
 
@@ -57,6 +59,7 @@ export const chainNodes: ChainNode[] = [
     type: "substrate",
     chainUrl: 'wss://xiaobai.asyou.me:30001/ws',
     rpcUrl: 'https://xiaobai.asyou.me:30111',
+    rpcWs: 'wss://xiaobai.asyou.me:30111/websocket',
     queryUrl: 'https://xiaobai.asyou.me:30001/',
     secretUrl: 'https://xiaobai.asyou.me:30115/gql',
   },

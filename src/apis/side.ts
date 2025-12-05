@@ -14,7 +14,7 @@ export const GetSideChainNodes = async () => {
 }
 
 export const GetNowBlocks = async () => {
-    const url = CurrentChainNode().rpcUrl + "/blockchain"
+    const url = CurrentChainNode().rpcUrl + "/blockchain?t="+new Date().getTime()
     const resp = await axios.get(url)
     return resp.data.result 
 }

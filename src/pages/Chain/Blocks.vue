@@ -22,7 +22,7 @@
             </div>
             <div class="flex items-center">
               <div class="flex whitespace-nowrap text-sm mr-2">
-                <div data-state="closed" class="inline-block leading-none">{{ formatTimeDiff(block.header.time) }}</div>
+                <div data-state="closed" class="inline-block leading-none">{{ formatTimeDiff(block.header.time,now) }}</div>
               </div>
               <div class="flex items-center">
                 <div class="flex w-[21.34px] h-[21.34px] justify-center items-center">
@@ -46,6 +46,7 @@ import Svgimg from "@/components/svg/SvgImg.vue"
 import { GetNowBlocks, GetNowTx } from '@/apis/side';
 import { formatTimeDiff } from "@/utils/time"
 
+const now = ref(new Date().getTime())
 const blocks = ref<any[]>([])
 const txs = ref<any[]>([])
 

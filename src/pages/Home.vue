@@ -11,7 +11,7 @@
             </div>
             <div class="flex"></div>
           </div>
-          <WeTEE />
+          <WeTEE :key="block_t" />
         </div>
       </div>
       <Chip class="chip">
@@ -60,7 +60,8 @@
             </div>
             <div class="flex items-center">
               <div class="flex whitespace-nowrap text-sm mr-2">
-                <div data-state="closed" class="inline-block leading-none">{{ formatTimeDiff(block.header.time) }}</div>
+                <div data-state="closed" class="inline-block leading-none">{{ formatTimeDiff(block.header.time, now) }}
+                </div>
               </div>
               <div class="flex items-center">
                 <div class="flex w-[21.34px] h-[21.34px] justify-center items-center">
@@ -81,8 +82,9 @@
             <div class="flex space-x-3">
               <a class="outline-none text-sm" href="/transfer">
                 <button type="button"
-                  class="outline-none whitespace-nowrap border-none px-[10px] py-[10px] text-xs clickable link-bg">View
-                  All</button>
+                  class="outline-none whitespace-nowrap border-none px-[10px] py-[10px] text-xs clickable link-bg">
+                  View All
+                </button>
               </a>
             </div>
           </div>
@@ -111,7 +113,6 @@
                     </div>
                   </div>
                 </div>
-
               </div>
             </div>
             <div class="flex flex-col items-end justify-center">
@@ -152,19 +153,65 @@ import Polkadot from '@/components/chains/polkadot.vue';
 import WeTEE from '@/components/chains/wetee.vue';
 import { GetNowBlocks, GetNowTx } from '@/apis/side';
 import { formatTimeDiff } from "@/utils/time"
+import { ReconnectingWebSocket } from "@/utils/ws"
+import { CurrentChainNode } from '@/plugins/chain';
 
 const blocks = ref<any[]>([])
 const txs = ref<any[]>([])
+const now = ref(new Date().getTime())
+const block_t = ref(new Date().getTime())
+
+let ws: ReconnectingWebSocket
+let timeIns: any
 
 onMounted(() => {
+  timeIns = setInterval(() => {
+    now.value = new Date().getTime()
+  }, 6000)
+
   GetNowBlocks().then(async datas => {
     blocks.value = datas.block_metas
     const txResult = await GetNowTx(datas.last_height)
-    console.log(txResult)
     txs.value = txResult.txs
   })
+
+  ws = new ReconnectingWebSocket(CurrentChainNode().rpcWs, {});
+  ws.addEventListener("message", async (e) => {
+    const result = JSON.parse(e.data)
+    if (!result.result.data) {
+      return
+    }
+    const block = result.result.data.value.block
+    blocks.value.unshift({
+      header: block.header,
+      num_txs: block.data.txs.length
+    })
+    block_t.value = new Date().getTime()
+
+    const txResult = await GetNowTx(block.header.height)
+    txs.value = txResult.txs
+  });
+  ws.onopen = () => {
+    console.log("open")
+  };
+  ws.onclose = () => {
+    console.log("onclose")
+  };
+
+  ws.onerror = () => {
+    console.log("on error")
+    ws.close();
+  };
+
+  ws.send(`{"jsonrpc": "2.0","method": "subscribe","id": 0,"params": {"query": "tm.event='NewBlock'"}}`);
 })
 
+onUnmounted(() => {
+  ws.close()
+  if (timeIns != null) {
+    clearInterval(timeIns)
+  }
+})
 </script>
 
 <style lang="scss" scoped>

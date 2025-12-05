@@ -13,10 +13,10 @@ export function sleep(ms: number) {
  * @param {string} targetTimeStr - 目标UTC时间字符串（ISO格式）
  * @returns {string} 格式化后的时间差文本
  */
-export function formatTimeDiff(targetTimeStr: string): string {
+export function formatTimeDiff(targetTimeStr: string, now: number): string {
     // 解析目标时间（UTC）和当前时间（UTC），转为毫秒级时间戳
     const targetTime = new Date(targetTimeStr).getTime();
-    const nowTime = new Date().getTime();
+    const nowTime = now || new Date().getTime();
 
     // 计算时间差（毫秒），取绝对值（兼容目标时间在当前时间前后）
     const diffMs = Math.abs(targetTime - nowTime);
