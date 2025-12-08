@@ -151,7 +151,7 @@ import Svgimg from "@/components/svg/SvgImg.vue"
 import LogoMini from '@/components/svg/LogoMini.vue';
 import Polkadot from '@/components/chains/polkadot.vue';
 import WeTEE from '@/components/chains/wetee.vue';
-import { GetNowBlocks, GetNowTx } from '@/apis/side';
+import { GetNowBlocks, GetNowTx, SubNewBlock } from '@/apis/side';
 import { formatTimeDiff } from "@/utils/time"
 import { ReconnectingWebSocket } from "@/utils/ws"
 import { CurrentChainNode } from '@/plugins/chain';
@@ -175,8 +175,7 @@ onMounted(() => {
     txs.value = txResult.txs
   })
 
-  ws = new ReconnectingWebSocket(CurrentChainNode().rpcWs, {});
-  ws.addEventListener("message", async (e) => {
+  ws = SubNewBlock(async (e) => {
     const result = JSON.parse(e.data)
     if (!result.result.data) {
       return
@@ -190,20 +189,7 @@ onMounted(() => {
 
     const txResult = await GetNowTx(block.header.height)
     txs.value = txResult.txs
-  });
-  ws.onopen = () => {
-    console.log("open")
-  };
-  ws.onclose = () => {
-    console.log("onclose")
-  };
-
-  ws.onerror = () => {
-    console.log("on error")
-    ws.close();
-  };
-
-  ws.send(`{"jsonrpc": "2.0","method": "subscribe","id": 0,"params": {"query": "tm.event='NewBlock'"}}`);
+  })
 })
 
 onUnmounted(() => {

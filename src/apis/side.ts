@@ -1,4 +1,5 @@
 import { CurrentChainNode } from "@/plugins/chain"
+import { ReconnectingWebSocket } from "@/utils/ws"
 import axios from "axios"
 
 export const GetSideChainStatus = async () => {
@@ -26,6 +27,22 @@ export const GetNowTx = async (block:string) => {
 }
 
 
-export const SubNewBlock = async () => {
-    // const 
+export const SubNewBlock = (back: ((this: ReconnectingWebSocket, ev: MessageEvent<any>) => any) | { handleEvent: (event: MessageEvent<any>) => any }) => {
+  const ws = new ReconnectingWebSocket(CurrentChainNode().rpcWs, {});
+  ws.addEventListener("message", back);
+  ws.onopen = () => {
+    console.log("open")
+  };
+  ws.onclose = () => {
+    console.log("onclose")
+  };
+
+  ws.onerror = () => {
+    console.log("on error")
+    ws.close();
+  };
+
+  ws.send(`{"jsonrpc": "2.0","method": "subscribe","id": 0,"params": {"query": "tm.event='NewBlock'"}}`);
+
+  return ws
 }
