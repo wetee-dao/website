@@ -254,7 +254,7 @@ const unfocus = () => {
   top: 0;
   left: 0;
   z-index: 9;
-  border-bottom: 1px solid rgba(236, 236, 236, 0.08);
+  border-bottom: 1px solid rgba(236, 236, 236, 0.04);
   background-color: transparent;
   transition: background - color 0.5s ease;
   background-image: radial - gradient(transparent 1px, $primary-bg 1px);

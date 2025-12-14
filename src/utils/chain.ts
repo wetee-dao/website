@@ -42,7 +42,7 @@ export const showWTE = (b: BN) => {
 }
 
 export const showToken = (b: BN, decimals: number) => {
-  let unit = new BN(10).pow(new BN(decimals));
+  const unit = new BN(10).pow(new BN(decimals));
   return b.mul(new BN(1000)).div(unit).toNumber() / 1000
 }
 

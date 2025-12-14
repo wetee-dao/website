@@ -38,7 +38,7 @@
             <div class="inline truncate">Latest Blocks</div>
           </div>
           <div class="flex">
-            <a class="outline-none" href="/block">
+            <a class="outline-none" href="/chain/blocks">
               <button type="button"
                 class=" border outline-none whitespace-nowrap border-none px-[10px] py-[10px] text-xs clickable link-bg">
                 View All
@@ -80,7 +80,7 @@
           </div>
           <div class="flex">
             <div class="flex space-x-3">
-              <a class="outline-none text-sm" href="/transfer">
+              <a class="outline-none text-sm" href="/chain/txs">
                 <button type="button"
                   class="outline-none whitespace-nowrap border-none px-[10px] py-[10px] text-xs clickable link-bg">
                   View All

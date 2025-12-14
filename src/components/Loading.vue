@@ -22,6 +22,7 @@ const title = ref(props.params.title || "Send transaction to chain");
     height: 100%;
     background: rgb(29 36 34 / 94%);
     z-index: 200;
+    
     .loader{
         margin: 35vh auto auto auto;
         display: flex;

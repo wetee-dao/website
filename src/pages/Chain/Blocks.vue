@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import Footer from '@/components/Footer.vue'
 import Svgimg from "@/components/svg/SvgImg.vue"
 import { GetNowBlocks, GetNowTx } from '@/apis/side';
