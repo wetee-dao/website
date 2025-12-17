@@ -1,7 +1,7 @@
 <template>
   <div class="home gradient-body">
     <!-- <Banner /> -->
-    <div class="chain-box border-rgb overflow-hidden container flex mt-6 mb-4 lg: flex-col lg:flex-row">
+    <div class="chain-box top border-rgb overflow-hidden container flex flex-row mt-6 mb-4">
       <div class="chain wetee flex  lg:mb-0 flex-row flex-1">
         <div class=" p-[15px] lg:p-5 w-full flex-1 flex-col flex items-stretch justify-center gap-2.5">
           <div class="title flex flex-wrap justify-between items-center">
@@ -59,13 +59,8 @@
               </div>
             </div>
             <div class="flex items-center">
-              <div class="flex whitespace-nowrap text-sm mr-2">
+              <div class="flex whitespace-nowrap text-sm">
                 <div data-state="closed" class="inline-block leading-none">{{ formatTimeDiff(block.header.time, now) }}
-                </div>
-              </div>
-              <div class="flex items-center">
-                <div class="flex w-[21.34px] h-[21.34px] justify-center items-center">
-                  <div class="Waiting_loader__jL6XM" style="width: 20px; aspect-ratio: 1 / 1;"></div>
                 </div>
               </div>
             </div>
@@ -235,14 +230,15 @@ onUnmounted(() => {
 }
 
 .chip {
-  margin: 15px 90px;
-  font-size: 3.8px;
+  display: inline-flex;
+  margin: auto 3.3vw;
+  font-size: 0.25vw;
   border: 1Px solid rgba($secondary-text-rgb, 0.1);
   background-color: transparent;
 
   .chip-text {
     color: $primary-text;
-    font-size: 26px;
+    font-size: 2vw;
     text-align: center;
     font-family: "letter-font";
     font-weight: bold;
@@ -254,6 +250,8 @@ onUnmounted(() => {
 }
 
 .chain {
+  display: inline-flex;
+  width: calc(50% - 160px);
   .title {
     font-size: 16px;
     font-weight: bold;
@@ -261,17 +259,6 @@ onUnmounted(() => {
     .chain-logo {
       width: 20px;
       height: 20px;
-    }
-  }
-
-  .data {
-    color: #c0c0c0;
-
-    &>div {
-      border: 2px solid rgba(60, 60, 60, 0.25);
-      padding-left: 10px;
-      padding-right: 10px;
-      margin: 5px;
     }
   }
 
@@ -325,5 +312,24 @@ onUnmounted(() => {
 
 .animate-ping-rotate {
   animation: pingrotate 4s infinite;
+}
+
+@media (max-width: 600px) {
+  .top{
+    flex-direction: column;
+    padding: 10px 0;
+  }
+
+  .chain{
+    width: 100%;
+  }
+
+  .chip{
+    font-size: 1.4vw;
+    margin: 25vw auto;
+    .chip-text{
+      font-size: 10vw;
+    }
+  }
 }
 </style>

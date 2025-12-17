@@ -118,9 +118,9 @@
         <li :class="path == '/use-cases' ? 'active' : ''">
           <RouterLink to="/use-cases">Use Cases</RouterLink>
         </li>
-        <li :class="path == '/launch/stake' ? 'active' : ''">
+        <!-- <li :class="path == '/launch/stake' ? 'active' : ''">
           <a target="_blank" href="/launch/stake">Fair Launch</a>
-        </li>
+        </li> -->
         <li :class="path == '/contacts' ? 'active' : ''">
           <RouterLink class="trans" tkey="nav_contact" to="/contacts">Contacts</RouterLink>
         </li>

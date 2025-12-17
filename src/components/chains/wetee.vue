@@ -1,9 +1,9 @@
 <template>
-    <div class="data grid grid-cols-1 gap-4 md:grid-cols-2 lg:gap-0 flex-1">
+    <div class="data grid grid-cols-1 gap-4 md:grid-cols-1 lg:grid-cols-2 lg:gap-0 flex-1">
         <div class="flex items-center justify-end" v-for="item in items">
             <a class="outline-none flex-1 md:flex-none flex group items-center" target="_blank" :href="item.link">
                 <Svgimg class="icon" color="#50fa82" :name="item.icon" />
-                <div class="texts pl-4 flex flex-1 justify-center md:flex-auto md:flex-col">
+                <div class="texts pl-4 flex flex-1 justify-center flex-auto flex-col">
                     <div class="tag text-sm inline !text-xs">{{ item.name }}</div>
                     <div class="text-base inline">{{ item.value }}</div>
                 </div>
@@ -68,9 +68,9 @@ onMounted(() => {
 
     &>div {
         border: 2px solid rgba(60, 60, 60, 0.25);
-        padding-left: 10px;
+        // padding-left: 10px;
         padding-right: 10px;
-        margin: 5px;
+        margin: 0 8px 8px 0;
 
         &>a {
             width: 100%;
@@ -86,8 +86,16 @@ onMounted(() => {
     .icon {
         width: 25px;
         height: 25px;
-        margin-right: 15px;
-        margin-left: 5px;
+        margin: 15px;
+        min-height: 25px;
+        max-height: 25px;
+    }
+}
+
+@media (max-width: 600px) {
+    .data>div {
+        padding-right: 0px;
+        margin-right: 0px;
     }
 }
 </style>
