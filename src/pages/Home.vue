@@ -1,9 +1,10 @@
 <template>
   <div class="home gradient-body">
     <!-- <Banner /> -->
-    <div class="chain-box top border-rgb overflow-hidden container flex flex-row mt-6 mb-4">
-      <div class="chain wetee flex  lg:mb-0 flex-row flex-1">
-        <div class=" p-[15px] lg:p-5 w-full flex-1 flex-col flex items-stretch justify-center gap-2.5">
+    <div
+      class="chain-box top p-[15px] lg:p-5 border-rgb overflow-hidden container flex justify-between flex-row mt-6 mb-4">
+      <div class="chain wetee flex lg:mb-0 flex-row flex-1">
+        <div class="w-full flex-1 flex-col flex items-stretch justify-center gap-2.5">
           <div class="title flex flex-wrap justify-between items-center">
             <div class="flex overflow-hidden items-center">
               <LogoMini class="chain-logo mr-3" />
@@ -17,8 +18,8 @@
       <Chip class="chip">
         <div class="chip-text">Network for WEB5</div>
       </Chip>
-      <div class="chain polkadot flex  lg:mb-0 flex-row flex-1">
-        <div class="p-[15px] lg:p-5 w-full flex-1 flex-col flex items-stretch justify-center gap-2.5">
+      <div class="chain polkadot flex lg:mb-0 flex-row flex-1">
+        <div class="w-full flex-1 flex-col flex items-stretch justify-center gap-2.5">
           <div class="flex flex-wrap justify-between items-center">
             <div class="flex"></div>
             <div class="title flex overflow-hidden items-center">
@@ -85,39 +86,22 @@
           </div>
         </div>
         <div class="flex flex-col divide-y w-full h-[390px] overflow-y-auto overflow-x-hidden">
-          <div class="flex justify-between p-5 block" v-for="tx in txs">
-            <div class="flex flex-col">
+          <div class="flex justify-between p-5 block" v-key="tx.height + '-' + tx.index" v-for="tx in txs">
+            <div class="flex flex-1 flex-col">
               <div class="flex space-x-2 mb-1 items-center">
                 <div class="text-sm inline">Tx#</div><a
-                  class="outline-none text-sm whitespace-nowrap font-semibold !text-base number"
-                  href="/extrinsic/31119512-2">{{ tx.height }}-{{ tx.index }}</a>
+                  class="outline-none text-sm whitespace-nowrap font-semibold !text-base number" href="/">{{ tx.height
+                  }}-{{ tx.index }}</a>
               </div>
               <div class="flex flex-col md:space-x-2 md:items-center md:flex-row">
                 <div class="flex space-x-2 items-center">
-                  <div class="text-sm inline">Hash</div>
-                  <div class="flex items-center space-x-1 text-xs">
-                    <div class="flex flex-col ">
-                      <div class="flex items-center space-x-1">
-                        <div data-state="closed" class="inline-block leading-none">
-                          <a class="outline-none text-sm"
-                            href="/account/G8rzt5C9NnqvBQuwacuQRj4Pi2WUyV3jEveWgkjp8SDeR3Q">
-                            <div class="text-sm inline">{{ tx.hash }}</div>
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <div class="text-sm">Hash</div>
+                  <div class="text-sm hash flex-1">{{ tx.hash }}</div>
                 </div>
               </div>
             </div>
-            <div class="flex flex-col items-end justify-center">
-              <div class="flex items-center mb-1">
-                <div class="inline-flex whitespace-nowrap items-center mr-2">
-                  <div data-state="closed" class="inline-block leading-none">
-                    <div class="text-sm inline"></div>
-                  </div>
-                  <div class="text-sm inline ml-1"></div>
-                </div>
+            <div class="flex flex-col ml-2 items-end justify-center">
+              <div class="flex items-center">
                 <svg viewBox="0 0 30 30" fill="currentColor" aria-hidden="true" class="w-6 textsuccess">
                   <circle cx="15" cy="15" r="15" opacity="0.1"
                     style="fill: color(display-p3 0.4196 0.7569 0.0549); fill-opacity: 1;">
@@ -232,7 +216,7 @@ onUnmounted(() => {
 .chip {
   display: inline-flex;
   margin: auto 3.3vw;
-  font-size: 0.25vw;
+  font-size: 0.263vw;
   border: 1Px solid rgba($secondary-text-rgb, 0.1);
   background-color: transparent;
 
@@ -251,7 +235,8 @@ onUnmounted(() => {
 
 .chain {
   display: inline-flex;
-  width: calc(50% - 160px);
+  max-width: calc(50% - 12vw);
+
   .title {
     font-size: 16px;
     font-weight: bold;
@@ -286,6 +271,16 @@ onUnmounted(() => {
   .link {
     color: rgba($primary-text-rgb, 0.5)
   }
+
+  .hash {
+    height: 20px;
+    overflow: hidden;
+    word-break: break-all;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+  }
 }
 
 @keyframes pingrotate {
@@ -315,19 +310,21 @@ onUnmounted(() => {
 }
 
 @media (max-width: 600px) {
-  .top{
+  .top {
     flex-direction: column;
     padding: 10px 0;
   }
 
-  .chain{
-    width: 100%;
+  .chain {
+    max-width: 100%;
+    padding: 15px;
   }
 
-  .chip{
+  .chip {
     font-size: 1.4vw;
     margin: 25vw auto;
-    .chip-text{
+
+    .chip-text {
       font-size: 10vw;
     }
   }

@@ -3,7 +3,7 @@
         <div class="flex items-center justify-end" v-for="item in items">
             <a class="outline-none flex-1 md:flex-none flex group items-center" target="_blank" :href="item.link">
                 <Svgimg class="icon" color="#50fa82" :name="item.icon" />
-                <div class="texts pl-4 flex flex-1 justify-center flex-auto flex-col">
+                <div class="texts pl-2 lg:pl-4 flex flex-1 justify-center flex-auto flex-col">
                     <div class="tag text-sm inline !text-xs">{{ item.name }}</div>
                     <div class="text-base inline">{{ item.value }}</div>
                 </div>
@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, onMounted, ref } from "vue";
+import { onMounted, ref } from "vue";
 import Svgimg from "@/components/svg/SvgImg.vue"
 import { GetNowTx, GetSideChainNodes, GetSideChainStatus } from "@/apis/side";
 const props = defineProps(["params"])

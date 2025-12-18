@@ -81,7 +81,7 @@
 }
 
 .chip-pin {
-  width: 1em;
+  width: 2px;
   height: 12.5em;
   background-color: rgba(255, 255, 255, 0.0588235294);
   overflow: hidden;
@@ -91,7 +91,7 @@
   content: '';
   display: block;
   height: 5em;
-  width: 1em;
+  width: 2px;
   background: linear-gradient(to top, transparent, $primary-text);
   animation: bottom_to_top 2s 0s infinite;
 }
@@ -120,7 +120,7 @@
   content: '';
   display: block;
   height: 5em;
-  width: 1em;
+  width: 2px;
   background: linear-gradient(to bottom, transparent, $primary-text);
   animation: top_to_bottom 2s 0s infinite;
 }
@@ -149,7 +149,7 @@
 .chip-pins-left .chip-pin::before {
   content: '';
   display: block;
-  height: 1em;
+  height: 2px;
   width: 5em;
   background: linear-gradient(to left, transparent, $primary-text);
   animation: right_to_left 2s 0s infinite;
@@ -179,7 +179,7 @@
 .chip-pins-right .chip-pin::before {
   content: '';
   display: block;
-  height: 1em;
+  height: 2px;
   width: 5em;
   background: linear-gradient(to right, transparent, $primary-text);
   animation: left_to_right 2s 0s infinite;
@@ -198,6 +198,6 @@
 .chip-pins-right .chip-pin,
 .chip-pins-left .chip-pin {
   width: 12.5em;
-  height: 1em;
+  height: 2px;
 }
 </style>
