@@ -34,7 +34,7 @@
       <div class="chain-box flex lg:mb-0 flex-col flex-1 border-r overflow-y-auto">
         <div class="title-wrap flex p-[15px] lg:p-5 flex-wrap justify-between items-center">
           <div class="title flex">
-            <Svgimg class="chain-logo animate-ping-rotate mr-2 flex-shrink-0" color="#50fa82" name="3block" />
+            <Svgimg class="chain-logo animate-ping-rotate mr-2 flex-shrink-0" color="#5dfa50" name="3block" />
             <div class="inline truncate">Latest Blocks</div>
           </div>
           <div class="flex">
@@ -70,7 +70,7 @@
       <div class="chain-box flex  lg:mb-0 flex-col flex-1 overflow-y-auto">
         <div class="title-wrap flex p-[15px] lg:p-5 flex-wrap justify-between items-center">
           <div class="title flex">
-            <Svgimg class="chain-logo mr-2 flex-shrink-0" color="#50fa82" name="transfer" />
+            <Svgimg class="chain-logo mr-2 flex-shrink-0" color="#5dfa50" name="transfer" />
             <div class="inline truncate">Transfers</div>
           </div>
           <div class="flex">

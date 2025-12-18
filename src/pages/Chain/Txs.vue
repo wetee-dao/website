@@ -4,7 +4,7 @@
       <div class="chain-box flex lg:mb-0 flex-col flex-1">
         <div class="title-wrap flex p-[15px] lg:p-5 flex-wrap justify-between items-center">
           <div class="title flex overflow-hidden">
-            <Svgimg class="chain-logo mr-2 flex-shrink-0" color="#50fa82" name="transfer" />
+            <Svgimg class="chain-logo mr-2 flex-shrink-0" color="#5dfa50" name="transfer" />
             <div class="inline truncate">Transfers</div>
           </div>
         </div>

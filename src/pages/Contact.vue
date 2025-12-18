@@ -79,7 +79,7 @@ import Footer from '@/components/Footer.vue';
 .contact__icon svg {
     width: 24px;
     height: 24px;
-    fill: #50fa82;
+    fill: #5dfa50;
     position: relative;
 }
 

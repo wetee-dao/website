@@ -90,6 +90,7 @@ onMounted(() => {
         margin: 15px;
         min-height: 25px;
         max-height: 25px;
+        opacity: 0.5;
     }
 }
 

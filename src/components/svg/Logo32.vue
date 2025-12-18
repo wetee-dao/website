@@ -2,7 +2,7 @@
     <svg :class="'logo-icon ' + (fillBorder ? 'fill' : '')" viewBox="0 0 1037 503" version="1.1"
         xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="编组" transform="translate(0.168208, 0.000000)" fill="#50FA82" fill-rule="nonzero">
+        <g id="编组" transform="translate(0.168208, 0.000000)" fill="#5dfa50" fill-rule="nonzero">
             <g id="32">
                 <g id="2" transform="translate(744.038071, 0.000000)">
                     <polygon id="路径" points="187.05846 210.255741 105.589939 210.255741 105.589939 291.730846 187.05846 291.730846"></polygon>

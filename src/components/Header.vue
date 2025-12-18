@@ -35,7 +35,7 @@
             <li>
               <RouterLink to="/chain/blocks" @click="unfocus">
                 <div class="flex items-center ">
-                  <Svgimg class="icon mr-2" color="#50fa82" name="block" />
+                  <Svgimg class="icon mr-2" color="#5dfa50" name="block" />
                   <div class="title-wrap">
                     <div class="title">Blocks</div>
                     <div class="subtitle">Decentralized confidential containers</div>
@@ -46,7 +46,7 @@
             <li>
               <RouterLink to="/chain/txs" @click="unfocus">
                 <div class="flex items-center">
-                  <Svgimg class="icon mr-2" color="#50fa82" name="transfer" />
+                  <Svgimg class="icon mr-2" color="#5dfa50" name="transfer" />
                   <div class="title-wrap">
                     <div class="title">Transfers</div>
                     <div class="subtitle">Trustless channel between WEB3 and WEB2</div>
