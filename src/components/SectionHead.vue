@@ -6,7 +6,7 @@
         <!-- breadcrumb -->
         <ul class="breadcrumb">
           <li class="breadcrumb__item">
-            <RouterLink to="/">home</RouterLink>
+            <RouterLink to="/">/</RouterLink>
           </li>
           <li class="breadcrumb__item" v-for="path in paths">
             <RouterLink :to="path.path">{{ path.name }}</RouterLink>

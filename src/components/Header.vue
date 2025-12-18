@@ -2,8 +2,8 @@
   <header :class="props.shadow ? 'header' : 'header header-shadow'">
     <div class="header__content container">
       <!-- btn -->
-      <button v-if="group == 'main'" :class="'header__btn  block md:hidden ' + (isActivce ? 'header__btn--active' : '')" type="button"
-        @click="toggleMenu()">
+      <button v-if="group == 'main'" :class="'header__btn  block md:hidden ' + (isActivce ? 'header__btn--active' : '')"
+        type="button" @click="toggleMenu()">
         <span></span>
         <span></span>
         <span></span>
@@ -11,9 +11,10 @@
       <!-- end btn -->
 
       <!-- logo -->
-      <div v-if="group == 'main'" class="header__logo" @click="home()">
+      <div v-if="group == 'main'" class="header__logo flex" @click="home()">
         <!-- <img src="/imgs/TTE.svg" /> -->
-        <Logo />
+        <Logo :fill="true" />
+        <!-- <span>3+2</span> -->
       </div>
       <!-- end logo -->
 
@@ -72,7 +73,7 @@
             <li>
               <RouterLink to="/products/bridge" @click="unfocus">
                 <div class="flex items-center">
-                  <Bridge/>
+                  <Bridge />
                   <div class="title-wrap">
                     <div class="title">TEE Bridge</div>
                     <div class="subtitle">Trustless channel between WEB3 and WEB2</div>
@@ -94,7 +95,7 @@
             <li>
               <RouterLink to="/products/store" @click="unfocus">
                 <div class="flex items-center">
-                  <Store/>
+                  <Store />
                   <div class="title-wrap">
                     <div class="title">TEE Storage</div>
                     <div class="subtitle">Decentralized encrypted storage</div>
@@ -190,7 +191,7 @@ import Miner from './svg/Miner.vue';
 import Bridge from './svg/Bridge.vue';
 import Store from './svg/Store.vue';
 import Cloud from './svg/Cloud.vue';
-import Logo from './svg/Logo.vue';
+import Logo from './svg/Logo2.vue';
 
 const props = defineProps(["shadow"])
 const userStore = useGlobalStore()
@@ -271,7 +272,7 @@ const unfocus = () => {
   background: transparent;
 
   :deep(.header__logo) {
-    svg{
+    svg {
       // filter: grayscale(100%);
       transform: scale(1.2);
       position: relative;
@@ -433,7 +434,7 @@ const unfocus = () => {
 
   .header__nav>li {
     display: block;
-    margin-left: 2vw;
+    margin-left: 1.3vw;
     margin-bottom: 0;
     position: relative;
     padding: 10px 0;
@@ -441,12 +442,12 @@ const unfocus = () => {
     &.active {
       &:after {
         content: ' ';
-        width: 130%;
-        height: 70%;
+        width: 114%;
+        height: 60%;
         background-color: rgba($secondary-text-rgb, 0.1);
         position: absolute;
-        bottom: 16%;
-        left: -15%;
+        bottom: 20%;
+        left: -7%;
       }
     }
 
@@ -480,18 +481,18 @@ const unfocus = () => {
           text-align: left;
         }
 
-        .icon{
+        .icon {
           height: 35px;
           width: 35px;
           margin-right: 10px;
         }
 
-        .title{
+        .title {
           font-size: 16px;
           margin-bottom: 2px;
         }
 
-        .subtitle{
+        .subtitle {
           font-size: 12px;
           color: rgba($secondary-text-rgb, 0.5);
         }
@@ -503,9 +504,8 @@ const unfocus = () => {
     display: inline-block;
     font-size: 16px;
     line-height: 16px;
-    font-weight: bold;
     text-align: center;
-    color: #b7b7b7 !important;
+    color: rgba($secondary-text-rgb, 0.5) !important;
     background: transparent !important;
     width: 100%;
     cursor: pointer;
@@ -531,7 +531,7 @@ const unfocus = () => {
     svg {
       width: 100%;
       height: auto;
-      fill: rgba($secondary-text-rgb, 1);
+      fill: rgba($secondary-text-rgb, 0.5);
     }
   }
 
@@ -553,6 +553,7 @@ const unfocus = () => {
 
     &.inverse {
       background-color: rgba($primary-text-rgb, 0.45);
+
       span {
         color: #040406;
         letter-spacing: -1px;
@@ -636,25 +637,29 @@ const unfocus = () => {
       }
     }
 
-    .connect{
+    .connect {
       display: none;
     }
 
-    .header__dropdown{
-      li{
+    .header__dropdown {
+      li {
         padding: 0 !important;
       }
-      .icon{
+
+      .icon {
         display: none;
       }
-      .title-wrap{
+
+      .title-wrap {
         width: 100%;
       }
-      .title{
+
+      .title {
         width: 100%;
         text-align: center;
       }
-      .subtitle{
+
+      .subtitle {
         display: none;
       }
     }

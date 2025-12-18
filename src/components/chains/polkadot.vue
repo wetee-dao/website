@@ -1,5 +1,5 @@
 <template>
-    <div class="data grid grid-cols-1 gap-4 md:grid-cols-1 lg:grid-cols-2 lg:gap-0 flex-1">
+    <div class="data grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 lg:gap-0 flex-1">
         <div class="flex items-center justify-end" v-for="item in items">
             <a class="outline-none flex-1 md:flex-none flex group items-center" target="_blank" :href="item.link">
                 <div class="texts pr-2 lg:pr-4 flex flex-1 justify-center flex-auto flex-col items-end">

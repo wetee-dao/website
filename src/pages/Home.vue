@@ -100,7 +100,7 @@
                 </div>
               </div>
             </div>
-            <div class="flex flex-col ml-2 items-end justify-center">
+            <div class="flex flex-col ml-4 items-end justify-center">
               <div class="flex items-center">
                 <svg viewBox="0 0 30 30" fill="currentColor" aria-hidden="true" class="w-6 textsuccess">
                   <circle cx="15" cy="15" r="15" opacity="0.1"

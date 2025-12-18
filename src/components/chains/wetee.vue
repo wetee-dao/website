@@ -1,13 +1,13 @@
 <template>
-    <div class="data grid grid-cols-1 gap-4 md:grid-cols-1 lg:grid-cols-2 lg:gap-0 flex-1">
+    <div class="data grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 lg:gap-0 flex-1">
         <div class="flex items-center justify-end" v-for="item in items">
-            <a class="outline-none flex-1 md:flex-none flex group items-center" target="_blank" :href="item.link">
+            <RouterLink class="outline-none flex-1 md:flex-none flex group items-center" :to="item.link">
                 <Svgimg class="icon" color="#50fa82" :name="item.icon" />
                 <div class="texts pl-2 lg:pl-4 flex flex-1 justify-center flex-auto flex-col">
                     <div class="tag text-sm inline !text-xs">{{ item.name }}</div>
                     <div class="text-base inline">{{ item.value }}</div>
                 </div>
-            </a>
+            </RouterLink>
         </div>
     </div>
 </template>
@@ -21,25 +21,25 @@ const items = ref([
     {
         name: "Finalized Blocks",
         icon: "block",
-        link: "https://polkadot.subscan.io/block",
+        link: "/chain/blocks",
         value: "-",
     },
     {
         name: "Transfers",
         icon: "transfer",
-        link: "https://polkadot.subscan.io/transfer",
+        link:  "/chain/txs",
         value: "-",
     },
     {
         name: "Secret Nodes",
         icon: "secret",
-        link: "https://polkadot.subscan.io/extrinsic",
+        link: "/nodes",
         value: "-",
     },
     {
         name: "TEE Applications",
         icon: "applications",
-        link: "https://polkadot.subscan.io/account",
+        link: "/apps",
         value: "-",
     }
 ])
