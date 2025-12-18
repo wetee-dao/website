@@ -35,7 +35,7 @@
             <li>
               <RouterLink to="/chain/blocks" @click="unfocus">
                 <div class="flex items-center ">
-                  <Svgimg class="w-10 h-10 mr-2" color="#50fa82" name="block" />
+                  <Svgimg class="icon mr-2" color="#50fa82" name="block" />
                   <div class="title-wrap">
                     <div class="title">Blocks</div>
                     <div class="subtitle">Decentralized confidential containers</div>
@@ -46,7 +46,7 @@
             <li>
               <RouterLink to="/chain/txs" @click="unfocus">
                 <div class="flex items-center">
-                  <Svgimg class="w-10 h-10 mr-2" color="#50fa82" name="transfer" />
+                  <Svgimg class="icon mr-2" color="#50fa82" name="transfer" />
                   <div class="title-wrap">
                     <div class="title">Transfers</div>
                     <div class="subtitle">Trustless channel between WEB3 and WEB2</div>
@@ -116,15 +116,15 @@
             </li>
           </ul>
         </li>
-        <li :class="path == '/use-cases' ? 'active' : ''">
+        <!-- <li :class="path == '/use-cases' ? 'active' : ''">
           <RouterLink to="/use-cases">Use Cases</RouterLink>
-        </li>
+        </li> -->
         <!-- <li :class="path == '/launch/stake' ? 'active' : ''">
           <a target="_blank" href="/launch/stake">Fair Launch</a>
         </li> -->
-        <li :class="path == '/contacts' ? 'active' : ''">
+        <!-- <li :class="path == '/contacts' ? 'active' : ''">
           <RouterLink class="trans" tkey="nav_contact" to="/contacts">Contacts</RouterLink>
-        </li>
+        </li> -->
         <li>
           <a class="trans" tkey="nav_white_paper" target="_blank" href="https://wetee.gitbook.io/docment">Docs</a>
         </li>
@@ -145,7 +145,7 @@
       </ul>
       <!-- end lanch navigation -->
 
-      <div class="space flex justify-end items-center">
+      <div class="flex space justify-end items-center">
         <a target="_blank" href="https://github.com/wetee-dao" class="coin__btn hidden md:block" title="github code">
           <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4251"
             width="256" height="256">
@@ -169,7 +169,7 @@
 
         <!-- dapp -->
         <a target="_blank" href="/dapp" class="header__cta inverse" title="Decentralization trust cloud">
-          <span class="text" tkey="nav_connect">Dashboard</span>
+          <span class="text" tkey="nav_connect">Dapp</span>
         </a>
         <!-- end dapp -->
       </div>
@@ -308,7 +308,7 @@ const unfocus = () => {
 
   .header__logo {
     width: auto;
-    height: 21px;
+    height: 22px;
     align-items: center;
     cursor: pointer;
     margin: 3px 10px 3px 4px;
@@ -410,7 +410,7 @@ const unfocus = () => {
     position: relative;
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
     background-color: transparent;
     top: auto;
@@ -426,6 +426,7 @@ const unfocus = () => {
     height: 80px;
     position: relative;
     top: 2px;
+    margin-left: 20px;
   }
 
   .header__nav--active {
@@ -434,7 +435,8 @@ const unfocus = () => {
 
   .header__nav>li {
     display: block;
-    margin-left: 1.3vw;
+    margin-left: 1vw;
+    margin-right: 1vw;
     margin-bottom: 0;
     position: relative;
     padding: 10px 0;
@@ -468,7 +470,8 @@ const unfocus = () => {
       background-color: rgba($secondary-text-rgb, 0.07);
       border-bottom: none;
       z-index: 10;
-      left: -15%;
+      left: -7%;
+      // left: calc(-170px + 50%);
       padding: 5px;
 
       li {
@@ -482,8 +485,8 @@ const unfocus = () => {
         }
 
         .icon {
-          height: 35px;
-          width: 35px;
+          height: 30px;
+          width: 30px;
           margin-right: 10px;
         }
 
@@ -503,6 +506,7 @@ const unfocus = () => {
   .header__nav a {
     display: inline-block;
     font-size: 16px;
+    font-weight: bold;
     line-height: 16px;
     text-align: center;
     color: rgba($secondary-text-rgb, 0.5) !important;
@@ -552,7 +556,7 @@ const unfocus = () => {
     // filter: grayscale(50%);
 
     &.inverse {
-      background-color: rgba($primary-text-rgb, 0.45);
+      background-color: rgba($primary-text-rgb, 0.85);
 
       span {
         color: #040406;

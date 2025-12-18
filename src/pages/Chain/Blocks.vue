@@ -3,8 +3,8 @@
     <div class="blocks container flex mb-4 flex-col lg:flex-row">
       <div class="chain-box flex lg:mb-0 flex-col flex-1">
         <div class="title-wrap flex p-[15px] lg:p-5 flex-wrap justify-between items-center">
-          <div class="title flex overflow-hidden">
-            <Svgimg class="chain-logo animate-ping-rotate mr-2 flex-shrink-0" color="#50fa82" name="block" />
+          <div class="title flex">
+            <Svgimg class="chain-logo animate-ping-rotate mr-2 flex-shrink-0" color="#50fa82" name="3block" />
             <div class="inline truncate">Blocks</div>
           </div>
         </div>

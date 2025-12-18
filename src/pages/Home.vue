@@ -1,6 +1,5 @@
 <template>
   <div class="home gradient-body">
-    <!-- <Banner /> -->
     <div
       class="chain-box top p-[15px] lg:p-5 border-rgb overflow-hidden container flex justify-between flex-row mt-6 mb-4">
       <div class="chain wetee flex lg:mb-0 flex-row flex-1">
@@ -8,7 +7,7 @@
           <div class="title flex flex-wrap justify-between items-center">
             <div class="flex overflow-hidden items-center">
               <LogoMini class="chain-logo mr-3" />
-              <div class="inline truncate">Trusted Trustless Computing Network</div>
+              <div class="inline truncate">Trusted Trustless WEB2 Network</div>
             </div>
             <div class="flex"></div>
           </div>
@@ -16,7 +15,7 @@
         </div>
       </div>
       <Chip class="chip">
-        <div class="chip-text">Network for WEB5</div>
+        <div class="chip-text">WEB5 Network</div>
       </Chip>
       <div class="chain polkadot flex lg:mb-0 flex-row flex-1">
         <div class="w-full flex-1 flex-col flex items-stretch justify-center gap-2.5">
@@ -34,8 +33,8 @@
     <div class="container border-rgb flex mb-4 flex-col lg:flex-row">
       <div class="chain-box flex lg:mb-0 flex-col flex-1 border-r overflow-y-auto">
         <div class="title-wrap flex p-[15px] lg:p-5 flex-wrap justify-between items-center">
-          <div class="title flex overflow-hidden">
-            <Svgimg class="chain-logo animate-ping-rotate mr-2 flex-shrink-0" color="#50fa82" name="block" />
+          <div class="title flex">
+            <Svgimg class="chain-logo animate-ping-rotate mr-2 flex-shrink-0" color="#50fa82" name="3block" />
             <div class="inline truncate">Latest Blocks</div>
           </div>
           <div class="flex">
@@ -70,7 +69,7 @@
       </div>
       <div class="chain-box flex  lg:mb-0 flex-col flex-1 overflow-y-auto">
         <div class="title-wrap flex p-[15px] lg:p-5 flex-wrap justify-between items-center">
-          <div class="title flex overflow-hidden">
+          <div class="title flex">
             <Svgimg class="chain-logo mr-2 flex-shrink-0" color="#50fa82" name="transfer" />
             <div class="inline truncate">Transfers</div>
           </div>
@@ -249,7 +248,7 @@ onUnmounted(() => {
 
   &.wetee {
     .title {
-      color: #00d37a;
+      color: $primary-text;
     }
   }
 
