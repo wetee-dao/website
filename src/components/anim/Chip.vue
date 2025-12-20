@@ -32,9 +32,7 @@
       <div class="chip-pin"></div>
       <div class="chip-pin"></div>
     </div>
-    <div>
-      <slot />
-    </div>
+    <slot />
   </div>
 </template>
 

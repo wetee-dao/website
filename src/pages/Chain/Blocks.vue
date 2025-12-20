@@ -4,7 +4,7 @@
       <div class="chain-box flex lg:mb-0 flex-col flex-1">
         <div class="title-wrap flex p-[15px] lg:p-5 flex-wrap justify-between items-center">
           <div class="title flex">
-            <Svgimg class="chain-logo animate-ping-rotate mr-2 flex-shrink-0" color="#5dfa50" name="3block" />
+            <Svgimg class="chain-logo animate-ping-rotate mr-2 flex-shrink-0"  name="3block" />
             <div class="inline truncate">Blocks</div>
           </div>
         </div>
@@ -95,41 +95,7 @@ onMounted(() => {
     .chain-logo {
       width: 30px;
       height: 30px;
-    }
-  }
-}
-
-.chain {
-  .title {
-    font-size: 16px;
-    font-weight: bold;
-
-    .chain-logo {
-      width: 20px;
-      height: 20px;
-    }
-  }
-
-  .data {
-    color: #c0c0c0;
-
-    &>div {
-      border: 2px solid rgba(60, 60, 60, 0.25);
-      padding-left: 10px;
-      padding-right: 10px;
-      margin: 5px;
-    }
-  }
-
-  &.wetee {
-    .title {
-      color: #00d37a;
-    }
-  }
-
-  &.polkadot {
-    .title {
-      color: #e6007a;
+      color: $primary-text;
     }
   }
 }

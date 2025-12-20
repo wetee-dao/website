@@ -7,7 +7,7 @@
           <div class="title flex flex-wrap justify-between items-center">
             <div class="flex overflow-hidden items-center">
               <LogoMini class="chain-logo mr-3" />
-              <div class="inline truncate">Trusted Trustless WEB2 Network</div>
+              <div class="inline truncate">Trusted Trustless WEB2</div>
             </div>
             <div class="flex"></div>
           </div>
@@ -15,14 +15,17 @@
         </div>
       </div>
       <Chip class="chip">
-        <div class="chip-text">WEB5 Network</div>
+        <div class="chip-text flex flex-col justify-center items-center">
+          <div class="chip-top">WEB3</div>
+          <div class="chip-bottom">WEB2</div>
+        </div>
       </Chip>
       <div class="chain polkadot flex lg:mb-0 flex-row flex-1">
         <div class="w-full flex-1 flex-col flex items-stretch justify-center gap-2.5">
           <div class="flex flex-wrap justify-between items-center">
             <div class="flex"></div>
             <div class="title flex overflow-hidden items-center">
-              <div class="inline truncate">Polkadot network</div>
+              <div class="inline truncate">Polkadot</div>
               <img class="chain-logo ml-3" src="/imgs/polkadot_mini.svg" />
             </div>
           </div>
@@ -33,8 +36,8 @@
     <div class="container border-rgb flex mb-4 flex-col lg:flex-row">
       <div class="chain-box flex lg:mb-0 flex-col flex-1 border-r overflow-y-auto">
         <div class="title-wrap flex p-[15px] lg:p-5 flex-wrap justify-between items-center">
-          <div class="title flex">
-            <Svgimg class="chain-logo animate-ping-rotate mr-2 flex-shrink-0" color="#5dfa50" name="3block" />
+          <div class="title opacity-50 flex">
+            <Svgimg class="chain-logo animate-ping-rotate mr-2 flex-shrink-0" name="3block" />
             <div class="inline truncate">Latest Blocks</div>
           </div>
           <div class="flex">
@@ -69,8 +72,8 @@
       </div>
       <div class="chain-box flex  lg:mb-0 flex-col flex-1 overflow-y-auto">
         <div class="title-wrap flex p-[15px] lg:p-5 flex-wrap justify-between items-center">
-          <div class="title flex">
-            <Svgimg class="chain-logo mr-2 flex-shrink-0" color="#5dfa50" name="transfer" />
+          <div class="title opacity-50 flex">
+            <Svgimg class="chain-logo mr-2 flex-shrink-0" name="transfer" />
             <div class="inline truncate">Transfers</div>
           </div>
           <div class="flex">
@@ -190,7 +193,6 @@ onUnmounted(() => {
 
 .chain-box {
   background-color: $primary-bg;
-  // border: 1Px solid rgba($primary-text-rgb, 0.3);
   border-color: #ffffff0f;
 
   .title-wrap {
@@ -208,6 +210,7 @@ onUnmounted(() => {
     .chain-logo {
       width: 30px;
       height: 30px;
+      color: $primary-text;
     }
   }
 }
@@ -216,15 +219,33 @@ onUnmounted(() => {
   display: inline-flex;
   margin: auto 3.3vw;
   font-size: 0.263vw;
-  border: 1Px solid rgba($secondary-text-rgb, 0.1);
+  border: 5Px solid rgba($secondary-text-rgb, 0.05);
   background-color: transparent;
 
   .chip-text {
     color: $primary-text;
-    font-size: 2vw;
+    font-size: min(30px, 2.2vw);
+    line-height: 1;
     text-align: center;
     font-family: "letter-font";
     font-weight: bold;
+    width: 100%;
+  }
+
+  .chip-top {
+    position: relative;
+    margin-bottom: 2vw;
+
+    &::after {
+      content: "+";
+      width: 100%;
+      text-align: center;
+      display: block;
+      overflow: hidden;
+      position: absolute;
+      top: calc(100% - 0.1rem);
+      left: 0;
+    }
   }
 }
 
@@ -264,11 +285,11 @@ onUnmounted(() => {
   border-color: #ffffff08;
 
   .number {
-    color: $primary-text;
+    color: rgb(133, 162, 141);
   }
 
   .link {
-    color: rgba($primary-text-rgb, 0.5)
+    color: rgba($primary-text-rgb, 0.4)
   }
 
   .hash {

@@ -35,7 +35,7 @@
             <li>
               <RouterLink to="/chain/blocks" @click="unfocus">
                 <div class="flex items-center ">
-                  <Svgimg class="icon mr-2" color="#5dfa50" name="block" />
+                  <Svgimg class="icon"  name="block" />
                   <div class="title-wrap">
                     <div class="title">Blocks</div>
                     <div class="subtitle">Decentralized confidential containers</div>
@@ -46,7 +46,7 @@
             <li>
               <RouterLink to="/chain/txs" @click="unfocus">
                 <div class="flex items-center">
-                  <Svgimg class="icon mr-2" color="#5dfa50" name="transfer" />
+                  <Svgimg class="icon"  name="transfer" />
                   <div class="title-wrap">
                     <div class="title">Transfers</div>
                     <div class="subtitle">Trustless channel between WEB3 and WEB2</div>
@@ -62,7 +62,7 @@
             <li>
               <RouterLink to="/products/cloud" @click="unfocus">
                 <div class="flex items-center ">
-                  <Cloud />
+                  <Cloud class="icon" />
                   <div class="title-wrap">
                     <div class="title">TEE Vm Cloud</div>
                     <div class="subtitle">Decentralized confidential containers</div>
@@ -73,7 +73,7 @@
             <li>
               <RouterLink to="/products/bridge" @click="unfocus">
                 <div class="flex items-center">
-                  <Bridge />
+                  <Bridge class="icon" />
                   <div class="title-wrap">
                     <div class="title">TEE Bridge</div>
                     <div class="subtitle">Trustless channel between WEB3 and WEB2</div>
@@ -84,7 +84,7 @@
             <li>
               <RouterLink to="/products/miner" @click="unfocus">
                 <div class="flex items-center">
-                  <Miner />
+                  <Miner class="icon" />
                   <div class="title-wrap">
                     <div class="title">TEE Miner</div>
                     <div class="subtitle">Provide computing power to earn</div>
@@ -95,7 +95,7 @@
             <li>
               <RouterLink to="/products/store" @click="unfocus">
                 <div class="flex items-center">
-                  <Store />
+                  <Store class="icon" />
                   <div class="title-wrap">
                     <div class="title">TEE Storage</div>
                     <div class="subtitle">Decentralized encrypted storage</div>
@@ -488,6 +488,8 @@ const unfocus = () => {
           height: 30px;
           width: 30px;
           margin-right: 10px;
+          color: $primary-text;
+          fill: $primary-text;
         }
 
         .title {

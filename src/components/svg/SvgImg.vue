@@ -1,53 +1,52 @@
 <template>
-    <svg :class="svgClass" aria-hidden="true">
-        <use class="svg-use" :href="symbolId" :color="color" />
+    <svg :class="svgClass" ref="svg" aria-hidden="true" :style="'fill:'+color">
+        <use class="svg-use" :href="symbolId"  />
         <title v-if="iconTitle">{{ iconTitle }}</title>
     </svg>
 </template>
 
-<script lang="ts">
-import { defineComponent, computed } from 'vue'
+<script setup lang="ts">
+import {  computed, onMounted, ref, type VNodeRef } from 'vue'
 
-export default defineComponent({
-    name: 'SvgIcon',
-    props: {
-        prefix: {
-            type: String,
-            default: 'icon'
-        },
-        name: {
-            type: String,
-            required: true
-        },
-        color: {
-            type: String,
-            default: '',
-        },
-        className: {
-            type: String,
-            default: ''
-        },
-        iconTitle: {
-            type: String,
-            default: '',
-        },
+const props = defineProps({
+    prefix: {
+        type: String,
+        default: 'icon'
     },
-    setup(props) {
-        const symbolId = computed(() => `#${props.name}`)
-        const svgClass = computed(() => {
-            if (props.className) {
-                return `svg-icon ${props.className}`
-            }
-            return 'svg-icon'
-        })
-        return { symbolId, svgClass }
+    name: {
+        type: String,
+        required: true
+    },
+    className: {
+        type: String,
+        default: ''
+    },
+    iconTitle: {
+        type: String,
+        default: '',
+    },
+})
+
+const svg = ref<VNodeRef | undefined>(undefined)
+const symbolId = computed(() => `#${props.name}`)
+const svgClass = computed(() => {
+    if (props.className) {
+        return `svg-icon ${props.className}`
     }
+    return 'svg-icon'
+})
+const color = ref("")
+
+onMounted(()=>{
+    const style = window.getComputedStyle(svg.value)
+    color.value = style.color
 })
 </script>
 <style scope>
 .svg-icon {
     vertical-align: -0.1em;
     fill: currentColor;
+    /* fill: red; */
     overflow: hidden;
 }
 </style>

@@ -6,7 +6,7 @@
                     <div class="tag text-sm inline !text-xs">{{ item.name }}</div>
                     <div class="text-base inline ">{{ item.value }}</div>
                 </div>
-                <Svgimg class="icon" color="#e6007a" :name="item.icon" />
+                <Svgimg class="icon" :name="item.icon" />
             </a>
         </div>
     </div>
@@ -63,7 +63,7 @@ onMounted(() => {
 
 <style lang='scss' scoped>
 .data {
-    color: #c0c0c0;
+    // color: #c0c0c0;
 
     .tag {
         color: #717171;
@@ -91,6 +91,7 @@ onMounted(() => {
         min-height: 25px;
         max-height: 25px;
         opacity: 0.5;
+        // color: #e6007a;
     }
 }
 
