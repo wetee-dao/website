@@ -58,7 +58,7 @@ a {
     overflow: hidden;
     background-color: transparent;
     // border-radius: 15px;
-    border: 2Px solid #5dfa50;
+    border: 2Px solid $primary-text;
     margin-right: 20px;
     color: #fff;
     font-weight: bold;
@@ -71,7 +71,7 @@ a {
 }
 
 .btn__primary {
-    background-color: #5dfa50;
+    background-color: $primary-text;
     color: #000;
 }
 

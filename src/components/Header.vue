@@ -360,7 +360,7 @@ const unfocus = () => {
       display: block;
       width: 24px;
       height: 2px;
-      background-color: #ffffff;
+      background-color: rgba($secondary-text-rgb, 0.6);
       border-radius: 3px;
       transition: 0.5s ease;
     }
@@ -595,7 +595,7 @@ const unfocus = () => {
 
   @media (max-width: 765px) {
     .header__nav {
-      background-color: #090909;
+      background-color: rgba(16, 16, 16, 0.95);
       position: fixed;
       top: 80px;
       left: 0;
@@ -603,6 +603,7 @@ const unfocus = () => {
       padding: 25px 45px;
       display: none;
       width: 100vw;
+      margin-left: 0;
 
       li {
         width: 250px;

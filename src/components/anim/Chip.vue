@@ -73,7 +73,7 @@
   height: 12.5em;
   position: absolute;
   left: 0;
-  top: -13em;
+  top: -12.5em;
   display: flex;
   justify-content: space-around;
 }
@@ -109,7 +109,7 @@
   height: 12.5em;
   position: absolute;
   left: 0;
-  bottom: -13em;
+  bottom: -12.5em;
   display: flex;
   justify-content: space-around;
 }
@@ -137,7 +137,7 @@
   width: 12.5em;
   height: 100%;
   position: absolute;
-  left: -13em;
+  left: -12.5em;
   bottom: 0px;
   display: flex;
   justify-content: space-around;
@@ -167,7 +167,7 @@
   width: 12.5em;
   height: 100%;
   position: absolute;
-  right: -13.2em;
+  right: -12.5em;
   bottom: 0px;
   display: flex;
   justify-content: space-around;

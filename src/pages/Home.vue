@@ -1,44 +1,46 @@
 <template>
   <div class="home gradient-body">
-    <div
-      class="chain-box top p-[15px] lg:p-5 border-rgb overflow-hidden container flex justify-between flex-row mt-6 mb-4">
-      <div class="chain wetee flex lg:mb-0 flex-row flex-1">
-        <div class="w-full flex-1 flex-col flex items-stretch justify-center gap-2.5">
-          <div class="title flex flex-wrap justify-between items-center">
-            <div class="flex overflow-hidden items-center">
-              <LogoMini class="chain-logo mr-3" />
-              <div class="inline truncate">Trusted Trustless WEB2</div>
+    <div class="border-rgb container mt-6 mb-4">
+      <div class="chain-box top  p-[15px] lg:p-5 overflow-hidden  flex justify-between flex-row">
+        <div class="chain wetee flex lg:mb-0 flex-row flex-1">
+          <div class="w-full flex-1 flex-col flex items-stretch justify-center gap-2.5">
+            <div class="title flex flex-wrap justify-between items-center">
+              <div class="flex overflow-hidden items-center">
+                <LogoMini class="chain-logo mr-3" />
+                <div class="inline truncate">Trusted Trustless WEB2</div>
+              </div>
+              <div class="flex"></div>
             </div>
-            <div class="flex"></div>
+            <WeTEE :key="block_t" />
           </div>
-          <WeTEE :key="block_t" />
         </div>
-      </div>
-      <Chip class="chip">
-        <div class="chip-text flex flex-col justify-center items-center">
-          <div class="chip-top">WEB3</div>
-          <div class="chip-bottom">WEB2</div>
-        </div>
-      </Chip>
-      <div class="chain polkadot flex lg:mb-0 flex-row flex-1">
-        <div class="w-full flex-1 flex-col flex items-stretch justify-center gap-2.5">
-          <div class="flex flex-wrap justify-between items-center">
-            <div class="flex"></div>
-            <div class="title flex overflow-hidden items-center">
-              <div class="inline truncate">Polkadot</div>
-              <img class="chain-logo ml-3" src="/imgs/polkadot_mini.svg" />
+        <Chip class="chip">
+          <div class="chip-text flex flex-col justify-center items-center">
+            <div class="text">WEB3</div>
+            <div class="text">+</div>
+            <div class="text">WEB2</div>
+          </div>
+        </Chip>
+        <div class="chain polkadot flex lg:mb-0 flex-row flex-1">
+          <div class="w-full flex-1 flex-col flex items-stretch justify-center gap-2.5">
+            <div class="flex flex-wrap justify-between items-center">
+              <div class="flex"></div>
+              <div class="title flex overflow-hidden items-center">
+                <div class="inline truncate">Polkadot</div>
+                <img class="chain-logo ml-3" src="/imgs/polkadot_mini.svg" />
+              </div>
             </div>
+            <Polkadot />
           </div>
-          <Polkadot />
         </div>
       </div>
     </div>
     <div class="container border-rgb flex mb-4 flex-col lg:flex-row">
       <div class="chain-box flex lg:mb-0 flex-col flex-1 border-r overflow-y-auto">
         <div class="title-wrap flex p-[15px] lg:p-5 flex-wrap justify-between items-center">
-          <div class="title opacity-50 flex">
-            <Svgimg class="chain-logo animate-ping-rotate mr-2 flex-shrink-0" name="3block" />
-            <div class="inline truncate">Latest Blocks</div>
+          <div class="title flex">
+            <Svgimg class="chain-logo animate-ping-rotate mr-2 flex-shrink-0" name="lineblock" />
+            <div class="inline opacity-50 truncate">Latest Blocks</div>
           </div>
           <div class="flex">
             <a class="outline-none" href="/chain/blocks">
@@ -72,9 +74,9 @@
       </div>
       <div class="chain-box flex  lg:mb-0 flex-col flex-1 overflow-y-auto">
         <div class="title-wrap flex p-[15px] lg:p-5 flex-wrap justify-between items-center">
-          <div class="title opacity-50 flex">
+          <div class="title flex">
             <Svgimg class="chain-logo mr-2 flex-shrink-0" name="transfer" />
-            <div class="inline truncate">Transfers</div>
+            <div class="inline opacity-50 truncate">Transfers</div>
           </div>
           <div class="flex">
             <div class="flex space-x-3">
@@ -104,15 +106,7 @@
             </div>
             <div class="flex flex-col ml-4 items-end justify-center">
               <div class="flex items-center">
-                <svg viewBox="0 0 30 30" fill="currentColor" aria-hidden="true" class="w-6 textsuccess">
-                  <circle cx="15" cy="15" r="15" opacity="0.1"
-                    style="fill: color(display-p3 0.4196 0.7569 0.0549); fill-opacity: 1;">
-                  </circle>
-                  <path
-                    d="M21.4218 9.95697C21.9978 9.36173 22.9475 9.3459 23.5429 9.92181C24.1381 10.4979 24.1539 11.4476 23.578 12.0429L14.8681 21.0429C14.5855 21.3349 14.1963 21.4999 13.7899 21.4999C13.3837 21.4999 12.9953 21.3348 12.7128 21.0429L7.92176 16.0927C7.34595 15.4974 7.36171 14.5476 7.95692 13.9716C8.55225 13.3958 9.502 13.4116 10.078 14.0068L13.7899 17.8427L21.4218 9.95697Z"
-                    style="fill: color(display-p3 0.4196 0.7569 0.0549); fill-opacity: 1;">
-                  </path>
-                </svg>
+                <Svgimg class="w-6 h-6 status-ok" name="success" />
               </div>
             </div>
           </div>
@@ -213,13 +207,18 @@ onUnmounted(() => {
       color: $primary-text;
     }
   }
+
+  .status-ok {
+    color: $primary-text;
+  }
 }
 
 .chip {
   display: inline-flex;
   margin: auto 3.3vw;
   font-size: 0.263vw;
-  border: 5Px solid rgba($secondary-text-rgb, 0.05);
+  // border: 1Px solid rgba($secondary-text-rgb, 0.05);
+  box-shadow: inset 0 0 0 5Px rgba($secondary-text-rgb, 0.05);
   background-color: transparent;
 
   .chip-text {
@@ -232,20 +231,8 @@ onUnmounted(() => {
     width: 100%;
   }
 
-  .chip-top {
+  .text {
     position: relative;
-    margin-bottom: 2vw;
-
-    &::after {
-      content: "+";
-      width: 100%;
-      text-align: center;
-      display: block;
-      overflow: hidden;
-      position: absolute;
-      top: calc(100% - 0.1rem);
-      left: 0;
-    }
   }
 }
 
@@ -285,7 +272,7 @@ onUnmounted(() => {
   border-color: #ffffff08;
 
   .number {
-    color: rgb(133, 162, 141);
+    color: rgba($primary-text-rgb, 0.4);
   }
 
   .link {

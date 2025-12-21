@@ -11,6 +11,6 @@
 <style lang="scss" scoped>
 .icon {
     width: 100%;
-    fill: #5dfa50;
+    fill: $primary-text;
 }
 </style>
