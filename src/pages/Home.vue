@@ -186,7 +186,7 @@ onUnmounted(() => {
 }
 
 .chain-box {
-  background-color: $primary-bg;
+  background-color: rgba($primary-bg-rgb,0.55);
   border-color: #ffffff0f;
 
   .title-wrap {

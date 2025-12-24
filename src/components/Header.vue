@@ -35,7 +35,7 @@
             <li>
               <RouterLink to="/chain/blocks" @click="unfocus">
                 <div class="flex items-center ">
-                  <Svgimg class="icon"  name="block" />
+                  <Svgimg class="icon" name="block" />
                   <div class="title-wrap">
                     <div class="title">Blocks</div>
                     <div class="subtitle">Decentralized confidential containers</div>
@@ -46,9 +46,31 @@
             <li>
               <RouterLink to="/chain/txs" @click="unfocus">
                 <div class="flex items-center">
-                  <Svgimg class="icon"  name="transfer" />
+                  <Svgimg class="icon" name="transfer" />
                   <div class="title-wrap">
                     <div class="title">Transfers</div>
+                    <div class="subtitle">Trustless channel between WEB3 and WEB2</div>
+                  </div>
+                </div>
+              </RouterLink>
+            </li>
+            <li>
+              <RouterLink to="/chain/txs" @click="unfocus">
+                <div class="flex items-center">
+                  <Svgimg class="icon" name="secret" />
+                  <div class="title-wrap">
+                    <div class="title">Secret Nodes</div>
+                    <div class="subtitle">Trustless channel between WEB3 and WEB2</div>
+                  </div>
+                </div>
+              </RouterLink>
+            </li>
+            <li>
+              <RouterLink to="/chain/txs" @click="unfocus">
+                <div class="flex items-center">
+                  <Svgimg class="icon" name="applications" />
+                  <div class="title-wrap">
+                    <div class="title">Trust Apps</div>
                     <div class="subtitle">Trustless channel between WEB3 and WEB2</div>
                   </div>
                 </div>
@@ -255,12 +277,13 @@ const unfocus = () => {
   top: 0;
   left: 0;
   z-index: 9;
-  border-bottom: 1px solid rgba(236, 236, 236, 0.04);
+  // border-bottom: 1px solid rgba(236, 236, 236, 0.04);
   background-color: transparent;
   transition: background - color 0.5s ease;
   background-image: radial - gradient(transparent 1px, $primary-bg 1px);
   background-size: 4px 4px;
   backdrop-filter: saturate(50%) blur(4px);
+  box-shadow: 0 0 4px #2cc2600d;
 }
 
 .header-shadow {

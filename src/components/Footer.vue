@@ -76,7 +76,7 @@
 
 <style lang="scss" scoped>
 .footer {
-  background-color: $primary-bg;
+  background-color: rgba($primary-bg-rgb, 0.55);
   // padding-top: 30px;
   // border-top: 1px solid rgba(158, 158, 158, 0.15);
 }

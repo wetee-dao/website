@@ -91,6 +91,7 @@ onMounted(() => {
 
 .blocks {
   border: 4px solid rgba(255, 255, 255, 0.0588235294);
+  min-height: calc(100vh - 230px);
 }
 
 .border-rgb {
@@ -101,7 +102,7 @@ onMounted(() => {
 .chain-box {
   background-color: $primary-bg;
   // border: 1Px solid rgba($primary-text-rgb, 0.3);
-  border-color: #ffffff0f;
+  background-color: rgba($primary-bg-rgb,0.68);
 
   .title-wrap {
     border-bottom: 1px solid rgba(255, 255, 255, 0.0588235294);
