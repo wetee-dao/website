@@ -80,7 +80,6 @@ import Footer from '@/components/Footer.vue';
   font-size: 20px;
   text-align: center;
   font-family: "letter-font";
-  font-weight: bold;
   margin-left: -10px;
 }
 

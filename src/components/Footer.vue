@@ -151,7 +151,6 @@
     display: block;
     font-size: 20px;
     color: $secondary-text;
-    font-weight: 400;
     font-family: "letter-font";
   }
 }

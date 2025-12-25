@@ -227,7 +227,6 @@ onUnmounted(() => {
     line-height: 1;
     text-align: center;
     font-family: "letter-font";
-    font-weight: bold;
     width: 100%;
   }
 

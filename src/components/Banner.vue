@@ -96,7 +96,6 @@ import Chip from './anim/Chip.vue';
   font-size: 21px;
   text-align: center;
   font-family: "letter-font";
-  font-weight: bold;
 }
 
 .banner__canvas {
