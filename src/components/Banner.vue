@@ -40,7 +40,7 @@ import Chip from './anim/Chip.vue';
 <style lang="scss" scoped>
 .banner__content {
   min-height: 400px;
-  border-radius: 20px;
+  border-radius: 2px;
   padding: 20px 0px;
   position: relative;
   overflow: hidden;

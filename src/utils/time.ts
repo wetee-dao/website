@@ -3,6 +3,23 @@ export function sleep(ms: number) {
 }
 
 /**
+ * 相对时间描述，如 "12hrs 26mins ago"
+ */
+export function timeAgo(date: Date | string | number): string {
+    const then = typeof date === 'number' ? date : new Date(date).getTime();
+    const now = Date.now();
+    const diffMs = Math.max(0, now - then);
+    const sec = Math.floor(diffMs / 1000);
+    const min = Math.floor(sec / 60);
+    const hr = Math.floor(min / 60);
+    const day = Math.floor(hr / 24);
+    if (day > 0) return `${day}d ago`;
+    if (hr > 0) return `${hr}hrs ${min % 60}mins ago`;
+    if (min > 0) return `${min}mins ago`;
+    return `${sec}secs ago`;
+}
+
+/**
  * 计算目标UTC时间距离当前时间的差值，并按规则格式化输出
  * 规则：
  * - 小于1分钟：XXs

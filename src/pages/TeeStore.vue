@@ -48,7 +48,7 @@
           <div class="app">
             <div class="app__head">
               <div class="app__cover">
-                <img style="border-radius: 10px;" :src="app.icon" alt="" />
+                <img style="border-radius: 2px;" :src="app.icon" alt="" />
               </div>
 
               <div class="app__title">
@@ -214,7 +214,7 @@ const renderTemps = (t: string) => {
 .app_type>div {
   margin: 5px 10px 5px 0px;
   padding: 8px 18px;
-  border-radius: 10px;
+  border-radius: 2px;
   cursor: pointer;
 }
 
@@ -250,7 +250,7 @@ const renderTemps = (t: string) => {
     align-items: center;
     width: 70px;
     height: 70px;
-    border-radius: 16px;
+    border-radius: 2px;
     overflow: hidden;
     padding: 5px;
 

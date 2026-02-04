@@ -6,7 +6,7 @@ import type { AnyJson, Registry, TypeDef } from "@polkadot/types/types";
 import { ApiPromise, HttpProvider, Keyring } from "@polkadot/api";
 import { toH160Address, transformUserInput } from "@/utils/ink";
 
-class InkApi {
+export class InkApi {
     cloudAbi: Abi | undefined
     subnetAbi: Abi | undefined
     cloudContract: string
@@ -25,8 +25,7 @@ class InkApi {
         this.chainUrl = ""
     }
 
-    init(queryUrl: string, chainUrl: string) {
-        this.queryUrl = queryUrl
+    init(chainUrl: string) {
         this.chainUrl = chainUrl
     }
 
@@ -203,10 +202,9 @@ class InkApi {
 
     // query ink
     async ink_query(contract: string, method: string, args: Record<string, unknown>) {
-        // console.log("ink_query", contract, method, args)
         const data = await this.ink_builder(contract, method, args, "0")
         if (data.dry == 'Decoding error') {
-            return null
+            throw new Error("Decoding error")
         }
         return data.dry
     }
@@ -335,7 +333,7 @@ class InkApi {
 
     // read contract abi
     async getAbi(url: string): Promise<Abi> {
-        const response = await axios.get(url)
+        const response = await axios.get("/"+url)
         return new Abi(response.data)
     }
 
@@ -405,9 +403,9 @@ function formatInputData(arr: Uint8Array): Uint8Array {
 }
 
 export const Ink = new InkApi({
-    subnetContract: "0x12385503bc1eaf1a42836d19f3e68f91b1dc12ba",
+    subnetContract: "0x1c8d2f0a79b2506d32739425cd7caaf0398a326b",
     subnetAbiUrl: "contract/subnet.json",
-    cloudContract: "0x1ce944cc464f6a7f2e5fb722e55273ae43eac33b",
+    cloudContract: "0x26d4b4099dd664e35700797e0522192a9e81faf4",
     cloudAbiUrl: "contract/cloud.json",
 })
 

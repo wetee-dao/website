@@ -56,11 +56,11 @@
             <div class="flex flex-col">
               <div class="flex space-x-2 mb-1 items-center">
                 <div class="text-sm inline">Block#</div><a class="outline-none font-semibold !text-base number"
-                  href="/block/31157453">{{ block.header.height }}</a>
+                  :href="`/chain/block/${block.header.height}`">{{ block.header.height }}</a>
               </div>
               <div class="flex space-x-2">
                 <div class="text-sm inline">Includes</div><a class="outline-none text-sm link"
-                  href="/block/31157453?tab=extrinsic">{{ block.num_txs }} Txs</a>
+                  :href="`/chain/txs?height=${block.header.height}`">{{ block.num_txs }} Txs</a>
               </div>
             </div>
             <div class="flex items-center">
@@ -129,7 +129,6 @@ import WeTEE from '@/components/chains/wetee.vue';
 import { GetNowBlocks, GetNowTx, SubNewBlock } from '@/apis/side';
 import { formatTimeDiff } from "@/utils/time"
 import { ReconnectingWebSocket } from "@/utils/ws"
-import { CurrentChainNode } from '@/plugins/chain';
 
 const blocks = ref<any[]>([])
 const txs = ref<any[]>([])

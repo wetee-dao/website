@@ -55,12 +55,12 @@
               </RouterLink>
             </li>
             <li>
-              <RouterLink to="/chain/txs" @click="unfocus">
+              <RouterLink to="/chain/nodes" @click="unfocus">
                 <div class="flex items-center">
                   <Svgimg class="icon" name="secret" />
                   <div class="title-wrap">
-                    <div class="title">Secret Nodes</div>
-                    <div class="subtitle">Trustless channel between WEB3 and WEB2</div>
+                    <div class="title">Nodes</div>
+                    <div class="subtitle">Secrets 共识节点 · Workers 运行节点</div>
                   </div>
                 </div>
               </RouterLink>
@@ -92,7 +92,7 @@
                 </div>
               </RouterLink>
             </li>
-            <li>
+            <!-- <li>
               <RouterLink to="/products/bridge" @click="unfocus">
                 <div class="flex items-center">
                   <Bridge class="icon" />
@@ -102,8 +102,8 @@
                   </div>
                 </div>
               </RouterLink>
-            </li>
-            <li>
+            </li> -->
+            <!-- <li>
               <RouterLink to="/products/miner" @click="unfocus">
                 <div class="flex items-center">
                   <Miner class="icon" />
@@ -135,12 +135,12 @@
                   </div>
                 </div>
               </RouterLink>
-            </li>
+            </li> -->
           </ul>
         </li>
-        <!-- <li :class="path == '/use-cases' ? 'active' : ''">
-          <RouterLink to="/use-cases">Use Cases</RouterLink>
-        </li> -->
+        <li :class="path == '/gov' ? 'active' : ''">
+          <RouterLink to="/gov">Open Gov</RouterLink>
+        </li>
         <!-- <li :class="path == '/launch/stake' ? 'active' : ''">
           <a target="_blank" href="/launch/stake">Fair Launch</a>
         </li> -->
@@ -352,7 +352,7 @@ const unfocus = () => {
     margin-right: 10px;
     cursor: pointer;
     background-color: rgba($secondary-text-rgb, 0.04);
-    border-radius: 3px;
+    border-radius: 2px;
     padding: 11px 10px;
     font-size: 16px;
 
@@ -385,7 +385,7 @@ const unfocus = () => {
       width: 24px;
       height: 2px;
       background-color: rgba($secondary-text-rgb, 0.6);
-      border-radius: 3px;
+      border-radius: 2px;
       transition: 0.5s ease;
     }
 

@@ -80,6 +80,16 @@ const router = createRouter({
       component: () => import('../pages/Chain/Blocks.vue')
     },
     {
+      path: '/chain/nodes',
+      name: 'Nodes',
+      component: () => import('../pages/Chain/Nodes.vue')
+    },
+    {
+      path: '/chain/block/:height',
+      name: 'Block Detail',
+      component: () => import('../pages/Chain/Block.vue')
+    },
+    {
       path: '/chain/txs',
       name: 'Txs',
       component: () => import('../pages/Chain/Txs.vue')
@@ -88,6 +98,16 @@ const router = createRouter({
       path: '/chain-mint',
       name: 'Chain mint',
       component: () => import('../pages/Chainmint.vue')
+    },
+    {
+      path: '/gov',
+      name: 'Open Gov',
+      component: () => import('../pages/Gov/Referenda.vue')
+    },
+    {
+      path: '/gov/referenda/:id',
+      name: 'Referendum Detail',
+      component: () => import('../pages/Gov/ReferendaDetail.vue')
     },
     {
       path: '/not404',

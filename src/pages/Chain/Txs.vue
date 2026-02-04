@@ -64,23 +64,34 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import Footer from '@/components/Footer.vue'
 import Svgimg from "@/components/svg/SvgImg.vue"
-import { GetNowBlocks, GetNowTx } from '@/apis/side';
+import { GetNowBlocks, GetNowTx, GetTxByHeight } from '@/apis/side';
 import { formatTimeDiff } from "@/utils/time"
 
+const route = useRoute()
 const blocks = ref<any[]>([])
 const txs = ref<any[]>([])
 
-onMounted(() => {
-  GetNowBlocks().then(async datas => {
-    blocks.value = datas.block_metas
-    const txResult = await GetNowTx(datas.last_height)
-    console.log(txResult)
-    txs.value = txResult.txs
-  })
-})
+function loadTxs() {
+  const height = route.query.height ?? route.params.height
+  if (height != null && String(height).trim() !== '') {
+    GetTxByHeight(String(height).trim()).then((res) => {
+      txs.value = res?.txs ?? []
+    })
+  } else {
+    GetNowBlocks().then(async (datas) => {
+      blocks.value = datas.block_metas
+      const txResult = await GetNowTx(datas.last_height)
+      txs.value = txResult?.txs ?? []
+    })
+  }
+}
+
+onMounted(loadTxs)
+watch(() => [route.query.height, route.params.height], loadTxs)
 
 </script>
 

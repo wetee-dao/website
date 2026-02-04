@@ -93,7 +93,7 @@ import Footer from '@/components/Footer.vue';
 .confidentials {
   background-color: $primary-bg;
   padding: 30px 20px;
-  // border-radius: 20px;
+  // border-radius: 2px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -116,7 +116,7 @@ import Footer from '@/components/Footer.vue';
       display: block;
       width: 60px;
       height: 4px;
-      border-radius: 4px;
+      border-radius: 2px;
       background-color: $primary-text;
       top: 0;
       left: 0;
@@ -153,7 +153,7 @@ import Footer from '@/components/Footer.vue';
     position: relative;
     background: #151616;
     padding: 30px;
-    // border-radius: 20px;
+    // border-radius: 2px;
   }
 
   .title {

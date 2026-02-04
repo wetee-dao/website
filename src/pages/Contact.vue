@@ -69,7 +69,7 @@ import Footer from '@/components/Footer.vue';
     align-items: center;
     width: 40px;
     height: 40px;
-    // border-radius: 14px;
+    // border-radius: 2px;
     background-color: rgba(69, 69, 69, 0.3);
     position: relative;
     overflow: hidden;

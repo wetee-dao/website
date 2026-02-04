@@ -12,12 +12,12 @@
           <div class="flex justify-between p-5 block" v-for="block in blocks">
             <div class="flex flex-col">
               <div class="flex space-x-2 mb-1 items-center">
-                <div class="text-sm inline">Block#</div><a class="outline-none font-semibold !text-base number"
-                  href="/block/31157453">{{ block.header.height }}</a>
+                <div class="text-sm inline">Block#</div><RouterLink class="outline-none font-semibold !text-base number"
+                  :to="`/chain/block/${block.header.height}`">{{ block.header.height }}</RouterLink>
               </div>
               <div class="flex space-x-2">
-                <div class="text-sm inline">Includes</div><a class="outline-none text-sm link"
-                  href="/block/31157453?tab=extrinsic">{{ block.num_txs }} Txs</a>
+                <div class="text-sm inline">Includes</div><RouterLink class="outline-none text-sm link"
+                  :to="`/chain/txs?height=${block.header.height}`">{{ block.num_txs }} Txs</RouterLink>
               </div>
             </div>
             <div class="flex items-center">
@@ -41,6 +41,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
+import { RouterLink } from 'vue-router';
 import Footer from '@/components/Footer.vue'
 import Svgimg from "@/components/svg/SvgImg.vue"
 import { GetNowBlocks, GetNowTx } from '@/apis/side';

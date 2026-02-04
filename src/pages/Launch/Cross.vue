@@ -235,7 +235,7 @@ const initData = async () => {
   font-weight: bold;
   padding: 3px 4px;
   background-color: #5b4600;
-  border-radius: 3px;
+  border-radius: 2px;
 }
 
 .total_unit {

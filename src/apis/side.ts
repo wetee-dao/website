@@ -26,6 +26,19 @@ export const GetNowTx = async (block:string) => {
     return resp.data.result 
 }
 
+/** 按区块高度查询该区块的交易 */
+export const GetTxByHeight = async (height: string | number) => {
+    const url = CurrentChainNode().rpcUrl + "/tx_search?query=\"tx.height=" + String(height) + "\"&per_page=100&order_by=\"asc\""
+    const resp = await axios.get(url)
+    return resp.data.result
+}
+
+/** CometBFT: 根据高度获取区块详情 */
+export const GetBlockByHeight = async (height: string | number) => {
+    const url = CurrentChainNode().rpcUrl + "/block?height=" + String(height) + "&t=" + Date.now()
+    const resp = await axios.get(url)
+    return resp.data.result
+}
 
 export const SubNewBlock = (back: ((this: ReconnectingWebSocket, ev: MessageEvent<any>) => any) | { handleEvent: (event: MessageEvent<any>) => any }) => {
   const ws = new ReconnectingWebSocket(CurrentChainNode().rpcWs, {});

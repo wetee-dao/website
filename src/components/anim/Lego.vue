@@ -125,7 +125,7 @@
   position: absolute;
   transform: rotateY(60deg) rotate(10deg) rotateX(6deg);
   bottom: 15px;
-  border-radius: 5px 0 5px 5px;
+  border-radius: 2px 0 2px 2px;
 }
 
 .lego>.right {
@@ -135,7 +135,7 @@
   transform: rotateY(-60deg) rotate(-10deg) rotateX(5deg);
   bottom: 15px;
   right: 0;
-  border-radius: 0 5px 5px 5px;
+  border-radius: 0 2px 2px 2px;
 }
 
 .lego .container-top {
@@ -155,7 +155,7 @@
   height: 69px;
   position: absolute;
   transform: rotateY(42deg) rotateZ(-17deg) rotateX(-43deg);
-  border-radius: 5px 0 0 0;
+  border-radius: 2px 0 0 0;
 }
 
 .lego .container-top .top>.dot {

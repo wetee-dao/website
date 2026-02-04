@@ -122,7 +122,7 @@ import Ring from '@/components/anim/Ring.vue';
       display: block;
       width: 60px;
       height: 4px;
-      border-radius: 4px;
+      border-radius: 2px;
       background-color: $primary-text;
       top: 0;
       left: 0;
@@ -159,7 +159,7 @@ import Ring from '@/components/anim/Ring.vue';
     position: relative;
     background: #151616;
     padding: 30px;
-    // border-radius: 20px;
+    // border-radius: 2px;
   }
 
   .title {

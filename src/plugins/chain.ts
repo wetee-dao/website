@@ -35,19 +35,19 @@ class ChainNode {
   type: string;
   chainId: string;
   chainUrl: string;
-  queryUrl: string;
   secretUrl: string;
   rpcUrl: string;
-  rpcWs: string
-  constructor(name: string, type: string, chainId: string, chainUrl: string, queryUrl: string, secretUrl: string, rpcUrl: string, rpcWs:string) {
+  rpcWs: string;
+  MainChainUrl: string
+  constructor(name: string, type: string, chainId: string, chainUrl: string, queryUrl: string, secretUrl: string, rpcUrl: string, rpcWs:string, MainChainUrl: string) {
     this.name = name
     this.type = type
     this.chainId = chainId
     this.chainUrl = chainUrl
-    this.queryUrl = queryUrl
     this.secretUrl = secretUrl
     this.rpcUrl = rpcUrl
     this.rpcWs = rpcWs
+    this.MainChainUrl = MainChainUrl
   }
 }
 
@@ -57,10 +57,10 @@ export const chainNodes: ChainNode[] = [
     name: 'DEV-LOCAL',
     chainId: "dev-local",
     type: "substrate",
+    MainChainUrl: 'wss://xiaobai.asyou.me:30001/ws',
     chainUrl: 'wss://xiaobai.asyou.me:30001/ws',
     rpcUrl: 'https://xiaobai.asyou.me:30111',
     rpcWs: 'wss://xiaobai.asyou.me:30111/websocket',
-    queryUrl: 'https://xiaobai.asyou.me:30001/',
     secretUrl: 'https://xiaobai.asyou.me:30115/gql',
   },
 ]
@@ -82,7 +82,7 @@ export const initChainApi = (chainId: string) => {
   if (!node) {
     node = chainNodes[0]
   }
-  Ink.init(node.queryUrl, node.chainUrl)
+  Ink.init(node.chainUrl)
 }
 
 export const CurrentSecretUrl = () => {

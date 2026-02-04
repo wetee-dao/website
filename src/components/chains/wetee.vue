@@ -33,7 +33,7 @@ const items = ref([
     {
         name: "Secret Nodes",
         icon: "secret",
-        link: "/nodes",
+        link: "/chain/nodes",
         value: "-",
     },
     {
