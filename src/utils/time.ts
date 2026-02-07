@@ -68,6 +68,6 @@ export function formatTimeDiff(targetTimeStr: string, now: number): string {
         return `${days} day ${hours} hrs`;
     } else {
         // 大于等于1年：显示年+天
-        return `${years}y${days}天`;
+        return `${years}y${days}d`;
     }
 }

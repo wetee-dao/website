@@ -85,6 +85,11 @@ const router = createRouter({
       component: () => import('../pages/Chain/Nodes.vue')
     },
     {
+      path: '/chain/pods',
+      name: 'Pods',
+      component: () => import('../pages/Chain/Pods.vue')
+    },
+    {
       path: '/chain/block/:height',
       name: 'Block Detail',
       component: () => import('../pages/Chain/Block.vue')

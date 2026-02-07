@@ -48,9 +48,9 @@
                                     <span class="dot"></span>
                                     <span>Online</span>
                                 </div>
-                                <div class="card-id mono" > Owner: {{ node[1].owner }}</div>
-                                <div class="card-id mono" > P2P ID: {{ node[1].p2pId }}</div>
-                                <div class="card-id mono" > Validator ID: {{ node[1].validatorId }}</div>
+                                <div class="card-id mono">Owner: <span class="card-id-value">{{ node[1].owner }}</span></div>
+                                <div class="card-id mono">P2P ID: <span class="card-id-value">{{ node[1].p2pId }}</span></div>
+                                <div class="card-id mono">Validator ID: <span class="card-id-value">{{ node[1].validatorId }}</span></div>
                             </div>
                         </div>
                     </template>
@@ -94,8 +94,8 @@
                                     <span class="dot"></span>
                                     <span>Online</span>
                                 </div>
-                                <div class="card-id mono" > Owner: {{ node[1].owner }}</div>
-                                <div class="card-id mono" > P2P ID: {{ node[1].p2pId }}</div>
+                                <div class="card-id mono">Owner: <span class="card-id-value">{{ node[1].owner }}</span></div>
+                                <div class="card-id mono">P2P ID: <span class="card-id-value">{{ node[1].p2pId }}</span></div>
                             </div>
                         </div>
                         <!-- Pagination -->
@@ -177,9 +177,6 @@ onMounted(() => {
         .then((data) => {
             secretsRaw.value = data
         })
-        .catch((e) => {
-            errorSecrets.value = e?.message || 'Failed to load consensus nodes'
-        })
         .finally(() => {
             loadingSecrets.value = false
         })
@@ -188,7 +185,6 @@ onMounted(() => {
     errorWorkers.value = ''
     GetWorkers(null, 48)
         .then((data) => {
-            console.log("getWorkers", data)
             workersRaw.value = data
         })
         .finally(() => {
@@ -344,7 +340,7 @@ onMounted(() => {
 
 .node-card--compact {
     flex: 0 0 auto;
-    width: 200px;
+    width: 260px;
     min-width: 200px;
     padding: 0.75rem;
 }
@@ -590,9 +586,12 @@ onMounted(() => {
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 1;
-    line-clamp: 1;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
+}
+
+.card-id-value {
+    color: rgba($primary-text-rgb, 0.72);
 }
 
 .mono {

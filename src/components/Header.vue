@@ -60,13 +60,13 @@
                   <Svgimg class="icon" name="secret" />
                   <div class="title-wrap">
                     <div class="title">Nodes</div>
-                    <div class="subtitle">Secrets 共识节点 · Workers 运行节点</div>
+                    <div class="subtitle">Secrets consensus nodes · Workers runtime nodes</div>
                   </div>
                 </div>
               </RouterLink>
             </li>
             <li>
-              <RouterLink to="/chain/txs" @click="unfocus">
+              <RouterLink to="/chain/pods" @click="unfocus">
                 <div class="flex items-center">
                   <Svgimg class="icon" name="applications" />
                   <div class="title-wrap">

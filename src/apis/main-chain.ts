@@ -1,12 +1,13 @@
 import { CurrentChainNode } from "@/plugins/chain"
 import { InkApi } from "@/providers/chainapi/ink"
+import { MAIN_CHAIN_CLOUD_CONTRACT, MAIN_CHAIN_SUBNET_CONTRACT } from "@/config";
 
 class MainChainApi extends InkApi {
     constructor() {
         super({
-            subnetContract: "0x1c8d2f0a79b2506d32739425cd7caaf0398a326b",
+            subnetContract: MAIN_CHAIN_SUBNET_CONTRACT,
             subnetAbiUrl: "contract/subnet.json",
-            cloudContract: "0x26d4b4099dd664e35700797e0522192a9e81faf4",
+            cloudContract: MAIN_CHAIN_CLOUD_CONTRACT,
             cloudAbiUrl: "contract/cloud.json",
         })
         this.init(CurrentChainNode().MainChainUrl)
@@ -26,6 +27,20 @@ class MainChainApi extends InkApi {
         })
         return workers
     }
+
+    // get pods
+    async getPods(start: string | null, size: number) {
+        const pods = await this.ink_query(this.cloudContract, "pods", {
+            start: start,
+            size: size
+        })
+        return pods
+    }
+
+    // get pod extended info (containers with image, etc.)
+    async getPodExtInfo(podId: string) {
+        return this.podExtInfo(podId)
+    }
 }
 
 const MainChain = new MainChainApi()
@@ -37,4 +52,13 @@ export const GetNodes = async () => {
 export const GetWorkers = async (start: string | null, size: number) => {
     const workers = await MainChain.getWorkers(start, size)
     return workers
+}
+
+export const GetPods = async (start: string | null, size: number) => {
+    const pods = await MainChain.getPods(start, size)
+    return pods
+}
+
+export const GetPodExtInfo = async (podId: string) => {
+    return MainChain.getPodExtInfo(podId)
 }
