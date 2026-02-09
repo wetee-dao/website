@@ -5,19 +5,19 @@
         <div class="title-wrap flex p-[15px] lg:p-5 flex-wrap justify-between items-center">
           <div class="title flex">
             <Svgimg class="chain-logo animate-ping-rotate mr-2 flex-shrink-0"  name="lineblock" />
-            <div class="inline truncate">Blocks</div>
+            <div class="inline truncate">{{ t('chain.blocks') }}</div>
           </div>
         </div>
         <div class="flex flex-col divide-y w-full">
           <div class="flex justify-between p-5 block" v-for="block in blocks">
             <div class="flex flex-col">
               <div class="flex space-x-2 mb-1 items-center">
-                <div class="text-sm inline">Block#</div><RouterLink class="outline-none font-semibold !text-base number"
+                <div class="text-sm inline">{{ t('common.block') }}</div><RouterLink class="outline-none font-semibold !text-base number"
                   :to="`/chain/block/${block.header.height}`">{{ block.header.height }}</RouterLink>
               </div>
               <div class="flex space-x-2">
-                <div class="text-sm inline">Includes</div><RouterLink class="outline-none text-sm link"
-                  :to="`/chain/txs?height=${block.header.height}`">{{ block.num_txs }} Txs</RouterLink>
+                <div class="text-sm inline">{{ t('common.includes') }}</div><RouterLink class="outline-none text-sm link"
+                  :to="`/chain/txs?height=${block.header.height}`">{{ block.num_txs }} {{ t('common.txs') }}</RouterLink>
               </div>
             </div>
             <div class="flex items-center">
@@ -40,13 +40,15 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
-import { RouterLink } from 'vue-router';
+import { onMounted, ref } from 'vue'
+import { RouterLink } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import Footer from '@/components/Footer.vue'
-import Svgimg from "@/components/svg/SvgImg.vue"
-import { GetNowBlocks, GetNowTx } from '@/apis/side';
-import { formatTimeDiff } from "@/utils/time"
+import Svgimg from '@/components/svg/SvgImg.vue'
+import { GetNowBlocks, GetNowTx } from '@/apis/side'
+import { formatTimeDiff } from '@/utils/time'
 
+const { t } = useI18n()
 const now = ref(new Date().getTime())
 const blocks = ref<any[]>([])
 const txs = ref<any[]>([])

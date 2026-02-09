@@ -5,9 +5,9 @@
         <div class="title-wrap flex p-[15px] lg:p-5 flex-wrap justify-between items-center">
           <div class="title flex overflow-hidden">
             <Svgimg class="chain-logo mr-2 flex-shrink-0" name="lineblock" />
-            <div class="inline truncate">Block #{{ height }}</div>
+            <div class="inline truncate">{{ t('chainDetail.blockTitle') }} #{{ height }}</div>
           </div>
-          <RouterLink to="/chain/blocks" class="text-sm link">← Back to Blocks</RouterLink>
+          <RouterLink to="/chain/blocks" class="text-sm link">{{ t('chainDetail.backToBlocks') }}</RouterLink>
         </div>
 
         <template v-if="loading">
@@ -21,49 +21,49 @@
         <template v-else-if="block">
           <div class="detail divide-y">
             <div class="detail-row flex flex-wrap p-5">
-              <span class="label">Block Height</span>
+              <span class="label">{{ t('chainDetail.blockHeight') }}</span>
               <span class="value number">{{ block.block?.header?.height || height }}</span>
             </div>
             <div class="detail-row flex flex-wrap p-5">
-              <span class="label">Block Hash</span>
+              <span class="label">{{ t('chainDetail.blockHash') }}</span>
               <span class="value mono hash">{{ blockIdHash }}</span>
             </div>
             <div class="detail-row flex flex-wrap p-5">
-              <span class="label">Proposer</span>
+              <span class="label">{{ t('chainDetail.proposer') }}</span>
               <span class="value mono">{{ proposerAddress }}</span>
             </div>
             <div class="detail-row flex flex-wrap p-5">
-              <span class="label">Block Time</span>
+              <span class="label">{{ t('chainDetail.blockTime') }}</span>
               <span class="value">{{ blockTimeFormatted }}</span>
               <span class="value-muted ml-2">({{ timeAgoStr }})</span>
             </div>
             <div class="detail-row flex flex-wrap p-5">
-              <span class="label">Chain ID</span>
+              <span class="label">{{ t('chainDetail.chainId') }}</span>
               <span class="value mono">{{ chainId }}</span>
             </div>
             <div class="detail-row flex flex-wrap p-5">
-              <span class="label">Transactions</span>
+              <span class="label">{{ t('chainDetail.transactions') }}</span>
               <span class="value number">{{ numTxs }}</span>
-              <RouterLink v-if="numTxs > 0" :to="`/chain/txs?height=${height}`" class="link ml-2">View Transactions</RouterLink>
+              <RouterLink v-if="numTxs > 0" :to="`/chain/txs?height=${height}`" class="link ml-2">{{ t('chainDetail.viewTransactions') }}</RouterLink>
             </div>
             <div class="detail-row flex flex-wrap p-5" v-if="lastBlockHash">
-              <span class="label">Previous Block Hash</span>
+              <span class="label">{{ t('chainDetail.previousBlockHash') }}</span>
               <RouterLink :to="`/chain/block/${Number(block.block?.header?.height ?? 0) - 1}`" class="value mono link">{{ lastBlockHash }}</RouterLink>
             </div>
             <div class="detail-row flex flex-wrap p-5" v-if="appHash">
-              <span class="label">App Hash</span>
+              <span class="label">{{ t('chainDetail.appHash') }}</span>
               <span class="value mono small">{{ appHash }}</span>
             </div>
             <div class="detail-row flex flex-wrap p-5" v-if="dataHash">
-              <span class="label">Data Hash</span>
+              <span class="label">{{ t('chainDetail.dataHash') }}</span>
               <span class="value mono small">{{ dataHash }}</span>
             </div>
           </div>
 
           <div v-if="numTxs > 0" class="txs-section p-5 border-t border-white/10">
             <div class="text-sm text-secondary">
-              This block has <span class="number">{{ numTxs }}</span> transaction(s).
-              <RouterLink :to="`/chain/txs?height=${height}`" class="link">View transaction list</RouterLink>
+              {{ t('chainDetail.thisBlockHas') }} <span class="number">{{ numTxs }}</span> {{ t('chainDetail.transactionS') }}
+              <RouterLink :to="`/chain/txs?height=${height}`" class="link">{{ t('chainDetail.viewTransactionList') }}</RouterLink>
             </div>
           </div>
         </template>
@@ -77,11 +77,13 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import Footer from '@/components/Footer.vue'
 import Svgimg from '@/components/svg/SvgImg.vue'
 import { GetBlockByHeight } from '@/apis/side'
 import { timeAgo } from '@/utils/time'
 
+const { t } = useI18n()
 const route = useRoute()
 const height = computed(() => route.params.height as string)
 

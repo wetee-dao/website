@@ -1,22 +1,24 @@
 import './assets/main.scss'
 
 import { createApp } from 'vue'
-import 'virtual:svg-icons-register' 
+import 'virtual:svg-icons-register'
 
 import App from './App.vue'
 import router from './router'
+import { i18n } from './locales'
 import pop from './plugins/pop'
 import chain, { chainNetPing, initChainApi } from './plugins/chain'
 import { store, useGlobalStore } from './stores/global'
 
 const m = () => {
-    const app = createApp(App)
+  const app = createApp(App)
 
-    app.use(store)
-    app.use(router)
-    app.use(pop)
-        .use(chain)
-    app.mount('#app')
+  app.use(store)
+  app.use(router)
+  app.use(i18n)
+  app.use(pop)
+  app.use(chain)
+  app.mount('#app')
 }
 
 const ins = useGlobalStore(store)

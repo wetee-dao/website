@@ -4,12 +4,11 @@
     <div class="container section flex">
       <div class="flex flex-col items-center md:flex-row md:justify-center md:items-center w-full">
         <div class="flex-1 md:pr-20">
-          <div class="top__title">Evolve WEB2 programs to contract-level</div>
-          <div class="top__text">All WEB2 applications, once deployed, possess the characteristics of smart contracts.
-          </div>
+          <div class="top__title">{{ t('productsCloud.title') }}</div>
+          <div class="top__text">{{ t('productsCloud.subtitle') }}</div>
           <div class="btns mt-10">
-            <RouterLink to="/tee-store" class="btn  btn--nephrite"><span>TEE store</span></RouterLink>
-            <a target="_blank" href="/dapp" class="btn btn__primary "><span>Deploy container</span></a>
+            <RouterLink to="/tee-store" class="btn  btn--nephrite"><span>{{ t('productsCloud.teeStore') }}</span></RouterLink>
+            <a target="_blank" href="/dapp" class="btn btn__primary "><span>{{ t('productsCloud.deployContainer') }}</span></a>
           </div>
         </div>
         <div class="hidden icon md:block">
@@ -20,38 +19,28 @@
     <div class="container section-first">
       <div class="grid md:grid-cols-2 lg:grid-cols-3 grid-flow-row gap-6">
         <div class="confidentials confidentials--first">
-          <h3 class="confidentials__title">100% compatible with Docker</h3>
-          <p class="confidentials__text">Can directly deploy using existing Docker images without needing to change any
-            code.
-          </p>
+          <h3 class="confidentials__title">{{ t('productsCloud.card1Title') }}</h3>
+          <p class="confidentials__text">{{ t('productsCloud.card1Text') }}</p>
         </div>
         <div class="confidentials confidentials--yellow">
-          <h3 class="confidentials__title">0-cost confidential computing</h3>
-          <p class="confidentials__text">It completely shields the complexity of privacy-preserving computation.</p>
+          <h3 class="confidentials__title">{{ t('productsCloud.card2Title') }}</h3>
+          <p class="confidentials__text">{{ t('productsCloud.card2Text') }}</p>
         </div>
         <div class="confidentials confidentials--nephrite">
-          <h3 class="confidentials__title">Affordable pricing</h3>
-          <p class="confidentials__text">users' idle computing power and edge computing power are lower and completely
-            transparent.
-          </p>
+          <h3 class="confidentials__title">{{ t('productsCloud.card3Title') }}</h3>
+          <p class="confidentials__text">{{ t('productsCloud.card3Text') }}</p>
         </div>
         <div class="confidentials confidentials--yellow">
-          <h3 class="confidentials__title">Fully cloud-native capabilities</h3>
-          <p class="confidentials__text">Fully leveraging the mature technologies of cloud and the core advantages of
-            meta-native.
-          </p>
+          <h3 class="confidentials__title">{{ t('productsCloud.card4Title') }}</h3>
+          <p class="confidentials__text">{{ t('productsCloud.card4Text') }}</p>
         </div>
         <div class="confidentials confidentials--nephrite">
-          <h3 class="confidentials__title">Supports all main CPUs/GPUs</h3>
-          <p class="confidentials__text">Supports SGX/TDX/SEV/CXX confidential computing chips and computing
-            technologies.
-          </p>
+          <h3 class="confidentials__title">{{ t('productsCloud.card5Title') }}</h3>
+          <p class="confidentials__text">{{ t('productsCloud.card5Text') }}</p>
         </div>
         <div class="confidentials confidentials--first">
-          <h3 class="confidentials__title">Devops</h3>
-          <p class="confidentials__text">Provides DevOps, enabling developers to continuously integrate and deploy their
-            programs.
-          </p>
+          <h3 class="confidentials__title">{{ t('productsCloud.card6Title') }}</h3>
+          <p class="confidentials__text">{{ t('productsCloud.card6Text') }}</p>
         </div>
       </div>
     </div>
@@ -59,32 +48,26 @@
       <div class="container  ">
         <div class="box flex">
           <div class=" md:w-2/3 flex flex-col justify-center">
-            <div class="title">Contract-like confidential container</div>
+            <div class="title">{{ t('productsCloud.featureTitle') }}</div>
             <div class="feature">
-              <div class="name">Non-tamperable</div>
-              <div class="desc">Confidential containers are built based on blockchain technology. Once uploaded to the
-                blockchain, they cannot be tampered with or forged, offering a high level of trustworthiness.</div>
+              <div class="name">{{ t('productsCloud.feature1Name') }}</div>
+              <div class="desc">{{ t('productsCloud.feature1Desc') }}</div>
             </div>
             <div class="feature">
-              <div class="name">Contract account</div>
-              <div class="desc">All deployed confidential containers have a unique contract account, allowing them to
-                invoke and be invoked by smart contracts.</div>
+              <div class="name">{{ t('productsCloud.feature2Name') }}</div>
+              <div class="desc">{{ t('productsCloud.feature2Desc') }}</div>
             </div>
             <div class="feature">
-              <div class="name">Transparent/Auditable</div>
-              <div class="desc">Just like smart contracts, it can verify whether container images and code are
-                consistent,
-                ensuring the security and functionality of containers through rigorous auditing.</div>
+              <div class="name">{{ t('productsCloud.feature3Name') }}</div>
+              <div class="desc">{{ t('productsCloud.feature3Desc') }}</div>
             </div>
             <div class="feature">
-              <div class="name">Private+Secure</div>
-              <div class="desc">Hardware-level memory and data encryption ensures that no one can leak user privacy and
-                data.</div>
+              <div class="name">{{ t('productsCloud.feature4Name') }}</div>
+              <div class="desc">{{ t('productsCloud.feature4Desc') }}</div>
             </div>
             <div class="feature">
-              <div class="name">Decentralized</div>
-              <div class="desc">The execution of confidential containers does not require the involvement of banks or
-                third-party institutions, it is completely decentralized.</div>
+              <div class="name">{{ t('productsCloud.feature5Name') }}</div>
+              <div class="desc">{{ t('productsCloud.feature5Desc') }}</div>
             </div>
           </div>
           <div class="md:w-1/3 flex justify-center items-center p-20">
@@ -100,12 +83,14 @@
 </template>
 
 <script setup lang="ts">
-import SectionHead from '@/components/SectionHead.vue';
-import Shadow from '@/components/Shadow.vue';
-import Dbox from '@/components/anim/3Dbox.vue';
-import Footer from '@/components/Footer.vue';
-import Container from '@/components/svg/Container.vue';
+import { useI18n } from 'vue-i18n'
+import SectionHead from '@/components/SectionHead.vue'
+import Shadow from '@/components/Shadow.vue'
+import Dbox from '@/components/anim/3Dbox.vue'
+import Footer from '@/components/Footer.vue'
+import Container from '@/components/svg/Container.vue'
 
+const { t } = useI18n()
 </script>
 
 <style lang="scss" scoped>

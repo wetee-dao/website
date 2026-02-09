@@ -30,15 +30,15 @@
       <!-- navigation -->
       <ul v-if="group == 'main'" :class="'header__nav ' + (isActivce ? 'header__nav--active' : '')">
         <li :class="path.indexOf('/chain') > -1 ? 'active' : ''">
-          <a href="javascript:void(0)">Blockchain <i class="iconfont">&#xe68f;</i></a>
+          <a href="javascript:void(0)">{{ t('nav.blockchain') }} <i class="iconfont">&#xe68f;</i></a>
           <ul v-if="props.shadow && showSub" class="header__dropdown">
             <li>
               <RouterLink to="/chain/blocks" @click="unfocus">
                 <div class="flex items-center ">
                   <Svgimg class="icon" name="block" />
                   <div class="title-wrap">
-                    <div class="title">Blocks</div>
-                    <div class="subtitle">Decentralized confidential containers</div>
+                    <div class="title">{{ t('nav.blocks') }}</div>
+                    <div class="subtitle">{{ t('nav.blocksSubtitle') }}</div>
                   </div>
                 </div>
               </RouterLink>
@@ -48,8 +48,8 @@
                 <div class="flex items-center">
                   <Svgimg class="icon" name="transfer" />
                   <div class="title-wrap">
-                    <div class="title">Transfers</div>
-                    <div class="subtitle">Trustless channel between WEB3 and WEB2</div>
+                    <div class="title">{{ t('nav.transfers') }}</div>
+                    <div class="subtitle">{{ t('nav.transfersSubtitle') }}</div>
                   </div>
                 </div>
               </RouterLink>
@@ -59,8 +59,8 @@
                 <div class="flex items-center">
                   <Svgimg class="icon" name="secret" />
                   <div class="title-wrap">
-                    <div class="title">Nodes</div>
-                    <div class="subtitle">Secrets consensus nodes · Workers runtime nodes</div>
+                    <div class="title">{{ t('nav.nodes') }}</div>
+                    <div class="subtitle">{{ t('nav.nodesSubtitle') }}</div>
                   </div>
                 </div>
               </RouterLink>
@@ -70,8 +70,8 @@
                 <div class="flex items-center">
                   <Svgimg class="icon" name="applications" />
                   <div class="title-wrap">
-                    <div class="title">Trust Apps</div>
-                    <div class="subtitle">Trustless channel between WEB3 and WEB2</div>
+                    <div class="title">{{ t('nav.trustApps') }}</div>
+                    <div class="subtitle">{{ t('nav.trustAppsSubtitle') }}</div>
                   </div>
                 </div>
               </RouterLink>
@@ -79,15 +79,15 @@
           </ul>
         </li>
         <li :class="path.indexOf('/products') > -1 ? 'active' : ''">
-          <a href="javascript:void(0)">Products <i class="iconfont">&#xe68f;</i></a>
+          <a href="javascript:void(0)">{{ t('nav.products') }} <i class="iconfont">&#xe68f;</i></a>
           <ul v-if="props.shadow && showSub" class="header__dropdown">
             <li>
               <RouterLink to="/products/cloud" @click="unfocus">
                 <div class="flex items-center ">
                   <Cloud class="icon" />
                   <div class="title-wrap">
-                    <div class="title">TEE Vm Cloud</div>
-                    <div class="subtitle">Decentralized confidential containers</div>
+                    <div class="title">{{ t('nav.teeVmCloud') }}</div>
+                    <div class="subtitle">{{ t('nav.cloudSubtitle') }}</div>
                   </div>
                 </div>
               </RouterLink>
@@ -97,8 +97,8 @@
                 <div class="flex items-center">
                   <Bridge class="icon" />
                   <div class="title-wrap">
-                    <div class="title">TEE Bridge</div>
-                    <div class="subtitle">Trustless channel between WEB3 and WEB2</div>
+                    <div class="title">{{ t('nav.teeBridge') }}</div>
+                    <div class="subtitle">{{ t('nav.bridgeSubtitle') }}</div>
                   </div>
                 </div>
               </RouterLink>
@@ -108,19 +108,19 @@
                 <div class="flex items-center">
                   <Miner class="icon" />
                   <div class="title-wrap">
-                    <div class="title">TEE Miner</div>
-                    <div class="subtitle">Provide computing power to earn</div>
+                    <div class="title">{{ t('nav.teeMiner') }}</div>
+                    <div class="subtitle">{{ t('nav.minerSubtitle') }}</div>
                   </div>
                 </div>
               </RouterLink>
-            </li>
+            </li> -->
             <li>
               <RouterLink to="/products/store" @click="unfocus">
                 <div class="flex items-center">
                   <Store class="icon" />
                   <div class="title-wrap">
-                    <div class="title">TEE Storage</div>
-                    <div class="subtitle">Decentralized encrypted storage</div>
+                    <div class="title">{{ t('nav.teeStorage') }}</div>
+                    <div class="subtitle">{{ t('nav.storeSubtitle') }}</div>
                   </div>
                 </div>
               </RouterLink>
@@ -130,25 +130,19 @@
                 <div class="flex items-center">
                   <MPC class="icon" />
                   <div class="title-wrap">
-                    <div class="title">TEE MPC</div>
-                    <div class="subtitle">MPC base on blockchain and TEE</div>
+                    <div class="title">{{ t('nav.teeMpc') }}</div>
+                    <div class="subtitle">{{ t('nav.mpcSubtitle') }}</div>
                   </div>
                 </div>
               </RouterLink>
-            </li> -->
+            </li>
           </ul>
         </li>
         <li :class="path == '/gov' ? 'active' : ''">
-          <RouterLink to="/gov">Open Gov</RouterLink>
+          <RouterLink to="/gov">{{ t('nav.openGov') }}</RouterLink>
         </li>
-        <!-- <li :class="path == '/launch/stake' ? 'active' : ''">
-          <a target="_blank" href="/launch/stake">Fair Launch</a>
-        </li> -->
-        <!-- <li :class="path == '/contacts' ? 'active' : ''">
-          <RouterLink class="trans" tkey="nav_contact" to="/contacts">Contacts</RouterLink>
-        </li> -->
         <li>
-          <a class="trans" tkey="nav_white_paper" target="_blank" href="https://wetee.gitbook.io/docment">Docs</a>
+          <a target="_blank" href="https://wetee.gitbook.io/docment">{{ t('common.docs') }}</a>
         </li>
       </ul>
       <!-- end navigation -->
@@ -156,18 +150,18 @@
       <!-- lanch navigation -->
       <ul v-if="group == 'lanch'" :class="'header__nav ' + (isActivce ? 'header__nav--active' : '')">
         <li :class="path == '/launch/economy' ? 'active' : ''">
-          <RouterLink to="/launch/economy">Token Economy</RouterLink>
+          <RouterLink to="/launch/economy">{{ t('launch.tokenEconomy') }}</RouterLink>
         </li>
         <li :class="path == '/launch/stake' ? 'active' : ''">
-          <RouterLink to="/launch/stake">Fair Launch</RouterLink>
+          <RouterLink to="/launch/stake">{{ t('launch.fairLaunch') }}</RouterLink>
         </li>
         <li :class="path == '/launch/cross' ? 'active' : ''">
-          <RouterLink to="/launch/cross">Cross Chain</RouterLink>
+          <RouterLink to="/launch/cross">{{ t('launch.crossChain') }}</RouterLink>
         </li>
       </ul>
       <!-- end lanch navigation -->
 
-      <div class="flex space justify-end items-center">
+      <div class="flex space justify-end items-center gap-1">
         <a target="_blank" href="https://github.com/wetee-dao" class="coin__btn hidden md:block" title="github code">
           <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4251"
             width="256" height="256">
@@ -178,20 +172,32 @@
           </svg>
         </a>
 
+        <!-- language switcher -->
+        <div class="header__lang flex items-center border border-solid border-[rgba(255,255,255,0.2)] overflow-hidden">
+          <button type="button" :class="['header__lang-btn', locale === 'en' ? 'header__lang-btn--active' : '']"
+            @click="switchLocale('en')">
+            EN
+          </button>
+          <button type="button" :class="['header__lang-btn', locale === 'zh-CN' ? 'header__lang-btn--active' : '']"
+            @click="switchLocale('zh-CN')">
+            中文
+          </button>
+        </div>
+
         <!-- wallet -->
-        <div class="header__cta connect" @click="login" v-if="!userInfo">
-          <span class="text" tkey="nav_connect">&nbsp;Connect</span>
+        <div class="header__cta connect border border-solid border-[rgba(255,255,255,0.2)]" @click="login" v-if="!userInfo">
+          <span class="text">&nbsp;{{ t('common.connect') }}</span>
         </div>
         <div class="header__cta connect" @click="login" v-if="userInfo">
           <Identicon class="uicon" :key="userInfo.addr" @click="login" :hash="ss58toHex(userInfo.addr)" :padding="0.28"
             :foreground="[80, 250, 130, 255]" :background="[80, 255, 130, 0]" :size="16" />
-          <span class="text" tkey="nav_connect">{{ userInfo.name }}</span>
+          <span class="text">{{ userInfo.name }}</span>
         </div>
         <!-- end wallet -->
 
         <!-- dapp -->
         <a target="_blank" href="/dapp" class="header__cta inverse" title="Decentralization trust cloud">
-          <span class="text" tkey="nav_connect">Dapp</span>
+          <span class="text">{{ t('common.dapp') }}</span>
         </a>
         <!-- end dapp -->
       </div>
@@ -200,22 +206,32 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, ref } from 'vue';
+import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useNotification } from 'naive-ui'
-import { ss58toHex } from "@/utils/chain";
-import { useGlobalStore } from '@/stores/global';
-import useGlobelProperties from '@/plugins/globel';
-import Identicon from "./identicon.vue";
-import router from '@/router';
-import Svgimg from "@/components/svg/SvgImg.vue"
-import MPC from './svg/MPC.vue';
-import Miner from './svg/Miner.vue';
-import Bridge from './svg/Bridge.vue';
-import Store from './svg/Store.vue';
-import Cloud from './svg/Cloud.vue';
-import Logo from './svg/Logo2.vue';
+import { ss58toHex } from '@/utils/chain'
+import { useGlobalStore } from '@/stores/global'
+import useGlobelProperties from '@/plugins/globel'
+import { setLocale, getLocale, type LocaleId } from '@/locales'
+import Identicon from './identicon.vue'
+import router from '@/router'
+import Svgimg from '@/components/svg/SvgImg.vue'
+import MPC from './svg/MPC.vue'
+import Miner from './svg/Miner.vue'
+import Bridge from './svg/Bridge.vue'
+import Store from './svg/Store.vue'
+import Cloud from './svg/Cloud.vue'
+import Logo from './svg/Logo2.vue'
 
-const props = defineProps(["shadow"])
+const { t } = useI18n()
+const locale = ref<LocaleId>(getLocale())
+
+const switchLocale = (l: LocaleId) => {
+  setLocale(l)
+  locale.value = getLocale()
+}
+
+const props = defineProps(['shadow'])
 const userStore = useGlobalStore()
 const notification = useNotification()
 
@@ -468,12 +484,12 @@ const unfocus = () => {
     &.active {
       &:after {
         content: ' ';
-        width: 114%;
+        width: 126%;
         height: 60%;
         background-color: rgba($secondary-text-rgb, 0.1);
         position: absolute;
         bottom: 20%;
-        left: -7%;
+        left: -13%;
       }
     }
 
@@ -553,6 +569,31 @@ const unfocus = () => {
     fill: $primary-text;
   }
 
+  .header__lang {
+    height: 28px;
+
+    .header__lang-btn {
+      padding: 0 8px;
+      height: 100%;
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba($secondary-text-rgb, 0.6);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: color 0.2s, background 0.2s;
+
+      &:hover {
+        color: $primary-text;
+      }
+
+      &--active {
+        color: $primary-text;
+        background: rgba($primary-text-rgb, 0.15);
+      }
+    }
+  }
+
   .coin__btn {
     width: 45px;
     margin-right: 3px;
@@ -576,7 +617,6 @@ const unfocus = () => {
     overflow: hidden;
     margin-right: 0px;
     padding: 0 9px 0 3px;
-    border: 1Px solid rgba($primary-text-rgb, 0.2);
     cursor: pointer;
     // filter: grayscale(100%);
     // filter: grayscale(50%);

@@ -8,15 +8,15 @@
           <li class="breadcrumb__item">
             <RouterLink class="iconfont" to="/">&#xe6a4;</RouterLink>
           </li>
-          <li class="breadcrumb__item" v-for="path in paths">
-            <RouterLink :to="path.path">{{ path.name }}</RouterLink>
+          <li class="breadcrumb__item" v-for="p in paths" :key="p.path">
+            <RouterLink :to="p.path">{{ sectionTitleForPath(p.path, p.name) }}</RouterLink>
           </li>
         </ul>
         <!-- end breadcrumb -->
 
         <!-- section title -->
         <div class="section__title section__title--left section__title--page" style="text-indent: -1px;">
-          <h1>{{ paths[paths.length - 1].name }}</h1>
+          <h1>{{ sectionTitleForPath(currentPath, currentName) }}</h1>
         </div>
         <!-- end section title -->
       </div>
@@ -32,11 +32,44 @@
 </template>
 
 <script setup lang="ts">
+import { computed, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import AppCanvas from '@/components/AppsBg.vue'
-import { useGlobalStore } from '@/stores/global';
-import { ref } from 'vue';
+import { useGlobalStore } from '@/stores/global'
+
+const { t } = useI18n()
+const route = useRoute()
 const userStore = useGlobalStore()
 const paths = ref(userStore.paths)
+
+const pathToTitleKey: Record<string, string> = {
+  '/products/cloud': 'productsCloud.sectionTitle',
+  '/products/store': 'products.store',
+  '/products/miner': 'products.miner',
+  '/products/bridge': 'products.bridge',
+  '/products/mpc': 'products.mpc',
+  '/gov': 'gov.title',
+  '/chain/blocks': 'chain.blocks',
+  '/chain/txs': 'chain.txs',
+  '/chain/nodes': 'chain.nodes',
+  '/chain/pods': 'chain.pods',
+  '/tee-store': 'footer.teeStore',
+  '/launch/economy': 'launch.tokenEconomy',
+  '/launch/stake': 'launch.fairLaunch',
+  '/launch/cross': 'launch.crossChain',
+  '/contacts': 'common.contacts',
+}
+
+function sectionTitleForPath(path: string, fallbackName?: string): string {
+  const key = pathToTitleKey[path]
+  return key ? t(key) : (fallbackName ?? path)
+}
+
+const currentPath = computed(() => paths.value[paths.value.length - 1]?.path ?? route.path)
+const currentName = computed(() => paths.value[paths.value.length - 1]?.name ?? '')
+
+watch(() => userStore.paths, (p) => { paths.value = p }, { immediate: true })
 </script>
 
 <style lang="scss" scoped>

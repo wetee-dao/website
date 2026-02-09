@@ -5,14 +5,14 @@
 
       <main class="gov-main flex-1 min-w-0">
         <div v-if="!detail" class="chain-box main-box p-10 text-center text-secondary">
-          Referendum #{{ id }} not found.
-          <RouterLink to="/gov" class="link-back">Back to Referenda</RouterLink>
+          {{ t('govDetail.notFound', { id }) }}
+          <RouterLink to="/gov" class="link-back">{{ t('govDetail.backToReferenda') }}</RouterLink>
         </div>
 
         <template v-else>
           <!-- Breadcrumb: Referenda / Track / #id -->
           <nav class="breadcrumb flex flex-wrap items-center gap-1 text-sm mb-4">
-            <RouterLink to="/gov" class="breadcrumb-link">Referenda</RouterLink>
+            <RouterLink to="/gov" class="breadcrumb-link">{{ t('govDetail.referenda') }}</RouterLink>
             <span class="breadcrumb-sep">/</span>
             <span class="breadcrumb-link">{{ detail.track }}</span>
             <span class="breadcrumb-sep">/</span>
@@ -43,7 +43,7 @@
                   :class="{ active: activeTab === tab.key }"
                   @click="activeTab = tab.key"
                 >
-                  {{ tab.label }}
+                  {{ t(tab.labelKey) }}
                 </button>
               </div>
             </div>
@@ -59,24 +59,24 @@
                 </ul>
               </div>
               <div v-show="activeTab === 'translations'" class="proposal-translations text-secondary">
-                Translations placeholder. Connect to Subsquare or translation API for multi-language content.
+                {{ t('govDetail.translationsPlaceholder') }}
               </div>
             </div>
 
             <!-- Status: Decision / Confirmation / Attempts -->
             <div class="status-section p-4 lg:p-5 border-t border-white/6">
-              <h3 class="section-title">Status</h3>
+              <h3 class="section-title">{{ t('govDetail.status') }}</h3>
               <div class="status-cards flex flex-wrap gap-4">
                 <div class="status-card">
-                  <span class="status-card-label">Decision</span>
+                  <span class="status-card-label">{{ t('govDetail.decision') }}</span>
                   <span class="status-card-value">{{ detail.decisionPeriod }}</span>
                 </div>
                 <div class="status-card">
-                  <span class="status-card-label">Confirmation</span>
+                  <span class="status-card-label">{{ t('govDetail.confirmation') }}</span>
                   <span class="status-card-value">{{ detail.confirmationPeriod }}</span>
                 </div>
                 <div class="status-card">
-                  <span class="status-card-label">Attempts</span>
+                  <span class="status-card-label">{{ t('govDetail.attempts') }}</span>
                   <span class="status-card-value">{{ detail.attempts }}</span>
                 </div>
               </div>
@@ -84,50 +84,50 @@
 
             <!-- Tally -->
             <div class="tally-section p-4 lg:p-5 border-t border-white/6">
-              <h3 class="section-title">Tally</h3>
+              <h3 class="section-title">{{ t('govDetail.tally') }}</h3>
               <div class="tally-row flex flex-wrap gap-6 mb-4">
                 <div class="tally-aye">
-                  <span class="tally-label">Aye</span>
+                  <span class="tally-label">{{ t('govDetail.aye') }}</span>
                   <span class="tally-pct">{{ detail.tally.ayePct }}%</span>
                   <span class="tally-amount">{{ detail.tally.ayeAmount }}</span>
                 </div>
                 <div class="tally-nay">
-                  <span class="tally-label">Nay</span>
+                  <span class="tally-label">{{ t('govDetail.nay') }}</span>
                   <span class="tally-pct">{{ detail.tally.nayPct }}%</span>
                   <span class="tally-amount">{{ detail.tally.nayAmount }}</span>
                 </div>
               </div>
               <div class="tally-extra flex flex-wrap gap-6 text-sm text-secondary">
-                <span>Support {{ detail.tally.support }}%</span>
-                <span>Threshold {{ detail.tally.threshold }}%</span>
-                <span>Issuance {{ detail.tally.issuance }}</span>
+                <span>{{ t('govDetail.support') }} {{ detail.tally.support }}%</span>
+                <span>{{ t('govDetail.threshold') }} {{ detail.tally.threshold }}%</span>
+                <span>{{ t('govDetail.issuance') }} {{ detail.tally.issuance }}</span>
               </div>
             </div>
 
             <!-- Votes -->
             <div class="votes-section p-4 lg:p-5 border-t border-white/6">
               <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
-                <h3 class="section-title mb-0">Votes</h3>
+                <h3 class="section-title mb-0">{{ t('govDetail.votes') }}</h3>
                 <div class="votes-view-toggle flex gap-2">
                   <button type="button" class="toggle-btn" :class="{ active: votesView === 'nested' }" @click="votesView = 'nested'">
-                    Nested
+                    {{ t('govDetail.nested') }}
                   </button>
                   <button type="button" class="toggle-btn" :class="{ active: votesView === 'flattened' }" @click="votesView = 'flattened'">
-                    Flattened
+                    {{ t('govDetail.flattened') }}
                   </button>
                 </div>
               </div>
               <div class="votes-placeholder text-secondary text-sm">
-                Vote list (Nested/Flattened). Connect to chain or Subsquare API for real votes.
+                {{ t('govDetail.voteListPlaceholder') }}
               </div>
             </div>
 
             <!-- Actions -->
             <div class="actions-section p-4 lg:p-5 border-t border-white/6">
-              <h3 class="section-title">Actions</h3>
+              <h3 class="section-title">{{ t('govDetail.actions') }}</h3>
               <div class="actions-btns flex flex-wrap gap-3">
-                <button type="button" class="btn btn--primary">Vote</button>
-                <span class="text-secondary text-sm self-center">Or do delegation here, check wiki.</span>
+                <button type="button" class="btn btn--primary">{{ t('govDetail.vote') }}</button>
+                <span class="text-secondary text-sm self-center">{{ t('govDetail.voteOrDelegation') }}</span>
               </div>
             </div>
           </div>
@@ -142,9 +142,12 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import Footer from '@/components/Footer.vue'
 import GovSidebar from './GovSidebar.vue'
 import { timeAgo } from '@/utils/time'
+
+const { t } = useI18n()
 
 type Status = 'Deciding' | 'Preparing' | 'Executed' | 'TimedOut' | 'Rejected'
 
@@ -179,9 +182,9 @@ const activeTab = ref<'content' | 'summary' | 'translations'>('content')
 const votesView = ref<'nested' | 'flattened'>('nested')
 
 const contentTabs = [
-  { key: 'content' as const, label: 'Content' },
-  { key: 'summary' as const, label: 'AI Summary' },
-  { key: 'translations' as const, label: 'Translations' },
+  { key: 'content' as const, labelKey: 'govDetail.tabContent' },
+  { key: 'summary' as const, labelKey: 'govDetail.tabSummary' },
+  { key: 'translations' as const, labelKey: 'govDetail.tabTranslations' },
 ]
 
 // 根据 id 返回详情（模拟；可替换为 API）

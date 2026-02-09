@@ -24,8 +24,8 @@
     "@polkadot/ui-shared": "^3.16.3",
     "@polkadot/util": "^13.5.8",
     "@polkadot/util-crypto": "^13.5.8",
-    "@talismn/connect-wallets": "^1.2.8",
     "@splidejs/vue-splide": "^0.6.12",
+    "@talismn/connect-wallets": "^1.2.8",
     "axios": "^1.6.7",
     "chart.js": "^4.4.6",
     "ethers": "^6.16.0",
@@ -33,6 +33,7 @@
     "qs": "^6.13.1",
     "vue": "^3.5.12",
     "vue-chartjs": "^5.3.2",
+    "vue-i18n": "^11.2.8",
     "vue-router": "^4.4.5"
   },
   "devDependencies": {

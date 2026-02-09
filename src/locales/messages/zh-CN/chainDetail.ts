@@ -1,0 +1,17 @@
+export default {
+  blockTitle: '区块',
+  backToBlocks: '← 返回区块列表',
+  blockHeight: '区块高度',
+  blockHash: '区块哈希',
+  proposer: '提议者',
+  blockTime: '出块时间',
+  chainId: '链 ID',
+  transactions: '交易数',
+  viewTransactions: '查看交易',
+  previousBlockHash: '上一区块哈希',
+  appHash: 'App Hash',
+  dataHash: 'Data Hash',
+  thisBlockHas: '本区块包含',
+  transactionS: '笔交易。',
+  viewTransactionList: '查看交易列表',
+}

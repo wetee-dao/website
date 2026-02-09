@@ -4,10 +4,10 @@
     <div class="container section flex">
       <div class="flex flex-col items-center md:flex-row md:justify-center md:items-center w-full">
         <div class="flex-1 md:pr-20">
-          <div class="top__title">Blockchain-based Trusted MPC</div>
-          <div class="top__text">A trusted MPC scheme entirely built with blockchain and TEE, where trust is established through code, eliminating the need for any third party</div>
+          <div class="top__title">{{ t('productsMpc.title') }}</div>
+          <div class="top__text">{{ t('productsMpc.subtitle') }}</div>
           <div class="btns mt-10">
-            <a target="_blank" href="javascript:void(0)" class="btn btn__primary "><span>Start to use</span></a>
+            <a target="_blank" href="javascript:void(0)" class="btn btn__primary "><span>{{ t('productsMpc.startToUse') }}</span></a>
           </div>
         </div>
         <div class="hidden icon md:block">
@@ -18,29 +18,24 @@
     <div class="container section-first">
       <div class="grid md:grid-cols-2 lg:grid-cols-3 grid-flow-row gap-6">
         <div class="confidentials confidentials--first">
-          <h3 class="confidentials__title">High Privacy</h3>
-          <p class="confidentials__text">TEE provides a secure execution environment, with data always being encrypted and stored.
-          </p>
+          <h3 class="confidentials__title">{{ t('productsMpc.card1Title') }}</h3>
+          <p class="confidentials__text">{{ t('productsMpc.card1Text') }}</p>
         </div>
         <div class="confidentials confidentials--yellow">
-          <h3 class="confidentials__title">Decentralized</h3>
-          <p class="confidentials__text">Smart contracts control, preventing data from being read by centralized programs.</p>
+          <h3 class="confidentials__title">{{ t('productsMpc.card2Title') }}</h3>
+          <p class="confidentials__text">{{ t('productsMpc.card2Text') }}</p>
         </div>
         <div class="confidentials confidentials--first">
-          <h3 class="confidentials__title">100% compatible</h3>
-          <p class="confidentials__text">Can directly deploy using existing Data analysis and AI applications without needing to change any
-            code.
-          </p>
+          <h3 class="confidentials__title">{{ t('productsMpc.card3Title') }}</h3>
+          <p class="confidentials__text">{{ t('productsMpc.card3Text') }}</p>
         </div>
         <div class="confidentials confidentials--yellow">
-          <h3 class="confidentials__title">0-cost confidential computing</h3>
-          <p class="confidentials__text">It completely shields the complexity of privacy-preserving computation.</p>
+          <h3 class="confidentials__title">{{ t('productsMpc.card4Title') }}</h3>
+          <p class="confidentials__text">{{ t('productsMpc.card4Text') }}</p>
         </div>
         <div class="confidentials confidentials--nephrite">
-          <h3 class="confidentials__title">Affordable pricing</h3>
-          <p class="confidentials__text">users' idle computing power and edge computing power are lower and completely
-            transparent.
-          </p>
+          <h3 class="confidentials__title">{{ t('productsMpc.card5Title') }}</h3>
+          <p class="confidentials__text">{{ t('productsMpc.card5Text') }}</p>
         </div>
       </div>
     </div>
@@ -89,12 +84,14 @@
 </template>
 
 <script setup lang="ts">
-import SectionHead from '@/components/SectionHead.vue';
-import Shadow from '@/components/Shadow.vue';
-import Footer from '@/components/Footer.vue';
-import Container from '@/components/svg/Container.vue';
-import Cube from '@/components/anim/Cube.vue';
+import { useI18n } from 'vue-i18n'
+import SectionHead from '@/components/SectionHead.vue'
+import Shadow from '@/components/Shadow.vue'
+import Footer from '@/components/Footer.vue'
+import Container from '@/components/svg/Container.vue'
+import Cube from '@/components/anim/Cube.vue'
 
+const { t } = useI18n()
 </script>
 
 <style lang="scss" scoped>

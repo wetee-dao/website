@@ -7,7 +7,7 @@
             <div class="title flex flex-wrap justify-between items-center">
               <div class="flex overflow-hidden items-center">
                 <LogoMini class="chain-logo mr-3" />
-                <div class="inline truncate">Trusted Trustless WEB2</div>
+                <div class="inline truncate">{{ t('home.tagline') }}</div>
               </div>
               <div class="flex"></div>
             </div>
@@ -26,7 +26,7 @@
             <div class="flex flex-wrap justify-between items-center">
               <div class="flex"></div>
               <div class="title flex overflow-hidden items-center">
-                <div class="inline truncate">Polkadot</div>
+                <div class="inline truncate">{{ t('home.polkadot') }}</div>
                 <img class="chain-logo ml-3" src="/imgs/polkadot_mini.svg" />
               </div>
             </div>
@@ -40,13 +40,13 @@
         <div class="title-wrap flex p-[15px] lg:p-5 flex-wrap justify-between items-center">
           <div class="title flex">
             <Svgimg class="chain-logo animate-ping-rotate mr-2 flex-shrink-0" name="lineblock" />
-            <div class="inline opacity-50 truncate">Latest Blocks</div>
+            <div class="inline opacity-50 truncate">{{ t('home.latestBlocks') }}</div>
           </div>
           <div class="flex">
             <a class="outline-none" href="/chain/blocks">
               <button type="button"
                 class=" border outline-none whitespace-nowrap border-none px-[10px] py-[10px] text-xs clickable link-bg">
-                View All
+                {{ t('common.viewAll') }}
               </button>
             </a>
           </div>
@@ -55,12 +55,12 @@
           <div class="flex justify-between p-5 block" v-for="block in blocks">
             <div class="flex flex-col">
               <div class="flex space-x-2 mb-1 items-center">
-                <div class="text-sm inline">Block#</div><a class="outline-none font-semibold !text-base number"
+                <div class="text-sm inline">{{ t('common.block') }}</div><a class="outline-none font-semibold !text-base number"
                   :href="`/chain/block/${block.header.height}`">{{ block.header.height }}</a>
               </div>
               <div class="flex space-x-2">
-                <div class="text-sm inline">Includes</div><a class="outline-none text-sm link"
-                  :href="`/chain/txs?height=${block.header.height}`">{{ block.num_txs }} Txs</a>
+                <div class="text-sm inline">{{ t('common.includes') }}</div><a class="outline-none text-sm link"
+                  :href="`/chain/txs?height=${block.header.height}`">{{ block.num_txs }} {{ t('common.txs') }}</a>
               </div>
             </div>
             <div class="flex items-center">
@@ -76,14 +76,14 @@
         <div class="title-wrap flex p-[15px] lg:p-5 flex-wrap justify-between items-center">
           <div class="title flex">
             <Svgimg class="chain-logo mr-2 flex-shrink-0" name="transfer" />
-            <div class="inline opacity-50 truncate">Transfers</div>
+            <div class="inline opacity-50 truncate">{{ t('home.transfers') }}</div>
           </div>
           <div class="flex">
             <div class="flex space-x-3">
               <a class="outline-none text-sm" href="/chain/txs">
                 <button type="button"
                   class="outline-none whitespace-nowrap border-none px-[10px] py-[10px] text-xs clickable link-bg">
-                  View All
+                  {{ t('common.viewAll') }}
                 </button>
               </a>
             </div>
@@ -93,13 +93,13 @@
           <div class="flex justify-between p-5 block" v-key="tx.height + '-' + tx.index" v-for="tx in txs">
             <div class="flex flex-1 flex-col">
               <div class="flex space-x-2 mb-1 items-center">
-                <div class="text-sm inline">Tx#</div><a
+                <div class="text-sm inline">{{ t('common.tx') }}</div><a
                   class="outline-none text-sm whitespace-nowrap font-semibold !text-base number" href="/">{{ tx.height
                   }}-{{ tx.index }}</a>
               </div>
               <div class="flex flex-col md:space-x-2 md:items-center md:flex-row">
                 <div class="flex space-x-2 items-center">
-                  <div class="text-sm">Hash</div>
+                  <div class="text-sm">{{ t('common.hash') }}</div>
                   <div class="text-sm hash flex-1">{{ tx.hash }}</div>
                 </div>
               </div>
@@ -119,17 +119,19 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import Footer from '@/components/Footer.vue'
-import Chip from '@/components/anim/Chip.vue';
-import Svgimg from "@/components/svg/SvgImg.vue"
-import LogoMini from '@/components/svg/LogoMini.vue';
-import Polkadot from '@/components/chains/polkadot.vue';
-import WeTEE from '@/components/chains/wetee.vue';
-import { GetNowBlocks, GetNowTx, SubNewBlock } from '@/apis/side';
-import { formatTimeDiff } from "@/utils/time"
-import { ReconnectingWebSocket } from "@/utils/ws"
+import Chip from '@/components/anim/Chip.vue'
+import Svgimg from '@/components/svg/SvgImg.vue'
+import LogoMini from '@/components/svg/LogoMini.vue'
+import Polkadot from '@/components/chains/polkadot.vue'
+import WeTEE from '@/components/chains/wetee.vue'
+import { GetNowBlocks, GetNowTx, SubNewBlock } from '@/apis/side'
+import { formatTimeDiff } from '@/utils/time'
+import { ReconnectingWebSocket } from '@/utils/ws'
 
+const { t } = useI18n()
 const blocks = ref<any[]>([])
 const txs = ref<any[]>([])
 const now = ref(new Date().getTime())

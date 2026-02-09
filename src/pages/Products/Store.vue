@@ -4,10 +4,10 @@
     <div class="container section flex">
       <div class="flex flex-col items-center md:flex-row md:justify-center md:items-center w-full">
         <div class="flex-1 md:pr-20">
-          <div class="top__title">TEE-protected and cryptography-secured on-chain decentralized public/private data disk</div>
-          <div class="top__text">Used independently or as storage for TEE programs</div>
+          <div class="top__title">{{ t('productsStore.title') }}</div>
+          <div class="top__text">{{ t('productsStore.subtitle') }}</div>
           <div class="mt-10">
-            <a href="javascript:void(0)" class="btn btn__primary start"><span>Create an encrypted disk</span></a>
+            <a href="javascript:void(0)" class="btn btn__primary start"><span>{{ t('productsStore.createDisk') }}</span></a>
           </div>
         </div>
         <div class="hidden icon md:block">
@@ -18,19 +18,16 @@
     <div class="container section-first">
       <div class="grid md:grid-cols-2 lg:grid-cols-3 grid-flow-row gap-6">
         <div class="confidentials confidentials--first">
-          <h3 class="confidentials__title">High Privacy</h3>
-          <p class="confidentials__text">TEE provides a secure execution environment, with data always being encrypted and stored.
-          </p>
+          <h3 class="confidentials__title">{{ t('productsStore.card1Title') }}</h3>
+          <p class="confidentials__text">{{ t('productsStore.card1Text') }}</p>
         </div>
         <div class="confidentials confidentials--yellow">
-          <h3 class="confidentials__title">Decentralized</h3>
-          <p class="confidentials__text">Smart contracts control, preventing data from being read by centralized programs.</p>
+          <h3 class="confidentials__title">{{ t('productsStore.card2Title') }}</h3>
+          <p class="confidentials__text">{{ t('productsStore.card2Text') }}</p>
         </div>
         <div class="confidentials confidentials--nephrite">
-          <h3 class="confidentials__title">Affordable pricing</h3>
-          <p class="confidentials__text">Users' idle computing power and edge computing power are lower and completely
-            transparent.
-          </p>
+          <h3 class="confidentials__title">{{ t('productsStore.card3Title') }}</h3>
+          <p class="confidentials__text">{{ t('productsStore.card3Text') }}</p>
         </div>
       </div>
     </div>
@@ -79,12 +76,14 @@
 </template>
 
 <script setup lang="ts">
-import SectionHead from '@/components/SectionHead.vue';
-import Shadow from '@/components/Shadow.vue';
-import Footer from '@/components/Footer.vue';
-import Container from '@/components/svg/Container.vue';
-import Ring from '@/components/anim/Ring.vue';
+import { useI18n } from 'vue-i18n'
+import SectionHead from '@/components/SectionHead.vue'
+import Shadow from '@/components/Shadow.vue'
+import Footer from '@/components/Footer.vue'
+import Container from '@/components/svg/Container.vue'
+import Ring from '@/components/anim/Ring.vue'
 
+const { t } = useI18n()
 </script>
 
 <style lang="scss" scoped>

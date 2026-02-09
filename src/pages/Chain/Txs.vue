@@ -5,20 +5,20 @@
         <div class="title-wrap flex p-[15px] lg:p-5 flex-wrap justify-between items-center">
           <div class="title flex overflow-hidden">
             <Svgimg class="chain-logo mr-2 flex-shrink-0"  name="transfer" />
-            <div class="inline truncate">Transfers</div>
+            <div class="inline truncate">{{ t('chain.txs') }}</div>
           </div>
         </div>
         <div class="flex flex-col divide-y w-full">
           <div class="flex justify-between p-5 block" v-for="tx in txs">
             <div class="flex flex-col">
               <div class="flex space-x-2 mb-1 items-center">
-                <div class="text-sm inline">Tx#</div><a
+                <div class="text-sm inline">{{ t('common.tx') }}</div><a
                   class="outline-none text-sm whitespace-nowrap font-semibold !text-base number"
                   href="/extrinsic/31119512-2">{{ tx.height }}-{{ tx.index }}</a>
               </div>
               <div class="flex flex-col md:space-x-2 md:items-center md:flex-row">
                 <div class="flex space-x-2 items-center">
-                  <div class="text-sm inline">Hash</div>
+                  <div class="text-sm inline">{{ t('common.hash') }}</div>
                   <div class="flex items-center space-x-1 text-xs">
                     <div class="flex flex-col ">
                       <div class="flex items-center space-x-1">
@@ -64,13 +64,15 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { onMounted, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import Footer from '@/components/Footer.vue'
-import Svgimg from "@/components/svg/SvgImg.vue"
-import { GetNowBlocks, GetNowTx, GetTxByHeight } from '@/apis/side';
-import { formatTimeDiff } from "@/utils/time"
+import Svgimg from '@/components/svg/SvgImg.vue'
+import { GetNowBlocks, GetNowTx, GetTxByHeight } from '@/apis/side'
+import { formatTimeDiff } from '@/utils/time'
 
+const { t } = useI18n()
 const route = useRoute()
 const blocks = ref<any[]>([])
 const txs = ref<any[]>([])

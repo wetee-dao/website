@@ -1,0 +1,15 @@
+export default {
+  title: '基于区块链的可信多方计算',
+  subtitle: '完全基于区块链与 TEE 构建的可信 MPC 方案，信任由代码建立，无需任何第三方。',
+  startToUse: '开始使用',
+  card1Title: '高隐私',
+  card1Text: 'TEE 提供安全执行环境，数据始终加密存储。',
+  card2Title: '去中心化',
+  card2Text: '由智能合约控制，避免数据被中心化程序读取。',
+  card3Title: '100% 兼容',
+  card3Text: '可直接使用现有数据分析与 AI 应用部署，无需修改任何代码。',
+  card4Title: '零成本机密计算',
+  card4Text: '完全屏蔽隐私计算的技术复杂度。',
+  card5Title: '透明定价',
+  card5Text: '用户闲置算力与边缘算力成本更低，且完全透明。',
+}

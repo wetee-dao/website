@@ -1,119 +1,72 @@
 <template>
     <div class="page gradient-body pods-page">
         <div class="pods-container container">
-            <div class="page-header">
-                <div class="title-row flex items-center gap-3">
-                    <Svgimg class="chain-logo" name="applications" />
-                    <h1 class="page-title">Trusted Applications</h1>
-                    <span class="badge-live">
-                        <span class="pulse"></span>
-                        LIVE
-                    </span>
-                </div>
-                <p class="page-desc">TEE trusted execution environment — Pod applications list</p>
-            </div>
+            <header class="page-header">
+                <h1 class="page-title">{{ t('pods.title') }}</h1>
+                <p class="page-desc">{{ t('pods.desc') }}</p>
+            </header>
 
             <section class="panel panel-pods">
-                <div class="panel-border"></div>
-                <div class="panel-header">
-                    <Svgimg class="panel-icon" name="applications" />
-                    <div>
-                        <h2 class="panel-title">Pods</h2>
-                        <p class="panel-subtitle">
-                            Trusted apps · {{ normalizedPods.length }} total, page {{ podsPage }} / {{ podsTotalPages }}
-                        </p>
-                    </div>
-                    <span class="panel-count">{{ normalizedPods.length }}</span>
+                <div class="panel-head">
+                    <span class="panel-count">{{ normalizedPods.length }} {{ t('pods.panelTitle') }}</span>
                 </div>
                 <div class="panel-body">
                     <template v-if="loadingPods">
                         <div class="state-loading">
-                            <div class="scan-line"></div>
-                            <div class="Waiting_loader__jL6XM w-12 h-12 mx-auto mb-4"></div>
-                            <span>Loading trusted applications...</span>
+                            <div class="loader-minimal"></div>
+                            <span>{{ t('pods.loading') }}</span>
                         </div>
                     </template>
                     <template v-else-if="errorPods">
                         <div class="state-error">{{ errorPods }}</div>
                     </template>
                     <template v-else-if="normalizedPods.length === 0">
-                        <div class="state-empty">No trusted applications</div>
+                        <div class="state-empty">{{ t('pods.empty') }}</div>
                     </template>
                     <template v-else>
                         <div class="pod-grid">
-                            <div
+                            <article
                                 v-for="(item, i) in podsDisplayed"
                                 :key="'p-' + (podsStartIndex + i)"
                                 class="pod-card"
                             >
-                                <div class="card-accent"></div>
-                                <div class="card-glow"></div>
-                                <header class="card-header">
-                                    <div class="card-title-row">
-                                        <span class="card-id-badge">#{{ podId(item) }}</span>
-                                        <span class="card-name" :title="podName(item) || 'Unnamed Pod'">{{ podName(item) || 'Unnamed Pod' }}</span>
-                                    </div>
-                                    <div class="card-badges">
-                                        <span v-if="podField(item, 'ptype')" class="badge badge-type">{{ podField(item, 'ptype') }}</span>
-                                        <span v-if="podField(item, 'teeType')" class="badge badge-tee">{{ podField(item, 'teeType') }}</span>
-                                        <span class="badge badge-status">
-                                            <span class="dot"></span>
-                                            Running
+                                <div class="card-main">
+                                    <div class="card-head">
+                                        <span class="card-id">#{{ podId(item) }}</span>
+                                        <span class="card-meta">
+                                            <template v-if="podField(item, 'ptype')">{{ podField(item, 'ptype') }}</template>
+                                            <template v-if="podField(item, 'ptype') && podField(item, 'teeType')"> · </template>
+                                            <template v-if="podField(item, 'teeType')">{{ podField(item, 'teeType') }}</template>
                                         </span>
                                     </div>
-                                </header>
-                                <div class="card-body">
-                                    <div class="card-section">
-                                        <div class="card-row card-row--image">
-                                            <span class="card-label">Image</span>
-                                            <span class="card-value mono card-value--image" :title="podImage(item)">
-                                                <template v-if="!hasExtInfo(podId(item)) && !podImage(item)">Loading…</template>
-                                                <template v-else>{{ podImage(item) || '—' }}</template>
-                                            </span>
-                                        </div>
-                                        <div class="card-specs-row">
-                                            <span class="spec-pill"><em class="spec-icon">CPU</em> {{ podField(item, 'cpu') || '—' }}</span>
-                                            <span class="spec-pill"><em class="spec-icon">Mem</em> {{ podField(item, 'mem') || '—' }}</span>
-                                            <span class="spec-pill"><em class="spec-icon">GPU</em> {{ podField(item, 'gpu') || '0' }}</span>
-                                        </div>
-                                    </div>
-                                    <div class="card-divider"></div>
-                                    <div class="card-section card-section--meta">
-                                        <div v-if="podField(item, 'startBlock')" class="card-row card-row--compact">
-                                            <span class="card-label">Block</span>
-                                            <span class="card-value mono">{{ podField(item, 'startBlock') }}</span>
-                                        </div>
-                                        <div v-if="podField(item, 'command') && podField(item, 'command') !== 'NONE'" class="card-row card-row--compact">
-                                            <span class="card-label">Cmd</span>
-                                            <span class="card-value mono truncate" :title="podField(item, 'command')">{{ podField(item, 'command') }}</span>
-                                        </div>
-                                        <div v-if="podOwner(item)" class="card-row card-row--owner">
-                                            <span class="card-label">Owner</span>
-                                            <span class="card-value mono truncate" :title="podOwner(item)">{{ podOwner(item) }}</span>
-                                        </div>
+                                    <p class="card-name" :title="podName(item) || t('pods.unnamedPod')">{{ podName(item) || t('pods.unnamedPod') }}</p>
+                                    <p class="card-image mono" :title="podImage(item)">
+                                        <template v-if="!hasExtInfo(podId(item)) && !podImage(item)">{{ t('pods.loadingImage') }}</template>
+                                        <template v-else>{{ podImage(item) || '—' }}</template>
+                                    </p>
+                                    <div class="card-specs">
+                                        <span>{{ podField(item, 'cpu') || '—' }} {{ t('pods.cpu') }}</span>
+                                        <span>{{ podField(item, 'mem') || '—' }} {{ t('pods.mem') }}</span>
+                                        <span>{{ podField(item, 'gpu') || '0' }} {{ t('pods.gpu') }}</span>
                                     </div>
                                 </div>
-                            </div>
+                                <div class="card-foot">
+                                    <template v-if="podField(item, 'startBlock')">
+                                        <span class="card-foot-item">{{ t('pods.block') }} {{ podField(item, 'startBlock') }}</span>
+                                    </template>
+                                    <template v-if="podOwner(item)">
+                                        <span class="card-foot-item mono truncate" :title="podOwner(item)">{{ podOwner(item) }}</span>
+                                    </template>
+                                </div>
+                            </article>
                         </div>
                         <div v-if="podsTotalPages > 1" class="pagination">
-                            <button
-                                type="button"
-                                class="pagination-btn"
-                                :disabled="podsPage <= 1"
-                                @click="podsPage = Math.max(1, podsPage - 1)"
-                            >
-                                Previous
+                            <button type="button" class="pagination-btn" :disabled="podsPage <= 1" @click="podsPage = Math.max(1, podsPage - 1)">
+                                {{ t('pods.previous') }}
                             </button>
-                            <span class="pagination-info">
-                                {{ podsStartIndex + 1 }} – {{ podsEndIndex }} / {{ normalizedPods.length }}
-                            </span>
-                            <button
-                                type="button"
-                                class="pagination-btn"
-                                :disabled="podsPage >= podsTotalPages"
-                                @click="podsPage = Math.min(podsTotalPages, podsPage + 1)"
-                            >
-                                Next
+                            <span class="pagination-info">{{ podsPage }} / {{ podsTotalPages }}</span>
+                            <button type="button" class="pagination-btn" :disabled="podsPage >= podsTotalPages" @click="podsPage = Math.min(podsTotalPages, podsPage + 1)">
+                                {{ t('pods.next') }}
                             </button>
                         </div>
                     </template>
@@ -126,9 +79,11 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import Svgimg from '@/components/svg/SvgImg.vue'
 import { GetPods, GetPodExtInfo } from '@/apis/main-chain'
 
+const { t } = useI18n()
 const podsRaw = ref<any>(null)
 const loadingPods = ref(true)
 const errorPods = ref('')
@@ -261,383 +216,172 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .page {
-    padding-top: 100px;
+    padding-top: 7rem;
     min-height: 100vh;
 }
 
 .pods-container {
     position: relative;
+    margin: 0 auto;
 }
 
-.pods-page::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    top: 80px;
-    pointer-events: none;
-    background-image:
-        linear-gradient(rgba(65, 225, 128, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(65, 225, 128, 0.03) 1px, transparent 1px);
-    background-size: 24px 24px;
-    z-index: 0;
-}
-
+/* Header — minimal */
 .page-header {
-    position: relative;
-    margin-bottom: 2rem;
-    padding: 1rem 0;
-}
-
-.title-row {
-    position: relative;
-    z-index: 1;
-}
-
-.chain-logo {
-    width: 36px;
-    height: 36px;
-    color: $primary-text;
-    flex-shrink: 0;
+    margin-bottom: 3rem;
+    padding: 0;
 }
 
 .page-title {
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: $primary-text;
-    margin: 0;
-    letter-spacing: 0.02em;
-}
-
-.badge-live {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.7rem;
-    font-weight: 600;
-    color: rgba($primary-text-rgb, 0.9);
-    padding: 4px 10px;
-    border: 1px solid rgba($primary-text-rgb, 0.4);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-}
-
-.pulse {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: $primary-text;
-    animation: pulse-dot 1.5s ease-in-out infinite;
-}
-
-@keyframes pulse-dot {
-    0%, 100% {
-        opacity: 1;
-        box-shadow: 0 0 0 0 rgba(65, 225, 128, 0.5);
-    }
-    50% { opacity: 0.8; }
-    70% { box-shadow: 0 0 0 6px rgba(65, 225, 128, 0); }
+    font-size: 1.5rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: rgba(255, 255, 255, 0.95);
+    margin: 0 0 0.35rem 0;
 }
 
 .page-desc {
-    margin: 0.5rem 0 0 0;
-    font-size: 0.95rem;
-    color: rgba($primary-text-rgb, 0.6);
-    position: relative;
-    z-index: 1;
-}
-
-.panel {
-    position: relative;
-    z-index: 1;
-    background: rgba($primary-bg-rgb, 0.45);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    overflow: hidden;
-}
-
-.panel-border {
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    padding: 1px;
-    background: linear-gradient(135deg, rgba(11, 175, 255, 0.15), transparent 40%, transparent 60%, rgba(11, 175, 255, 0.08));
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    pointer-events: none;
-}
-
-.panel-header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem 1.25rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    flex-wrap: wrap;
-}
-
-.panel-icon {
-    width: 28px;
-    height: 28px;
-    color: $primary-text;
-    flex-shrink: 0;
-}
-
-.panel-title {
-    line-height: 1.1;
-    font-size: 14px;
-    font-weight: 700;
-    color: $primary-text;
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.45);
     margin: 0;
-    flex: 1;
-}
-
-.panel-subtitle {
-    font-size: 0.75rem;
-    color: rgba($primary-text-rgb, 0.5);
-    width: 100%;
-}
-
-.panel-count {
-    font-variant-numeric: tabular-nums;
-    font-size: 1rem;
-    font-weight: 600;
-    color: rgba($primary-text-rgb, 0.8);
-    padding: 4px 10px;
-    background: rgba(255, 255, 255, 0.05);
-}
-
-.panel-body {
-    padding: 1rem 1.25rem;
-    position: relative;
-}
-
-.pod-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 1rem;
-}
-
-/* Card container */
-.pod-card {
-    position: relative;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    background: linear-gradient(165deg, rgba(255, 255, 255, 0.05) 0%, rgba(0, 0, 0, 0.28) 100%);
-    overflow: hidden;
-    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
-}
-
-.pod-card:hover {
-    border-color: rgba(11, 175, 255, 0.3);
-    box-shadow: 0 8px 32px rgba(11, 175, 255, 0.08), 0 0 0 1px rgba(11, 175, 255, 0.06);
-    transform: translateY(-2px);
-}
-
-.card-accent {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, rgba(11, 175, 255, 0.6), rgba(65, 225, 128, 0.4));
-    opacity: 0.9;
-}
-
-.card-glow {
-    position: absolute;
-    inset: -1px;
-    border-radius: inherit;
-    opacity: 0;
-    transition: opacity 0.25s ease;
-    pointer-events: none;
-    background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(11, 175, 255, 0.15), transparent 70%);
-}
-
-.pod-card:hover .card-glow {
-    opacity: 1;
-}
-
-/* Card header */
-.card-header {
-    padding: 1rem 1.25rem 0.75rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.card-title-row {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.6rem;
-}
-
-.card-id-badge {
-    flex-shrink: 0;
-    font-variant-numeric: tabular-nums;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: rgba($primary-text-rgb, 0.5);
-    padding: 2px 8px;
-    background: rgba(255, 255, 255, 0.06);
-    border-radius: 6px;
-}
-
-.card-name {
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: $primary-text;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.card-badges {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-}
-
-.badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 0.68rem;
-    font-weight: 600;
-    padding: 3px 8px;
-    border-radius: 6px;
-    text-transform: uppercase;
     letter-spacing: 0.02em;
 }
 
-.badge-type {
-    background: rgba(11, 175, 255, 0.15);
-    color: rgba(11, 175, 255, 0.95);
+/* Panel — single line head */
+.panel {
+    position: relative;
+    background: transparent;
+    border: none;
+    overflow: visible;
 }
 
-.badge-tee {
-    background: rgba(65, 225, 128, 0.12);
-    color: rgba(65, 225, 128, 0.9);
+.panel-head {
+    padding: 0 0 1.25rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    margin-bottom: 1.5rem;
 }
 
-.badge-status {
-    background: rgba(255, 255, 255, 0.06);
-    color: rgba($primary-text-rgb, 0.75);
-}
-
-.badge-status .dot {
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: #22c55e;
-    box-shadow: 0 0 6px #22c55e;
-    animation: pulse-dot 1.5s ease-in-out infinite;
-}
-
-/* Card body */
-.card-body {
-    padding: 1.1rem 1.25rem 1.25rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-}
-
-.card-section {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.card-section--meta {
-    gap: 0.35rem;
-}
-
-.card-divider {
-    height: 1px;
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.06), transparent);
-    margin: 0.75rem 0 0.5rem;
-}
-
-.card-row {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.5rem;
+.panel-count {
     font-size: 0.75rem;
-    line-height: 1.45;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
 }
 
-.card-row--image {
-    align-items: flex-start;
+.panel-body {
+    padding: 0;
 }
 
-.card-row--compact {
-    font-size: 0.72rem;
-    line-height: 1.35;
+/* Grid — more space */
+.pod-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 1.25rem;
 }
 
-.card-row--owner .card-value {
+/* Card — minimal, flat */
+.pod-card {
+    display: flex;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 1.5rem 1.5rem 1.25rem;
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.pod-card:hover {
+    border-color: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.card-main {
+    flex: 1;
+    min-width: 0;
+}
+
+.card-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.card-id {
     font-size: 0.7rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.35);
+    letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums;
 }
 
-.card-label {
-    color: rgba($primary-text-rgb, 0.48);
-    flex-shrink: 0;
-    min-width: 3.8rem;
-    font-size: 0.72rem;
+.card-meta {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 0.02em;
 }
 
-.card-section--meta .card-label {
-    min-width: 3.2rem;
+.card-name {
+    font-size: 1rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.92);
+    margin: 0 0 0.6rem 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    letter-spacing: 0.01em;
 }
 
-.card-value {
-    color: rgba($primary-text-rgb, 0.92);
-    word-break: break-all;
+.card-image {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0 0 0.85rem 0;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     line-clamp: 2;
     -webkit-box-orient: vertical;
+    line-height: 1.4;
 }
 
-.card-value--image {
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    font-size: 0.72rem;
-    color: rgba(11, 175, 255, 0.9);
+.card-specs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1.25rem;
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.4);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+}
+
+.card-foot {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+}
+
+.card-foot-item {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.35);
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .truncate {
-    -webkit-line-clamp: 1;
-    line-clamp: 1;
-}
-
-.card-specs-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem;
-}
-
-.spec-pill {
-    font-size: 0.7rem;
-    color: rgba($primary-text-rgb, 0.88);
-    padding: 5px 10px;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 8px;
-    font-variant-numeric: tabular-nums;
-}
-
-.spec-icon {
-    font-style: normal;
-    color: rgba($primary-text-rgb, 0.5);
-    margin-right: 2px;
-    font-size: 0.65rem;
+    max-width: 12em;
 }
 
 .mono {
     font-family: ui-monospace, 'Cascadia Code', 'Fira Code', monospace;
 }
 
+/* States */
 .state-loading,
 .state-error,
 .state-empty {
@@ -645,68 +389,65 @@ onMounted(() => {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 180px;
-    color: rgba($primary-text-rgb, 0.5);
-    font-size: 0.9rem;
+    min-height: 200px;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.875rem;
+    letter-spacing: 0.02em;
 }
 
-.state-loading {
-    position: relative;
+.loader-minimal {
+    width: 20px;
+    height: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-top-color: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    margin-bottom: 1rem;
+    animation: spin 0.8s linear infinite;
 }
 
-.scan-line {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(65, 225, 128, 0.3), transparent);
-    animation: scan 2s linear infinite;
-}
-
-@keyframes scan {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(180px); }
+@keyframes spin {
+    to { transform: rotate(360deg); }
 }
 
 .state-error {
-    color: #f87171;
+    color: rgba(248, 113, 113, 0.9);
 }
 
+/* Pagination — minimal */
 .pagination {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 1rem;
-    margin-top: 1.5rem;
-    padding-top: 1rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+    padding-top: 2rem;
 }
 
 .pagination-btn {
-    padding: 6px 14px;
-    font-size: 0.875rem;
-    color: $primary-text;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 2px;
+    padding: 0;
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.6);
+    background: none;
+    border: none;
     cursor: pointer;
-    transition: background 0.2s, border-color 0.2s;
+    letter-spacing: 0.03em;
+    transition: color 0.2s ease;
 }
 
 .pagination-btn:hover:not(:disabled) {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba($btn-color, 0.5);
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .pagination-btn:disabled {
-    opacity: 0.4;
+    opacity: 0.3;
     cursor: not-allowed;
 }
 
 .pagination-info {
-    font-size: 0.875rem;
-    color: rgba($primary-text-rgb, 0.6);
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.35);
     font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
 }
 </style>

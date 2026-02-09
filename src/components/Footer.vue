@@ -45,7 +45,7 @@
     <div class="footer__content flex items-center">
       <div class="container">
         <div class="flex items-center">
-          <small class="footer__copyright flex-1">© WeTEE DAO, 2026.</small>
+          <small class="footer__copyright flex-1">{{ t('footer.copyright') }}</small>
           <div class="footer__social">
             <a href="https://twitter.com/Wetee_DAO" target="_blank">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -73,6 +73,11 @@
     </div>
   </footer>
 </template>
+
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
+</script>
 
 <style lang="scss" scoped>
 .footer {

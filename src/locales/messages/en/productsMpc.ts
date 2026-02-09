@@ -1,0 +1,15 @@
+export default {
+  title: 'Blockchain-based Trusted MPC',
+  subtitle: 'A trusted MPC scheme entirely built with blockchain and TEE, where trust is established through code, eliminating the need for any third party',
+  startToUse: 'Start to use',
+  card1Title: 'High Privacy',
+  card1Text: 'TEE provides a secure execution environment, with data always being encrypted and stored.',
+  card2Title: 'Decentralized',
+  card2Text: 'Smart contracts control, preventing data from being read by centralized programs.',
+  card3Title: '100% compatible',
+  card3Text: 'Can directly deploy using existing Data analysis and AI applications without needing to change any code.',
+  card4Title: '0-cost confidential computing',
+  card4Text: 'It completely shields the complexity of privacy-preserving computation.',
+  card5Title: 'Affordable pricing',
+  card5Text: "users' idle computing power and edge computing power are lower and completely transparent.",
+}

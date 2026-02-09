@@ -1,0 +1,17 @@
+export default {
+  blockTitle: 'Block',
+  backToBlocks: '← Back to Blocks',
+  blockHeight: 'Block Height',
+  blockHash: 'Block Hash',
+  proposer: 'Proposer',
+  blockTime: 'Block Time',
+  chainId: 'Chain ID',
+  transactions: 'Transactions',
+  viewTransactions: 'View Transactions',
+  previousBlockHash: 'Previous Block Hash',
+  appHash: 'App Hash',
+  dataHash: 'Data Hash',
+  thisBlockHas: 'This block has',
+  transactionS: 'transaction(s).',
+  viewTransactionList: 'View transaction list',
+}
