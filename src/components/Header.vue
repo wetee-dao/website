@@ -188,7 +188,7 @@
         <div class="header__cta connect border border-solid border-[rgba(255,255,255,0.2)]" @click="login" v-if="!userInfo">
           <span class="text">&nbsp;{{ t('common.connect') }}</span>
         </div>
-        <div class="header__cta connect" @click="login" v-if="userInfo">
+        <div class="header__cta connect border border-solid border-[rgba(255,255,255,0.2)]" @click="login" v-if="userInfo">
           <Identicon class="uicon" :key="userInfo.addr" @click="login" :hash="ss58toHex(userInfo.addr)" :padding="0.28"
             :foreground="[80, 250, 130, 255]" :background="[80, 255, 130, 0]" :size="16" />
           <span class="text">{{ userInfo.name }}</span>
@@ -615,11 +615,10 @@ const unfocus = () => {
     height: 30px;
     background-color: transparent;
     overflow: hidden;
-    margin-right: 0px;
+    margin-right: -3px;
     padding: 0 9px 0 3px;
     cursor: pointer;
-    // filter: grayscale(100%);
-    // filter: grayscale(50%);
+    border-right: none;
 
     &.inverse {
       background-color: rgba($primary-text-rgb, 0.85);
