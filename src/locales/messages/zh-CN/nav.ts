@@ -8,7 +8,7 @@ export default {
   crossChain: '跨链',
   blocks: '区块',
   blocksSubtitle: '去中心化机密容器',
-  transfers: '转账',
+  transfers: '交易',
   transfersSubtitle: 'WEB3 与 WEB2 间的无信任通道',
   nodes: '节点',
   nodesSubtitle: '秘密共识节点 · 工作者运行时节点',
