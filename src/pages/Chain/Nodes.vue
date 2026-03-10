@@ -5,13 +5,13 @@
             <div class="page-header">
                 <div class="title-row flex items-center gap-3">
                     <Svgimg class="chain-logo" name="lineblock" />
-                    <h1 class="page-title">Network Nodes</h1>
+                    <h1 class="page-title">{{ t('chain.nodesTitle') }}</h1>
                     <span class="badge-live">
                         <span class="pulse"></span>
-                        LIVE
+                        {{ t('pods.live') }}
                     </span>
                 </div>
-                <p class="page-desc">Consensus nodes & runtime workers — live topology</p>
+                <p class="page-desc">{{ t('chain.nodesDesc') }}</p>
             </div>
 
             <!-- Secrets: compact top strip -->
@@ -20,8 +20,8 @@
                 <div class="panel-header panel-header--compact">
                     <Svgimg class="panel-icon" name="secret" />
                     <div>
-                        <h2 class="panel-title">Secrets</h2>
-                        <p class="panel-subtitle">Blockchain consensus nodes · block production & validation</p>
+                        <h2 class="panel-title">{{ t('chain.nodesSecretsTitle') }}</h2>
+                        <p class="panel-subtitle">{{ t('chain.nodesSecretsSubtitle') }}</p>
                     </div>
                     <span class="panel-count">{{ normalizedSecrets.length }}</span>
                 </div>
@@ -29,14 +29,14 @@
                     <template v-if="loadingSecrets">
                         <div class="state-loading state-loading--compact">
                             <div class="Waiting_loader__jL6XM w-8 h-8"></div>
-                            <span>Loading consensus nodes...</span>
+                            <span>{{ t('chain.nodesLoadingSecrets') }}</span>
                         </div>
                     </template>
                     <template v-else-if="errorSecrets">
                         <div class="state-error state-error--compact">{{ errorSecrets }}</div>
                     </template>
                     <template v-else-if="normalizedSecrets.length === 0">
-                        <div class="state-empty state-empty--compact">No consensus nodes</div>
+                        <div class="state-empty state-empty--compact">{{ t('chain.nodesNoSecrets') }}</div>
                     </template>
                     <template v-else>
                         <div class="node-grid node-grid--secrets">
@@ -46,11 +46,11 @@
                                 <div class="card-index">#{{ node[0] }} {{ node[1].name }}</div>
                                 <div class="card-status">
                                     <span class="dot"></span>
-                                    <span>Online</span>
+                                    <span>{{ t('chain.online') }}</span>
                                 </div>
-                                <div class="card-id mono">Owner: <span class="card-id-value">{{ node[1].owner }}</span></div>
-                                <div class="card-id mono">P2P ID: <span class="card-id-value">{{ node[1].p2pId }}</span></div>
-                                <div class="card-id mono">Validator ID: <span class="card-id-value">{{ node[1].validatorId }}</span></div>
+                                <div class="card-id mono">{{ t('chain.owner') }}: <span class="card-id-value">{{ node[1].owner }}</span></div>
+                                <div class="card-id mono">{{ t('chain.p2pId') }}: <span class="card-id-value">{{ node[1].p2pId }}</span></div>
+                                <div class="card-id mono">{{ t('chain.validatorId') }}: <span class="card-id-value">{{ node[1].validatorId }}</span></div>
                             </div>
                         </div>
                     </template>
@@ -63,10 +63,8 @@
                 <div class="panel-header">
                     <Svgimg class="panel-icon" name="applications" />
                     <div>
-                        <h2 class="panel-title">Workers</h2>
-                        <p class="panel-subtitle">Runtime workers · {{ normalizedWorkers.length }} total, page {{
-                            workersPage }} /
-                            {{ workersTotalPages }}</p>
+                        <h2 class="panel-title">{{ t('chain.nodesWorkersTitle') }}</h2>
+                        <p class="panel-subtitle">{{ t('chain.nodesWorkersSubtitle', { total: normalizedWorkers.length, page: workersPage, totalPages: workersTotalPages }) }}</p>
                     </div>
                     <span class="panel-count">{{ normalizedWorkers.length }}</span>
                 </div>
@@ -75,14 +73,14 @@
                         <div class="state-loading">
                             <div class="scan-line"></div>
                             <div class="Waiting_loader__jL6XM w-12 h-12 mx-auto mb-4"></div>
-                            <span>Loading workers...</span>
+                            <span>{{ t('chain.nodesLoadingWorkers') }}</span>
                         </div>
                     </template>
                     <template v-else-if="errorWorkers">
                         <div class="state-error">{{ errorWorkers }}</div>
                     </template>
                     <template v-else-if="normalizedWorkers.length === 0">
-                        <div class="state-empty">No workers</div>
+                        <div class="state-empty">{{ t('chain.nodesNoWorkers') }}</div>
                     </template>
                     <template v-else>
                         <div class="node-grid node-grid--workers">
@@ -102,14 +100,14 @@
                         <div v-if="workersTotalPages > 1" class="pagination">
                             <button type="button" class="pagination-btn" :disabled="workersPage <= 1"
                                 @click="workersPage = Math.max(1, workersPage - 1)">
-                                Previous
+                                {{ t('pods.previous') }}
                             </button>
                             <span class="pagination-info">
                                 {{ workersStartIndex + 1 }} – {{ workersEndIndex }} / {{ normalizedWorkers.length }}
                             </span>
                             <button type="button" class="pagination-btn" :disabled="workersPage >= workersTotalPages"
                                 @click="workersPage = Math.min(workersTotalPages, workersPage + 1)">
-                                Next
+                                {{ t('pods.next') }}
                             </button>
                         </div>
                     </template>
@@ -122,8 +120,11 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import Svgimg from '@/components/svg/SvgImg.vue'
 import { GetNodes, GetWorkers } from '@/apis/main-chain'
+
+const { t } = useI18n()
 
 const secretsRaw = ref<any>(null)
 const workersRaw = ref<any>(null)
@@ -210,10 +211,10 @@ onMounted(() => {
     inset: 0;
     top: 80px;
     pointer-events: none;
-    background-image:
-        linear-gradient(rgba(65, 225, 128, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(65, 225, 128, 0.03) 1px, transparent 1px);
-    background-size: 24px 24px;
+    // background-image:
+    //     linear-gradient(rgba(65, 225, 128, 0.03) 1px, transparent 1px),
+    //     linear-gradient(90deg, rgba(65, 225, 128, 0.03) 1px, transparent 1px);
+    // background-size: 24px 24px;
     z-index: 0;
 }
 

@@ -4,20 +4,20 @@
     <div class="container">
       <div class="row">
         <!-- breadcrumb -->
-        <ul class="breadcrumb">
+        <!--ul class="breadcrumb">
           <li class="breadcrumb__item">
             <RouterLink class="iconfont" to="/">&#xe6a4;</RouterLink>
           </li>
           <li class="breadcrumb__item" v-for="p in paths" :key="p.path">
             <RouterLink :to="p.path">{{ sectionTitleForPath(p.path, p.name) }}</RouterLink>
           </li>
-        </ul>
+        </ul-->
         <!-- end breadcrumb -->
 
         <!-- section title -->
-        <div class="section__title section__title--left section__title--page" style="text-indent: -1px;">
+        <!--div class="section__title section__title--left section__title--page" style="text-indent: -1px;">
           <h1>{{ sectionTitleForPath(currentPath, currentName) }}</h1>
-        </div>
+        </div-->
         <!-- end section title -->
       </div>
     </div>
@@ -77,8 +77,9 @@ watch(() => userStore.paths, (p) => { paths.value = p }, { immediate: true })
   position: relative;
   width: 100%;
   overflow: hidden;
+  border-top: 1px solid rgba(170, 114, 206, 0.12);
   border-bottom: 1px solid rgba(170, 114, 206, 0.12);
-  padding-top: 60px;
+  padding-top: 95px;
   padding-bottom: 15px;
 
   // &::before {

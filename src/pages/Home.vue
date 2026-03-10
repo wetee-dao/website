@@ -196,7 +196,6 @@ onUnmounted(() => {
 
   .title {
     font-size: 16px;
-    font-weight: bold;
 
     &>.inline {
       line-height: 31px;
@@ -246,7 +245,6 @@ onUnmounted(() => {
 
   .title {
     font-size: 16px;
-    font-weight: bold;
 
     .chain-logo {
       width: 20px;

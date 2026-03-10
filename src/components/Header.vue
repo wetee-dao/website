@@ -173,7 +173,7 @@
         </a>
 
         <!-- language switcher -->
-        <div class="header__lang flex items-center border border-solid border-[rgba(255,255,255,0.2)] overflow-hidden">
+        <div class="header__lang flex items-center overflow-hidden">
           <button type="button" :class="['header__lang-btn', locale === 'en' ? 'header__lang-btn--active' : '']"
             @click="switchLocale('en')">
             EN
@@ -185,10 +185,10 @@
         </div>
 
         <!-- wallet -->
-        <div class="header__cta connect border border-solid border-[rgba(255,255,255,0.2)]" @click="login" v-if="!userInfo">
+        <div class="header__cta connect" @click="login" v-if="!userInfo">
           <span class="text">&nbsp;{{ t('common.connect') }}</span>
         </div>
-        <div class="header__cta connect border border-solid border-[rgba(255,255,255,0.2)]" @click="login" v-if="userInfo">
+        <div class="header__cta connect" @click="login" v-if="userInfo">
           <Identicon class="uicon" :key="userInfo.addr" @click="login" :hash="ss58toHex(userInfo.addr)" :padding="0.28"
             :foreground="[80, 250, 130, 255]" :background="[80, 255, 130, 0]" :size="16" />
           <span class="text">{{ userInfo.name }}</span>
@@ -351,7 +351,7 @@ const unfocus = () => {
     height: 22px;
     align-items: center;
     cursor: pointer;
-    margin: 3px 10px 3px 4px;
+    margin: 3px 50px 3px 4px;
 
     svg {
       height: 100%;
@@ -475,11 +475,11 @@ const unfocus = () => {
 
   .header__nav>li {
     display: block;
-    margin-left: 1vw;
-    margin-right: 1vw;
+    margin-left: 0.9vw;
+    margin-right: 0.9vw;
     margin-bottom: 0;
     position: relative;
-    padding: 10px 0;
+    padding: 6px 0;
 
     &.active {
       &:after {
@@ -506,7 +506,7 @@ const unfocus = () => {
     .header__dropdown {
       display: none;
       position: absolute;
-      top: 45px;
+      top: 40px;
       background-color: rgba($secondary-text-rgb, 0.07);
       border-bottom: none;
       z-index: 10;
@@ -547,8 +547,7 @@ const unfocus = () => {
 
   .header__nav a {
     display: inline-block;
-    font-size: 16px;
-    font-weight: bold;
+    font-size: 13px;
     line-height: 16px;
     text-align: center;
     color: rgba($secondary-text-rgb, 0.5) !important;
@@ -571,12 +570,12 @@ const unfocus = () => {
 
   .header__lang {
     height: 28px;
+    background: lighten(#000, 15%);
 
     .header__lang-btn {
       padding: 0 8px;
       height: 100%;
       font-size: 12px;
-      font-weight: 600;
       color: rgba($secondary-text-rgb, 0.6);
       background: transparent;
       border: none;
@@ -588,8 +587,8 @@ const unfocus = () => {
       }
 
       &--active {
-        color: $primary-text;
-        background: rgba($primary-text-rgb, 0.15);
+        color: $primary-bg;
+        background: rgba($primary-text-rgb, 0.9);
       }
     }
   }
@@ -621,12 +620,17 @@ const unfocus = () => {
     border-right: none;
 
     &.inverse {
-      background-color: rgba($primary-text-rgb, 0.85);
+      padding: 0 15px;
+      background-color: rgba($primary-text-rgb, 1);
 
       span {
         color: #040406;
         letter-spacing: -1px;
       }
+    }
+
+    &.connect {
+      background: lighten(#000, 15%);
     }
 
     .uicon {
@@ -647,8 +651,7 @@ const unfocus = () => {
       display: block;
       letter-spacing: 0.4px;
       // text-transform: uppercase;
-      font-size: 16px;
-      font-weight: bold;
+      font-size: 13px;
       line-height: 16px;
       color: $primary-text;
       transition: 0.5s ease;
