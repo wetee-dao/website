@@ -296,7 +296,7 @@ const unfocus = () => {
   // border-bottom: 1px solid rgba(236, 236, 236, 0.04);
   background-color: transparent;
   transition: background - color 0.5s ease;
-  background-image: radial - gradient(transparent 1px, rgb(7, 17, 14) 1px);
+  background-image: radial - gradient(transparent 1px, $primary-bg 1px);
   background-size: 4px 4px;
   backdrop-filter: saturate(50%) blur(4px);
   box-shadow: 0 0 4px #2cc2600d;

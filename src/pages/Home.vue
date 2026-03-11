@@ -1,7 +1,13 @@
 <template>
   <div class="home gradient-body">
-    <div class="border-rgb container mt-6 mb-4">
-      <div class="chain-box top  p-[15px] lg:p-5 overflow-hidden  flex justify-between flex-row">
+    <div class="border-rgb banner container mt-6 mb-4" style="position:relative;">
+      <PixelBg />
+      <div class="hud-corner tl"></div>
+      <div class="hud-corner tr"></div>
+      <div class="hud-corner bl"></div>
+      <div class="hud-corner br"></div>
+
+      <div class="chain-box top p-[15px] lg:p-5 overflow-hidden flex justify-between flex-row" style="position:relative;z-index:1;">
         <div class="chain wetee flex lg:mb-0 flex-row flex-1">
           <div class="w-full flex-1 flex-col flex items-stretch justify-center gap-2.5">
             <div class="title flex flex-wrap justify-between items-center">
@@ -122,6 +128,7 @@
 import { onMounted, onUnmounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Footer from '@/components/Footer.vue'
+import PixelBg from '@/components/anim/PixelBg.vue'
 import Chip from '@/components/anim/Chip.vue'
 import Svgimg from '@/components/svg/SvgImg.vue'
 import LogoMini from '@/components/svg/LogoMini.vue'
@@ -218,7 +225,7 @@ onUnmounted(() => {
   margin: auto 3.3vw;
   font-size: 0.263vw;
   // border: 1Px solid rgba($secondary-text-rgb, 0.05);
-  box-shadow: inset 0 0 0 5Px rgba($secondary-text-rgb, 0.05);
+  box-shadow: inset 0 0 0 5Px rgba($secondary-text-rgb, 0.09);
   background-color: transparent;
 
   .chip-text {
@@ -237,6 +244,20 @@ onUnmounted(() => {
 
 .link-bg {
   background-color: #ffffff1f;
+}
+
+.hud-corner {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.5;
+
+  &.tl { top: 0;    left: 0;    border-top: 1px solid $primary-text; border-left:  1px solid $primary-text; }
+  &.tr { top: 0;    right: 0;   border-top: 1px solid $primary-text; border-right: 1px solid $primary-text; }
+  &.bl { bottom: 0; left: 0;    border-bottom: 1px solid $primary-text; border-left:  1px solid $primary-text; }
+  &.br { bottom: 0; right: 0;   border-bottom: 1px solid $primary-text; border-right: 1px solid $primary-text; }
 }
 
 .chain {
@@ -285,6 +306,7 @@ onUnmounted(() => {
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
+    line-clamp: 1;
   }
 }
 

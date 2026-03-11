@@ -50,7 +50,7 @@
   align-items: center;
   background-color: #101010;
   padding: 5em 7.5em;
-  // animation: chip_diffuse 2s 0s infinite;
+  // animation disabled — keep chip visually quiet
   position: relative;
 }
 
@@ -91,8 +91,15 @@
   height: 5em;
   width: 2px;
   background: linear-gradient(to top, transparent, $primary-text);
-  animation: bottom_to_top 2s 0s infinite;
+  animation: bottom_to_top 4s 0s infinite;
 }
+
+.chip-pins .chip-pin:nth-child(1)::before { animation-delay: 0s; }
+.chip-pins .chip-pin:nth-child(2)::before { animation-delay: -0.33s; }
+.chip-pins .chip-pin:nth-child(3)::before { animation-delay: -0.66s; }
+.chip-pins .chip-pin:nth-child(4)::before { animation-delay: -1s; }
+.chip-pins .chip-pin:nth-child(5)::before { animation-delay: -1.33s; }
+.chip-pins .chip-pin:nth-child(6)::before { animation-delay: -1.66s; }
 
 @keyframes bottom_to_top {
   0% {
@@ -120,8 +127,15 @@
   height: 5em;
   width: 2px;
   background: linear-gradient(to bottom, transparent, $primary-text);
-  animation: top_to_bottom 2s 0s infinite;
+  animation: top_to_bottom 4s 0s infinite;
 }
+
+.chip-pins-bottom .chip-pin:nth-child(1)::before { animation-delay: -1.66s; }
+.chip-pins-bottom .chip-pin:nth-child(2)::before { animation-delay: -1.33s; }
+.chip-pins-bottom .chip-pin:nth-child(3)::before { animation-delay: -1s; }
+.chip-pins-bottom .chip-pin:nth-child(4)::before { animation-delay: -0.66s; }
+.chip-pins-bottom .chip-pin:nth-child(5)::before { animation-delay: -0.33s; }
+.chip-pins-bottom .chip-pin:nth-child(6)::before { animation-delay: 0s; }
 
 @keyframes top_to_bottom {
   0% {
@@ -150,8 +164,15 @@
   height: 2px;
   width: 5em;
   background: linear-gradient(to left, transparent, $primary-text);
-  animation: right_to_left 2s 0s infinite;
+  animation: right_to_left 4s 0s infinite;
 }
+
+.chip-pins-left .chip-pin:nth-child(1)::before { animation-delay: 0s; }
+.chip-pins-left .chip-pin:nth-child(2)::before { animation-delay: -0.33s; }
+.chip-pins-left .chip-pin:nth-child(3)::before { animation-delay: -0.66s; }
+.chip-pins-left .chip-pin:nth-child(4)::before { animation-delay: -1s; }
+.chip-pins-left .chip-pin:nth-child(5)::before { animation-delay: -1.33s; }
+.chip-pins-left .chip-pin:nth-child(6)::before { animation-delay: -1.66s; }
 
 @keyframes right_to_left {
   0% {
@@ -180,8 +201,15 @@
   height: 2px;
   width: 5em;
   background: linear-gradient(to right, transparent, $primary-text);
-  animation: left_to_right 2s 0s infinite;
+  animation: left_to_right 4s 0s infinite;
 }
+
+.chip-pins-right .chip-pin:nth-child(1)::before { animation-delay: -1.66s; }
+.chip-pins-right .chip-pin:nth-child(2)::before { animation-delay: -1.33s; }
+.chip-pins-right .chip-pin:nth-child(3)::before { animation-delay: -1s; }
+.chip-pins-right .chip-pin:nth-child(4)::before { animation-delay: -0.66s; }
+.chip-pins-right .chip-pin:nth-child(5)::before { animation-delay: -0.33s; }
+.chip-pins-right .chip-pin:nth-child(6)::before { animation-delay: 0s; }
 
 @keyframes left_to_right {
   0% {
