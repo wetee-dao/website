@@ -14,21 +14,34 @@ export const GetSideChainNodes = async () => {
     return resp.data.result
 }
 
-export const GetNowBlocks = async () => {
-    const url = CurrentChainNode().rpcUrl + "/blockchain?t="+new Date().getTime()
+export const GetNowBlocks = async (minHeight?: string | number, maxHeight?: string | number) => {
+    let url = CurrentChainNode().rpcUrl + "/blockchain?t=" + new Date().getTime()
+    if (minHeight != null) {
+        url += "&minHeight=" + minHeight
+    }
+    if (maxHeight != null) {
+        url += "&maxHeight=" + maxHeight
+    }
     const resp = await axios.get(url)
     return resp.data.result 
 }
 
-export const GetNowTx = async (block:string) => {
-    const url = CurrentChainNode().rpcUrl + "/tx_search?query=\"tx.height<="+block+"\"&per_page=30&order_by=\"desc\""
+export const GetBlocksRange = async (maxHeight: string | number, limit: number = 20) => {
+    const minH = Math.max(1, Number(maxHeight) - limit + 1)
+    const url = CurrentChainNode().rpcUrl + "/blockchain?minHeight=" + minH + "&maxHeight=" + maxHeight + "&t=" + new Date().getTime()
+    const resp = await axios.get(url)
+    return resp.data.result 
+}
+
+export const GetNowTx = async (block: string, page: number = 1, perPage: number = 30) => {
+    const url = CurrentChainNode().rpcUrl + "/tx_search?query=\"tx.height<=" + block + "\"&page=" + page + "&per_page=" + perPage + "&order_by=\"desc\""
     const resp = await axios.get(url)
     return resp.data.result 
 }
 
 /** 按区块高度查询该区块的交易 */
-export const GetTxByHeight = async (height: string | number) => {
-    const url = CurrentChainNode().rpcUrl + "/tx_search?query=\"tx.height=" + String(height) + "\"&per_page=100&order_by=\"asc\""
+export const GetTxByHeight = async (height: string | number, page: number = 1, perPage: number = 20) => {
+    const url = CurrentChainNode().rpcUrl + "/tx_search?query=\"tx.height=" + String(height) + "\"&page=" + page + "&per_page=" + perPage + "&order_by=\"asc\""
     const resp = await axios.get(url)
     return resp.data.result
 }

@@ -1,15 +1,16 @@
 <template>
   <div class="page gradient-body">
-    <div class="blocks container flex mb-4 flex-col lg:flex-row">
+    <div class="blocks container flex mb-2 flex-col lg:flex-row">
       <div class="chain-box flex lg:mb-0 flex-col flex-1">
-        <div class="title-wrap flex p-[15px] lg:p-5 flex-wrap justify-between items-center">
-          <div class="title flex overflow-hidden">
-            <Svgimg class="chain-logo mr-2 flex-shrink-0"  name="transfer" />
-            <div class="inline truncate">{{ t('chain.txs') }}</div>
+        <div class="title-wrap flex p-6 lg:p-8 flex-wrap justify-between items-center" style="position: relative; height: 120px;">
+          <PixelBg :tileSize="6" :gap="4" :maxOpacity="0.12" :density="0.4" />
+          <div class="title flex overflow-hidden relative z-5">
+            <Svgimg class="chain-logo mr-3 flex-shrink-0"  name="transfer" />
+            <div class="inline truncate text-xl lg:text-2xl font-semibold">{{ t('chain.txs') }}</div>
           </div>
         </div>
         <div class="flex flex-col divide-y w-full">
-          <div class="flex justify-between p-5 block" v-for="tx in txs">
+          <div class="flex justify-between p-3 lg:p-4 block" v-for="tx in txs">
             <div class="flex flex-col">
               <div class="flex space-x-2 mb-1 items-center">
                 <div class="text-sm inline">{{ t('common.tx') }}</div><a
@@ -56,6 +57,16 @@
             </div>
           </div>
         </div>
+        <!-- Pagination -->
+        <div v-if="totalPages > 1" class="pagination">
+          <button type="button" class="pagination-btn iconfont" :disabled="currentPage <= 1" @click="currentPage = Math.max(1, currentPage - 1)">
+            &#xe602;
+          </button>
+          <span class="pagination-info">{{ currentPage }} / {{ totalPages }}</span>
+          <button type="button" class="pagination-btn iconfont" :disabled="currentPage >= totalPages" @click="currentPage = Math.min(totalPages, currentPage + 1)">
+            &#xe602;
+          </button>
+        </div>
       </div>
     </div>
     <div class="mb-4"></div>
@@ -64,47 +75,65 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref, watch, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import Footer from '@/components/Footer.vue'
 import Svgimg from '@/components/svg/SvgImg.vue'
+import PixelBg from '@/components/anim/PixelBg.vue'
 import { GetNowBlocks, GetNowTx, GetTxByHeight } from '@/apis/side'
-import { formatTimeDiff } from '@/utils/time'
 
 const { t } = useI18n()
 const route = useRoute()
 const blocks = ref<any[]>([])
 const txs = ref<any[]>([])
 
-function loadTxs() {
+// Pagination
+const pageSize = 10
+const currentPage = ref(1)
+const totalCount = ref(0)
+const totalPages = computed(() =>
+  Math.max(1, Math.ceil(totalCount.value / pageSize))
+)
+
+// Watch page changes to reload data
+watch(currentPage, () => {
+  loadTxs(false)
+})
+
+function loadTxs(resetPage: boolean = true) {
+  if (resetPage) {
+    currentPage.value = 1
+  }
   const height = route.query.height ?? route.params.height
   if (height != null && String(height).trim() !== '') {
-    GetTxByHeight(String(height).trim()).then((res) => {
+    GetTxByHeight(String(height).trim(), currentPage.value, pageSize).then((res) => {
       txs.value = res?.txs ?? []
+      totalCount.value = res?.total_count ?? 0
     })
   } else {
     GetNowBlocks().then(async (datas) => {
       blocks.value = datas.block_metas
-      const txResult = await GetNowTx(datas.last_height)
+      const txResult = await GetNowTx(datas.last_height, currentPage.value, pageSize)
       txs.value = txResult?.txs ?? []
+      totalCount.value = txResult?.total_count ?? 0
     })
   }
 }
 
 onMounted(loadTxs)
-watch(() => [route.query.height, route.params.height], loadTxs)
+watch(() => [route.query.height, route.params.height], () => loadTxs())
 
 </script>
 
 <style lang="scss" scoped>
 .page {
-  padding-top: 100px;
+  padding-top: 60px;
 }
 
 .blocks {
-  border: 4px solid rgba(255, 255, 255, 0.0588235294);
-  min-height: calc(100vh - 230px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  min-height: calc(100vh - 140px);
 }
 
 .border-rgb {
@@ -113,25 +142,24 @@ watch(() => [route.query.height, route.params.height], loadTxs)
 }
 
 .chain-box {
-  background-color: $primary-bg;
-  // border: 1Px solid rgba($primary-text-rgb, 0.3);
-  background-color: rgba($primary-bg-rgb,0.68);
+  background-color: rgba($primary-bg-rgb, 0.5);
+  border-radius: 4px;
 
   .title-wrap {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.0588235294);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   }
 
   .title {
-    font-size: 16px;
-    font-weight: bold;
+    font-size: 14px;
+    font-weight: 500;
 
     &>.inline {
-      line-height: 31px;
+      line-height: 24px;
     }
 
     .chain-logo {
-      width: 30px;
-      height: 30px;
+      width: 24px;
+      height: 24px;
       color: $primary-text;
     }
   }
@@ -139,7 +167,7 @@ watch(() => [route.query.height, route.params.height], loadTxs)
 
 .block {
   color: #858585;
-  border-color: #ffffff08;
+  border-color:  rgba(255, 255, 255, 0.09);
 
   .number {
     color: $primary-text;
@@ -174,5 +202,54 @@ watch(() => [route.query.height, route.params.height], loadTxs)
 
 .animate-ping-rotate {
   animation: pingrotate 4s infinite;
+}
+
+/* Pagination — prominent */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1rem;
+  padding: 1rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.pagination-btn {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  letter-spacing: 0.03em;
+  transition: all 0.2s ease;
+  min-width: 40px;
+}
+
+.pagination-btn:first-child {
+  transform: rotate(180deg);
+}
+
+.pagination-btn:hover:not(:disabled) {
+  color: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.pagination-info {
+  font-size: 1rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  min-width: 80px;
+  text-align: center;
 }
 </style>
