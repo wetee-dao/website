@@ -67,7 +67,7 @@ onMounted(() => {
     }
 
     &>div {
-        border: 2px solid rgba(60, 60, 60, 0.25);
+        border: 2px solid rgba(95, 94, 94, 0.25);
         // padding-left: 10px;
         padding-right: 10px;
         margin: 0 8px 8px 0;

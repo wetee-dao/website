@@ -40,7 +40,7 @@
               v-for="r in filteredReferenda"
               :key="r.id"
               :to="`/gov/referenda/${r.id}`"
-              class="referendum-item flex flex-col md:flex-row md:items-center p-4 lg:p-5 gap-3 md:gap-4"
+              class="referendum-item flex flex-col md:flex-row md:items-center gap-3 md:gap-4"
             >
               <div class="referendum-id">#{{ r.id }}</div>
               <div class="referendum-body flex-1 min-w-0">
@@ -232,76 +232,85 @@ function statusClass(status: Status): string {
 }
 
 .chain-box {
-  background-color: $primary-bg;
-  background-color: rgba($primary-bg-rgb, 0.68);
-  border: 4px solid rgba(255, 255, 255, 0.06);
+  background-color: rgba($primary-bg-rgb, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .main-box {
   .title-wrap {
-    border-bottom: 2px solid rgba(255, 255, 255, 0.06);
+    padding: 28px 32px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
   }
 
   .page-title {
-    font-size: 20px;
-    font-weight: 700;
+    font-size: 18px;
+    font-weight: 500;
     color: $primary-text;
-    margin: 0 0 4px;
+    margin: 0 0 6px;
+    letter-spacing: -0.01em;
   }
 
   .page-subtitle {
     font-size: 13px;
-    color: $secondary-text;
+    color: rgba($secondary-text-rgb, 0.6);
     margin: 0;
+    font-weight: 400;
   }
 
   .btn {
-    font-size: 14px;
-    height: 40px;
-    line-height: 38px;
+    font-size: 13px;
+    height: 36px;
+    line-height: 34px;
     border-radius: 2px;
-    border: 1px solid rgba($secondary-text-rgb, 0.5);
+    border: 1px solid rgba($secondary-text-rgb, 0.2);
     background: transparent;
-    color: $secondary-text;
+    color: rgba($secondary-text-rgb, 0.7);
     cursor: pointer;
     white-space: nowrap;
+    font-weight: 400;
+    transition: all 0.2s ease;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba($secondary-text-rgb, 0.35);
+      color: $primary-text;
     }
 
     &--outline {
-      border-color: rgba($secondary-text-rgb, 0.5);
+      border-color: rgba($secondary-text-rgb, 0.2);
     }
   }
 }
 
 .tracks-wrap {
-  padding-top: 10px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 16px 32px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  
   .tracks-label {
-    font-size: 12px;
-    font-weight: 600;
-    color: $secondary-text;
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba($secondary-text-rgb, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
 
   .track-tab {
-    padding: 6px 12px;
+    padding: 6px 14px;
     font-size: 13px;
     border-radius: 2px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: none;
     background: transparent;
-    color: $secondary-text;
+    color: rgba($secondary-text-rgb, 0.6);
     cursor: pointer;
-    transition: all 0.15s;
+    transition: all 0.2s ease;
+    font-weight: 400;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.06);
+      color: $primary-text;
+      background: rgba(255, 255, 255, 0.03);
     }
 
     &.active {
-      background: rgba(255, 255, 255, 0.12);
-      border-color: rgba(255, 255, 255, 0);
+      background: rgba(255, 255, 255, 0.06);
       color: $primary-text;
     }
   }
@@ -323,92 +332,96 @@ function statusClass(status: Status): string {
 }
 
 .referenda-list {
-  border-color: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.04);
 }
 
 .referendum-item {
   display: flex;
   text-decoration: none;
   color: inherit;
-  transition: background 0.15s;
-  border-color: #282828;
+  transition: background 0.2s ease;
+  border-color: rgba(255, 255, 255, 0.04);
+  padding: 20px 32px;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(255, 255, 255, 0.02);
   }
 }
 
 .referendum-id {
-  font-size: 15px;
-  font-weight: 600;
-  color: $secondary-text;
-  min-width: 52px;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba($secondary-text-rgb, 0.5);
+  min-width: 48px;
 }
 
 .referendum-title {
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 500;
   color: $primary-text;
-  margin: 0 0 6px;
-  line-height: 1.4;
+  margin: 0 0 8px;
+  line-height: 1.5;
 }
 
 .referendum-meta {
   .amount {
-    color: $secondary-text;
+    color: rgba($secondary-text-rgb, 0.6);
   }
 
   .track-badge {
-    padding: 2px 8px;
+    padding: 3px 10px;
     font-size: 11px;
     border-radius: 2px;
-    background: rgba(255, 255, 255, 0.08);
-    color: $secondary-text;
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba($secondary-text-rgb, 0.6);
+    font-weight: 400;
   }
 }
 
 .referendum-right {
   .comments {
     font-size: 13px;
-    color: $secondary-text;
+    color: rgba($secondary-text-rgb, 0.5);
   }
 }
 
 .status-badge {
-  padding: 4px 10px;
-  font-size: 12px;
-  font-weight: 600;
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 500;
   border-radius: 2px;
   white-space: nowrap;
+  letter-spacing: 0.02em;
 
   &.status-deciding {
-    background: rgba(11, 175, 255, 0.2);
-    color: #6ec8ff;
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba($secondary-text-rgb, 0.8);
   }
 
   &.status-preparing {
-    background: rgba(255, 193, 7, 0.2);
-    color: #ffc107;
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba($secondary-text-rgb, 0.8);
   }
 
   &.status-executed {
-    background: rgba(67, 160, 71, 0.25);
-    color: #81c784;
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba($secondary-text-rgb, 0.8);
   }
 
   &.status-timedout {
-    background: rgba(158, 158, 158, 0.25);
-    color: #bdbdbd;
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba($secondary-text-rgb, 0.6);
   }
 
   &.status-rejected {
-    background: rgba(244, 67, 54, 0.2);
-    color: #ef5350;
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba($secondary-text-rgb, 0.6);
   }
 }
 
 .empty-state {
   font-size: 14px;
+  padding: 60px 32px;
 }
 
 .text-secondary {

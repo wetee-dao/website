@@ -305,89 +305,104 @@ function statusClass(status: Status): string {
 }
 
 .chain-box {
-  background-color: $primary-bg;
-  background-color: rgba($primary-bg-rgb, 0.68);
-  border: 4px solid rgba(255, 255, 255, 0.06);
+  background-color: rgba($primary-bg-rgb, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .breadcrumb {
-  color: $secondary-text;
+  color: rgba($secondary-text-rgb, 0.5);
+  font-size: 13px;
 
   .breadcrumb-link {
-    color: $secondary-text;
+    color: rgba($secondary-text-rgb, 0.5);
     text-decoration: none;
+    transition: color 0.2s ease;
 
     &:hover {
-      text-decoration: underline;
+      color: rgba($secondary-text-rgb, 0.8);
     }
   }
 
   .breadcrumb-sep {
-    opacity: 0.6;
+    opacity: 0.4;
+    margin: 0 4px;
   }
 
   .breadcrumb-current {
-    color: $secondary-text;
+    color: rgba($secondary-text-rgb, 0.7);
   }
 }
 
 .border-b {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .border-t {
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .detail-header {
+  padding: 28px 32px;
+  
   .detail-title {
-    font-size: 22px;
-    font-weight: 700;
+    font-size: 20px;
+    font-weight: 500;
     color: $primary-text;
     margin: 0;
-    line-height: 1.35;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
   }
 
   .detail-meta {
     .track-badge {
-      padding: 2px 8px;
+      padding: 3px 10px;
       font-size: 11px;
       border-radius: 2px;
-      background: rgba(255, 255, 255, 0.08);
-      color: $secondary-text;
+      background: rgba(255, 255, 255, 0.04);
+      color: rgba($secondary-text-rgb, 0.6);
+      font-weight: 400;
     }
   }
 }
 
-.tabs-wrap .tabs {
-  .tab-btn {
-    padding: 10px 0;
-    font-size: 14px;
-    color: $secondary-text;
-    background: none;
-    border: none;
-    border-bottom: 2px solid transparent;
-    margin-bottom: -1px;
-    cursor: pointer;
-    transition: color 0.15s, border-color 0.15s;
+.tabs-wrap {
+  padding: 0 32px;
+  
+  .tabs {
+    .tab-btn {
+      padding: 12px 0;
+      font-size: 13px;
+      color: rgba($secondary-text-rgb, 0.5);
+      background: none;
+      border: none;
+      border-bottom: 1px solid transparent;
+      margin-bottom: -1px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: 400;
+      margin-right: 24px;
 
-    &:hover {
-      color: $primary-text;
-    }
+      &:hover {
+        color: rgba($secondary-text-rgb, 0.8);
+      }
 
-    &.active {
-      color: $primary-text;
-      border-bottom-color: $primary-text;
+      &.active {
+        color: $primary-text;
+        border-bottom-color: rgba(255, 255, 255, 0.2);
+      }
     }
   }
 }
 
 .content-wrap {
+  padding: 28px 32px;
+  
   .prose p,
   .prose ul {
-    margin: 0 0 1em;
-    color: $secondary-text;
-    line-height: 1.6;
+    margin: 0 0 1.25em;
+    color: rgba($secondary-text-rgb, 0.7);
+    line-height: 1.7;
+    font-size: 14px;
   }
 
   .prose ul {
@@ -396,30 +411,35 @@ function statusClass(status: Status): string {
 }
 
 .section-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: $secondary-text;
-  margin: 0 0 12px;
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba($secondary-text-rgb, 0.4);
+  margin: 0 0 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
 .status-cards {
   .status-card {
-    padding: 12px 16px;
-    background: rgba(255, 255, 255, 0.05);
+    padding: 16px 20px;
+    background: rgba(255, 255, 255, 0.02);
     border-radius: 2px;
     min-width: 120px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
 
     .status-card-label {
       display: block;
-      font-size: 11px;
-      color: $secondary-text;
-      margin-bottom: 4px;
+      font-size: 10px;
+      color: rgba($secondary-text-rgb, 0.4);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
 
     .status-card-value {
-      font-size: 16px;
-      font-weight: 600;
-      color: $secondary-text;
+      font-size: 15px;
+      font-weight: 500;
+      color: rgba($secondary-text-rgb, 0.8);
     }
   }
 }
@@ -428,100 +448,116 @@ function statusClass(status: Status): string {
   .tally-row {
     .tally-label {
       display: block;
-      font-size: 12px;
-      color: $secondary-text;
+      font-size: 11px;
+      color: rgba($secondary-text-rgb, 0.5);
       margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
 
     .tally-pct {
-      font-size: 18px;
-      font-weight: 600;
+      font-size: 16px;
+      font-weight: 500;
       margin-right: 8px;
     }
 
     .tally-amount {
-      font-size: 14px;
-      color: $secondary-text;
+      font-size: 13px;
+      color: rgba($secondary-text-rgb, 0.5);
     }
 
     .tally-aye .tally-pct {
-      color: #81c784;
+      color: rgba($secondary-text-rgb, 0.9);
     }
 
     .tally-nay .tally-pct {
-      color: #ef5350;
+      color: rgba($secondary-text-rgb, 0.6);
     }
   }
 }
 
 .votes-view-toggle .toggle-btn {
-  padding: 6px 12px;
-  font-size: 13px;
+  padding: 6px 14px;
+  font-size: 12px;
   border-radius: 2px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: none;
   background: transparent;
-  color: $secondary-text;
+  color: rgba($secondary-text-rgb, 0.5);
   cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 400;
+
+  &:hover {
+    color: rgba($secondary-text-rgb, 0.8);
+  }
 
   &.active {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.05);
     color: $primary-text;
   }
 }
 
 .actions-btns .btn {
-  font-size: 14px;
+  font-size: 13px;
+  padding: 10px 20px;
   border-radius: 2px;
-  border: 1px solid rgba($secondary-text-rgb, 0.6);
+  border: 1px solid rgba($secondary-text-rgb, 0.2);
   background: transparent;
-  color: $secondary-text;
+  color: rgba($secondary-text-rgb, 0.7);
   cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 400;
+
+  &:hover {
+    border-color: rgba($secondary-text-rgb, 0.4);
+    color: $primary-text;
+  }
 
   &--primary {
-    background: $primary-text;
-    color: $block;
-    border-color: $primary-text;
+    background: rgba(255, 255, 255, 0.08);
+    color: $primary-text;
+    border-color: transparent;
   }
 }
 
 .status-badge {
-  padding: 4px 10px;
-  font-size: 12px;
-  font-weight: 600;
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 500;
   border-radius: 2px;
   white-space: nowrap;
+  letter-spacing: 0.02em;
 
   &.status-deciding {
-    background: rgba(11, 175, 255, 0.2);
-    color: #6ec8ff;
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba($secondary-text-rgb, 0.8);
   }
 
   &.status-preparing {
-    background: rgba(255, 193, 7, 0.2);
-    color: #ffc107;
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba($secondary-text-rgb, 0.8);
   }
 
   &.status-executed {
-    background: rgba(67, 160, 71, 0.25);
-    color: #81c784;
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba($secondary-text-rgb, 0.8);
   }
 
   &.status-timedout {
-    background: rgba(158, 158, 158, 0.25);
-    color: #bdbdbd;
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba($secondary-text-rgb, 0.6);
   }
 
   &.status-rejected {
-    background: rgba(244, 67, 54, 0.2);
-    color: #ef5350;
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba($secondary-text-rgb, 0.6);
   }
 }
 
 .link-back {
   display: inline-block;
   margin-top: 8px;
-  color: $secondary-text;
+  color: rgba($secondary-text-rgb, 0.5);
 }
 
 .text-secondary {

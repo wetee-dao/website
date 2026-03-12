@@ -91,7 +91,7 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .page {
-  padding-top: 60px;
+  padding-top: 100px;
 }
 
 .blocks {

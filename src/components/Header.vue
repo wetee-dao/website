@@ -572,7 +572,7 @@ const unfocus = () => {
 
   .header__lang {
     height: 28px;
-    background: color.adjust(#000, $lightness: +15%);
+    background: color.adjust(#000, $lightness: 15%);
 
     .header__lang-btn {
       padding: 0 8px;
@@ -632,7 +632,7 @@ const unfocus = () => {
     }
 
     &.connect {
-      background: color.adjust(#000, $lightness: +15%);
+      background: color.adjust(#000, $lightness: 15%);
     }
 
     .uicon {

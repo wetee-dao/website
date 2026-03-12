@@ -49,49 +49,51 @@ const isReferendaActive = computed(() => {
 }
 
 .chain-box {
-  background-color: $primary-bg;
-  background-color: rgba($primary-bg-rgb, 0.68);
-  border: 4px solid rgba(255, 255, 255, 0.06);
+  background-color: rgba($primary-bg-rgb, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .sidebar-box {
   .sidebar-title {
-    font-size: 11px;
-    font-weight: 600;
+    font-size: 10px;
+    font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: $secondary-text;
-    padding: 16px 18px 8px;
+    letter-spacing: 0.08em;
+    color: rgba($secondary-text-rgb, 0.4);
+    padding: 20px 20px 10px;
   }
 
   .sidebar-nav {
     display: flex;
     flex-direction: column;
+    padding: 0 8px;
   }
 
   .nav-item {
-    padding: 8px 16px;
-    font-size: 14px;
-    color: $secondary-text;
+    padding: 10px 12px;
+    font-size: 13px;
+    color: rgba($secondary-text-rgb, 0.6);
     text-decoration: none;
     border-radius: 2px;
-    margin: 1.5px 8px;
-    transition: background 0.15s, color 0.15s;
+    margin: 1px 0;
+    transition: all 0.2s ease;
+    font-weight: 400;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.03);
+      color: rgba($secondary-text-rgb, 0.8);
     }
 
     &.active {
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.05);
       color: $primary-text;
     }
   }
 
   .sidebar-divider {
     height: 1px;
-    background: rgba(255, 255, 255, 0.06);
-    // margin: 8px 0;
+    background: rgba(255, 255, 255, 0.04);
+    margin: 8px 16px;
   }
 }
 </style>
