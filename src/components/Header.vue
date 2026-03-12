@@ -287,12 +287,14 @@ const unfocus = () => {
 </script>
 
 <style lang="scss" scoped>
+@use "sass:color";
+
 .header {
   position: fixed;
   width: 100%;
   top: 0;
   left: 0;
-  z-index: 9;
+  z-index: 20;
   // border-bottom: 1px solid rgba(236, 236, 236, 0.04);
   background-color: transparent;
   transition: background - color 0.5s ease;
@@ -462,7 +464,7 @@ const unfocus = () => {
     padding: 0;
     margin-right: auto;
     border-top: none;
-    z-index: 2;
+    z-index: 20;
     height: 80px;
     position: relative;
     top: 2px;
@@ -509,7 +511,7 @@ const unfocus = () => {
       top: 40px;
       background-color: rgba($secondary-text-rgb, 0.07);
       border-bottom: none;
-      z-index: 10;
+      z-index: 20;
       left: -7%;
       // left: calc(-170px + 50%);
       padding: 5px;
@@ -570,7 +572,7 @@ const unfocus = () => {
 
   .header__lang {
     height: 28px;
-    background: lighten(#000, 15%);
+    background: color.adjust(#000, $lightness: +15%);
 
     .header__lang-btn {
       padding: 0 8px;
@@ -630,7 +632,7 @@ const unfocus = () => {
     }
 
     &.connect {
-      background: lighten(#000, 15%);
+      background: color.adjust(#000, $lightness: +15%);
     }
 
     .uicon {

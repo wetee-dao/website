@@ -13,27 +13,16 @@
           <div class="flex justify-between p-3 lg:p-4 block" v-for="tx in txs">
             <div class="flex flex-col">
               <div class="flex space-x-2 mb-1 items-center">
-                <div class="text-sm inline">{{ t('common.tx') }}</div><a
-                  class="outline-none text-sm whitespace-nowrap font-semibold !text-base number"
-                  href="/extrinsic/31119512-2">{{ tx.height }}-{{ tx.index }}</a>
+                <div class="text-sm inline">{{ t('common.tx') }}</div>
+                <RouterLink
+                  class="outline-none text-sm whitespace-nowrap font-semibold !text-base number link"
+                  :to="`/chain/tx/${tx.hash}`">{{ tx.height }}-{{ tx.index }}</RouterLink>
               </div>
               <div class="flex flex-col md:space-x-2 md:items-center md:flex-row">
                 <div class="flex space-x-2 items-center">
                   <div class="text-sm inline">{{ t('common.hash') }}</div>
-                  <div class="flex items-center space-x-1 text-xs">
-                    <div class="flex flex-col ">
-                      <div class="flex items-center space-x-1">
-                        <div data-state="closed" class="inline-block leading-none">
-                          <a class="outline-none text-sm"
-                            href="/account/G8rzt5C9NnqvBQuwacuQRj4Pi2WUyV3jEveWgkjp8SDeR3Q">
-                            <div class="text-sm inline">{{ tx.hash }}</div>
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <RouterLink :to="`/chain/tx/${tx.hash}`" class="text-sm link mono truncate max-w-[200px] lg:max-w-[400px]">{{ tx.hash }}</RouterLink>
                 </div>
-
               </div>
             </div>
             <div class="flex flex-col items-end justify-center">
@@ -76,7 +65,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref, watch, computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, RouterLink } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import Footer from '@/components/Footer.vue'
 import Svgimg from '@/components/svg/SvgImg.vue'
@@ -167,14 +156,23 @@ watch(() => [route.query.height, route.params.height], () => loadTxs())
 
 .block {
   color: #858585;
-  border-color:  rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.09);
 
   .number {
     color: $primary-text;
   }
 
   .link {
-    color: rgba($primary-text-rgb, 0.5)
+    color: rgba($primary-text-rgb, 0.6);
+    text-decoration: none;
+
+    &:hover {
+      color: $primary-text;
+    }
+  }
+
+  .mono {
+    font-family: ui-monospace, monospace;
   }
 }
 

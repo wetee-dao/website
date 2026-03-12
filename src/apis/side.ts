@@ -53,6 +53,12 @@ export const GetBlockByHeight = async (height: string | number) => {
     return resp.data.result
 }
 
+export const getTxByHash = async (hash: string) => {
+  const url = CurrentChainNode().rpcUrl + "/tx?hash=0x" + hash + "&t=" + Date.now()
+  const resp = await axios.get(url)
+  return resp.data.result
+}
+
 export const SubNewBlock = (back: ((this: ReconnectingWebSocket, ev: MessageEvent<any>) => any) | { handleEvent: (event: MessageEvent<any>) => any }) => {
   const ws = new ReconnectingWebSocket(CurrentChainNode().rpcWs, {});
   ws.addEventListener("message", back);

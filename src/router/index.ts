@@ -100,6 +100,11 @@ const router = createRouter({
       component: () => import('../pages/Chain/Txs.vue')
     },
     {
+      path: '/chain/tx/:hash',
+      name: 'Tx Detail',
+      component: () => import('../pages/Chain/Tx.vue')
+    },
+    {
       path: '/chain-mint',
       name: 'Chain mint',
       component: () => import('../pages/Chainmint.vue')

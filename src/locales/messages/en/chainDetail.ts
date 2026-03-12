@@ -14,4 +14,18 @@ export default {
   thisBlockHas: 'This block has',
   transactionS: 'transaction(s).',
   viewTransactionList: 'View transaction list',
+  // Transaction detail
+  txTitle: 'Transaction',
+  backToTxs: '← Back to Transactions',
+  txHash: 'Transaction Hash',
+  txIndex: 'Transaction Index',
+  txTime: 'Transaction Time',
+  txStatus: 'Status',
+  txCode: 'Response Code',
+  txData: 'Transaction Data',
+  txEvents: 'Events',
+  gasUsed: 'Gas Used',
+  gasWanted: 'Gas Wanted',
+  success: 'Success',
+  failed: 'Failed',
 }

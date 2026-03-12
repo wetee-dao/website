@@ -99,14 +99,15 @@
           <div class="flex justify-between p-5 block" v-key="tx.height + '-' + tx.index" v-for="tx in txs">
             <div class="flex flex-1 flex-col">
               <div class="flex space-x-2 mb-1 items-center">
-                <div class="text-sm inline">{{ t('common.tx') }}</div><a
-                  class="outline-none text-sm whitespace-nowrap font-semibold !text-base number" href="/">{{ tx.height
-                  }}-{{ tx.index }}</a>
+                <div class="text-sm inline">{{ t('common.tx') }}</div>
+                <RouterLink
+                  class="outline-none text-sm whitespace-nowrap font-semibold !text-base number link"
+                  :to="`/chain/tx/${tx.hash}`">{{ tx.height }}-{{ tx.index }}</RouterLink>
               </div>
               <div class="flex flex-col md:space-x-2 md:items-center md:flex-row">
                 <div class="flex space-x-2 items-center">
                   <div class="text-sm">{{ t('common.hash') }}</div>
-                  <div class="text-sm hash flex-1">{{ tx.hash }}</div>
+                  <RouterLink :to="`/chain/tx/${tx.hash}`" class="text-sm hash flex-1 link">{{ tx.hash }}</RouterLink>
                 </div>
               </div>
             </div>
@@ -126,6 +127,7 @@
 
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
+import { RouterLink } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import Footer from '@/components/Footer.vue'
 import PixelBg from '@/components/anim/PixelBg.vue'
@@ -295,7 +297,12 @@ onUnmounted(() => {
   }
 
   .link {
-    color: rgba($primary-text-rgb, 0.4)
+    color: rgba($primary-text-rgb, 0.4);
+    text-decoration: none;
+
+    &:hover {
+      color: rgba($primary-text-rgb, 0.7);
+    }
   }
 
   .hash {

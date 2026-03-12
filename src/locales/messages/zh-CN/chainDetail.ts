@@ -14,4 +14,18 @@ export default {
   thisBlockHas: '本区块包含',
   transactionS: '笔交易。',
   viewTransactionList: '查看交易列表',
+  // Transaction detail
+  txTitle: '交易',
+  backToTxs: '← 返回交易列表',
+  txHash: '交易哈希',
+  txIndex: '交易索引',
+  txTime: '交易时间',
+  txStatus: '状态',
+  txCode: '响应码',
+  txData: '交易数据',
+  txEvents: '事件',
+  gasUsed: '已用 Gas',
+  gasWanted: '请求 Gas',
+  success: '成功',
+  failed: '失败',
 }
