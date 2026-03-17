@@ -21,7 +21,7 @@
 
           <div class="chain-box main-box">
             <!-- 标题 + 元信息 -->
-            <div class="detail-header p-4 lg:p-5 border-b border-white/6">
+            <div class="detail-header border-b border-white/6">
               <h1 class="detail-title">{{ detail.title }}</h1>
               <div class="detail-meta flex flex-wrap items-center gap-x-4 gap-y-2 mt-3">
                 <span class="meta-proposer">{{ detail.proposer }}</span>
@@ -33,7 +33,7 @@
             </div>
 
             <!-- Tabs: Content | AI Summary | Translations -->
-            <div class="tabs-wrap px-4 lg:px-5 pt-3">
+            <div class="tabs-wrap pt-3">
               <div class="tabs flex gap-4 border-b border-white/6">
                 <button
                   v-for="tab in contentTabs"
@@ -49,7 +49,7 @@
             </div>
 
             <!-- Content 区域 -->
-            <div class="content-wrap p-4 lg:p-5">
+            <div class="content-wrap">
               <div v-show="activeTab === 'content'" class="proposal-content prose">
                 <p v-for="(p, i) in detail.contentParagraphs" :key="i">{{ p }}</p>
               </div>
@@ -64,7 +64,7 @@
             </div>
 
             <!-- Status: Decision / Confirmation / Attempts -->
-            <div class="status-section p-4 lg:p-5 border-t border-white/6">
+            <div class="status-section p-5 lg:p-8 border-t border-white/6">
               <h3 class="section-title">{{ t('govDetail.status') }}</h3>
               <div class="status-cards flex flex-wrap gap-4">
                 <div class="status-card">
@@ -83,7 +83,7 @@
             </div>
 
             <!-- Tally -->
-            <div class="tally-section p-4 lg:p-5 border-t border-white/6">
+            <div class="tally-section p-5 lg:p-8 border-t border-white/6">
               <h3 class="section-title">{{ t('govDetail.tally') }}</h3>
               <div class="tally-row flex flex-wrap gap-6 mb-4">
                 <div class="tally-aye">
@@ -105,7 +105,7 @@
             </div>
 
             <!-- Votes -->
-            <div class="votes-section p-4 lg:p-5 border-t border-white/6">
+            <div class="votes-section p-5 lg:p-8 border-t border-white/6">
               <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
                 <h3 class="section-title mb-0">{{ t('govDetail.votes') }}</h3>
                 <div class="votes-view-toggle flex gap-2">
@@ -123,7 +123,7 @@
             </div>
 
             <!-- Actions -->
-            <div class="actions-section p-4 lg:p-5 border-t border-white/6">
+            <div class="actions-section p-5 lg:p-8 border-t border-white/6">
               <h3 class="section-title">{{ t('govDetail.actions') }}</h3>
               <div class="actions-btns flex flex-wrap gap-3">
                 <button type="button" class="btn btn--primary">{{ t('govDetail.vote') }}</button>

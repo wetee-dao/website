@@ -6,7 +6,7 @@
       <!-- 主内容区 -->
       <main class="gov-main flex-1 min-w-0">
         <div class="chain-box main-box">
-          <div class="title-wrap flex p-4 lg:p-5 flex-wrap justify-between items-center gap-4">
+          <div class="title-wrap flex flex-wrap justify-between items-center gap-4">
             <div>
               <h1 class="page-title">OpenGov Referenda</h1>
               <p class="page-subtitle">Subscribe on-chain events · All active and history referenda</p>
@@ -18,7 +18,7 @@
           </div>
 
           <!-- Tracks 筛选 -->
-          <div class="tracks-wrap flex items-center px-4 lg:px-5 pb-3">
+          <div class="tracks-wrap flex items-center">
             <div class="tracks-label mr-2">Referenda Tracks</div>
             <div class="tracks-tabs flex flex-wrap gap-2">
               <button
