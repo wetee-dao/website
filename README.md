@@ -1,45 +1,86 @@
-# website
+# WeTEE Website (Vue 3 + Vite)
 
-This template should help get you started developing with Vue 3 in Vite.
+The WeTEE frontend website, built with Vue 3, TypeScript and Vite.
 
-## Recommended IDE Setup
+## Requirements
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+- Node.js (LTS recommended)
+- npm
 
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
+## Quick start
 
 ```sh
 npm install
+npm run dev
 ```
 
-### Compile and Hot-Reload for Development
+Then open the printed local URL (usually `http://localhost:5173`).
+
+## Scripts
+
+- **dev**: start local development server
 
 ```sh
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
+- **build**: type-check and build for production
 
 ```sh
 npm run build
 ```
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+- **preview**: preview the production build locally
+
+```sh
+npm run preview
+```
+
+- **lint**: run ESLint
+
+```sh
+npm run lint
+```
+
+- **test:unit**: run unit tests (Vitest)
 
 ```sh
 npm run test:unit
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+## Project structure
 
-```sh
-npm run lint
-```
+- `src/`: app source code
+  - `pages/`: route pages (e.g. `src/pages/Chain/Pods.vue`)
+  - `components/`: shared UI components
+  - `router/`: Vue Router routes
+  - `apis/`: chain / backend API wrappers (e.g. `src/apis/main-chain.ts`)
+  - `providers/`: chain providers (Ink / Substrate, etc.)
+  - `assets/`: global styles and assets
+- `public/`: static assets served as-is
+  - `public/contract/`: contract ABIs (`cloud.json`, `subnet.json`)
+  - `public/config/`: runtime configs
+
+## Chain / contracts
+
+This site talks to the WeTEE contracts via the ABI files in `public/contract/` and the chain provider in `src/providers/`.
+
+If you update contract addresses or endpoints, check:
+
+- `src/config.ts` (contract addresses)
+- `src/plugins/chain.ts` (chain endpoints / current node selection)
+- `public/contract/*.json` (ABIs)
+
+## IDE setup
+
+Recommended:
+
+- VS Code
+- Volar (`Vue.volar`)
+
+## Docker (optional)
+
+There are helper scripts in `hacks/` for building/running via Docker:
+
+- `hacks/build.sh`
+- `hacks/docker.sh`
