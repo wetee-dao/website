@@ -1,5 +1,38 @@
 <template>
   <footer class="footer">
+    <div class="footer__main">
+      <div class="container">
+        <p class="footer__powered">{{ t('home.footer.powered') }}</p>
+        <div class="footer__grid">
+          <div class="footer__col">
+            <h6 class="footer__col-title">{{ t('home.footer.products') }}</h6>
+            <nav class="footer__nav">
+              <RouterLink to="/products/cloud">{{ t('home.products.teeVm') }}</RouterLink>
+              <RouterLink to="/products/store">{{ t('home.products.teeStore') }}</RouterLink>
+              <span class="footer__nav-muted">{{ t('home.products.teeBridge') }}</span>
+              <span class="footer__nav-muted">{{ t('home.products.teeMpc') }}</span>
+            </nav>
+          </div>
+          <div class="footer__col">
+            <h6 class="footer__col-title">{{ t('home.footer.resources') }}</h6>
+            <nav class="footer__nav">
+              <a target="_blank" href="https://wetee.gitbook.io/docment">{{ t('common.docs') }}</a>
+              <a target="_blank" href="https://github.com/wetee-dao">{{ t('footer.github') }}</a>
+              <a target="_blank" href="https://wetee.gitbook.io/docment">{{ t('home.footer.whitepaper') }}</a>
+              <a target="_blank" href="https://wetee.gitbook.io/docment">{{ t('home.footer.apiRef') }}</a>
+            </nav>
+          </div>
+          <div class="footer__col">
+            <h6 class="footer__col-title">{{ t('home.footer.community') }}</h6>
+            <nav class="footer__nav">
+              <a href="https://twitter.com/Wetee_DAO" target="_blank" rel="noreferrer">{{ t('home.footer.twitter') }}</a>
+              <a href="https://discord.gg" target="_blank" rel="noreferrer">{{ t('home.footer.discord') }}</a>
+              <a href="https://t.me/wetee_bai" target="_blank" rel="noreferrer">{{ t('home.footer.telegram') }}</a>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- <div class="container">
       <div class="flex">
         <div class="flex flex-col justify-center w-1/3 md:w-1/4">
@@ -45,7 +78,7 @@
     <div class="footer__content flex items-center">
       <div class="container">
         <div class="flex items-center">
-          <small class="footer__copyright flex-1">{{ t('footer.copyright') }}</small>
+          <small class="footer__copyright flex-1">{{ t('home.footer.copyright') }}</small>
           <div class="footer__social">
             <a href="https://twitter.com/Wetee_DAO" target="_blank">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -75,6 +108,7 @@
 </template>
 
 <script setup lang="ts">
+import { RouterLink } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 </script>
@@ -82,8 +116,57 @@ const { t } = useI18n()
 <style lang="scss" scoped>
 .footer {
   background-color: rgba($primary-bg-rgb, 0.55);
-  // padding-top: 30px;
-  // border-top: 1px solid rgba(158, 158, 158, 0.15);
+}
+
+.footer__main {
+  padding: 48px 0 8px;
+  border-top: 1px solid rgba(158, 158, 158, 0.12);
+}
+
+.footer__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 2rem 2.5rem;
+}
+
+.footer__col-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba($primary-text-rgb, 0.95);
+  margin: 0 0 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.footer__col .footer__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.footer__col .footer__nav a,
+.footer__col .footer__nav .footer__nav-muted {
+  display: block;
+  font-size: 13px;
+  color: rgba($secondary-text-rgb, 0.55);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer__col .footer__nav a:hover {
+  color: rgba($primary-text-rgb, 0.9);
+}
+
+.footer__nav-muted {
+  cursor: default;
+  opacity: 0.65;
+}
+
+.footer__powered {
+  margin: 0 0 28px;
+  font-size: 12px;
+  color: rgba($secondary-text-rgb, 0.45);
+  text-align: center;
 }
 
 .footer__logo {
@@ -120,7 +203,7 @@ const { t } = useI18n()
 }
 
 .footer__content {
-  margin-top: 50px;
+  margin-top: 24px;
   padding: 0;
   height: 80px;
   width: 100%;

@@ -32,7 +32,7 @@ const router = createRouter({
     },
     {
       path: '/products/bridge',
-      name: 'Trustless TEE Bridge',
+      name: 'TEE Bridge — TEE and on-chain contracts',
       component: () => import('../pages/Products/Bridge.vue')
     },
     {
