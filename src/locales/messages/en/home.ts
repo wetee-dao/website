@@ -13,7 +13,7 @@ export default {
     featVm: 'TEE VM',
     featVmSub: 'Confidential VM',
     featBridge: 'TEE Bridge',
-    featBridgeSub: 'Connect TEE computation results to blockchain contracts',
+    featBridgeSub: 'Bridge TEE ↔\u20e3 Contracts',
     featMpc: 'TEE MPC',
     featMpcSub: 'Confidential MPC',
   },

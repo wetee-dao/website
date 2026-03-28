@@ -20,7 +20,7 @@ export default {
   teeStorage: 'TEE 存储',
   teeMpc: 'TEE 多方计算',
   cloudSubtitle: '去中心化机密容器',
-  bridgeSubtitle: '打通 TEE 程序与区块链合约',
+  bridgeSubtitle: 'Bridge TEE ↔\u20e3 Contracts',
   minerSubtitle: '提供算力获得收益',
   storeSubtitle: '去中心化加密存储',
   mpcSubtitle: '基于区块链与 TEE 的 MPC',

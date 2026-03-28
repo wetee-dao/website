@@ -13,7 +13,7 @@ export default {
     featVm: 'TEE VM',
     featVmSub: '机密虚拟机',
     featBridge: 'TEE Bridge',
-    featBridgeSub: '将 TEE 机密计算结果传递到链上合约',
+    featBridgeSub: 'Bridge TEE ↔\u20e3 Contracts',
     featMpc: 'TEE MPC',
     featMpcSub: '机密 MPC',
   },
