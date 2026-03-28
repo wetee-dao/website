@@ -4,10 +4,10 @@
     <div class="container section flex">
       <div class="flex flex-col items-center md:flex-row md:justify-center md:items-center w-full">
         <div class="flex-1 md:pr-20">
-          <div class="top__title">Channel between WEB3 smart contracts and WEB2 applications</div>
-          <div class="top__text">Smart contracts and TEE applications can invoke each other</div>
+          <div class="top__title">{{ $t('productsBridge.teeBridgeTopTitle') }}</div>
+          <div class="top__text">{{ $t('productsBridge.teeBridgeTopText') }}</div>
           <div class="btns mt-10">
-            <a href="javascript:void(0)" class="btn btn__primary "><span>Deploy</span></a>
+            <a href="javascript:void(0)" class="btn btn__primary "><span>{{ $t('productsBridge.teeBridgeDeploy') }}</span></a>
           </div>
         </div>
         <div class="hidden icon md:block">
@@ -18,18 +18,16 @@
     <div class="container section-first">
       <div class="grid md:grid-cols-2 lg:grid-cols-3 grid-flow-row gap-6">
         <div class="confidentials confidentials--first">
-          <h3 class="confidentials__title">Enterprise bridge</h3>
-          <p class="confidentials__text">Decentralized node clusters and TEE ensure bridge efficiency and security.
-          </p>
+          <h3 class="confidentials__title">{{ $t('productsBridge.teeBridgeCard1Title') }}</h3>
+          <p class="confidentials__text">{{ $t('productsBridge.teeBridgeCard1Text') }}</p>
         </div>
         <div class="confidentials confidentials--yellow">
-          <h3 class="confidentials__title">WEB2 proxy contract</h3>
-          <p class="confidentials__text">Smart contracts directly invoke WEB2 application APIs through proxy contract.</p>
+          <h3 class="confidentials__title">{{ $t('productsBridge.teeBridgeCard2Title') }}</h3>
+          <p class="confidentials__text">{{ $t('productsBridge.teeBridgeCard2Text') }}</p>
         </div>
         <div class="confidentials confidentials--nephrite">
-          <h3 class="confidentials__title">Simple usage</h3>
-          <p class="confidentials__text">No need for extra TOKEN, you can call it using the chain's native token.
-          </p>
+          <h3 class="confidentials__title">{{ $t('productsBridge.teeBridgeCard3Title') }}</h3>
+          <p class="confidentials__text">{{ $t('productsBridge.teeBridgeCard3Text') }}</p>
         </div>
       </div>
     </div>

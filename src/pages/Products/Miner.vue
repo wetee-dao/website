@@ -4,11 +4,10 @@
     <div class="container section flex">
       <div class="flex flex-col items-center md:flex-row md:justify-center md:items-center w-full">
         <div class="flex-1 md:pr-20">
-          <div class="top__title">Both single TEE machine and large TEE server cluster can earn DOT/USDT</div>
-          <div class="top__text">100% decentralized protocol, 3 steps to start mining</div>
+          <div class="top__title">{{ $t('productsMiner.teeMinerTopTitle') }}</div>
+          <div class="top__text">{{ $t('productsMiner.teeMinerTopText') }}</div>
           <div class="btns mt-10">
-            <!-- <RouterLink to="/tee-store" class="btn  btn--nephrite"><span>TEE store</span></RouterLink> -->
-            <a href="javascript:void(0)" class="btn btn__primary "><span>Start Mint</span></a>
+            <a href="javascript:void(0)" class="btn btn__primary "><span>{{ $t('productsMiner.teeMinerStartMint') }}</span></a>
           </div>
         </div>
         <div class="hidden icon md:block">
@@ -19,18 +18,16 @@
     <div class="container section-first">
       <div class="grid md:grid-cols-2 lg:grid-cols-3 grid-flow-row gap-6">
         <div class="confidentials confidentials--first">
-          <h3 class="confidentials__title">Hardware compatibility</h3>
-          <p class="confidentials__text"> TEE hardware supported can include: Intel SGX\Intel TDX\AMD SEV-SNP.
-          </p>
+          <h3 class="confidentials__title">{{ $t('productsMiner.teeMinerCard1Title') }}</h3>
+          <p class="confidentials__text">{{ $t('productsMiner.teeMinerCard1Text') }}</p>
         </div>
         <div class="confidentials confidentials--yellow">
-          <h3 class="confidentials__title">Compatible with Kubernetes</h3>
-          <p class="confidentials__text">Compatible with Kubernetes, ensuring the stability and performance of mining.</p>
+          <h3 class="confidentials__title">{{ $t('productsMiner.teeMinerCard2Title') }}</h3>
+          <p class="confidentials__text">{{ $t('productsMiner.teeMinerCard2Text') }}</p>
         </div>
         <div class="confidentials confidentials--nephrite">
-          <h3 class="confidentials__title">Decentralized</h3>
-          <p class="confidentials__text">Decentralized smart contract control, transparent buying and selling market.
-          </p>
+          <h3 class="confidentials__title">{{ $t('productsMiner.teeMinerCard3Title') }}</h3>
+          <p class="confidentials__text">{{ $t('productsMiner.teeMinerCard3Text') }}</p>
         </div>
       </div>
     </div>

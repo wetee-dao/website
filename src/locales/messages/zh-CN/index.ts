@@ -5,6 +5,8 @@ import footer from './footer'
 import chain from './chain'
 import chainDetail from './chainDetail'
 import products from './products'
+import productsBridge from './productsBridge'
+import productsMiner from './productsMiner'
 import productsCloud from './productsCloud'
 import productsStore from './productsStore'
 import productsMpc from './productsMpc'
@@ -21,6 +23,8 @@ export default {
   chain,
   chainDetail,
   products,
+  productsBridge,
+  productsMiner,
   productsCloud,
   productsStore,
   productsMpc,
