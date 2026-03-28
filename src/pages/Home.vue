@@ -510,7 +510,7 @@ const prodBadgeClass =
   'mt-auto pt-4 text-[0.6875rem] font-medium uppercase tracking-[0.1em] text-[rgba(var(--g-secondary-text-rgb),0.35)]'
 
 const whyCardClass =
-  'group rounded-sm border border-white/[0.06] border-l-2 border-l-[rgba(var(--g-primary-text-rgb),0.38)] bg-[linear-gradient(100deg,rgba(var(--g-primary-text-rgb),0.07)_0%,rgba(255,255,255,0.02)_45%,transparent_100%)] px-5 py-6 pl-5 transition-[border-color,box-shadow] duration-300 hover:border-white/[0.1] hover:border-l-[rgba(var(--g-primary-text-rgb),0.55)] hover:shadow-[0_16px_40px_rgba(0,0,0,0.35)]'
+  'group rounded-sm border-l-2 border-l-[rgba(var(--g-primary-text-rgb),0.38)] bg-[linear-gradient(100deg,rgba(var(--g-primary-text-rgb),0.07)_0%,rgba(255,255,255,0.02)_45%,transparent_100%)] px-5 py-6 pl-5 transition-[border-color,box-shadow] duration-300 hover:border-white/[0.1] hover:border-l-[rgba(var(--g-primary-text-rgb),0.55)] hover:shadow-[0_16px_40px_rgba(0,0,0,0.35)]'
 
 const blocks = ref<any[]>([])
 const txs = ref<any[]>([])

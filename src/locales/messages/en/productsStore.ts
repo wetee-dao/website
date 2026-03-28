@@ -1,4 +1,14 @@
 export default {
+  title: 'TEE Store',
+  subtitle: 'AI Model Marketplace',
+  createDisk: 'Create disk',
+  card1Title: 'TEE-protected models',
+  card1Text: 'Browse models executed with hardware-backed confidentiality.',
+  card2Title: 'One-click deployment',
+  card2Text: 'Deploy inference endpoints without hand-rolling infra.',
+  card3Title: 'Verified model integrity',
+  card3Text: 'Integrity checks and attestations tied to on-chain expectations.',
+
   teeStore: 'TEE Store',
   teeStoreSubtitle: 'AI Model Marketplace',
   teeStoreDesc: 'AI model marketplace. One-click deploy.',

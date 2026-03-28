@@ -13,7 +13,7 @@ export default {
     featVm: 'TEE VM',
     featVmSub: 'Confidential VM',
     featBridge: 'TEE Bridge',
-    featBridgeSub: 'Bridge TEE ↔\u20e3 Contracts',
+    featBridgeSub: 'Bridge TEE ↔ Contracts',
     featMpc: 'TEE MPC',
     featMpcSub: 'Confidential MPC',
   },

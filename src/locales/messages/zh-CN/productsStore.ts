@@ -1,4 +1,14 @@
 export default {
+  title: 'TEE Store',
+  subtitle: 'AI 模型市场',
+  createDisk: '创建磁盘',
+  card1Title: 'TEE 保护模型',
+  card1Text: '浏览在硬件级机密环境下运行的模型。',
+  card2Title: '一键部署',
+  card2Text: '无需从零搭建基础设施即可部署推理端点。',
+  card3Title: '模型完整性验证',
+  card3Text: '与链上预期绑定的完整性校验与证明。',
+
   teeStore: 'TEE Store',
   teeStoreSubtitle: 'AI 模型市场',
   teeStoreDesc: 'AI 模型市场。点击即部署。',

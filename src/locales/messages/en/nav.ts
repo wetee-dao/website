@@ -20,7 +20,7 @@ export default {
   teeStorage: 'TEE Storage',
   teeMpc: 'TEE MPC',
   cloudSubtitle: 'Decentralized confidential containers',
-  bridgeSubtitle: 'Bridge TEE ↔\u20e3 Contracts',
+  bridgeSubtitle: 'Bridge TEE ↔ Contracts',
   minerSubtitle: 'Provide computing power to earn',
   storeSubtitle: 'Decentralized encrypted storage',
   mpcSubtitle: 'MPC base on blockchain and TEE',

@@ -1,4 +1,18 @@
 export default {
+  title: 'TEE MPC',
+  subtitle: 'Secure Multi-Party Computation',
+  startToUse: 'Start Using',
+  card1Title: 'No trusted setup',
+  card1Text: 'Run multi-party programs without a trusted initialization ceremony.',
+  card2Title: 'Input privacy guaranteed',
+  card2Text: 'Parties contribute data without revealing raw inputs to each other.',
+  card3Title: 'Verifiable computation',
+  card3Text: 'Prove execution correctness against agreed programs and policies.',
+  card4Title: 'Multi-party execution',
+  card4Text: 'Coordinate roles and updates across participants with clear trust boundaries.',
+  card5Title: 'Hardware-backed isolation',
+  card5Text: 'Combine MPC flows with TEE attestation where policies require it.',
+
   teeMPC: 'TEE MPC',
   teeMPCSubtitle: 'Secure Multi-Party Computation',
   teeMPCDesc: 'Secure multi-party computation. No trusted setup.',

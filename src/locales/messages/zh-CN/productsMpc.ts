@@ -1,4 +1,18 @@
 export default {
+  title: 'TEE MPC',
+  subtitle: '安全多方计算',
+  startToUse: '开始使用',
+  card1Title: '无需可信初始化',
+  card1Text: '多方程序无需可信初始化仪式即可运行。',
+  card2Title: '输入隐私保障',
+  card2Text: '各方贡献数据而无需向彼此暴露原始输入。',
+  card3Title: '可验证计算',
+  card3Text: '针对约定程序与策略证明执行正确性。',
+  card4Title: '多方协同执行',
+  card4Text: '在清晰信任边界下协调参与者角色与状态更新。',
+  card5Title: '硬件级隔离',
+  card5Text: '在策略需要时将 MPC 流程与 TEE 证明结合。',
+
   teeMPC: 'TEE MPC',
   teeMPCSubtitle: '安全多方计算',
   teeMPCDesc: '安全多方计算。无需可信初始化。',
