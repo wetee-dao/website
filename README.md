@@ -1,86 +1,113 @@
-# WeTEE Website (Vue 3 + Vite)
+[English](README.md) | [中文](README_zh-CN.md)
 
-The WeTEE frontend website, built with Vue 3, TypeScript and Vite.
+---
 
-## Requirements
+# Web2Plus
 
-- Node.js (LTS recommended)
-- npm
+**Run any program with privacy. Deploy to any chain.**
 
-## Quick start
+Web2Plus is a TEE-backed confidential computing platform that connects off-chain programs with on-chain smart contracts. Pay with USDT, ETH, BNB, or SOL — no new token required.
 
-```sh
-npm install
-npm run dev
+[Website](https://wetee.app) · [Docs](https://docs.wetee.app) · [Twitter](https://twitter.com/web2plus)
+
+---
+
+## The Problem
+
+```
+Off-chain programs     →     On-chain contracts
+──────────────────────────────────────────────
+Private execution      →     Transparent (no privacy)
+Fast & cheap          →     Slow & expensive
+Easy to build         →     Hard to build
 ```
 
-Then open the printed local URL (usually `http://localhost:5173`).
+Web2 programs are fast and private but can't interact with blockchain logic.
+Smart contracts are transparent and decentralized but can't run complex programs.
 
-## Scripts
+**Web2Plus bridges both.**
 
-- **dev**: start local development server
+---
 
-```sh
-npm run dev
+## How It Works
+
+```
+Your Program
+     ↓
+TEE Hardware (Intel SGX/TDX/SEV-SNP)
+     ↓
+Confidential Execution
+     ↓
+On-chain Verification
+     ↓
+Smart Contract
 ```
 
-- **build**: type-check and build for production
+1. **Deploy** your program to TEE VM
+2. **Run** with hardware-level privacy
+3. **Verify** results on-chain
+4. **Trigger** smart contracts without a trusted oracle
 
-```sh
-npm run build
-```
+---
 
-- **preview**: preview the production build locally
+## Products
 
-```sh
-npm run preview
-```
+| Product | Status | Description |
+|---------|--------|-------------|
+| **TEE VM** | ✅ Live | Confidential computing VM. Run any program with hardware-level privacy. |
+| **TEE Store** | ✅ Live | App marketplace. One-click deploy TEE-protected applications. |
+| **TEE Bridge** | 🔜 Soon | Bridge TEE ↔️ Contracts. Bring confidential computation on-chain. |
+| **TEE Miner** | 🔜 Soon | Earn by running TEE nodes. Hardware or cloud. |
+| **TEE MPC** | 🔜 Soon | Secure multi-party computation. No trusted setup. |
 
-- **lint**: run ESLint
+---
 
-```sh
-npm run lint
-```
+## Why Web2Plus
 
-- **test:unit**: run unit tests (Vitest)
+| | |
+|-|---|
+| **Any Program** | Not just AI — any off-chain program |
+| **Any Chain** | Polkadot, Ethereum, BSC, Solana — one API |
+| **No Token** | Pay with USDT, ETH, BNB, or SOL |
+| **TEE Protected** | Intel SGX/TDX/SEV-SNP hardware-backed privacy |
+| **On-chain Verified** | Not a black box — results can be verified |
+| **No Oracle** | Direct TEE → Smart contract execution |
 
-```sh
-npm run test:unit
-```
+---
 
-## Project structure
+## Tech Stack
 
-- `src/`: app source code
-  - `pages/`: route pages (e.g. `src/pages/Chain/Pods.vue`)
-  - `components/`: shared UI components
-  - `router/`: Vue Router routes
-  - `apis/`: chain / backend API wrappers (e.g. `src/apis/main-chain.ts`)
-  - `providers/`: chain providers (Ink / Substrate, etc.)
-  - `assets/`: global styles and assets
-- `public/`: static assets served as-is
-  - `public/contract/`: contract ABIs (`cloud.json`, `subnet.json`)
-  - `public/config/`: runtime configs
+- **Blockchain:** Polkadot (Substrate), EVM compatible chains
+- **Privacy:** TEE (Intel SGX/TDX/SEV-SNP)
+- **Execution:** Off-chain TEE programs, on-chain verification
 
-## Chain / contracts
+---
 
-This site talks to the WeTEE contracts via the ABI files in `public/contract/` and the chain provider in `src/providers/`.
+## Community
 
-If you update contract addresses or endpoints, check:
+- [Twitter](https://twitter.com/web2plus) — product updates & threads
+- [Discord](https://discord.gg/web2plus) — developer chat
+- [Telegram](https://t.me/web2plus) — announcements
 
-- `src/config.ts` (contract addresses)
-- `src/plugins/chain.ts` (chain endpoints / current node selection)
-- `public/contract/*.json` (ABIs)
+---
 
-## IDE setup
+## Status
 
-Recommended:
+| Component | Status |
+|-----------|--------|
+| Website | ✅ Live at [wetee.app](https://wetee.app) |
+| TEE VM | ✅ Live |
+| TEE Store | ✅ Live |
+| TEE Bridge | 🔜 Coming soon |
+| TEE Miner | 🔜 Coming soon |
+| TEE MPC | 🔜 Coming soon |
 
-- VS Code
-- Volar (`Vue.volar`)
+---
 
-## Docker (optional)
+## Contributing
 
-There are helper scripts in `hacks/` for building/running via Docker:
+PRs welcome. Check [open issues](./issues).
 
-- `hacks/build.sh`
-- `hacks/docker.sh`
+## License
+
+MIT
