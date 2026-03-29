@@ -1,8 +1,8 @@
 <template>
-  <div class="min-h-screen pt-[90px] gradient-body">
+  <div class="min-h-screen pt-[100px] gradient-body">
     <!-- Hero -->
     <section
-      class="box-border flex min-h-[700px] h-[calc(100vh-120px)] flex-col"
+      class="box-border flex flex-col h-[calc(100vh-120px)] min-h-[760px] sm:min-h-[650px] md:min-h-[640px] lg:min-h-[720px] xl:min-h-[600px]"
     >
       <div
         class="hero-banner container relative flex min-h-0 flex-1 flex-col overflow-hidden border-4 border-[#ffffff0f] bg-[rgba(var(--g-primary-bg-rgb),0.35)]"
