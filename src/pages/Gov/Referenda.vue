@@ -8,18 +8,18 @@
         <div class="chain-box main-box">
           <div class="title-wrap flex flex-wrap justify-between items-center gap-4">
             <div>
-              <h1 class="page-title">OpenGov Referenda</h1>
-              <p class="page-subtitle">Subscribe on-chain events · All active and history referenda</p>
+              <h1 class="page-title">{{ t('gov.pageTitle') }}</h1>
+              <p class="page-subtitle">{{ t('gov.pageSubtitle') }}</p>
             </div>
             <div class="flex items-center">
-              <button class="btn btn--outline px-4" type="button">Delegate</button>
-              <button class="btn btn--outline px-4" type="button">Subscribe</button>
+              <button class="btn btn--outline px-4" type="button">{{ t('gov.delegate') }}</button>
+              <button class="btn btn--outline px-4" type="button">{{ t('gov.subscribe') }}</button>
             </div>
           </div>
 
           <!-- Tracks 筛选 -->
           <div class="tracks-wrap flex items-center">
-            <div class="tracks-label mr-2">Referenda Tracks</div>
+            <div class="tracks-label mr-2">{{ t('gov.tracks') }}</div>
             <div class="tracks-tabs flex flex-wrap gap-2">
               <button
                 v-for="t in trackOptions"
@@ -44,23 +44,23 @@
             >
               <div class="referendum-id">#{{ r.id }}</div>
               <div class="referendum-body flex-1 min-w-0">
-                <h3 class="referendum-title">{{ r.title }}</h3>
+                <h3 class="referendum-title">{{ t(r.titleKey) }}</h3>
                 <div class="referendum-meta flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-secondary">
                   <span v-if="r.amount" class="amount">{{ r.amount }}</span>
                   <span class="proposer">{{ r.proposer }}</span>
-                  <span class="track-badge">{{ r.track }}</span>
+                  <span class="track-badge">{{ t(r.trackKey) }}</span>
                   <span class="time-ago">{{ timeAgo(r.createdAt) }}</span>
                 </div>
               </div>
               <div class="referendum-right flex items-center gap-3 shrink-0">
                 <span v-if="r.comments !== undefined" class="comments">{{ r.comments }}</span>
-                <span class="status-badge" :class="statusClass(r.status)">{{ r.status }}</span>
+                <span class="status-badge" :class="statusClass(r.status)">{{ statusLabel(r.status) }}</span>
               </div>
             </RouterLink>
           </div>
 
           <div v-if="filteredReferenda.length === 0" class="empty-state p-10 text-center text-secondary">
-            No referenda match the current filter.
+            {{ t('gov.empty') }}
           </div>
         </div>
       </main>
@@ -71,6 +71,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import GovSidebar from './GovSidebar.vue'
 import { timeAgo } from '@/utils/time'
 
@@ -78,127 +79,52 @@ type Status = 'Deciding' | 'Preparing' | 'Executed' | 'TimedOut' | 'Rejected'
 
 interface Referendum {
   id: number
-  title: string
+  titleKey: string
   amount?: string
   proposer: string
-  track: string
+  trackKey: string
   createdAt: string | number
   status: Status
   comments?: number
 }
 
+const { t } = useI18n()
 const trackFilter = ref<string>('all')
 const filterNewOnly = ref(false)
 
-const trackOptions = [
-  { value: 'all', label: 'All' },
-  { value: 'system', label: 'System' },
-  { value: 'treasury', label: 'Treasury' },
-  { value: 'others', label: 'Others' },
-]
+const trackOptions = computed(() => [
+  { value: 'all', label: t('gov.all') },
+  { value: 'system', label: t('gov.system') },
+  { value: 'treasury', label: t('gov.treasury') },
+  { value: 'others', label: t('gov.others') },
+])
 
 // 模拟数据（参考 Subsquare Polkadot Referenda）
 const referenda = ref<Referendum[]>([
   {
     id: 1836,
-    title: 'Polkadot-API 2026 Development Funding through Polkadot Community Foundation',
+    titleKey: 'gov.title1836',
     amount: '≈955.21K USDC',
     proposer: '16JG...pr9J',
-    track: 'Medium Spender',
+    trackKey: 'gov.trackMediumSpender',
     createdAt: Date.now() - 12 * 60 * 60 * 1000,
     status: 'Deciding',
     comments: 0,
   },
-  {
-    id: 1833,
-    title: 'Polkadot Moderation Team Bounty Top-up',
-    amount: '82,118 DOT',
-    proposer: '12Gk...QKp5',
-    track: 'Medium Spender',
-    createdAt: Date.now() - 15 * 60 * 60 * 1000,
-    status: 'Deciding',
-    comments: 3,
-  },
-  {
-    id: 1832,
-    title: 'System Collator Bounty - Topup',
-    amount: '≈70.2K DOT',
-    proposer: '15D2...KwVb',
-    track: 'Medium Spender',
-    createdAt: Date.now() - 7 * 60 * 60 * 1000,
-    status: 'Deciding',
-    comments: 4,
-  },
-  {
-    id: 1837,
-    title: 'Deploy Universal Deterministic Deployment Proxy (CREATE2 Factory) on Asset Hub',
-    proposer: '15PC...irSY',
-    track: 'Whitelisted Caller',
-    createdAt: Date.now() - 15 * 60 * 60 * 1000,
-    status: 'Preparing',
-    comments: 0,
-  },
-  {
-    id: 1835,
-    title: 'Cancelled: Let this proposal time out',
-    proposer: '15PC...irSY',
-    track: 'Root',
-    createdAt: Date.now() - 15 * 60 * 60 * 1000,
-    status: 'Preparing',
-    comments: 0,
-  },
-  {
-    id: 1828,
-    title: 'Polkadot Upgrade 2.0.5',
-    proposer: '13TR...wxUE',
-    track: 'Whitelisted Caller',
-    createdAt: Date.now() - 3 * 24 * 60 * 60 * 1000,
-    status: 'Executed',
-    comments: 9,
-  },
-  {
-    id: 1827,
-    title: '[Wish For Change] The Dynamic Allocation Pool (DAP) and the future of staking: Phase 1',
-    proposer: '13b1...aAUN',
-    track: 'Wish For Change',
-    createdAt: Date.now() - 2 * 24 * 60 * 60 * 1000 - 15 * 60 * 60 * 1000,
-    status: 'Executed',
-    comments: 7,
-  },
-  {
-    id: 1826,
-    title: '[Root] Referendum #1826',
-    proposer: '16MP...gt9R',
-    track: 'Root',
-    createdAt: Date.now() - 26 * 24 * 60 * 60 * 1000,
-    status: 'TimedOut',
-    comments: 3,
-  },
-  {
-    id: 1825,
-    title: '[Small Spender] Squidsway Governance Report and Tool',
-    amount: '8,000 USDT',
-    proposer: '13id...Cs2M',
-    track: 'Small Spender',
-    createdAt: Date.now() - 12 * 24 * 60 * 60 * 1000,
-    status: 'Rejected',
-    comments: 5,
-  },
 ])
 
-function trackGroup(track: string): string {
-  const t = track.toLowerCase()
-  if (t.includes('root') || t.includes('wish for change')) return 'system'
-  if (t.includes('tipper') || t.includes('spender') || t.includes('treasurer')) return 'treasury'
-  if (t.includes('admin') || t.includes('canceller') || t.includes('killer')) return 'governance'
-  if (t.includes('whitelisted') || t.includes('fellowship')) return 'fellowship'
+function trackGroup(trackKey: string): string {
+  const track = t(trackKey).toLowerCase()
+  if (track.includes('root') || track.includes('wish for change') || track.includes('变更意愿')) return 'system'
+  if (track.includes('tipper') || track.includes('spender') || track.includes('treasurer') || track.includes('支出') || track.includes('国库')) return 'treasury'
+  if (track.includes('whitelisted') || track.includes('fellowship') || track.includes('白名单')) return 'others'
   return 'others'
 }
 
 const filteredReferenda = computed(() => {
   let list = referenda.value
   if (trackFilter.value !== 'all') {
-    list = list.filter((r) => trackGroup(r.track) === trackFilter.value)
+    list = list.filter((r) => trackGroup(r.trackKey) === trackFilter.value)
   }
   if (filterNewOnly.value) {
     const oneDay = 24 * 60 * 60 * 1000
@@ -219,6 +145,17 @@ function statusClass(status: Status): string {
     Rejected: 'status-rejected',
   }
   return map[status] || ''
+}
+
+function statusLabel(status: Status): string {
+  const map: Record<Status, string> = {
+    Deciding: t('gov.statusDeciding'),
+    Preparing: t('gov.statusPreparing'),
+    Executed: t('gov.statusExecuted'),
+    TimedOut: t('gov.statusTimedOut'),
+    Rejected: t('gov.statusRejected'),
+  }
+  return map[status] || status
 }
 </script>
 

@@ -1,29 +1,29 @@
 <template>
   <aside class="gov-sidebar shrink-0 lg:w-56">
     <div class="chain-box sidebar-box">
-      <div class="sidebar-title">Governance</div>
+      <div class="sidebar-title">{{ t('gov.governance') }}</div>
       <nav class="sidebar-nav">
         <RouterLink to="/gov?tab=overview" class="nav-item" :class="{ active: isOverviewActive }">
-          Overview
+          {{ t('gov.overview') }}
         </RouterLink>
         <RouterLink to="/gov" class="nav-item" :class="{ active: isReferendaActive }">
-          Referenda
+          {{ t('gov.referenda') }}
         </RouterLink>
-        <a href="javascript:void(0)" class="nav-item">Discussions</a>
-        <a href="javascript:void(0)" class="nav-item">Delegation</a>
+        <a href="javascript:void(0)" class="nav-item">{{ t('gov.discussions') }}</a>
+        <a href="javascript:void(0)" class="nav-item">{{ t('gov.delegation') }}</a>
       </nav>
       <div class="sidebar-divider" />
-      <div class="sidebar-title">Treasury</div>
+      <div class="sidebar-title">{{ t('gov.treasuryTitle') }}</div>
       <nav class="sidebar-nav">
-        <a href="javascript:void(0)" class="nav-item">Status</a>
-        <a href="javascript:void(0)" class="nav-item">Spends</a>
-        <a href="javascript:void(0)" class="nav-item">Proposals</a>
+        <a href="javascript:void(0)" class="nav-item">{{ t('gov.status') }}</a>
+        <a href="javascript:void(0)" class="nav-item">{{ t('gov.spends') }}</a>
+        <a href="javascript:void(0)" class="nav-item">{{ t('gov.proposals') }}</a>
       </nav>
       <div class="sidebar-divider" />
-      <div class="sidebar-title">Others</div>
+      <div class="sidebar-title">{{ t('gov.othersTitle') }}</div>
       <nav class="sidebar-nav">
-        <a href="javascript:void(0)" class="nav-item">Staking</a>
-        <a href="javascript:void(0)" class="nav-item">Preimages</a>
+        <a href="javascript:void(0)" class="nav-item">{{ t('gov.staking') }}</a>
+        <a href="javascript:void(0)" class="nav-item">{{ t('gov.preimages') }}</a>
       </nav>
     </div>
   </aside>
@@ -32,8 +32,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 
 const route = useRoute()
+const { t } = useI18n()
 
 const isOverviewActive = computed(() => route.path === '/gov' && route.query.tab === 'overview')
 

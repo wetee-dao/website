@@ -14,7 +14,7 @@
           <nav class="breadcrumb flex flex-wrap items-center gap-1 text-sm mb-4">
             <RouterLink to="/gov" class="breadcrumb-link">{{ t('govDetail.referenda') }}</RouterLink>
             <span class="breadcrumb-sep">/</span>
-            <span class="breadcrumb-link">{{ detail.track }}</span>
+            <span class="breadcrumb-link">{{ t(detail.trackKey) }}</span>
             <span class="breadcrumb-sep">/</span>
             <span class="breadcrumb-current">#{{ detail.id }}</span>
           </nav>
@@ -22,13 +22,13 @@
           <div class="chain-box main-box">
             <!-- 标题 + 元信息 -->
             <div class="detail-header border-b border-white/6">
-              <h1 class="detail-title">{{ detail.title }}</h1>
+              <h1 class="detail-title">{{ t(detail.titleKey) }}</h1>
               <div class="detail-meta flex flex-wrap items-center gap-x-4 gap-y-2 mt-3">
                 <span class="meta-proposer">{{ detail.proposer }}</span>
-                <span class="track-badge">{{ detail.track }}</span>
+                <span class="track-badge">{{ t(detail.trackKey) }}</span>
                 <span class="meta-time">{{ timeAgo(detail.createdAt) }}</span>
                 <span v-if="detail.comments !== undefined" class="meta-comments">{{ detail.comments }}</span>
-                <span class="status-badge" :class="statusClass(detail.status)">{{ detail.status }}</span>
+                <span class="status-badge" :class="statusClass(detail.status)">{{ statusLabel(detail.status) }}</span>
               </div>
             </div>
 
@@ -153,10 +153,10 @@ type Status = 'Deciding' | 'Preparing' | 'Executed' | 'TimedOut' | 'Rejected'
 
 interface ReferendumDetail {
   id: number
-  title: string
+  titleKey: string
   amount?: string
   proposer: string
-  track: string
+  trackKey: string
   createdAt: string | number
   status: Status
   comments?: number
@@ -198,51 +198,51 @@ const detail = computed<ReferendumDetail | null>(() => {
 
 function getReferendumBase(rid: number): Record<string, unknown> | null {
   const list: Record<string, unknown>[] = [
-    { id: 1836, title: 'Polkadot-API 2026 Development Funding through Polkadot Community Foundation', amount: '≈955.21K USDC', proposer: '16JG...pr9J', track: 'Medium Spender', createdAt: Date.now() - 12 * 60 * 60 * 1000, status: 'Deciding', comments: 0 },
-    { id: 1833, title: 'Polkadot Moderation Team Bounty Top-up', amount: '82,118 DOT', proposer: '12Gk...QKp5', track: 'Medium Spender', createdAt: Date.now() - 15 * 60 * 60 * 1000, status: 'Deciding', comments: 3 },
-    { id: 1832, title: 'System Collator Bounty - Topup', amount: '≈70.2K DOT', proposer: '15D2...KwVb', track: 'Medium Spender', createdAt: Date.now() - 7 * 60 * 60 * 1000, status: 'Deciding', comments: 4 },
-    { id: 1837, title: 'Deploy Universal Deterministic Deployment Proxy (CREATE2 Factory) on Asset Hub', proposer: '15PC...irSY', track: 'Whitelisted Caller', createdAt: Date.now() - 15 * 60 * 60 * 1000, status: 'Preparing', comments: 0 },
-    { id: 1835, title: 'Cancelled: Let this proposal time out', proposer: '15PC...irSY', track: 'Root', createdAt: Date.now() - 15 * 60 * 60 * 1000, status: 'Preparing', comments: 0 },
-    { id: 1828, title: 'Polkadot Upgrade 2.0.5', proposer: '13TR...wxUE', track: 'Whitelisted Caller', createdAt: Date.now() - 3 * 24 * 60 * 60 * 1000, status: 'Executed', comments: 9 },
-    { id: 1827, title: '[Wish For Change] The Dynamic Allocation Pool (DAP) and the future of staking: Phase 1', proposer: '13b1...aAUN', track: 'Wish For Change', createdAt: Date.now() - 2 * 24 * 60 * 60 * 1000 - 15 * 60 * 60 * 1000, status: 'Executed', comments: 7 },
-    { id: 1826, title: '[Root] Referendum #1826', proposer: '16MP...gt9R', track: 'Root', createdAt: Date.now() - 26 * 24 * 60 * 60 * 1000, status: 'TimedOut', comments: 3 },
-    { id: 1825, title: '[Small Spender] Squidsway Governance Report and Tool', amount: '8,000 USDT', proposer: '13id...Cs2M', track: 'Small Spender', createdAt: Date.now() - 12 * 24 * 60 * 60 * 1000, status: 'Rejected', comments: 5 },
+    { id: 1836, titleKey: 'gov.title1836', amount: '≈955.21K USDC', proposer: '16JG...pr9J', trackKey: 'gov.trackMediumSpender', createdAt: Date.now() - 12 * 60 * 60 * 1000, status: 'Deciding', comments: 0 },
+    { id: 1833, titleKey: 'gov.title1833', amount: '82,118 DOT', proposer: '12Gk...QKp5', trackKey: 'gov.trackMediumSpender', createdAt: Date.now() - 15 * 60 * 60 * 1000, status: 'Deciding', comments: 3 },
+    { id: 1832, titleKey: 'gov.title1832', amount: '≈70.2K DOT', proposer: '15D2...KwVb', trackKey: 'gov.trackMediumSpender', createdAt: Date.now() - 7 * 60 * 60 * 1000, status: 'Deciding', comments: 4 },
+    { id: 1837, titleKey: 'gov.title1837', proposer: '15PC...irSY', trackKey: 'gov.trackWhitelistedCaller', createdAt: Date.now() - 15 * 60 * 60 * 1000, status: 'Preparing', comments: 0 },
+    { id: 1835, titleKey: 'gov.title1835', proposer: '15PC...irSY', trackKey: 'gov.trackRoot', createdAt: Date.now() - 15 * 60 * 60 * 1000, status: 'Preparing', comments: 0 },
+    { id: 1828, titleKey: 'gov.title1828', proposer: '13TR...wxUE', trackKey: 'gov.trackWhitelistedCaller', createdAt: Date.now() - 3 * 24 * 60 * 60 * 1000, status: 'Executed', comments: 9 },
+    { id: 1827, titleKey: 'gov.title1827', proposer: '13b1...aAUN', trackKey: 'gov.trackWishForChange', createdAt: Date.now() - 2 * 24 * 60 * 60 * 1000 - 15 * 60 * 60 * 1000, status: 'Executed', comments: 7 },
+    { id: 1826, titleKey: 'gov.title1826', proposer: '16MP...gt9R', trackKey: 'gov.trackRoot', createdAt: Date.now() - 26 * 24 * 60 * 60 * 1000, status: 'TimedOut', comments: 3 },
+    { id: 1825, titleKey: 'gov.title1825', amount: '8,000 USDT', proposer: '13id...Cs2M', trackKey: 'gov.trackSmallSpender', createdAt: Date.now() - 12 * 24 * 60 * 60 * 1000, status: 'Rejected', comments: 5 },
   ]
   return list.find((r) => Number(r.id) === rid) || null
 }
 
 function getReferendumDetail(rid: number, base: Record<string, unknown>): ReferendumDetail {
   const defaultContent = [
-    'This proposal covers the funding for the continued development and the additional efforts of the team.',
-    'We are seeking funding for ongoing development and maintenance. You can review all the details in the linked documents.',
-    'Once the referendum is approved, the team will go through the following process: Create and sign a contractual agreement; execute each payment per milestone.',
+    t('gov.detailDefaultContent1'),
+    t('gov.detailDefaultContent2'),
+    t('gov.detailDefaultContent3'),
   ]
   const defaultSummary = [
-    'This proposal is about funding for development.',
-    'The team wants support to continue working on the project.',
-    'They will sign a contract and get paid per milestone.',
+    t('gov.detailDefaultSummary1'),
+    t('gov.detailDefaultSummary2'),
+    t('gov.detailDefaultSummary3'),
   ]
   if (rid === 1836) {
     return {
       ...base,
       id: rid,
-      title: (base.title as string) || '',
+      titleKey: (base.titleKey as string) || '',
       proposer: (base.proposer as string) || '',
-      track: (base.track as string) || '',
+      trackKey: (base.trackKey as string) || '',
       createdAt: base.createdAt as number,
       status: (base.status as Status) || 'Deciding',
       contentParagraphs: [
-        'This proposal covers the funding for the continued development of Polkadot-API and the additional efforts of its team for 2026.',
-        'Over the past development cycles, we have introduced new features and enhancements to Polkadot-API, along with additional libraries that complement and expand its capabilities. We have also released a series of tech demos that are valuable in their own right, while also showcasing the potential of these libraries.',
-        'We are seeking funding for ongoing development and maintenance through the Polkadot Community Foundation, for the months from January 2026 to December 2026. As outlined in their documentation, the beneficiary is their address in AssetHub.',
-        'Once the referendum is approved, the PCF and Polkadot-API team will go through the following process: Create and sign a contractual agreement; for each monthly milestone, the team will issue an invoice to the PCF; the PCF will execute each payment.',
+        t('gov.detail1836Content1'),
+        t('gov.detail1836Content2'),
+        t('gov.detail1836Content3'),
+        t('gov.detail1836Content4'),
       ],
       aiSummary: [
-        'Polkadot-API is a tool for developers.',
-        'The team wants money to keep working on it in 2026.',
-        'They have made new features and cool demos.',
-        'They will sign a contract and get paid each month.',
-        'Some extra money is set aside for costs.',
+        t('gov.detail1836Summary1'),
+        t('gov.detail1836Summary2'),
+        t('gov.detail1836Summary3'),
+        t('gov.detail1836Summary4'),
+        t('gov.detail1836Summary5'),
       ],
       decisionPeriod: '28d',
       confirmationPeriod: '4d',
@@ -261,9 +261,9 @@ function getReferendumDetail(rid: number, base: Record<string, unknown>): Refere
   return {
     ...base,
     id: rid,
-    title: (base.title as string) || '',
+    titleKey: (base.titleKey as string) || '',
     proposer: (base.proposer as string) || '',
-    track: (base.track as string) || '',
+    trackKey: (base.trackKey as string) || '',
     createdAt: base.createdAt as number,
     status: (base.status as Status) || 'Deciding',
     contentParagraphs: defaultContent,
@@ -292,6 +292,17 @@ function statusClass(status: Status): string {
     Rejected: 'status-rejected',
   }
   return map[status] || ''
+}
+
+function statusLabel(status: Status): string {
+  const map: Record<Status, string> = {
+    Deciding: t('gov.statusDeciding'),
+    Preparing: t('gov.statusPreparing'),
+    Executed: t('gov.statusExecuted'),
+    TimedOut: t('gov.statusTimedOut'),
+    Rejected: t('gov.statusRejected'),
+  }
+  return map[status] || status
 }
 </script>
 
@@ -498,8 +509,6 @@ function statusClass(status: Status): string {
 }
 
 .actions-btns .btn {
-  font-size: 13px;
-  padding: 10px 20px;
   border-radius: 2px;
   border: 1px solid rgba($secondary-text-rgb, 0.2);
   background: transparent;
