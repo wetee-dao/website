@@ -12,7 +12,7 @@
               <p class="page-subtitle">{{ t('gov.pageSubtitle') }}</p>
             </div>
             <div class="flex items-center">
-              <button class="btn btn--outline px-4" type="button">{{ t('gov.delegate') }}</button>
+              <button @click="test" class="btn btn--outline px-4" type="button">{{ t('gov.delegate') }}</button>
               <button class="btn btn--outline px-4" type="button">{{ t('gov.subscribe') }}</button>
             </div>
           </div>
@@ -70,10 +70,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import GovSidebar from './GovSidebar.vue'
 import { timeAgo } from '@/utils/time'
+import { SecretContractApi } from '@/apis/contract'
 
 type Status = 'Deciding' | 'Preparing' | 'Executed' | 'TimedOut' | 'Rejected'
 
@@ -157,6 +158,14 @@ function statusLabel(status: Status): string {
   }
   return map[status] || status
 }
+
+const test = () => {
+  SecretContractApi.members()
+}
+
+onMounted(()=>{
+  
+})
 </script>
 
 <style lang="scss" scoped>
