@@ -6,11 +6,11 @@
         <RouterLink to="/gov/overview" class="nav-item" :class="{ active: isOverviewActive }">
           {{ t('gov.overview') }}
         </RouterLink>
-        <RouterLink to="/gov" class="nav-item" :class="{ active: isReferendaActive }">
-          {{ t('gov.referenda') }}
-        </RouterLink>
         <RouterLink to="/gov/members" class="nav-item" :class="{ active: isMembersActive }">
           {{ t('gov.members') }}
+        </RouterLink>
+        <RouterLink to="/gov" class="nav-item" :class="{ active: isReferendaActive }">
+          {{ t('gov.referenda') }}
         </RouterLink>
         <RouterLink to="/gov/tracks" class="nav-item" :class="{ active: isTracksActive }">
           {{ t('gov.tracks') }}

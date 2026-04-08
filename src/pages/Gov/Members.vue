@@ -53,11 +53,20 @@
             <h3 class="section-title">{{ t('govMembers.memberList') }}</h3>
             <div class="members-list">
               <div v-for="m in members" :key="m.account.v" class="member-item">
-                <div class="member-info">
-                  <span class="member-address">{{ m.account.v }}</span>
-                  <span class="member-balance">{{ m.balance }}</span>
+                <div class="member-info flex flex-row" v-if="m.account.t == 1">
+                  <div class="member-address-row">
+                    <!-- Polkadot 账户显示 identicon -->
+                    <PolkadotIdenticon 
+                      class="member-icon"
+                      :address="hexToSS58(m.account.v)"
+                    />
+                    <span class="member-address">
+                      {{ hexToSS58(m.account.v)}}
+                    </span>
+                  </div>
+                  <span class="member-balance">{{ formatBalanceValue(m.balance) }}</span>
                 </div>
-                <span v-if="m.address === myAddress" class="member-badge">{{ t('govMembers.you') }}</span>
+                <span v-if="getMemberSS58(m) === myAddress" class="member-badge">{{ t('govMembers.you') }}</span>
               </div>
             </div>
           </div>
@@ -73,10 +82,12 @@
 import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import GovSidebar from './GovSidebar.vue'
+import PolkadotIdenticon from '@/components/PolkadotIdenticon.vue'
 import { SecretContractApi } from '@/apis/contract'
 import { BN } from '@polkadot/util'
 import { $getTxProvider } from '@/plugins/chain'
 import type { WalletWrap } from '@/providers'
+import { hexToSS58 } from '@/utils/chain'
 
 const { t } = useI18n()
 
@@ -88,10 +99,18 @@ function formatBalanceValue(value: any): string {
   try {
     const bn = new BN(String(value).replace(/,/g, ''))
     const formatted = bn.div(new BN(WTE)).toNumber()
-    return formatted.toLocaleString() + ' WTE'
+    return formatted.toLocaleString() + ' VOTE'
   } catch {
     return String(value)
   }
+}
+
+// 获取成员的 ss58 地址
+function getMemberSS58(m: any): string {
+  if (m.account.t === 1) {
+    return hexToSS58(m.account.v)
+  }
+  return m.account.v
 }
 
 const members = ref<any[]>([])
@@ -106,7 +125,6 @@ async function loadData() {
   try {
     // 加载成员列表
     const membersResult = await SecretContractApi.members()
-    console.log(membersResult)
     if (membersResult && Array.isArray(membersResult)) {
       members.value = membersResult
     }
@@ -285,21 +303,34 @@ onMounted(() => {
       justify-content: space-between;
       align-items: center;
       padding: 16px 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
 
       &:last-child {
         border-bottom: none;
       }
 
       .member-info {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
+        width: 100%;
+        align-items: center;
 
-        .member-address {
-          font-size: 14px;
-          color: $primary-text;
-          font-family: monospace;
+        .member-address-row {
+          display: flex;
+          flex:1;
+
+          .member-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+          }
+
+          .member-address {
+            margin-left: 15px;
+            font-size: 14px;
+            line-height: 40px;
+            color: $secondary-text;
+            font-family: monospace;
+          }
         }
 
         .member-balance {

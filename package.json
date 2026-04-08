@@ -24,6 +24,7 @@
     "@polkadot/ui-shared": "^3.16.3",
     "@polkadot/util": "^13.5.8",
     "@polkadot/util-crypto": "^13.5.8",
+    "@polkadot/vue-identicon": "^3.16.7",
     "@splidejs/vue-splide": "^0.6.12",
     "@talismn/connect-wallets": "^1.2.8",
     "axios": "^1.6.7",

@@ -5,7 +5,7 @@ export default {
   pageSubtitle: '订阅链上事件 · 查看所有进行中与历史公投',
   delegate: '委托',
   subscribe: '订阅',
-  tracks: '公投赛道',
+  tracks: '公投轨道',
   all: '全部',
   system: '系统',
   treasury: '国库',
