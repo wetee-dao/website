@@ -12,6 +12,10 @@ import productsStore from './productsStore'
 import productsMpc from './productsMpc'
 import gov from './gov'
 import govDetail from './govDetail'
+import govOverview from './govOverview'
+import govMembers from './govMembers'
+import govTracks from './govTracks'
+import govSpends from './govSpends'
 import launch from './launch'
 import pods from './pods'
 
@@ -30,6 +34,10 @@ export default {
   productsMpc,
   gov,
   govDetail,
+  govOverview,
+  govMembers,
+  govTracks,
+  govSpends,
   launch,
   pods,
 }

@@ -101,18 +101,7 @@ const trackOptions = computed(() => [
 ])
 
 // 模拟数据（参考 Subsquare Polkadot Referenda）
-const referenda = ref<Referendum[]>([
-  {
-    id: 1836,
-    titleKey: 'gov.title1836',
-    amount: '≈955.21K USDC',
-    proposer: '16JG...pr9J',
-    trackKey: 'gov.trackMediumSpender',
-    createdAt: Date.now() - 12 * 60 * 60 * 1000,
-    status: 'Deciding',
-    comments: 0,
-  },
-])
+const referenda = ref<Referendum[]>([])
 
 function trackGroup(trackKey: string): string {
   const track = t(trackKey).toLowerCase()

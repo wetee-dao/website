@@ -77,9 +77,7 @@
 
 <script setup lang="ts">
 import SectionHead from '@/components/SectionHead.vue';
-import Shadow from '@/components/Shadow.vue';
 import Footer from '@/components/Footer.vue';
-import Container from '@/components/svg/Container.vue';
 import Chip2 from '@/components/anim/Chip2.vue';
 
 </script>
@@ -91,9 +89,8 @@ import Chip2 from '@/components/anim/Chip2.vue';
 }
 
 .confidentials {
-  background-color: $primary-bg;
+  background-color: $secondary-bg;
   padding: 30px 20px;
-  // border-radius: 2px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

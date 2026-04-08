@@ -21,7 +21,7 @@
 
           <div class="chain-box main-box">
             <!-- 标题 + 元信息 -->
-            <div class="detail-header border-b border-white/6">
+            <div class="detail-header border-b border-white-4">
               <h1 class="detail-title">{{ t(detail.titleKey) }}</h1>
               <div class="detail-meta flex flex-wrap items-center gap-x-4 gap-y-2 mt-3">
                 <span class="meta-proposer">{{ detail.proposer }}</span>
@@ -34,7 +34,7 @@
 
             <!-- Tabs: Content | AI Summary | Translations -->
             <div class="tabs-wrap pt-3">
-              <div class="tabs flex gap-4 border-b border-white/6">
+              <div class="tabs flex gap-4 border-b border-white-4">
                 <button
                   v-for="tab in contentTabs"
                   :key="tab.key"
@@ -64,7 +64,7 @@
             </div>
 
             <!-- Status: Decision / Confirmation / Attempts -->
-            <div class="status-section p-5 lg:p-8 border-t border-white/6">
+            <div class="status-section p-5 lg:p-8 border-t border-white-4">
               <h3 class="section-title">{{ t('govDetail.status') }}</h3>
               <div class="status-cards flex flex-wrap gap-4">
                 <div class="status-card">
@@ -83,7 +83,7 @@
             </div>
 
             <!-- Tally -->
-            <div class="tally-section p-5 lg:p-8 border-t border-white/6">
+            <div class="tally-section p-5 lg:p-8 border-t border-white-4">
               <h3 class="section-title">{{ t('govDetail.tally') }}</h3>
               <div class="tally-row flex flex-wrap gap-6 mb-4">
                 <div class="tally-aye">
@@ -105,7 +105,7 @@
             </div>
 
             <!-- Votes -->
-            <div class="votes-section p-5 lg:p-8 border-t border-white/6">
+            <div class="votes-section p-5 lg:p-8 border-t border-white-4">
               <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
                 <h3 class="section-title mb-0">{{ t('govDetail.votes') }}</h3>
                 <div class="votes-view-toggle flex gap-2">
@@ -123,7 +123,7 @@
             </div>
 
             <!-- Actions -->
-            <div class="actions-section p-5 lg:p-8 border-t border-white/6">
+            <div class="actions-section p-5 lg:p-8 border-t border-white-4">
               <h3 class="section-title">{{ t('govDetail.actions') }}</h3>
               <div class="actions-btns flex flex-wrap gap-3">
                 <button type="button" class="btn btn--primary">{{ t('govDetail.vote') }}</button>
@@ -197,17 +197,7 @@ const detail = computed<ReferendumDetail | null>(() => {
 })
 
 function getReferendumBase(rid: number): Record<string, unknown> | null {
-  const list: Record<string, unknown>[] = [
-    { id: 1836, titleKey: 'gov.title1836', amount: '≈955.21K USDC', proposer: '16JG...pr9J', trackKey: 'gov.trackMediumSpender', createdAt: Date.now() - 12 * 60 * 60 * 1000, status: 'Deciding', comments: 0 },
-    { id: 1833, titleKey: 'gov.title1833', amount: '82,118 DOT', proposer: '12Gk...QKp5', trackKey: 'gov.trackMediumSpender', createdAt: Date.now() - 15 * 60 * 60 * 1000, status: 'Deciding', comments: 3 },
-    { id: 1832, titleKey: 'gov.title1832', amount: '≈70.2K DOT', proposer: '15D2...KwVb', trackKey: 'gov.trackMediumSpender', createdAt: Date.now() - 7 * 60 * 60 * 1000, status: 'Deciding', comments: 4 },
-    { id: 1837, titleKey: 'gov.title1837', proposer: '15PC...irSY', trackKey: 'gov.trackWhitelistedCaller', createdAt: Date.now() - 15 * 60 * 60 * 1000, status: 'Preparing', comments: 0 },
-    { id: 1835, titleKey: 'gov.title1835', proposer: '15PC...irSY', trackKey: 'gov.trackRoot', createdAt: Date.now() - 15 * 60 * 60 * 1000, status: 'Preparing', comments: 0 },
-    { id: 1828, titleKey: 'gov.title1828', proposer: '13TR...wxUE', trackKey: 'gov.trackWhitelistedCaller', createdAt: Date.now() - 3 * 24 * 60 * 60 * 1000, status: 'Executed', comments: 9 },
-    { id: 1827, titleKey: 'gov.title1827', proposer: '13b1...aAUN', trackKey: 'gov.trackWishForChange', createdAt: Date.now() - 2 * 24 * 60 * 60 * 1000 - 15 * 60 * 60 * 1000, status: 'Executed', comments: 7 },
-    { id: 1826, titleKey: 'gov.title1826', proposer: '16MP...gt9R', trackKey: 'gov.trackRoot', createdAt: Date.now() - 26 * 24 * 60 * 60 * 1000, status: 'TimedOut', comments: 3 },
-    { id: 1825, titleKey: 'gov.title1825', amount: '8,000 USDT', proposer: '13id...Cs2M', trackKey: 'gov.trackSmallSpender', createdAt: Date.now() - 12 * 24 * 60 * 60 * 1000, status: 'Rejected', comments: 5 },
-  ]
+  const list: Record<string, unknown>[] = []
   return list.find((r) => Number(r.id) === rid) || null
 }
 
@@ -250,11 +240,11 @@ function getReferendumDetail(rid: number, base: Record<string, unknown>): Refere
       tally: {
         ayePct: 100,
         nayPct: 0,
-        ayeAmount: '≈203.73K DOT',
-        nayAmount: '0 DOT',
+        ayeAmount: '0 VOTE',
+        nayAmount: '0 VOTE',
         support: '0.00%',
         threshold: '0.0%',
-        issuance: '≈1.64B DOT',
+        issuance: '0 VOTE',
       },
     } as ReferendumDetail
   }
@@ -350,6 +340,10 @@ function statusLabel(status: Status): string {
 
 .border-t {
   border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.border-white-4 {
+  border-color: rgba(255, 255, 255, 0.04);
 }
 
 .detail-header {

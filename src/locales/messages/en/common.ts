@@ -9,4 +9,8 @@ export default {
   tx: 'Tx#',
   txs: 'Txs',
   includes: 'Includes',
+  yes: 'Yes',
+  no: 'No',
+  submit: 'Submit',
+  cancel: 'Cancel',
 }

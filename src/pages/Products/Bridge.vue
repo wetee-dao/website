@@ -89,7 +89,7 @@ import Footer from '@/components/Footer.vue';
 }
 
 .confidentials {
-  background-color: $primary-bg;
+  background-color: $secondary-bg;
   padding: 30px 20px;
   // border-radius: 2px;
   display: flex;

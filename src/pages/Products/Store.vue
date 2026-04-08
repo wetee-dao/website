@@ -31,6 +31,7 @@
         </div>
       </div>
     </div>
+    <div class="p-4"></div>
     <!-- <div class="features section section--bt">
       <div class="container  ">
         <div class="box flex">
@@ -97,7 +98,7 @@ const { t } = useI18n()
 }
 
 .confidentials {
-  background-color: $primary-bg;
+  background-color: $secondary-bg;
   padding: 30px 20px;
   display: flex;
   flex-direction: column;

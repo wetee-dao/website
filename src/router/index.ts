@@ -115,9 +115,29 @@ const router = createRouter({
       component: () => import('../pages/Gov/Referenda.vue')
     },
     {
+      path: '/gov/overview',
+      name: 'Gov Overview',
+      component: () => import('../pages/Gov/Overview.vue')
+    },
+    {
       path: '/gov/referenda/:id',
       name: 'Referendum Detail',
       component: () => import('../pages/Gov/ReferendaDetail.vue')
+    },
+    {
+      path: '/gov/members',
+      name: 'Gov Members',
+      component: () => import('../pages/Gov/Members.vue')
+    },
+    {
+      path: '/gov/tracks',
+      name: 'Gov Tracks',
+      component: () => import('../pages/Gov/Tracks.vue')
+    },
+    {
+      path: '/gov/spends',
+      name: 'Gov Spends',
+      component: () => import('../pages/Gov/Spends.vue')
     },
     {
       path: '/not404',

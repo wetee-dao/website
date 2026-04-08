@@ -9,4 +9,8 @@ export default {
   tx: '交易#',
   txs: '笔交易',
   includes: '包含',
+  yes: '是',
+  no: '否',
+  submit: '提交',
+  cancel: '取消',
 }

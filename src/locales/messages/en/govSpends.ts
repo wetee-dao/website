@@ -1,0 +1,17 @@
+export default {
+  title: 'Treasury Spends',
+  subtitle: 'Manage treasury spending requests',
+  create: 'Create Spend',
+  to: 'To',
+  amount: 'Amount',
+  track: 'Track',
+  payout: 'Payout',
+  empty: 'No spends found',
+  createTitle: 'Create Spend Request',
+  formTo: 'Recipient Address',
+  formAmount: 'Amount',
+  formTrack: 'Select Track',
+  statusPending: 'Pending',
+  statusPaid: 'Paid',
+  statusExpired: 'Expired',
+}

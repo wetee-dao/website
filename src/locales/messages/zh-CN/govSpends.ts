@@ -1,0 +1,17 @@
+export default {
+  title: '国库支出',
+  subtitle: '管理国库支出申请',
+  create: '创建支出',
+  to: '接收地址',
+  amount: '金额',
+  track: '轨道',
+  payout: '领取',
+  empty: '暂无支出',
+  createTitle: '创建支出申请',
+  formTo: '接收地址',
+  formAmount: '金额',
+  formTrack: '选择轨道',
+  statusPending: '待领取',
+  statusPaid: '已支付',
+  statusExpired: '已过期',
+}

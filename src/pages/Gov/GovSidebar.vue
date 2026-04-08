@@ -1,29 +1,27 @@
 <template>
   <aside class="gov-sidebar shrink-0 lg:w-56">
-    <div class="chain-box sidebar-box">
+    <div class="chain-box sidebar-box pb-4">
       <div class="sidebar-title">{{ t('gov.governance') }}</div>
       <nav class="sidebar-nav">
-        <RouterLink to="/gov?tab=overview" class="nav-item" :class="{ active: isOverviewActive }">
+        <RouterLink to="/gov/overview" class="nav-item" :class="{ active: isOverviewActive }">
           {{ t('gov.overview') }}
         </RouterLink>
         <RouterLink to="/gov" class="nav-item" :class="{ active: isReferendaActive }">
           {{ t('gov.referenda') }}
         </RouterLink>
-        <a href="javascript:void(0)" class="nav-item">{{ t('gov.discussions') }}</a>
-        <a href="javascript:void(0)" class="nav-item">{{ t('gov.delegation') }}</a>
+        <RouterLink to="/gov/members" class="nav-item" :class="{ active: isMembersActive }">
+          {{ t('gov.members') }}
+        </RouterLink>
+        <RouterLink to="/gov/tracks" class="nav-item" :class="{ active: isTracksActive }">
+          {{ t('gov.tracks') }}
+        </RouterLink>
       </nav>
       <div class="sidebar-divider" />
       <div class="sidebar-title">{{ t('gov.treasuryTitle') }}</div>
       <nav class="sidebar-nav">
-        <a href="javascript:void(0)" class="nav-item">{{ t('gov.status') }}</a>
-        <a href="javascript:void(0)" class="nav-item">{{ t('gov.spends') }}</a>
-        <a href="javascript:void(0)" class="nav-item">{{ t('gov.proposals') }}</a>
-      </nav>
-      <div class="sidebar-divider" />
-      <div class="sidebar-title">{{ t('gov.othersTitle') }}</div>
-      <nav class="sidebar-nav">
-        <a href="javascript:void(0)" class="nav-item">{{ t('gov.staking') }}</a>
-        <a href="javascript:void(0)" class="nav-item">{{ t('gov.preimages') }}</a>
+        <RouterLink to="/gov/spends" class="nav-item" :class="{ active: isSpendsActive }">
+          {{ t('gov.spends') }}
+        </RouterLink>
       </nav>
     </div>
   </aside>
@@ -37,19 +35,20 @@ import { useI18n } from 'vue-i18n'
 const route = useRoute()
 const { t } = useI18n()
 
-const isOverviewActive = computed(() => route.path === '/gov' && route.query.tab === 'overview')
+const isOverviewActive = computed(() => route.path === '/gov/overview')
 
 const isReferendaActive = computed(() => {
-  if (route.path === '/gov') return route.query.tab !== 'overview'
-  return route.path.startsWith('/gov/referenda')
+  return route.path === '/gov' || route.path.startsWith('/gov/referenda')
 })
+
+const isMembersActive = computed(() => route.path.startsWith('/gov/members'))
+
+const isTracksActive = computed(() => route.path.startsWith('/gov/tracks'))
+
+const isSpendsActive = computed(() => route.path.startsWith('/gov/spends'))
 </script>
 
 <style lang="scss" scoped>
-.gov-sidebar {
-  /* layout only */
-}
-
 .chain-box {
   background-color: rgba($primary-bg-rgb, 0.95);
   border: 1px solid rgba(255, 255, 255, 0.04);

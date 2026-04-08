@@ -79,6 +79,7 @@
         </div>
       </div>
     </div> -->
+    <div class="p-4"></div>
     <Footer />
   </div>
 </template>
@@ -86,9 +87,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import SectionHead from '@/components/SectionHead.vue'
-import Shadow from '@/components/Shadow.vue'
 import Footer from '@/components/Footer.vue'
-import Container from '@/components/svg/Container.vue'
 import Cube from '@/components/anim/Cube.vue'
 
 const { t } = useI18n()
@@ -101,7 +100,7 @@ const { t } = useI18n()
 }
 
 .confidentials {
-  background-color: $primary-bg;
+  background-color: $secondary-bg;
   padding: 30px 20px;
   // border-radius: 2px;
   display: flex;
