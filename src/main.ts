@@ -1,6 +1,8 @@
+import './assets/nuxt-ui.css'
 import './assets/main.scss'
 
 import { createApp } from 'vue'
+import nuxt from '@nuxt/ui/vue-plugin'
 import 'virtual:svg-icons-register'
 
 import App from './App.vue'
@@ -18,6 +20,7 @@ const m = () => {
   app.use(i18n)
   app.use(pop)
   app.use(chain)
+  app.use(nuxt)
   app.mount('#app')
 }
 
@@ -31,6 +34,7 @@ if (ins.chainId) {
   chainNetPing().then((id) => {
     ins.setChain(id)
     initChainApi(id)
+
     m()
   })
 }

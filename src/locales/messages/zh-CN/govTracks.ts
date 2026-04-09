@@ -3,6 +3,7 @@ export default {
   subtitle: '管理投票轨道配置',
   default: '默认',
   setDefault: '设为默认',
+  addTrack: '添加轨道',
   preparePeriod: '准备期',
   decisionPeriod: '决策期',
   confirmPeriod: '确认期',

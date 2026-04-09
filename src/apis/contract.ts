@@ -317,8 +317,6 @@ export class SecretContract {
                 }`,
         })
 
-
-
         return response.contractDryRun
     }
 
@@ -361,18 +359,20 @@ function decodeReturnValue(
     registry: Registry,
 ): AnyJson {
     let returnTypeName = getReturnTypeName(returnType);
-    // console.log(returnTypeName)
+    console.log(returnTypeName)
+
+    const resultInkErrPrefix = 'Result<';
     const resultInkErrSuffix = ', InkPrimitivesLangError>';
     if (
-        returnTypeName.startsWith('Result<') &&
+        returnTypeName.startsWith(resultInkErrPrefix) &&
         returnTypeName.endsWith(resultInkErrSuffix)
     ) {
         returnTypeName = returnTypeName.slice(
-            'Result<'.length,
+            resultInkErrPrefix.length,
             returnTypeName.length - resultInkErrSuffix.length,
         );
     }
-
+    
     let r: AnyJson = 'Decoding error';
     try {
         r = returnType ? registry.createTypeUnsafe(returnTypeName, [data]).toHuman() : '()';

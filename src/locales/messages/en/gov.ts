@@ -5,6 +5,7 @@ export default {
   pageSubtitle: 'Subscribe on-chain events · All active and history referenda',
   delegate: 'Delegate',
   subscribe: 'Subscribe',
+  submitProposal: 'Submit Proposal',
   tracks: 'Referenda Tracks',
   all: 'All',
   system: 'System',

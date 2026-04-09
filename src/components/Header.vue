@@ -370,7 +370,7 @@ const unfocus = () => {
     margin-right: 10px;
     cursor: pointer;
     background-color: rgba($secondary-text-rgb, 0.04);
-    border-radius: 2px;
+    
     padding: 11px 10px;
     font-size: 16px;
 
@@ -403,7 +403,7 @@ const unfocus = () => {
       width: 24px;
       height: 2px;
       background-color: rgba($secondary-text-rgb, 0.6);
-      border-radius: 2px;
+      
       transition: 0.5s ease;
     }
 

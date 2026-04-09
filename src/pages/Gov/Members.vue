@@ -11,24 +11,30 @@
               <p class="page-subtitle">{{ t('govMembers.subtitle') }}</p>
             </div>
             <div class="flex gap-3">
-              <button 
+              <UButton
                 v-if="!isMember" 
-                class="btn btn--primary" 
-                type="button" 
+                class="p-3" 
+                color="neutral"
+                variant="solid"
+                size="lg"
+                type="button"
                 :disabled="!publicJoin || joining"
                 @click="handleJoin"
               >
                 {{ joining ? '...' : (publicJoin ? t('govMembers.join') : t('govMembers.publicJoin') + ' ' + t('common.disabled')) }}
-              </button>
-              <button 
+              </UButton>
+              <UButton
                 v-else 
-                class="btn btn--danger" 
-                type="button" 
+                class="p-3" 
+                color="neutral"
+                variant="outline"
+                size="lg"
+                type="button"
                 :disabled="leaving"
                 @click="handleLeave"
               >
                 {{ leaving ? '...' : t('govMembers.leave') }}
-              </button>
+              </UButton>
             </div>
           </div>
 
@@ -66,7 +72,9 @@
                   </div>
                   <span class="member-balance">{{ formatBalanceValue(m.balance) }}</span>
                 </div>
-                <span v-if="getMemberSS58(m) === myAddress" class="member-badge">{{ t('govMembers.you') }}</span>
+                <UBadge v-if="getMemberSS58(m) === myAddress" class="member-badge" color="neutral" variant="subtle" size="sm">
+                  {{ t('govMembers.you') }}
+                </UBadge>
               </div>
             </div>
           </div>
@@ -229,12 +237,12 @@ onMounted(() => {
     font-weight: 400;
   }
 
-  .btn {
+  .mbtn {
     font-size: 13px;
     padding: 0 20px;
     margin: 0;
     width: auto;
-    border-radius: 2px;
+    
     border: 1px solid rgba($secondary-text-rgb, 0.2);
     background: transparent;
     color: rgba($secondary-text-rgb, 0.7);
@@ -344,7 +352,7 @@ onMounted(() => {
         font-size: 10px;
         background: rgba(255, 255, 255, 0.08);
         color: rgba($secondary-text-rgb, 0.6);
-        border-radius: 2px;
+        
       }
     }
   }

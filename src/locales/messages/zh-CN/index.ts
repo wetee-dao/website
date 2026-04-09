@@ -16,6 +16,7 @@ import govOverview from './govOverview'
 import govMembers from './govMembers'
 import govTracks from './govTracks'
 import govSpends from './govSpends'
+import proposal from './proposal'
 import launch from './launch'
 import pods from './pods'
 
@@ -38,6 +39,7 @@ export default {
   govMembers,
   govTracks,
   govSpends,
+  proposal,
   launch,
   pods,
 }

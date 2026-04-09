@@ -14,11 +14,21 @@
         Utilizing decentralized trusted computing power in a cloud-like manner, providing hardware-level
         security assurance for WEB3 applications and DeAI.
       </p>
-      <div class="btns flex justify-center md:justify-start">
-        <a target="_blank" href="https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fpaseo.asyou.me%2Fws#/explorer"
-          class="btn  btn--nephrite"><span>Chain Explorer</span>
+      <div class="mt-10 flex flex-wrap justify-center gap-4 md:justify-start">
+        <a
+          target="_blank"
+          href="https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fpaseo.asyou.me%2Fws#/explorer"
+          class="inline-flex h-[60px] items-center justify-center border-2 border-[rgba(var(--g-primary-text-rgb),0.55)] bg-transparent px-6 text-[17px] font-bold text-white no-underline transition-colors hover:border-[rgba(var(--g-primary-text-rgb),0.8)] hover:bg-white/[0.03]"
+        >
+          <span>Chain Explorer</span>
         </a>
-        <a target="_blank" href="/dapp" class="btn btn__primary "><span>Deploy Now</span></a>
+        <a
+          target="_blank"
+          href="/dapp"
+          class="inline-flex h-[60px] items-center justify-center border-2 border-[rgb(var(--g-primary-text-rgb))] bg-[rgb(var(--g-primary-text-rgb))] px-6 text-[17px] font-bold text-[#040406] no-underline transition-opacity hover:opacity-95"
+        >
+          <span>Deploy Now</span>
+        </a>
       </div>
     </div>
 
@@ -40,7 +50,7 @@ import Chip from './anim/Chip.vue';
 <style lang="scss" scoped>
 .banner__content {
   min-height: 400px;
-  border-radius: 2px;
+  
   padding: 20px 0px;
   position: relative;
   overflow: hidden;

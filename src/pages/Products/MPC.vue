@@ -1,13 +1,19 @@
 <template>
   <div class="">
     <SectionHead />
-    <div class="container section flex">
+    <div class="container section flex mb-10">
       <div class="flex flex-col items-center md:flex-row md:justify-center md:items-center w-full">
         <div class="flex-1 md:pr-20">
           <div class="top__title">{{ t('productsMpc.title') }}</div>
           <div class="top__text">{{ t('productsMpc.subtitle') }}</div>
-          <div class="btns mt-10">
-            <a target="_blank" href="javascript:void(0)" class="btn btn__primary "><span>{{ t('productsMpc.startToUse') }}</span></a>
+          <div class="mt-10 flex flex-wrap gap-4">
+            <a
+              target="_blank"
+              href="javascript:void(0)"
+              class="inline-flex h-[60px] items-center justify-center border-2 border-[rgb(var(--g-primary-text-rgb))] bg-[rgb(var(--g-primary-text-rgb))] px-6 text-[17px] font-bold text-[#040406] no-underline transition-opacity hover:opacity-95"
+            >
+              <span>{{ t('productsMpc.startToUse') }}</span>
+            </a>
           </div>
         </div>
         <div class="hidden icon md:block">
@@ -102,7 +108,7 @@ const { t } = useI18n()
 .confidentials {
   background-color: $secondary-bg;
   padding: 30px 20px;
-  // border-radius: 2px;
+  // 
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -125,7 +131,7 @@ const { t } = useI18n()
       display: block;
       width: 60px;
       height: 4px;
-      border-radius: 2px;
+      
       background-color: $primary-text;
       top: 0;
       left: 0;
@@ -162,7 +168,7 @@ const { t } = useI18n()
     position: relative;
     background: #151616;
     padding: 30px;
-    // border-radius: 2px;
+    // 
   }
 
   .title {

@@ -6,9 +6,20 @@
         <div class="flex-1 md:pr-20">
           <div class="top__title">{{ t('productsCloud.title') }}</div>
           <div class="top__text">{{ t('productsCloud.subtitle') }}</div>
-          <div class="btns mt-10">
-            <RouterLink to="/tee-store" class="btn  btn--nephrite"><span>{{ t('productsCloud.teeStore') }}</span></RouterLink>
-            <a target="_blank" href="/dapp" class="btn btn__primary "><span>{{ t('productsCloud.deployContainer') }}</span></a>
+          <div class="mt-10 flex flex-wrap gap-4">
+            <RouterLink
+              to="/tee-store"
+              class="inline-flex h-[60px] items-center justify-center border-2 border-[rgba(var(--g-primary-text-rgb),0.55)] bg-transparent px-6 text-[17px] font-bold text-white no-underline transition-colors hover:border-[rgba(var(--g-primary-text-rgb),0.8)] hover:bg-white/[0.03]"
+            >
+              <span>{{ t('productsCloud.teeStore') }}</span>
+            </RouterLink>
+            <a
+              target="_blank"
+              href="/dapp"
+              class="inline-flex h-[60px] items-center justify-center border-2 border-[rgb(var(--g-primary-text-rgb))] bg-[rgb(var(--g-primary-text-rgb))] px-6 text-[17px] font-bold text-[#040406] no-underline transition-opacity hover:opacity-95"
+            >
+              <span>{{ t('productsCloud.deployContainer') }}</span>
+            </a>
           </div>
         </div>
         <div class="hidden icon md:block">
@@ -16,7 +27,7 @@
         </div>
       </div>
     </div>
-    <div class="container section-first">
+    <div class="container section mt-10">
       <div class="grid md:grid-cols-2 lg:grid-cols-3 grid-flow-row gap-6">
         <div class="confidentials confidentials--first">
           <h3 class="confidentials__title">{{ t('productsCloud.card1Title') }}</h3>
@@ -45,7 +56,7 @@
       </div>
     </div>
     <div class="features section section--bt">
-      <div class="container  ">
+      <div class="container">
         <div class="box flex">
           <div class=" md:w-2/3 flex flex-col justify-center">
             <div class="title">{{ t('productsCloud.featureTitle') }}</div>
@@ -102,7 +113,7 @@ const { t } = useI18n()
 .confidentials {
   background-color: $secondary-bg;
   padding: 30px 20px;
-  // border-radius: 2px;
+  // 
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -125,7 +136,7 @@ const { t } = useI18n()
       display: block;
       width: 60px;
       height: 4px;
-      border-radius: 2px;
+      
       background-color: $primary-text;
       top: 0;
       left: 0;
@@ -156,13 +167,15 @@ const { t } = useI18n()
 .features {
   border: none;
   background-color: rgb(0, 13, 0);
+  padding-top: 60px;
+  padding-bottom: 60px;
   margin-top: 60px;
 
   .box {
     position: relative;
     background: #151616;
     padding: 30px;
-    // border-radius: 2px;
+    // 
   }
 
   .title {

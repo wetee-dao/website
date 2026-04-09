@@ -3,6 +3,7 @@ export default {
   subtitle: 'Manage voting tracks configuration',
   default: 'Default',
   setDefault: 'Set Default',
+  addTrack: 'Add Track',
   preparePeriod: 'Prepare Period',
   decisionPeriod: 'Decision Period',
   confirmPeriod: 'Confirm Period',

@@ -404,7 +404,7 @@ const getAssetInfo = (id: string, assets: any) => {
     font-size: 16px;
     padding: 2px;
     width: 100%;
-    border-radius: 2px;
+    
     position: relative;
 
     .inner {
@@ -413,7 +413,7 @@ const getAssetInfo = (id: string, assets: any) => {
       left: 0;
       right: 0;
       height: 100%;
-      border-radius: 2px;
+      
     }
   }
 
@@ -489,7 +489,7 @@ const getAssetInfo = (id: string, assets: any) => {
     font-weight: bold;
     padding: 3px 4px;
     background-color: #5b4600;
-    border-radius: 2px;
+    
   }
 
   .total_unit {

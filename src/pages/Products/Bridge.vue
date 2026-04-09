@@ -6,8 +6,13 @@
         <div class="flex-1 md:pr-20">
           <div class="top__title">{{ $t('productsBridge.teeBridgeTopTitle') }}</div>
           <div class="top__text">{{ $t('productsBridge.teeBridgeTopText') }}</div>
-          <div class="btns mt-10">
-            <a href="javascript:void(0)" class="btn btn__primary "><span>{{ $t('productsBridge.teeBridgeDeploy') }}</span></a>
+          <div class="mt-10 flex flex-wrap gap-4">
+            <a
+              href="javascript:void(0)"
+              class="inline-flex h-[60px] items-center justify-center border-2 border-[rgb(var(--g-primary-text-rgb))] bg-[rgb(var(--g-primary-text-rgb))] px-6 text-[17px] font-bold text-[#040406] no-underline transition-opacity hover:opacity-95"
+            >
+              <span>{{ $t('productsBridge.teeBridgeDeploy') }}</span>
+            </a>
           </div>
         </div>
         <div class="hidden icon md:block">
@@ -91,7 +96,7 @@ import Footer from '@/components/Footer.vue';
 .confidentials {
   background-color: $secondary-bg;
   padding: 30px 20px;
-  // border-radius: 2px;
+  // 
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -114,7 +119,7 @@ import Footer from '@/components/Footer.vue';
       display: block;
       width: 60px;
       height: 4px;
-      border-radius: 2px;
+      
       background-color: $primary-text;
       top: 0;
       left: 0;
@@ -151,7 +156,7 @@ import Footer from '@/components/Footer.vue';
     position: relative;
     background: #151616;
     padding: 30px;
-    // border-radius: 2px;
+    // 
   }
 
   .title {

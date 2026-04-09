@@ -11,9 +11,17 @@
               <h1 class="page-title">{{ t('gov.pageTitle') }}</h1>
               <p class="page-subtitle">{{ t('gov.pageSubtitle') }}</p>
             </div>
-            <div class="flex items-center">
-              <button @click="test" class="btn btn--outline px-4" type="button">{{ t('gov.delegate') }}</button>
-              <button class="btn btn--outline px-4" type="button">{{ t('gov.subscribe') }}</button>
+            <div class="flex items-center gap-3">
+              <UButton
+                class="p-3"
+                color="neutral"
+                variant="solid"
+                size="lg"
+                type="button"
+                @click="showProposalModal = true"
+              >
+                {{ t('gov.submitProposal') }}
+              </UButton>
             </div>
           </div>
 
@@ -21,16 +29,19 @@
           <div class="tracks-wrap flex items-center">
             <div class="tracks-label mr-2">{{ t('gov.tracks') }}</div>
             <div class="tracks-tabs flex flex-wrap gap-2">
-              <button
+              <UButton
                 v-for="t in trackOptions"
                 :key="t.value"
                 type="button"
-                class="track-tab"
+                class="track-tab p-3"
                 :class="{ active: trackFilter === t.value }"
                 @click="trackFilter = t.value"
+                color="neutral"
+                variant="ghost"
+                size="lg"
               >
                 {{ t.label }}
-              </button>
+              </UButton>
             </div>
           </div>
 
@@ -54,7 +65,9 @@
               </div>
               <div class="referendum-right flex items-center gap-3 shrink-0">
                 <span v-if="r.comments !== undefined" class="comments">{{ r.comments }}</span>
-                <span class="status-badge" :class="statusClass(r.status)">{{ statusLabel(r.status) }}</span>
+                <UBadge class="status-badge" :class="statusClass(r.status)" color="neutral" variant="subtle" size="sm">
+                  {{ statusLabel(r.status) }}
+                </UBadge>
               </div>
             </RouterLink>
           </div>
@@ -66,6 +79,13 @@
       </main>
     </div>
     <div class="pb-4" />
+
+    <!-- 提交公投弹窗 -->
+    <SubmitProposal 
+      :show="showProposalModal" 
+      @close="showProposalModal = false"
+      @submitted="loadData"
+    />
   </div>
 </template>
 
@@ -73,6 +93,7 @@
 import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import GovSidebar from './GovSidebar.vue'
+import SubmitProposal from './SubmitProposal.vue'
 import { timeAgo } from '@/utils/time'
 import { SecretContractApi } from '@/apis/contract'
 
@@ -92,6 +113,7 @@ interface Referendum {
 const { t } = useI18n()
 const trackFilter = ref<string>('all')
 const filterNewOnly = ref(false)
+const showProposalModal = ref(false)
 
 const trackOptions = computed(() => [
   { value: 'all', label: t('gov.all') },
@@ -148,12 +170,12 @@ function statusLabel(status: Status): string {
   return map[status] || status
 }
 
-const test = () => {
-  SecretContractApi.members()
+async function loadData() {
+  // TODO: 加载公投列表
 }
 
 onMounted(()=>{
-  
+  loadData()
 })
 </script>
 
@@ -192,11 +214,11 @@ onMounted(()=>{
     font-weight: 400;
   }
 
-  .btn {
+  .mbtn {
     font-size: 13px;
     height: 36px;
     line-height: 34px;
-    border-radius: 2px;
+    
     border: 1px solid rgba($secondary-text-rgb, 0.2);
     background: transparent;
     color: rgba($secondary-text-rgb, 0.7);
@@ -212,6 +234,16 @@ onMounted(()=>{
 
     &--outline {
       border-color: rgba($secondary-text-rgb, 0.2);
+    }
+
+    &--primary {
+      background: rgba(255, 255, 255, 0.08);
+      color: $primary-text;
+      border-color: transparent;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.12);
+      }
     }
   }
 }
@@ -231,7 +263,7 @@ onMounted(()=>{
   .track-tab {
     padding: 6px 14px;
     font-size: 13px;
-    border-radius: 2px;
+    
     border: none;
     background: transparent;
     color: rgba($secondary-text-rgb, 0.6);
@@ -306,7 +338,7 @@ onMounted(()=>{
   .track-badge {
     padding: 3px 10px;
     font-size: 11px;
-    border-radius: 2px;
+    
     background: rgba(255, 255, 255, 0.04);
     color: rgba($secondary-text-rgb, 0.6);
     font-weight: 400;
@@ -324,7 +356,7 @@ onMounted(()=>{
   padding: 4px 12px;
   font-size: 11px;
   font-weight: 500;
-  border-radius: 2px;
+  
   white-space: nowrap;
   letter-spacing: 0.02em;
 

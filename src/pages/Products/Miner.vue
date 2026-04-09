@@ -6,8 +6,13 @@
         <div class="flex-1 md:pr-20">
           <div class="top__title">{{ $t('productsMiner.teeMinerTopTitle') }}</div>
           <div class="top__text">{{ $t('productsMiner.teeMinerTopText') }}</div>
-          <div class="btns mt-10">
-            <a href="javascript:void(0)" class="btn btn__primary "><span>{{ $t('productsMiner.teeMinerStartMint') }}</span></a>
+          <div class="mt-10 flex flex-wrap gap-4">
+            <a
+              href="javascript:void(0)"
+              class="inline-flex h-[60px] items-center justify-center border-2 border-[rgb(var(--g-primary-text-rgb))] bg-[rgb(var(--g-primary-text-rgb))] px-6 text-[17px] font-bold text-[#040406] no-underline transition-opacity hover:opacity-95"
+            >
+              <span>{{ $t('productsMiner.teeMinerStartMint') }}</span>
+            </a>
           </div>
         </div>
         <div class="hidden icon md:block">
@@ -113,7 +118,7 @@ import Chip2 from '@/components/anim/Chip2.vue';
       display: block;
       width: 60px;
       height: 4px;
-      border-radius: 2px;
+      
       background-color: $primary-text;
       top: 0;
       left: 0;
@@ -150,7 +155,7 @@ import Chip2 from '@/components/anim/Chip2.vue';
     position: relative;
     background: #151616;
     padding: 30px;
-    // border-radius: 2px;
+    // 
   }
 
   .title {

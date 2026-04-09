@@ -6,8 +6,13 @@
         <div class="flex-1 md:pr-20">
           <div class="top__title">{{ t('productsStore.title') }}</div>
           <div class="top__text">{{ t('productsStore.subtitle') }}</div>
-          <div class="mt-10">
-            <a href="javascript:void(0)" class="btn btn__primary start"><span>{{ t('productsStore.createDisk') }}</span></a>
+          <div class="mt-10 flex flex-wrap gap-4">
+            <a
+              href="javascript:void(0)"
+              class="inline-flex h-[60px] items-center justify-center border-2 border-[rgb(var(--g-primary-text-rgb))] bg-[rgb(var(--g-primary-text-rgb))] px-6 text-[17px] font-bold text-[#040406] no-underline transition-opacity hover:opacity-95 start"
+            >
+              <span>{{ t('productsStore.createDisk') }}</span>
+            </a>
           </div>
         </div>
         <div class="hidden icon md:block">
@@ -15,7 +20,7 @@
         </div>
       </div>
     </div>
-    <div class="container section-first">
+    <div class="container section-first mt-10">
       <div class="grid md:grid-cols-2 lg:grid-cols-3 grid-flow-row gap-6">
         <div class="confidentials confidentials--first">
           <h3 class="confidentials__title">{{ t('productsStore.card1Title') }}</h3>
@@ -122,7 +127,7 @@ const { t } = useI18n()
       display: block;
       width: 60px;
       height: 4px;
-      border-radius: 2px;
+      
       background-color: $primary-text;
       top: 0;
       left: 0;
@@ -159,7 +164,7 @@ const { t } = useI18n()
     position: relative;
     background: #151616;
     padding: 30px;
-    // border-radius: 2px;
+    // 
   }
 
   .title {

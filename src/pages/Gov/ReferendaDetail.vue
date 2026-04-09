@@ -25,26 +25,33 @@
               <h1 class="detail-title">{{ t(detail.titleKey) }}</h1>
               <div class="detail-meta flex flex-wrap items-center gap-x-4 gap-y-2 mt-3">
                 <span class="meta-proposer">{{ detail.proposer }}</span>
-                <span class="track-badge">{{ t(detail.trackKey) }}</span>
+                <UBadge class="track-badge" color="neutral" variant="subtle" size="sm">
+                  {{ t(detail.trackKey) }}
+                </UBadge>
                 <span class="meta-time">{{ timeAgo(detail.createdAt) }}</span>
                 <span v-if="detail.comments !== undefined" class="meta-comments">{{ detail.comments }}</span>
-                <span class="status-badge" :class="statusClass(detail.status)">{{ statusLabel(detail.status) }}</span>
+                <UBadge class="status-badge" :class="statusClass(detail.status)" color="neutral" variant="subtle" size="sm">
+                  {{ statusLabel(detail.status) }}
+                </UBadge>
               </div>
             </div>
 
             <!-- Tabs: Content | AI Summary | Translations -->
             <div class="tabs-wrap pt-3">
               <div class="tabs flex gap-4 border-b border-white-4">
-                <button
+                <UButton
                   v-for="tab in contentTabs"
                   :key="tab.key"
                   type="button"
                   class="tab-btn"
                   :class="{ active: activeTab === tab.key }"
                   @click="activeTab = tab.key"
+                  color="neutral"
+                  variant="ghost"
+                  size="sm"
                 >
                   {{ t(tab.labelKey) }}
-                </button>
+                </UButton>
               </div>
             </div>
 
@@ -109,12 +116,28 @@
               <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
                 <h3 class="section-title mb-0">{{ t('govDetail.votes') }}</h3>
                 <div class="votes-view-toggle flex gap-2">
-                  <button type="button" class="toggle-btn" :class="{ active: votesView === 'nested' }" @click="votesView = 'nested'">
+                  <UButton
+                    type="button"
+                    class="toggle-btn"
+                    :class="{ active: votesView === 'nested' }"
+                    color="neutral"
+                    variant="ghost"
+                    size="sm"
+                    @click="votesView = 'nested'"
+                  >
                     {{ t('govDetail.nested') }}
-                  </button>
-                  <button type="button" class="toggle-btn" :class="{ active: votesView === 'flattened' }" @click="votesView = 'flattened'">
+                  </UButton>
+                  <UButton
+                    type="button"
+                    class="toggle-btn"
+                    :class="{ active: votesView === 'flattened' }"
+                    color="neutral"
+                    variant="ghost"
+                    size="sm"
+                    @click="votesView = 'flattened'"
+                  >
                     {{ t('govDetail.flattened') }}
-                  </button>
+                  </UButton>
                 </div>
               </div>
               <div class="votes-placeholder text-secondary text-sm">
@@ -126,7 +149,9 @@
             <div class="actions-section p-5 lg:p-8 border-t border-white-4">
               <h3 class="section-title">{{ t('govDetail.actions') }}</h3>
               <div class="actions-btns flex flex-wrap gap-3">
-                <button type="button" class="btn btn--primary">{{ t('govDetail.vote') }}</button>
+                <UButton type="button" class="mbtn mbtn--primary" color="neutral" variant="solid" size="sm">
+                  {{ t('govDetail.vote') }}
+                </UButton>
                 <span class="text-secondary text-sm self-center">{{ t('govDetail.voteOrDelegation') }}</span>
               </div>
             </div>
@@ -362,7 +387,7 @@ function statusLabel(status: Status): string {
     .track-badge {
       padding: 3px 10px;
       font-size: 11px;
-      border-radius: 2px;
+      
       background: rgba(255, 255, 255, 0.04);
       color: rgba($secondary-text-rgb, 0.6);
       font-weight: 400;
@@ -428,7 +453,7 @@ function statusLabel(status: Status): string {
   .status-card {
     padding: 16px 20px;
     background: rgba(255, 255, 255, 0.02);
-    border-radius: 2px;
+    
     min-width: 120px;
     border: 1px solid rgba(255, 255, 255, 0.04);
 
@@ -484,7 +509,7 @@ function statusLabel(status: Status): string {
 .votes-view-toggle .toggle-btn {
   padding: 6px 14px;
   font-size: 12px;
-  border-radius: 2px;
+  
   border: none;
   background: transparent;
   color: rgba($secondary-text-rgb, 0.5);
@@ -502,8 +527,8 @@ function statusLabel(status: Status): string {
   }
 }
 
-.actions-btns .btn {
-  border-radius: 2px;
+.actions-btns .mbtn {
+  
   border: 1px solid rgba($secondary-text-rgb, 0.2);
   background: transparent;
   color: rgba($secondary-text-rgb, 0.7);
@@ -527,7 +552,7 @@ function statusLabel(status: Status): string {
   padding: 4px 12px;
   font-size: 11px;
   font-weight: 500;
-  border-radius: 2px;
+  
   white-space: nowrap;
   letter-spacing: 0.02em;
 

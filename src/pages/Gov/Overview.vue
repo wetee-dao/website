@@ -44,7 +44,9 @@
               >
                 <span class="proposal-id">#{{ p.id }}</span>
                 <span class="proposal-title">{{ p.title }}</span>
-                <span class="proposal-status" :class="statusClass(p.status)">{{ statusLabel(p.status) }}</span>
+                <UBadge class="proposal-status" :class="statusClass(p.status)" color="neutral" variant="subtle" size="sm">
+                  {{ statusLabel(p.status) }}
+                </UBadge>
               </RouterLink>
             </div>
           </div>
@@ -209,7 +211,7 @@ onMounted(() => {
     padding: 20px;
     background: rgba(255, 255, 255, 0.02);
     border: 1px solid rgba(255, 255, 255, 0.04);
-    border-radius: 2px;
+    
 
     .stat-label {
       display: block;
@@ -273,7 +275,7 @@ onMounted(() => {
     .proposal-status {
       padding: 3px 10px;
       font-size: 11px;
-      border-radius: 2px;
+      
       font-weight: 500;
 
       &.status-deciding {

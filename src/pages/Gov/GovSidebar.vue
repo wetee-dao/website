@@ -75,7 +75,7 @@ const isSpendsActive = computed(() => route.path.startsWith('/gov/spends'))
     font-size: 13px;
     color: rgba($secondary-text-rgb, 0.6);
     text-decoration: none;
-    border-radius: 2px;
+    
     margin: 1px 0;
     transition: all 0.2s ease;
     font-weight: 400;

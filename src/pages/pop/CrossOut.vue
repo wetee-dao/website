@@ -335,7 +335,7 @@ const submit = async (isTry: boolean = false) => {
       margin-left: 5px;
       padding: 0 10px;
       background-color: rgba($accent-color, $alpha: 0.2);
-      border-radius: 2px;
+      
     }
   }
 
