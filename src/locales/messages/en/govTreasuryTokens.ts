@@ -1,0 +1,16 @@
+export default {
+  title: 'Treasury token holdings',
+  subtitle: 'Native relay-chain assets held by the treasury. Balances will load from the API once connected.',
+  mockHint: 'On-chain balances are not wired yet; values below are placeholders.',
+  colSymbol: 'Symbol',
+  colAsset: 'Asset',
+  colNetwork: 'Network',
+  colBalance: 'Balance',
+  dotSymbol: 'DOT',
+  dotAsset: 'Polkadot',
+  dotNetwork: 'Polkadot',
+  ksmSymbol: 'KSM',
+  ksmAsset: 'Kusama',
+  ksmNetwork: 'Kusama',
+  balancePlaceholder: '—',
+}

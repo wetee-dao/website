@@ -140,6 +140,11 @@ const router = createRouter({
       component: () => import('../pages/Gov/Spends.vue')
     },
     {
+      path: '/gov/treasury-tokens',
+      name: 'Gov Treasury Tokens',
+      component: () => import('../pages/Gov/TreasuryTokens.vue')
+    },
+    {
       path: '/not404',
       name: 'Not404',
       component: () => import('../pages/not404.vue')

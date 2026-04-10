@@ -1,0 +1,16 @@
+export default {
+  title: '国库代币持仓',
+  subtitle: '国库持有的中继链原生资产。接口接入后将显示链上余额。',
+  mockHint: '链上数据尚未接入，下表余额为占位展示。',
+  colSymbol: '符号',
+  colAsset: '资产',
+  colNetwork: '网络',
+  colBalance: '余额',
+  dotSymbol: 'DOT',
+  dotAsset: 'Polkadot',
+  dotNetwork: 'Polkadot',
+  ksmSymbol: 'KSM',
+  ksmAsset: 'Kusama',
+  ksmNetwork: 'Kusama',
+  balancePlaceholder: '—',
+}

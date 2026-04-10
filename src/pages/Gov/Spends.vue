@@ -77,7 +77,7 @@
 import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import GovSidebar from './GovSidebar.vue'
-import SubmitProposal from './SubmitProposal.vue'
+import SubmitProposal from './submit-proposal'
 import { SecretContractApi } from '@/apis/contract'
 import { $getTxProvider } from '@/plugins/chain'
 import type { WalletWrap } from '@/providers'

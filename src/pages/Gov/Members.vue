@@ -106,7 +106,7 @@ function formatBalanceValue(value: any): string {
   if (!value) return '0'
   try {
     const bn = new BN(String(value).replace(/,/g, ''))
-    const formatted = bn.div(new BN(WTE)).toNumber()
+    const formatted = bn.toString()
     return formatted.toLocaleString() + ' VOTE'
   } catch {
     return String(value)

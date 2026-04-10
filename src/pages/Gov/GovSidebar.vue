@@ -22,6 +22,13 @@
         <RouterLink to="/gov/spends" class="nav-item" :class="{ active: isSpendsActive }">
           {{ t('gov.spends') }}
         </RouterLink>
+        <RouterLink
+          to="/gov/treasury-tokens"
+          class="nav-item"
+          :class="{ active: isTreasuryTokensActive }"
+        >
+          {{ t('gov.treasuryTokens') }}
+        </RouterLink>
       </nav>
     </div>
   </aside>
@@ -46,6 +53,8 @@ const isMembersActive = computed(() => route.path.startsWith('/gov/members'))
 const isTracksActive = computed(() => route.path.startsWith('/gov/tracks'))
 
 const isSpendsActive = computed(() => route.path.startsWith('/gov/spends'))
+
+const isTreasuryTokensActive = computed(() => route.path.startsWith('/gov/treasury-tokens'))
 </script>
 
 <style lang="scss" scoped>

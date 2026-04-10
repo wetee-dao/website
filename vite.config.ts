@@ -27,7 +27,9 @@ export default defineConfig({
       }
     }),
     createSvgIconsPlugin({
-      iconDirs: [path.resolve(process.cwd(), 'src/icons')],
+      // SvgImg.vue 里使用的是 `#${name}`，这里确保 symbolId 与之匹配
+      iconDirs: [path.resolve(process.cwd(), 'src/assets/svg')],
+      symbolId: 'icon-[name]',
     }),
   ],
   resolve: {

@@ -75,7 +75,7 @@
     <section
       class="section-panel section-panel--light text-[rgba(var(--g-secondary-text-rgb),0.88)]"
     >
-      <div class="container py-12 lg:py-16">
+      <div class="container py-8 lg:py-12">
         <header class="max-w-[42rem]">
           <h2
             class="block w-full text-start text-[clamp(1.35rem,2.6vw,1.75rem)] font-medium leading-tight tracking-[-0.03em] text-[rgba(var(--g-secondary-text-rgb),0.94)]"
@@ -130,7 +130,7 @@
     <section
       class="section-panel section-panel--muted text-[rgba(var(--g-secondary-text-rgb),0.88)]"
     >
-      <div class="container py-12 lg:py-16">
+      <div class="container py-8 lg:py-12">
         <header class="max-w-[42rem]">
           <h2
             class="block w-full text-start text-[clamp(1.35rem,2.6vw,1.75rem)] font-medium leading-tight tracking-[-0.03em] text-[rgba(var(--g-secondary-text-rgb),0.94)]"
@@ -180,7 +180,7 @@
 
     <!-- How it works -->
     <section class="section-panel section-panel--light text-[rgba(var(--g-secondary-text-rgb),0.88)]">
-      <div class="container py-12 lg:py-16">
+      <div class="container py-8 lg:py-12">
         <h2
           class="m-0 block w-full text-start text-2xl font-bold text-[rgba(var(--g-secondary-text-rgb),0.95)]"
         >
@@ -240,7 +240,7 @@
     <section
       class="section-panel section-panel--dark text-[rgba(var(--g-secondary-text-rgb),0.88)]"
     >
-      <div class="container py-12 lg:py-16">
+      <div class="container py-8 lg:py-12">
         <header class="max-w-[42rem]">
           <h2
             class="block w-full text-start text-[clamp(1.35rem,2.6vw,1.75rem)] font-medium leading-tight tracking-[-0.03em] text-[rgba(var(--g-secondary-text-rgb),0.93)]"
@@ -313,7 +313,7 @@
 
     <!-- Tech proof：链上最新区块 + 交易（原独立页同款布局） -->
     <section class="section-panel section-panel--muted text-[rgba(var(--g-secondary-text-rgb),0.88)]">
-      <div class="container py-12 lg:py-16">
+      <div class="container py-8 lg:py-12">
         <h2
           class="m-0 block w-full text-start text-2xl font-bold text-[rgba(var(--g-secondary-text-rgb),0.95)]"
         >

@@ -28,7 +28,7 @@ const props = defineProps({
 })
 
 const svg = ref<VNodeRef | undefined>(undefined)
-const symbolId = computed(() => `#${props.name}`)
+const symbolId = computed(() => `#${props.prefix}-${props.name}`)
 const svgClass = computed(() => {
     if (props.className) {
         return `svg-icon ${props.className}`

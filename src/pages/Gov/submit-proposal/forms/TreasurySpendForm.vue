@@ -1,0 +1,25 @@
+<template>
+  <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+    <div class="sm:col-span-2">
+      <div class="mb-1.5 text-[11px] tracking-[0.08em] text-white/45">
+        {{ t('proposal.spendTo') }}
+      </div>
+      <UInput v-model="model.to" class="w-full" placeholder="5..." size="lg" />
+    </div>
+    <div class="sm:col-span-2">
+      <div class="mb-1.5 text-[11px] tracking-[0.08em] text-white/45">
+        {{ t('proposal.spendAmount') }}
+      </div>
+      <UInput v-model="model.amount" class="w-full" placeholder="1000" size="lg" />
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+import type { TreasurySpendFormModel } from '../types'
+
+const model = defineModel<TreasurySpendFormModel>({ required: true })
+
+const { t } = useI18n()
+</script>

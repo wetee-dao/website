@@ -3,7 +3,7 @@ import { GraphqlClient } from "@/utils/gql";
 
 import axios from "axios";
 import { Abi } from "@polkadot/api-contract";
-import { hexToU8a, stringToHex, u8aToBuffer, u8aToHex } from '@polkadot/util';
+import { hexToU8a, stringToHex, stringToU8a, u8aToBuffer, u8aToHex } from '@polkadot/util';
 import { Bytes } from '@polkadot/types';
 import type { AnyJson, Registry, TypeDef } from "@polkadot/types/types";
 import { transformUserInput } from "@/utils/ink";
@@ -99,10 +99,9 @@ export class SecretContract {
         return await this.contract_query("gov", "getPublicJoin", {})
     }
 
-    /** 设置公开加入 */
-    async setPublicJoin(wallet: WalletWrap, publicJoin: boolean) {
-        const result = await this.contract_builder("gov", "setPublicJoin", { publicJoin }, "0")
-        return await this.call(wallet, result.params)
+    /** 设置是否允许公开加入（需经公投：仅返回 CallContent） */
+    async setPublicJoin(publicJoin: boolean) {
+        return await this.buildCallContent("gov", "setPublicJoin", { publicJoin }, 0)
     }
 
     /** 公开加入 */
@@ -117,16 +116,16 @@ export class SecretContract {
         return await this.contract_query("gov", "defaultTrack", {})
     }
 
-    /** 设置默认Track */
-    async setDefaultTrack(wallet: WalletWrap, trackId: number) {
-        const result = await this.contract_builder("gov", "setDefaultTrack", { trackId }, "0")
-        return await this.call(wallet, result.params)
+    /**
+     * 设置默认 Track（需经公投：仅返回 CallContent，由业务层 dry-run 后 submitProposal）。
+     */
+    async setDefaultTrack(trackId: number) {
+        return await this.buildCallContent("gov", "setDefaultTrack", { trackID: trackId }, 0)
     }
 
-    /** 添加Track */
-    async addTrack(wallet: WalletWrap, track: any) {
-        const result = await this.contract_builder("gov", "addTrack", { track }, "0")
-        return await this.call(wallet, result.params)
+    /** 添加 Track（需经公投：仅返回 CallContent） */
+    async addTrack(track: any) {
+        return await this.buildCallContent("gov", "addTrack", { track }, 0)
     }
 
     /** 查询Track */
@@ -140,9 +139,8 @@ export class SecretContract {
     }
 
     // ============ Proposal Management ============
-    /** 提交提案 */
-    async submitProposal(wallet: WalletWrap, call: any, trackId: number) {
-        const result = await this.contract_builder("gov", "submitProposal", { call, trackId }, "0")
+    async submitProposal(wallet: WalletWrap, call: CallContent, proposalTrackId: number) {
+        const result = await this.contract_builder("gov", "submitProposal", { call, trackID: proposalTrackId }, "0")
         return await this.call(wallet, result.params)
     }
 
@@ -167,10 +165,9 @@ export class SecretContract {
         return await this.call(wallet, result.params)
     }
 
-    /** 存入提案押金 */
-    async depositProposal(wallet: WalletWrap, proposalId: number, amount: string) {
-        const result = await this.contract_builder("gov", "depositProposal", { proposalId, amount }, "0")
-        return await this.call(wallet, result.params)
+    /** 存入提案押金（需经公投：仅返回 CallContent） */
+    async depositProposal(proposalId: number, amount: string) {
+        return await this.buildCallContent("gov", "depositProposal", { proposalID: proposalId, amount }, 0)
     }
 
     /** 执行提案 */
@@ -210,10 +207,9 @@ export class SecretContract {
 
     // ============ Treasury ============
 
-    /** 支出申请 */
-    async spend(wallet: WalletWrap, to: string, amount: string, trackId: number) {
-        const result = await this.contract_builder("gov", "spend", { to, amount, trackId }, "0")
-        return await this.call(wallet, result.params)
+    /** 国库支出申请（需经公投：仅返回 CallContent） */
+    async spend(to: string, amount: string, trackId: number) {
+        return await this.buildCallContent("gov", "spend", { to, amount, trackID: trackId }, 0)
     }
 
     /** 领取支出 */
@@ -279,6 +275,29 @@ export class SecretContract {
         }
     }
 
+    async buildCallContent(contract: string, method: string, args: Record<string, unknown>, payValue: number): Promise<CallContent> {
+        const abi = await this.initContract(contract)
+        const methodAbi = abi.messages.find(item => item.method === method)
+        if (!methodAbi) {
+            throw new Error("contract method not found: " + method)
+        }
+        const params = transformUserInput(abi.registry, methodAbi.args, args)
+        const argBts = methodAbi.args.map(({ type: { lookupName, type } }, index) => {
+            let p = abi.registry.createType(lookupName || type, params[index]).toU8a()
+            if (type == "Address") {
+                p = p.slice(1)
+            }
+            return p
+        })
+
+        console.log("contract", stringToHex(contract))
+        console.log("selector", methodAbi.selector.toU8a())
+        console.log("args", argBts)
+        console.log("payValue", payValue)
+
+        return new CallContent(stringToHex(contract), methodAbi.selector.toU8a(), argBts, payValue)
+    }
+
     // init contract
     async initContract(contract: string) {
         let abi: Abi | undefined = undefined;
@@ -300,6 +319,16 @@ export class SecretContract {
     async getAbi(url: string): Promise<Abi> {
         const response = await axios.get("/" + url)
         return new Abi(response.data)
+    }
+
+    /** gov 合约：selector 十六进制（如 0xdf60a515）→ ink 方法名（如 add_track），供提案 call 展示 */
+    async getGovSelectorMethodMap(): Promise<Map<string, string>> {
+        const abi = await this.initContract("gov")
+        const map = new Map<string, string>()
+        for (const msg of abi.messages) {
+            map.set(msg.selector.toHex().toLowerCase(), msg.method)
+        }
+        return map
     }
 
     async tryRun(caller: string, contract: string, method: string, args: string[], mut: boolean) {
@@ -372,7 +401,7 @@ function decodeReturnValue(
             returnTypeName.length - resultInkErrSuffix.length,
         );
     }
-    
+
     let r: AnyJson = 'Decoding error';
     try {
         r = returnType ? registry.createTypeUnsafe(returnTypeName, [data]).toHuman() : '()';
@@ -384,6 +413,20 @@ function decodeReturnValue(
 
 function getReturnTypeName(type: TypeDef | null | undefined) {
     return type?.lookupName || type?.type || '';
+}
+
+export class CallContent {
+    contract: string
+    selector: Uint8Array
+    args: Uint8Array[]
+    amount: number
+
+    constructor(contract: string, selector: Uint8Array, args: Uint8Array[], amount: number) {
+        this.contract = contract
+        this.selector = selector
+        this.args = args
+        this.amount = amount
+    }
 }
 
 export const SecretContractApi = new SecretContract({
