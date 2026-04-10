@@ -7,6 +7,8 @@ export default {
   // Actions
   actionAddTrack: 'Add Track',
   actionSpend: 'Treasury Spend',
+  actionSetDefaultTrack: 'Set Default Track',
+  setDefaultTrackHint: 'Set the selected track as default (submit via referendum).',
   
   // AddTrack form
   trackName: 'Track Name',

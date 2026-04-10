@@ -21,6 +21,10 @@ export default {
   flattened: 'Flattened',
   voteListPlaceholder: 'Vote list (Nested/Flattened). Connect to chain or Subsquare API for real votes.',
   actions: 'Actions',
+  deposit: 'Deposit',
+  depositAmount: 'Deposit amount',
+  cancel: 'Cancel proposal',
+  execute: 'Execute proposal',
   vote: 'Vote',
   voteOrDelegation: 'Or do delegation here, check wiki.',
 }

@@ -28,9 +28,16 @@ export async function submitProposalPayload(
   }
   if (payload.action === 'spend') {
     const call = await dryRunGovBusinessMessage('spend', {
-      to: payload.to,
+      to: { T: payload.to.t, V: payload.to.v },
       amount: payload.amount,
       trackID: payload.proposalTrackId,
+    })
+    await SecretContractApi.submitProposal(wallet, call, payload.proposalTrackId)
+    return
+  }
+  if (payload.action === 'setDefaultTrack') {
+    const call = await dryRunGovBusinessMessage('setDefaultTrack', {
+      trackID: payload.defaultTrackId,
     })
     await SecretContractApi.submitProposal(wallet, call, payload.proposalTrackId)
     return

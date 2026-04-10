@@ -4,7 +4,10 @@
       <GovSidebar />
 
       <main class="gov-main flex-1 min-w-0">
-        <div v-if="!detail" class="chain-box main-box p-10 text-center text-secondary">
+        <div v-if="loading" class="chain-box main-box p-10 text-center text-secondary">
+          {{ t('gov.loadingReferenda') }}
+        </div>
+        <div v-else-if="!detail" class="chain-box main-box p-10 text-center text-secondary">
           {{ t('govDetail.notFound', { id }) }}
           <RouterLink to="/gov" class="link-back">{{ t('govDetail.backToReferenda') }}</RouterLink>
         </div>
@@ -14,25 +17,127 @@
           <nav class="breadcrumb flex flex-wrap items-center gap-1 text-sm mb-4">
             <RouterLink to="/gov" class="breadcrumb-link">{{ t('govDetail.referenda') }}</RouterLink>
             <span class="breadcrumb-sep">/</span>
-            <span class="breadcrumb-link">{{ t(detail.trackKey) }}</span>
-            <span class="breadcrumb-sep">/</span>
             <span class="breadcrumb-current">#{{ detail.id }}</span>
           </nav>
 
           <div class="chain-box main-box">
             <!-- 标题 + 元信息 -->
             <div class="detail-header border-b border-white-4">
-              <h1 class="detail-title">{{ t(detail.titleKey) }}</h1>
+              <div class="detail-title-row">
+                <h1 class="detail-title">{{ detail.title }}</h1>
+                <div class="header-actions">
+                  <UButton
+                    v-if="showDepositBtn"
+                    type="button"
+                    color="neutral"
+                    variant="solid"
+                    size="sm"
+                    :loading="depositing"
+                    @click="openDepositModal"
+                  >
+                    {{ t('govDetail.deposit') }}
+                  </UButton>
+                  <UButton
+                    v-if="showCancelBtn"
+                    type="button"
+                    color="neutral"
+                    variant="outline"
+                    size="sm"
+                    :loading="canceling"
+                    @click="handleCancel"
+                  >
+                    {{ t('govDetail.cancel') }}
+                  </UButton>
+                  <UButton
+                    v-if="showExecuteBtn"
+                    type="button"
+                    color="neutral"
+                    variant="outline"
+                    size="sm"
+                    :loading="executing"
+                    @click="handleExecute"
+                  >
+                    {{ t('govDetail.execute') }}
+                  </UButton>
+                </div>
+              </div>
               <div class="detail-meta flex flex-wrap items-center gap-x-4 gap-y-2 mt-3">
                 <span class="meta-proposer">{{ detail.proposer }}</span>
-                <UBadge class="track-badge" color="neutral" variant="subtle" size="sm">
-                  {{ t(detail.trackKey) }}
-                </UBadge>
-                <span class="meta-time">{{ timeAgo(detail.createdAt) }}</span>
+                <span class="meta-time">{{ t('gov.atBlock', { block: detail.submitBlock }) }}</span>
                 <span v-if="detail.comments !== undefined" class="meta-comments">{{ detail.comments }}</span>
                 <UBadge class="status-badge" :class="statusClass(detail.status)" color="neutral" variant="subtle" size="sm">
                   {{ statusLabel(detail.status) }}
                 </UBadge>
+              </div>
+            </div>
+
+            <!-- Deposit 弹窗 -->
+            <UModal
+              :open="depositModalOpen"
+              :title="t('govDetail.deposit')"
+              :dismissible="true"
+              @update:open="(v: boolean) => (depositModalOpen = v)"
+            >
+              <template #body>
+                <div class="space-y-3">
+                  <div class="text-sm text-secondary">
+                    {{ t('govDetail.depositAmount') }}
+                  </div>
+                  <UInput class="w-full" v-model="depositAmount" size="lg" color="neutral" />
+                </div>
+              </template>
+              <template #footer>
+                <div class="flex w-full justify-end gap-3">
+                  <UButton color="neutral" variant="outline" size="lg" type="button" @click="depositModalOpen = false">
+                    {{ t('common.cancel') }}
+                  </UButton>
+                  <UButton
+                    color="neutral"
+                    variant="solid"
+                    size="lg"
+                    type="button"
+                    :loading="depositing"
+                    :disabled="!depositAmount"
+                    @click="handleDeposit"
+                  >
+                    {{ t('common.submit') }}
+                  </UButton>
+                </div>
+              </template>
+            </UModal>
+
+            <!-- Track 信息 -->
+            <div v-if="detail.track" class="track-section p-5 lg:p-8 border-b border-white-4">
+              <h3 class="section-title">{{ t('gov.tracks') }}</h3>
+              <div class="track-grid">
+                <div class="track-kv">
+                  <span class="track-k">ID</span>
+                  <span class="track-v">#{{ detail.track.id }}</span>
+                </div>
+                <div class="track-kv">
+                  <span class="track-k">Name</span>
+                  <span class="track-v">{{ detail.track.name }}</span>
+                </div>
+                <div class="track-kv">
+                  <span class="track-k">{{ t('govTracks.preparePeriod') }}</span>
+                  <span class="track-v">{{ detail.track.preparePeriod }}</span>
+                </div>
+                <div class="track-kv">
+                  <span class="track-k">{{ t('govTracks.decisionPeriod') }}</span>
+                  <span class="track-v">{{ detail.track.decisionPeriod }}</span>
+                </div>
+                <div class="track-kv">
+                  <span class="track-k">{{ t('govTracks.confirmPeriod') }}</span>
+                  <span class="track-v">{{ detail.track.confirmPeriod }}</span>
+                </div>
+                <div class="track-kv">
+                  <span class="track-k">{{ t('govTracks.decisionDeposit') }}</span>
+                  <span class="track-v">{{ detail.track.decisionDeposit }}</span>
+                </div>
+                <div class="track-kv">
+                  <span class="track-k">{{ t('govTracks.maxBalance') }}</span>
+                  <span class="track-v">{{ detail.track.maxBalance }}</span>
+                </div>
               </div>
             </div>
 
@@ -43,8 +148,7 @@
                   v-for="tab in contentTabs"
                   :key="tab.key"
                   type="button"
-                  class="tab-btn"
-                  :class="{ active: activeTab === tab.key }"
+                  :class="{ active: activeTab === tab.key } + ' p-4 tab-btn'"
                   @click="activeTab = tab.key"
                   color="neutral"
                   variant="ghost"
@@ -148,11 +252,46 @@
             <!-- Actions -->
             <div class="actions-section p-5 lg:p-8 border-t border-white-4">
               <h3 class="section-title">{{ t('govDetail.actions') }}</h3>
-              <div class="actions-btns flex flex-wrap gap-3">
-                <UButton type="button" class="mbtn mbtn--primary" color="neutral" variant="solid" size="sm">
-                  {{ t('govDetail.vote') }}
+              <div class="actions-btns flex flex-wrap items-center gap-3">
+                <UButton
+                  v-if="showDepositBtn"
+                  type="button"
+                  class="mbtn mbtn--primary"
+                  color="neutral"
+                  variant="solid"
+                  size="sm"
+                  :loading="depositing"
+                  @click="openDepositModal"
+                >
+                  {{ t('govDetail.deposit') }}
                 </UButton>
-                <span class="text-secondary text-sm self-center">{{ t('govDetail.voteOrDelegation') }}</span>
+                <UButton
+                  v-if="showCancelBtn"
+                  type="button"
+                  class="mbtn"
+                  color="neutral"
+                  variant="outline"
+                  size="sm"
+                  :loading="canceling"
+                  @click="handleCancel"
+                >
+                  {{ t('govDetail.cancel') }}
+                </UButton>
+                <UButton
+                  v-if="showExecuteBtn"
+                  type="button"
+                  class="mbtn"
+                  color="neutral"
+                  variant="outline"
+                  size="sm"
+                  :loading="executing"
+                  @click="handleExecute"
+                >
+                  {{ t('govDetail.execute') }}
+                </UButton>
+              </div>
+              <div class="text-secondary text-sm mt-3">
+                {{ t('govDetail.voteOrDelegation') }}
               </div>
             </div>
           </div>
@@ -165,25 +304,40 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import Footer from '@/components/Footer.vue'
 import GovSidebar from './GovSidebar.vue'
-import { timeAgo } from '@/utils/time'
+import { SecretContractApi } from '@/apis/contract'
+import { hexToSS58 } from '@/utils/chain'
+import { parseHumanNumber } from '@/utils/parseHumanNumber'
+import { ProposalState, proposalStateToGovUi, readProposalStateCode, type GovProposalUiStatus } from '@/utils/proposalState'
+import { $getTxProvider } from '@/plugins/chain'
+import type { WalletWrap } from '@/providers'
 
 const { t } = useI18n()
 
-type Status = 'Deciding' | 'Preparing' | 'Executed' | 'TimedOut' | 'Rejected'
+type Status = GovProposalUiStatus
 
 interface ReferendumDetail {
   id: number
-  titleKey: string
-  amount?: string
+  title: string
   proposer: string
-  trackKey: string
-  createdAt: string | number
+  trackId: number
+  trackLabel: string
+  track?: {
+    id: number
+    name: string
+    preparePeriod: string
+    decisionPeriod: string
+    confirmPeriod: string
+    decisionDeposit: string
+    maxBalance: string
+  }
+  submitBlock: number
   status: Status
+  stateCode: number
   comments?: number
   contentParagraphs: string[]
   aiSummary: string[]
@@ -208,94 +362,215 @@ const votesView = ref<'nested' | 'flattened'>('nested')
 
 const contentTabs = [
   { key: 'content' as const, labelKey: 'govDetail.tabContent' },
-  { key: 'summary' as const, labelKey: 'govDetail.tabSummary' },
   { key: 'translations' as const, labelKey: 'govDetail.tabTranslations' },
 ]
 
-// 根据 id 返回详情（模拟；可替换为 API）
-const detail = computed<ReferendumDetail | null>(() => {
-  const rid = id.value
-  if (!rid) return null
-  const base = getReferendumBase(rid)
-  if (!base) return null
-  return getReferendumDetail(rid, base)
+const loading = ref(false)
+const detail = ref<ReferendumDetail | null>(null)
+const depositAmount = ref('')
+const depositing = ref(false)
+const canceling = ref(false)
+const executing = ref(false)
+const depositModalOpen = ref(false)
+
+const showDepositBtn = computed(() => {
+  if (!detail.value) return false
+  return detail.value.stateCode === ProposalState.Pending
 })
 
-function getReferendumBase(rid: number): Record<string, unknown> | null {
-  const list: Record<string, unknown>[] = []
-  return list.find((r) => Number(r.id) === rid) || null
+const showCancelBtn = computed(() => {
+  if (!detail.value) return false
+  return (
+    detail.value.stateCode === ProposalState.Pending ||
+    detail.value.stateCode === ProposalState.Ongoing ||
+    detail.value.stateCode === ProposalState.Confirming
+  )
+})
+
+const showExecuteBtn = computed(() => {
+  if (!detail.value) return false
+  return detail.value.stateCode === ProposalState.Approved
+})
+
+function bytesToString(bytes: unknown): string {
+  if (!bytes) return ''
+  if (typeof bytes === 'string') return bytes
+  if (Array.isArray(bytes)) return String.fromCharCode(...bytes.filter((b: number) => b !== 0))
+  return String(bytes)
 }
 
-function getReferendumDetail(rid: number, base: Record<string, unknown>): ReferendumDetail {
-  const defaultContent = [
-    t('gov.detailDefaultContent1'),
-    t('gov.detailDefaultContent2'),
-    t('gov.detailDefaultContent3'),
-  ]
-  const defaultSummary = [
-    t('gov.detailDefaultSummary1'),
-    t('gov.detailDefaultSummary2'),
-    t('gov.detailDefaultSummary3'),
-  ]
-  if (rid === 1836) {
-    return {
-      ...base,
-      id: rid,
-      titleKey: (base.titleKey as string) || '',
-      proposer: (base.proposer as string) || '',
-      trackKey: (base.trackKey as string) || '',
-      createdAt: base.createdAt as number,
-      status: (base.status as Status) || 'Deciding',
-      contentParagraphs: [
-        t('gov.detail1836Content1'),
-        t('gov.detail1836Content2'),
-        t('gov.detail1836Content3'),
-        t('gov.detail1836Content4'),
-      ],
-      aiSummary: [
-        t('gov.detail1836Summary1'),
-        t('gov.detail1836Summary2'),
-        t('gov.detail1836Summary3'),
-        t('gov.detail1836Summary4'),
-        t('gov.detail1836Summary5'),
-      ],
-      decisionPeriod: '28d',
-      confirmationPeriod: '4d',
+function formatBlocks(blocks: number): string {
+  if (!blocks) return '0'
+  const seconds = blocks * 6
+  if (seconds < 60) return `${blocks} blocks`
+  if (seconds < 3600) return `${Math.round(seconds / 60)} min`
+  if (seconds < 86400) return `${Math.round(seconds / 3600)} hours`
+  return `${Math.round(seconds / 86400)} days`
+}
+
+function callerToSs58(caller: { t?: string | number; v?: string } | null | undefined): string {
+  if (!caller?.v) return '—'
+  if (String(caller.t) !== '1') return '—'
+  return hexToSS58(caller.v)
+}
+
+function normalizeSelectorHex(s: string): string {
+  const t = s.toLowerCase().trim()
+  if (!t) return ''
+  return t.startsWith('0x') ? t : `0x${t}`
+}
+
+function formatProposalCall(
+  call: unknown,
+  methodBySelector: Map<string, string>,
+): { callLabel: string; callAmount: string } {
+  if (!call || typeof call !== 'object') return { callLabel: '', callAmount: '' }
+  let c = call as Record<string, unknown>
+  if ('Some' in c && c.Some && typeof c.Some === 'object') c = c.Some as Record<string, unknown>
+  const selector = normalizeSelectorHex(String(c.selector ?? ''))
+  const contract = String(c.contract ?? 'gov')
+  const amountRaw = c.amount
+  const amount = amountRaw == null ? '' : String(amountRaw).replace(/,/g, '')
+  if (!selector) return { callLabel: '', callAmount: amount }
+  const method = methodBySelector.get(selector) ?? selector
+  return { callLabel: `${contract}.${method}`, callAmount: amount }
+}
+
+async function loadDetail() {
+  const rid = id.value
+  if (!Number.isFinite(rid)) return
+  loading.value = true
+  try {
+    const [proposalResult, tracksResult, methodBySelector] = await Promise.all([
+      SecretContractApi.proposal(rid),
+      SecretContractApi.tracks(),
+      SecretContractApi.getGovSelectorMethodMap(),
+    ])
+
+    const p = (proposalResult as any)?.Some ?? proposalResult
+    if (!p || typeof p !== 'object') {
+      detail.value = null
+      return
+    }
+
+    const trackId = parseHumanNumber((p as any).trackID)
+    let trackLabel = `#${trackId}`
+    let trackDetail: ReferendumDetail['track'] | undefined = undefined
+    if (Array.isArray(tracksResult)) {
+      for (const item of tracksResult) {
+        const row = item as any[]
+        const id0 = parseHumanNumber(row?.[0])
+        if (id0 === trackId) {
+          const data = (row?.[1] ?? {}) as Record<string, unknown>
+          const name = bytesToString((data as any).name)
+          if (name) trackLabel = name
+          trackDetail = {
+            id: trackId,
+            name: name || trackLabel,
+            preparePeriod: formatBlocks(parseHumanNumber((data as any).prepare_period ?? (data as any).preparePeriod)),
+            decisionPeriod: formatBlocks(parseHumanNumber((data as any).decision_period ?? (data as any).decisionPeriod)),
+            confirmPeriod: formatBlocks(parseHumanNumber((data as any).confirm_period ?? (data as any).confirmPeriod)),
+            decisionDeposit: `${String((data as any).decision_deposit ?? (data as any).decisionDeposit ?? '0')} VOTE`,
+            maxBalance: `${String((data as any).max_balance ?? (data as any).maxBalance ?? '0')} VOTE`,
+          }
+          break
+        }
+      }
+    }
+
+    const code = readProposalStateCode((p as any).status)
+    const { callLabel, callAmount } = formatProposalCall((p as any).call, methodBySelector)
+
+    const content = [
+      callLabel ? `Call: ${callLabel}` : 'Call: -',
+      callAmount !== '' ? `Amount: ${callAmount} VOTE` : 'Amount: -',
+      `TrackID: ${trackId}`,
+    ]
+
+    detail.value = {
+      id: parseHumanNumber((p as any).id),
+      title: t('gov.proposalTitle', { id: rid }),
+      proposer: callerToSs58((p as any).caller),
+      trackId,
+      trackLabel,
+      track: trackDetail,
+      submitBlock: parseHumanNumber((p as any).submitBlock),
+      status: proposalStateToGovUi(code),
+      stateCode: code,
+      contentParagraphs: content,
+      aiSummary: [],
+      decisionPeriod: '-',
+      confirmationPeriod: '-',
       attempts: 0,
       tally: {
-        ayePct: 100,
+        ayePct: 0,
         nayPct: 0,
-        ayeAmount: '0 VOTE',
-        nayAmount: '0 VOTE',
-        support: '0.00%',
-        threshold: '0.0%',
-        issuance: '0 VOTE',
+        ayeAmount: '-',
+        nayAmount: '-',
+        support: '0',
+        threshold: '0',
+        issuance: '-',
       },
-    } as ReferendumDetail
+    }
+  } catch (e) {
+    console.error('Failed to load referendum detail:', e)
+    detail.value = null
+  } finally {
+    loading.value = false
   }
-  return {
-    ...base,
-    id: rid,
-    titleKey: (base.titleKey as string) || '',
-    proposer: (base.proposer as string) || '',
-    trackKey: (base.trackKey as string) || '',
-    createdAt: base.createdAt as number,
-    status: (base.status as Status) || 'Deciding',
-    contentParagraphs: defaultContent,
-    aiSummary: defaultSummary,
-    decisionPeriod: '28d',
-    confirmationPeriod: '4d',
-    attempts: 0,
-    tally: {
-      ayePct: 85,
-      nayPct: 15,
-      ayeAmount: '≈150K DOT',
-      nayAmount: '≈20K DOT',
-      support: '5.00%',
-      threshold: '50%',
-      issuance: '≈1.64B DOT',
-    },
-  } as ReferendumDetail
+}
+
+watch(id, () => loadDetail(), { immediate: true })
+
+function openDepositModal() {
+  depositAmount.value = ''
+  depositModalOpen.value = true
+}
+
+async function handleDeposit() {
+  if (!detail.value || depositing.value) return
+  depositing.value = true
+  try {
+    await $getTxProvider(async (wallet: WalletWrap) => {
+      await SecretContractApi.depositProposalTx(wallet, detail.value!.id, depositAmount.value)
+    })
+    depositModalOpen.value = false
+    await loadDetail()
+  } catch (e) {
+    console.error('DepositProposal failed:', e)
+  } finally {
+    depositing.value = false
+  }
+}
+
+async function handleCancel() {
+  if (!detail.value || canceling.value) return
+  canceling.value = true
+  try {
+    await $getTxProvider(async (wallet: WalletWrap) => {
+      await SecretContractApi.cancelProposal(wallet, detail.value!.id)
+    })
+    await loadDetail()
+  } catch (e) {
+    console.error('CancelProposal failed:', e)
+  } finally {
+    canceling.value = false
+  }
+}
+
+async function handleExecute() {
+  if (!detail.value || executing.value) return
+  executing.value = true
+  try {
+    await $getTxProvider(async (wallet: WalletWrap) => {
+      await SecretContractApi.execProposal(wallet, detail.value!.id)
+    })
+    await loadDetail()
+  } catch (e) {
+    console.error('ExecProposal failed:', e)
+  } finally {
+    executing.value = false
+  }
 }
 
 function statusClass(status: Status): string {
@@ -395,12 +670,26 @@ function statusLabel(status: Status): string {
   }
 }
 
+.detail-title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
 .tabs-wrap {
   padding: 0 32px;
   
   .tabs {
     .tab-btn {
-      padding: 12px 0;
       font-size: 13px;
       color: rgba($secondary-text-rgb, 0.5);
       background: none;
@@ -580,6 +869,34 @@ function statusLabel(status: Status): string {
     background: rgba(255, 255, 255, 0.06);
     color: rgba($secondary-text-rgb, 0.6);
   }
+}
+
+.track-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px 18px;
+  margin-top: 12px;
+}
+
+.track-kv {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.track-k {
+  color: rgba($secondary-text-rgb, 0.55);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.track-v {
+  color: $primary-text;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .link-back {

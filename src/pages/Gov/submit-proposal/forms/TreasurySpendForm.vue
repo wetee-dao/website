@@ -4,7 +4,7 @@
       <div class="mb-1.5 text-[11px] tracking-[0.08em] text-white/45">
         {{ t('proposal.spendTo') }}
       </div>
-      <UInput v-model="model.to" class="w-full" placeholder="5..." size="lg" />
+      <Account v-model="model.to" />
     </div>
     <div class="sm:col-span-2">
       <div class="mb-1.5 text-[11px] tracking-[0.08em] text-white/45">
@@ -17,6 +17,7 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
+import Account from '@/components/Account.vue'
 import type { TreasurySpendFormModel } from '../types'
 
 const model = defineModel<TreasurySpendFormModel>({ required: true })

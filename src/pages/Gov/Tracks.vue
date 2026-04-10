@@ -17,7 +17,7 @@
                 variant="outline"
                 size="lg"
                 type="button"
-                @click="showProposalModal = true"
+                @click="handleAddTrack"
               >
                 {{ t('govTracks.addTrack') }}
               </UButton>
@@ -102,7 +102,8 @@
     <!-- 提交公投弹窗 -->
     <SubmitProposal 
       :show="showProposalModal" 
-      default-action="addTrack"
+      :default-action="proposalDefaultAction"
+      :default-track-id="proposalDefaultTrackId"
       @close="showProposalModal = false"
       @submitted="loadData"
     />
@@ -114,10 +115,7 @@ import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import GovSidebar from './GovSidebar.vue'
 import SubmitProposal from './submit-proposal'
-import { dryRunGovBusinessMessage } from './submit-proposal/submitProposal'
 import { SecretContractApi } from '@/apis/contract'
-import { $getTxProvider } from '@/plugins/chain'
-import type { WalletWrap } from '@/providers'
 
 const { t } = useI18n()
 
@@ -134,6 +132,8 @@ interface Track {
 const tracks = ref<Track[]>([])
 const defaultTrackId = ref(0)
 const showProposalModal = ref(false)
+const proposalDefaultAction = ref<string>('addTrack')
+const proposalDefaultTrackId = ref<number | undefined>(undefined)
 
 // 将字节数组转换为字符串
 function bytesToString(bytes: any): string {
@@ -187,15 +187,16 @@ async function loadData() {
 }
 
 async function handleSetDefault(trackId: number) {
-  try {
-    await $getTxProvider(async (wallet: WalletWrap) => {
-      const call = await dryRunGovBusinessMessage('setDefaultTrack', { trackID: trackId })
-      await SecretContractApi.submitProposal(wallet, call, trackId)
-    })
-    loadData()
-  } catch (error) {
-    console.error('Failed to set default track:', error)
-  }
+  // 设为默认需要走公投：打开 submit-proposal 弹窗
+  proposalDefaultAction.value = 'setDefaultTrack'
+  proposalDefaultTrackId.value = trackId
+  showProposalModal.value = true
+}
+
+function handleAddTrack() {
+  proposalDefaultAction.value = 'addTrack'
+  proposalDefaultTrackId.value = undefined
+  showProposalModal.value = true
 }
 
 onMounted(() => {

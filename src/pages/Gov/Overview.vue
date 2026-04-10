@@ -33,33 +33,9 @@
           </div>
 
           <!-- 最新提案 -->
-          <div class="section p-5 lg:p-8 border-t border-white-4">
-            <h3 class="section-title">{{ t('govOverview.latestProposals') }}</h3>
-            <div class="proposals-list">
-              <RouterLink
-                v-for="p in latestProposals"
-                :key="p.id"
-                :to="`/gov/referenda/${p.id}`"
-                class="proposal-item"
-              >
-                <span class="proposal-id">#{{ p.id }}</span>
-                <span class="proposal-title">{{ p.title }}</span>
-                <UBadge class="proposal-status" :class="statusClass(p.status)" color="neutral" variant="subtle" size="sm">
-                  {{ statusLabel(p.status) }}
-                </UBadge>
-              </RouterLink>
-            </div>
-          </div>
-
-          <!-- 成员列表 -->
-          <div class="section p-5 lg:p-8 border-t border-white-4">
-            <h3 class="section-title">{{ t('govOverview.recentMembers') }}</h3>
-            <div class="members-list">
-              <div v-for="m in recentMembers" :key="m.address" class="member-item">
-                <span class="member-address">{{ formatAddress(m.address) }}</span>
-                <span class="member-balance">{{ m.balance }}</span>
-              </div>
-            </div>
+          <div class="section border-t border-white-4">
+            <h3 class="section-title p-5 lg:p-8">{{ t('govOverview.latestProposals') }}</h3>
+            <ReferendaList :items="latestListItems" />
           </div>
         </div>
       </main>
@@ -73,14 +49,21 @@ import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import GovSidebar from './GovSidebar.vue'
 import { SecretContractApi } from '@/apis/contract'
+import { parseHumanNumber } from '@/utils/parseHumanNumber'
+import { proposalStateToGovUi, readProposalStateCode, type GovProposalUiStatus } from '@/utils/proposalState'
+import ReferendaList, { type ReferendaListItem } from './ReferendaList.vue'
 
 const { t } = useI18n()
 
-type Status = 'Deciding' | 'Preparing' | 'Executed' | 'TimedOut' | 'Rejected'
+type Status = GovProposalUiStatus
 
 interface Proposal {
   id: number
-  title: string
+  callLabel: string
+  callAmount: string
+  trackId: number
+  trackLabel: string
+  submitBlock: number
   status: Status
 }
 
@@ -98,6 +81,8 @@ const stats = ref({
 
 const latestProposals = ref<Proposal[]>([])
 const recentMembers = ref<Member[]>([])
+
+const latestListItems = ref<ReferendaListItem[]>([])
 
 function statusClass(status: Status): string {
   const map: Record<Status, string> = {
@@ -126,20 +111,85 @@ function formatAddress(addr: string): string {
   return addr.slice(0, 6) + '...' + addr.slice(-4)
 }
 
+function bytesToString(bytes: unknown): string {
+  if (!bytes) return ''
+  if (typeof bytes === 'string') return bytes
+  if (Array.isArray(bytes)) return String.fromCharCode(...bytes.filter((b: number) => b !== 0))
+  return String(bytes)
+}
+
+function normalizeSelectorHex(s: string): string {
+  const x = s.toLowerCase().trim()
+  if (!x) return ''
+  return x.startsWith('0x') ? x : `0x${x}`
+}
+
+function formatProposalCall(
+  call: unknown,
+  methodBySelector: Map<string, string>,
+): { callLabel: string; callAmount: string } {
+  if (!call || typeof call !== 'object') return { callLabel: '-', callAmount: '' }
+  let c = call as Record<string, unknown>
+  if ('Some' in c && c.Some && typeof c.Some === 'object') c = c.Some as Record<string, unknown>
+  const selector = normalizeSelectorHex(String(c.selector ?? ''))
+  const contract = String(c.contract ?? 'gov')
+  const amountRaw = c.amount
+  const callAmount = amountRaw == null ? '' : String(amountRaw).replace(/,/g, '')
+  const method = selector ? methodBySelector.get(selector) ?? selector : ''
+  return {
+    callLabel: method ? `${contract}.${method}` : contract,
+    callAmount,
+  }
+}
+
 async function loadData() {
   try {
-    // 加载提案
-    const proposalsResult = await SecretContractApi.proposals()
-    if (proposalsResult && Array.isArray(proposalsResult)) {
-      latestProposals.value = proposalsResult.slice(0, 5).map((p: any) => ({
-        id: p.id,
-        title: p.title || `Proposal #${p.id}`,
-        status: p.status?.state || 'Preparing',
-      }))
-      stats.value.activeProposals = proposalsResult.filter((p: any) => 
-        p.status?.state === 'Deciding' || p.status?.state === 'Preparing'
-      ).length
+    // 加载提案（公投列表）
+    const [tracksResult, proposalsResult, methodBySelector] = await Promise.all([
+      SecretContractApi.tracks(),
+      SecretContractApi.proposals(),
+      SecretContractApi.getGovSelectorMethodMap(),
+    ])
+
+    const trackNameById = new Map<number, string>()
+    if (Array.isArray(tracksResult)) {
+      for (const item of tracksResult) {
+        const row = item as any[]
+        const id = parseHumanNumber(row?.[0])
+        const data = (row?.[1] ?? {}) as Record<string, unknown>
+        const name = bytesToString((data as any).name) || `#${id}`
+        trackNameById.set(id, name)
+      }
     }
+
+    const list = Array.isArray(proposalsResult) ? proposalsResult : []
+    const mapped: Proposal[] = list
+      .filter((x) => x && typeof x === 'object')
+      .map((p: any) => {
+        const id = parseHumanNumber(p.id)
+        const trackId = parseHumanNumber(p.trackID)
+        const trackLabel = trackNameById.get(trackId) ?? `#${trackId}`
+        const submitBlock = parseHumanNumber(p.submitBlock)
+        const code = readProposalStateCode(p.status)
+        const status = proposalStateToGovUi(code)
+        const { callLabel, callAmount } = formatProposalCall(p.call, methodBySelector)
+        return { id, callLabel, callAmount, trackId, trackLabel, submitBlock, status }
+      })
+      .sort((a, b) => b.id - a.id)
+
+    latestProposals.value = mapped.slice(0, 5)
+    latestListItems.value = latestProposals.value.map((p) => ({
+      id: p.id,
+      submitBlock: p.submitBlock,
+      proposer: '',
+      trackLabel: p.trackLabel,
+      status: p.status,
+      callLabel: p.callLabel,
+      callContract: p.callLabel.split('.')[0] || 'gov',
+      callMethod: p.callLabel.split('.').slice(1).join('.') || p.callLabel,
+      callAmount: p.callAmount,
+    }))
+    stats.value.activeProposals = mapped.filter((p) => p.status === 'Deciding' || p.status === 'Preparing').length
 
     // 加载成员
     const membersResult = await SecretContractApi.members()
@@ -151,11 +201,8 @@ async function loadData() {
       stats.value.totalMembers = membersResult.length
     }
 
-    // 加载Tracks
-    const tracksResult = await SecretContractApi.tracks()
-    if (tracksResult && Array.isArray(tracksResult)) {
-      stats.value.totalTracks = tracksResult.length
-    }
+    // Track 数量（复用上面 tracksResult）
+    stats.value.totalTracks = Array.isArray(tracksResult) ? tracksResult.length : 0
   } catch (error) {
     console.error('Failed to load overview data:', error)
   }
@@ -235,66 +282,12 @@ onMounted(() => {
     font-size: 11px;
     font-weight: 500;
     color: rgba($secondary-text-rgb, 0.4);
-    margin: 0 0 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
     text-transform: uppercase;
     letter-spacing: 0.08em;
   }
 }
 
-.proposals-list {
-  .proposal-item {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 12px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-    text-decoration: none;
-    color: inherit;
-    transition: background 0.2s ease;
-
-    &:hover {
-      background: rgba(255, 255, 255, 0.02);
-    }
-
-    &:last-child {
-      border-bottom: none;
-    }
-
-    .proposal-id {
-      font-size: 13px;
-      color: rgba($secondary-text-rgb, 0.5);
-      min-width: 50px;
-    }
-
-    .proposal-title {
-      flex: 1;
-      font-size: 14px;
-      color: $primary-text;
-    }
-
-    .proposal-status {
-      padding: 3px 10px;
-      font-size: 11px;
-      
-      font-weight: 500;
-
-      &.status-deciding {
-        background: rgba(255, 255, 255, 0.06);
-        color: rgba($secondary-text-rgb, 0.8);
-      }
-
-      &.status-preparing {
-        background: rgba(255, 255, 255, 0.06);
-        color: rgba($secondary-text-rgb, 0.8);
-      }
-
-      &.status-executed {
-        background: rgba(255, 255, 255, 0.06);
-        color: rgba($secondary-text-rgb, 0.8);
-      }
-    }
-  }
-}
 
 .border-white-4 {
   border-color: rgba(255, 255, 255, 0.04);

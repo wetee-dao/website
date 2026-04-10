@@ -13,6 +13,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     3Dbox: typeof import('./src/components/anim/3Dbox.vue')['default']
+    Account: typeof import('./src/components/Account.vue')['default']
     AppsBg: typeof import('./src/components/AppsBg.vue')['default']
     Banner: typeof import('./src/components/Banner.vue')['default']
     Bridge: typeof import('./src/components/svg/Bridge.vue')['default']
@@ -61,6 +62,7 @@ declare module 'vue' {
 // For TSX support
 declare global {
   const 3Dbox: typeof import('./src/components/anim/3Dbox.vue')['default']
+  const Account: typeof import('./src/components/Account.vue')['default']
   const AppsBg: typeof import('./src/components/AppsBg.vue')['default']
   const Banner: typeof import('./src/components/Banner.vue')['default']
   const Bridge: typeof import('./src/components/svg/Bridge.vue')['default']

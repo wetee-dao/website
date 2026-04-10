@@ -21,6 +21,10 @@ export default {
   flattened: '扁平',
   voteListPlaceholder: '投票列表（嵌套/扁平）。可接入链或 Subsquare API 获取真实投票。',
   actions: '操作',
+  deposit: '质押激活',
+  depositAmount: '质押金额',
+  cancel: '取消提案',
+  execute: '执行提案',
   vote: '投票',
   voteOrDelegation: '或在此进行委托，详见 wiki。',
 }

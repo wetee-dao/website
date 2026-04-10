@@ -32,44 +32,7 @@
           </div>
 
           <!-- Referenda 列表 -->
-          <div class="referenda-list divide-y">
-            <RouterLink v-for="r in filteredReferenda" :key="r.id" :to="`/gov/referenda/${r.id}`"
-              class="referendum-item flex flex-col md:flex-row md:items-center gap-3 md:gap-4">
-              <div class="referendum-id">#{{ r.id }}</div>
-              <div class="referendum-body flex-1 min-w-0">
-                <div class="referendum-title-row">
-                  <h3 class="referendum-title">{{ t('gov.proposalTitle', { id: r.id }) }}</h3>
-                  <span class="track-badge"># {{ trackName(r.trackId) }}</span>
-                </div>
-                <div class="referendum-subrow flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-secondary">
-                  <div
-                    v-if="r.callContract && r.callMethod"
-                    class="proposal-call"
-                    :title="r.callLabel"
-                  >
-                    <div class="proposal-call__fn" aria-label="call">
-                      <span class="proposal-call__contract">{{ r.callContract }}</span>
-                      <span class="proposal-call__sep" aria-hidden="true" />
-                      <span class="proposal-call__method">{{ r.callMethod }}</span>
-                    </div>
-                    <div v-if="r.callAmount !== ''" class="proposal-call__amount">
-                      <span class="proposal-call__amount-label">{{ t('gov.callAmountPrefix') }}</span>
-                      <span class="proposal-call__amount-value">{{ r.callAmount }}</span>
-                      <span class="proposal-call__amount-unit">VOTE</span>
-                    </div>
-                  </div>
-                  <span class="proposer">{{ r.proposer }}</span>
-                  <span class="time-ago">{{ t('gov.atBlock', { block: r.submitBlock }) }}</span>
-                </div>
-              </div>
-              <div class="referendum-right flex items-center gap-3 shrink-0">
-                <span v-if="r.comments !== undefined" class="comments">{{ r.comments }}</span>
-                <UBadge :class="statusClass(r.status)+' status-badge p-3'" color="neutral" size="lg">
-                  {{ statusLabel(r.status) }}
-                </UBadge>
-              </div>
-            </RouterLink>
-          </div>
+          <ReferendaList :items="listItems" />
 
           <div v-if="loading && referendas.length === 0" class="empty-state p-10 text-center text-secondary">
             {{ t('gov.loadingReferenda') }}
@@ -92,6 +55,7 @@
 import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import GovSidebar from './GovSidebar.vue'
+import ReferendaList, { type ReferendaListItem } from './ReferendaList.vue'
 import SubmitProposal from './submit-proposal'
 import { SecretContractApi } from '@/apis/contract'
 import { hexToSS58 } from '@/utils/chain'
@@ -135,6 +99,21 @@ const filteredReferenda = computed(() => {
   if (trackFilter.value === 'all') return referendas.value
   return referendas.value.filter((r) => r.trackCategory === trackFilter.value)
 })
+
+const listItems = computed<ReferendaListItem[]>(() =>
+  filteredReferenda.value.map((r) => ({
+    id: r.id,
+    submitBlock: r.submitBlock,
+    proposer: r.proposer,
+    trackLabel: trackName(r.trackId),
+    status: r.status,
+    callLabel: r.callLabel,
+    callContract: r.callContract,
+    callMethod: r.callMethod,
+    callAmount: r.callAmount,
+    comments: r.comments,
+  })),
+)
 
 const trackName = (trackId: number): string => {
   return trackOptions.value.find((t) => t.id === trackId.toString())?.name ?? ''
@@ -245,27 +224,6 @@ function mapProposal(
   }
 }
 
-function statusClass(status: Status): string {
-  const map: Record<Status, string> = {
-    Deciding: 'status-deciding',
-    Preparing: 'status-preparing',
-    Executed: 'status-executed',
-    TimedOut: 'status-timedout',
-    Rejected: 'status-rejected',
-  }
-  return map[status] || ''
-}
-
-function statusLabel(status: Status): string {
-  const map: Record<Status, string> = {
-    Deciding: t('gov.statusDeciding'),
-    Preparing: t('gov.statusPreparing'),
-    Executed: t('gov.statusExecuted'),
-    TimedOut: t('gov.statusTimedOut'),
-    Rejected: t('gov.statusRejected'),
-  }
-  return map[status] || status
-}
 
 async function loadData() {
   loading.value = true
@@ -407,171 +365,6 @@ onMounted(() => {
   }
 }
 
-.referenda-list {
-  border-color: rgba(255, 255, 255, 0.04);
-}
-
-.referendum-item {
-  display: flex;
-  text-decoration: none;
-  color: inherit;
-  transition: background 0.2s ease;
-  border-color: rgba(255, 255, 255, 0.04);
-  padding: 20px 32px;
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.02);
-  }
-}
-
-.referendum-id {
-  flex-shrink: 0;
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  font-variant-numeric: tabular-nums;
-  color: $primary-text;
-  background-color: rgba($secondary-bg-rgb, 0.55);
-  height: 60px;
-  width: 60px;
-  line-height: 60px;
-  text-align: center;
-}
-
-.referendum-title-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 6px;
-}
-
-.referendum-title {
-  font-size: 14px;
-  font-weight: 500;
-  color: $primary-text;
-  margin: 0;
-  line-height: 1.5;
-}
-
-.track-badge {
-  padding: 3px 10px;
-  font-size: 11px;
-  background: rgba(255, 255, 255, 0.04);
-  color: rgba($secondary-text-rgb, 0.6);
-  font-weight: 400;
-}
-
-.proposal-call {
-  display: inline-flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px;
-}
-
-.proposal-call__fn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0;
-  max-width: 100%;
-  padding: 0;
-  background: transparent;
-}
-
-.proposal-call__contract {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba($secondary-text-rgb, 0.48);
-}
-
-.proposal-call__sep {
-  display: inline-block;
-  width: 1px;
-  height: 14px;
-  margin: 0 12px;
-  background: rgba(255, 255, 255, 0.12);
-  border-radius: 0;
-}
-
-.proposal-call__method {
-  font-family: ui-monospace, 'SFMono-Regular', 'Menlo', monospace;
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  color: rgba($secondary-text-rgb, 0.82);
-  text-shadow: none;
-}
-
-.proposal-call__amount {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 6px;
-  padding: 0;
-  border-radius: 0;
-  background: transparent;
-}
-
-.proposal-call__amount-label {
-  font-size: 11px;
-  font-weight: 500;
-  color: rgba($secondary-text-rgb, 0.45);
-  letter-spacing: 0.02em;
-}
-
-.proposal-call__amount-value {
-  font-size: 14px;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-  color: $primary-text;
-}
-
-.proposal-call__amount-unit {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  color: rgba($secondary-text-rgb, 0.45);
-}
-
-.referendum-right {
-  .comments {
-    font-size: 13px;
-    color: rgba($secondary-text-rgb, 0.5);
-  }
-}
-
-.status-badge {
-  font-size: 11px;
-  font-weight: 500;
-  white-space: nowrap;
-  letter-spacing: 0.02em;
-
-  &.status-deciding {
-    background: rgba(255, 255, 255, 0.06);
-    color: rgba($secondary-text-rgb, 0.8);
-  }
-
-  &.status-preparing {
-    background: rgba(255, 255, 255, 0.06);
-    color: rgba($secondary-text-rgb, 0.8);
-  }
-
-  &.status-executed {
-    background: rgba(255, 255, 255, 0.06);
-    color: rgba($secondary-text-rgb, 0.8);
-  }
-
-  &.status-timedout {
-    background: rgba(255, 255, 255, 0.06);
-    color: rgba($secondary-text-rgb, 0.6);
-  }
-
-  &.status-rejected {
-    background: rgba(255, 255, 255, 0.06);
-    color: rgba($secondary-text-rgb, 0.6);
-  }
-}
 
 .empty-state {
   font-size: 14px;

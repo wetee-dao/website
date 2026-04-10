@@ -10,8 +10,10 @@ export interface AddTrackFormModel {
 }
 
 /** 国库支出表单 */
+export type UniAddrInput = { t: 1 | 2; v: string }
+
 export interface TreasurySpendFormModel {
-  to: string
+  to: UniAddrInput | null
   amount: string
 }
 
@@ -28,7 +30,7 @@ export function createDefaultAddTrackForm(): AddTrackFormModel {
 }
 
 export function createDefaultTreasurySpendForm(): TreasurySpendFormModel {
-  return { to: '', amount: '' }
+  return { to: null, amount: '' }
 }
 
 export type ProposalSubmitPayload =
@@ -51,6 +53,13 @@ export type ProposalSubmitPayload =
       action: 'spend'
       /** 与业务 spend 内 trackID、submit_proposal 的 trackID 一致（当前为所选轨道） */
       proposalTrackId: number
-      to: string
+      to: UniAddrInput
       amount: string
+    }
+  | {
+      action: 'setDefaultTrack'
+      /** 提交提案使用的轨道（当前沿用所选 track） */
+      proposalTrackId: number
+      /** 要设为默认的轨道 */
+      defaultTrackId: number
     }

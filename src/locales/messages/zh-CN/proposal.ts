@@ -7,6 +7,8 @@ export default {
   // Actions
   actionAddTrack: '添加轨道',
   actionSpend: '国库支出',
+  actionSetDefaultTrack: '设为默认轨道',
+  setDefaultTrackHint: '将“选择轨道”设为默认轨道（通过公投提交）。',
   
   // AddTrack form
   trackName: '轨道名称',

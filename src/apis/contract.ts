@@ -170,6 +170,12 @@ export class SecretContract {
         return await this.buildCallContent("gov", "depositProposal", { proposalID: proposalId, amount }, 0)
     }
 
+    /** 存入提案押金（直接发交易） */
+    async depositProposalTx(wallet: WalletWrap, proposalId: number, amount: string) {
+        const result = await this.contract_builder("gov", "depositProposal", { proposalID: proposalId, amount }, "0")
+        return await this.call(wallet, result.params)
+    }
+
     /** 执行提案 */
     async execProposal(wallet: WalletWrap, proposalId: number) {
         const result = await this.contract_builder("gov", "execProposal", { proposalId }, "0")
