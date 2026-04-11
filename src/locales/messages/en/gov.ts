@@ -30,7 +30,7 @@ export default {
   othersTitle: 'Others',
   staking: 'Staking',
   preimages: 'Preimages',
-  statusDeciding: 'Deciding',
+  statusDeciding: 'Voting',
   statusPreparing: 'Preparing',
   statusExecuted: 'Executed',
   statusTimedOut: 'Timed Out',

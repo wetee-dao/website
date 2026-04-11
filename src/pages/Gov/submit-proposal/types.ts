@@ -1,4 +1,57 @@
-/** 添加轨道表单（不含 minEnactmentPeriod，提交时由父级补全） */
+/** 与链上 Curve 一致，表单用 number；提交时原样传入 contract */
+export type CurveTypeId = 'LinearDecreasing' | 'SteppedDecreasing' | 'Reciprocal'
+
+export interface CurveFormModel {
+  type: CurveTypeId
+  linearBegin: number
+  linearEnd: number
+  linearLength: number
+  stepBegin: number
+  stepEnd: number
+  stepSize: number
+  stepPeriod: number
+  reciprocalFactor: number
+  reciprocalXScale: number
+  reciprocalXOffset: number
+  reciprocalYOffset: number
+}
+
+export function createDefaultCurveForm(): CurveFormModel {
+  return {
+    type: 'LinearDecreasing',
+    linearBegin: 10000,
+    linearEnd: 50,
+    linearLength: 100,
+    stepBegin: 0,
+    stepEnd: 0,
+    stepSize: 0,
+    stepPeriod: 0,
+    reciprocalFactor: 0,
+    reciprocalXScale: 0,
+    reciprocalXOffset: 0,
+    reciprocalYOffset: 0,
+  }
+}
+
+/** 传给 gov add_track 的 Curve 对象（camelCase，与 toHuman 一致） */
+export function curveFormToContract(m: CurveFormModel) {
+  return {
+    type: m.type,
+    linearBegin: m.linearBegin,
+    linearEnd: m.linearEnd,
+    linearLength: m.linearLength,
+    stepBegin: m.stepBegin,
+    stepEnd: m.stepEnd,
+    stepSize: m.stepSize,
+    stepPeriod: m.stepPeriod,
+    reciprocalFactor: m.reciprocalFactor,
+    reciprocalXScale: m.reciprocalXScale,
+    reciprocalXOffset: m.reciprocalXOffset,
+    reciprocalYOffset: m.reciprocalYOffset,
+  }
+}
+
+/** 添加轨道表单（minEnactmentPeriod 提交时由父级补全） */
 export interface AddTrackFormModel {
   name: string
   preparePeriod: number
@@ -7,6 +60,8 @@ export interface AddTrackFormModel {
   maxDeciding: number
   decisionDeposit: string
   maxBalance: string
+  minApproval: CurveFormModel
+  minSupport: CurveFormModel
 }
 
 /** 国库支出表单 */
@@ -18,6 +73,7 @@ export interface TreasurySpendFormModel {
 }
 
 export function createDefaultAddTrackForm(): AddTrackFormModel {
+  const c = createDefaultCurveForm()
   return {
     name: '',
     preparePeriod: 100,
@@ -26,6 +82,8 @@ export function createDefaultAddTrackForm(): AddTrackFormModel {
     maxDeciding: 10,
     decisionDeposit: '1000000000000',
     maxBalance: '1000000000000000',
+    minApproval: { ...c },
+    minSupport: { ...c },
   }
 }
 
@@ -36,7 +94,6 @@ export function createDefaultTreasurySpendForm(): TreasurySpendFormModel {
 export type ProposalSubmitPayload =
   | {
       action: 'addTrack'
-      /** submit_proposal 的轨道；业务 add_track 的 TrackData 在 trackData */
       proposalTrackId: number
       trackData: {
         name: string
@@ -47,19 +104,18 @@ export type ProposalSubmitPayload =
         minEnactmentPeriod: number
         decisionDeposit: string
         maxBalance: string
+        minApproval: ReturnType<typeof curveFormToContract>
+        minSupport: ReturnType<typeof curveFormToContract>
       }
     }
   | {
       action: 'spend'
-      /** 与业务 spend 内 trackID、submit_proposal 的 trackID 一致（当前为所选轨道） */
       proposalTrackId: number
       to: UniAddrInput
       amount: string
     }
   | {
       action: 'setDefaultTrack'
-      /** 提交提案使用的轨道（当前沿用所选 track） */
       proposalTrackId: number
-      /** 要设为默认的轨道 */
       defaultTrackId: number
     }

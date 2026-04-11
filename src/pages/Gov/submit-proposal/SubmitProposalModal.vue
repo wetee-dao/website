@@ -85,6 +85,7 @@ import { submitProposalPayload } from './submitProposal'
 import {
   createDefaultAddTrackForm,
   createDefaultTreasurySpendForm,
+  curveFormToContract,
   type AddTrackFormModel,
   type TreasurySpendFormModel,
 } from './types'
@@ -122,8 +123,8 @@ const spendForm = ref<TreasurySpendFormModel>(createDefaultTreasurySpendForm())
 
 const actionTabs = computed(() => [
   { id: 'addTrack' as const, label: t('proposal.actionAddTrack') },
-  { id: 'spend' as const, label: t('proposal.actionSpend') },
   { id: 'setDefaultTrack' as const, label: t('proposal.actionSetDefaultTrack') },
+  { id: 'spend' as const, label: t('proposal.actionSpend') },
 ])
 
 const trackSelectionOk = computed(() => {
@@ -165,6 +166,8 @@ function buildPayload(): ProposalSubmitPayload | null {
         minEnactmentPeriod: 1,
         decisionDeposit: f.decisionDeposit,
         maxBalance: f.maxBalance,
+        minApproval: curveFormToContract(f.minApproval),
+        minSupport: curveFormToContract(f.minSupport),
       },
     }
   }

@@ -13,4 +13,5 @@ export default {
   no: '否',
   submit: '提交',
   cancel: '取消',
+  close: '关闭',
 }

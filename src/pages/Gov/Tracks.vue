@@ -69,6 +69,36 @@
                     <span class="deposit-value">{{ track.maxBalance }}</span>
                   </div>
                 </div>
+                
+                <!-- 投票曲线 -->
+                <div class="track-curves">
+                  <div class="curve-item">
+                    <div class="curve-header">
+                      <span class="curve-label">Min Approval</span>
+                      <span class="curve-type">{{ formatCurveType(track.minApproval.Type) }}</span>
+                    </div>
+                    <div class="curve-range">
+                      <span class="curve-start">{{ track.minApprovalStart }}</span>
+                      <svg class="curve-arrow" width="20" height="8" viewBox="0 0 40 8">
+                        <path d="M0 4h36M32 1l4 3-4 3" stroke="currentColor" fill="none" stroke-width="1.5"/>
+                      </svg>
+                      <span class="curve-end">{{ track.minApprovalEnd }}</span>
+                    </div>
+                  </div>
+                  <div class="curve-item">
+                    <div class="curve-header">
+                      <span class="curve-label">Min Support</span>
+                      <span class="curve-type">{{ formatCurveType(track.minSupport.Type) }}</span>
+                    </div>
+                    <div class="curve-range">
+                      <span class="curve-start">{{ track.minSupportStart }}</span>
+                      <svg class="curve-arrow" width="20" height="8" viewBox="0 0 40 8">
+                        <path d="M0 4h36M32 1l4 3-4 3" stroke="currentColor" fill="none" stroke-width="1.5"/>
+                      </svg>
+                      <span class="curve-end">{{ track.minSupportEnd }}</span>
+                    </div>
+                  </div>
+                </div>
               </div>
               
               <div v-if="track.id !== defaultTrackId" class="track-card-footer">
@@ -87,11 +117,6 @@
           </div>
 
           <div v-else class="empty-state">
-            <div class="empty-icon">
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-              </svg>
-            </div>
             <p>{{ t('govTracks.empty') }}</p>
           </div>
         </div>
@@ -116,6 +141,8 @@ import { useI18n } from 'vue-i18n'
 import GovSidebar from './GovSidebar.vue'
 import SubmitProposal from './submit-proposal'
 import { SecretContractApi } from '@/apis/contract'
+import { parseHumanNumber } from '@/utils/parseHumanNumber'
+import { parseCurveFromApi, type Curve, curveY, formatCurveType, permilleToPercent } from '@/utils/curve'
 
 const { t } = useI18n()
 
@@ -127,6 +154,13 @@ interface Track {
   confirmPeriod: string
   decisionDeposit: string
   maxBalance: string
+  // 投票曲线
+  minApproval: Curve
+  minSupport: Curve
+  minApprovalStart: string
+  minApprovalEnd: string
+  minSupportStart: string
+  minSupportEnd: string
 }
 
 const tracks = ref<Track[]>([])
@@ -143,6 +177,15 @@ function bytesToString(bytes: any): string {
     return String.fromCharCode(...bytes.filter((b: number) => b !== 0))
   }
   return String(bytes)
+}
+
+/** tracks() 单条：{ id, track } 或 [id, track] */
+function normalizeTrackEntry(item: any, index: number): { id: number; data: any } {
+  if (item == null) return { id: index, data: {} }
+  if (Array.isArray(item)) {
+    return { id: parseHumanNumber(item[0]), data: item[1] ?? {} }
+  }
+  return { id: parseHumanNumber(item.id), data: item.track ?? {} }
 }
 
 // 格式化块数为可读时间
@@ -166,18 +209,30 @@ async function loadData() {
 
     // 加载所有tracks
     const tracksResult = await SecretContractApi.tracks()
-    console.log('tracksResult:', tracksResult)
     if (tracksResult && Array.isArray(tracksResult)) {
       tracks.value = tracksResult.map((item: any, index: number) => {
-        const trackData = item[1] || item
+        const { id: tid, data: trackData } = normalizeTrackEntry(item, index)
+        const prepareBlocks = parseHumanNumber(trackData.preparePeriod)
+        const decisionBlocks = parseHumanNumber(trackData.decisionPeriod)
+        const confirmBlocks = parseHumanNumber(trackData.confirmPeriod)
+
+        const minApproval = parseCurveFromApi(trackData.minApproval)
+        const minSupport = parseCurveFromApi(trackData.minSupport)
+
         return {
-          id: item[0] ?? trackData.id ?? index,
+          id: tid,
           name: bytesToString(trackData.name) || `Track ${index}`,
-          preparePeriod: formatBlocks(Number(trackData.prepare_period || trackData.preparePeriod || 0)),
-          decisionPeriod: formatBlocks(Number(trackData.decision_period || trackData.decisionPeriod || 0)),
-          confirmPeriod: formatBlocks(Number(trackData.confirm_period || trackData.confirmPeriod || 0)),
-          decisionDeposit: `${trackData.decision_deposit || trackData.decisionDeposit || 0} VOTE`,
-          maxBalance: `${trackData.max_balance || trackData.maxBalance || 0} VOTE`,
+          preparePeriod: formatBlocks(prepareBlocks),
+          decisionPeriod: formatBlocks(decisionBlocks),
+          confirmPeriod: formatBlocks(confirmBlocks),
+          decisionDeposit: `${parseHumanNumber(trackData.decisionDeposit)} VOTE`,
+          maxBalance: `${parseHumanNumber(trackData.maxBalance)} VOTE`,
+          minApproval,
+          minSupport,
+          minApprovalStart: permilleToPercent(curveY(minApproval, 0)),
+          minApprovalEnd: permilleToPercent(curveY(minApproval, decisionBlocks)),
+          minSupportStart: permilleToPercent(curveY(minSupport, 0)),
+          minSupportEnd: permilleToPercent(curveY(minSupport, decisionBlocks)),
         }
       })
     }
@@ -289,7 +344,7 @@ onMounted(() => {
 
 .tracks-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
   gap: 1px;
 }
 
@@ -298,6 +353,7 @@ onMounted(() => {
 }
 
 .track-card {
+  min-width: 0;
   background: rgba($primary-bg-rgb, 0.95);
   padding: 16px;
   margin: 12px;
@@ -357,6 +413,8 @@ onMounted(() => {
   }
 
   .track-card-body {
+    min-width: 0;
+
     .track-meta {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -413,6 +471,85 @@ onMounted(() => {
           font-weight: 500;
           font-family: monospace;
           letter-spacing: -0.02em;
+        }
+      }
+    }
+    
+    .track-curves {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1px;
+      background: rgba(255, 255, 255, 0.04);
+      margin-top: 2px;
+      max-width: 100%;
+      box-sizing: border-box;
+
+      @media (max-width: 520px) {
+        grid-template-columns: 1fr;
+      }
+
+      .curve-item {
+        min-width: 0;
+        padding: 16px 20px;
+        background: rgba($primary-bg-rgb, 0.95);
+
+        .curve-header {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-between;
+          align-items: center;
+          gap: 8px;
+          margin-bottom: 12px;
+
+          .curve-label {
+            font-size: 11px;
+            color: rgba($secondary-text-rgb, 0.6);
+            font-weight: 500;
+            min-width: 0;
+          }
+
+          .curve-type {
+            flex-shrink: 0;
+            max-width: 100%;
+            font-size: 9px;
+            color: rgba($secondary-text-rgb, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 2px 6px;
+            background: rgba(255, 255, 255, 0.04);
+          }
+        }
+
+        .curve-range {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          min-width: 0;
+
+          .curve-start {
+            min-width: 0;
+            font-size: 15px;
+            font-weight: 500;
+            color: rgba($secondary-text-rgb, 0.9);
+            overflow-wrap: anywhere;
+            text-align: center;
+          }
+
+          .curve-arrow {
+            flex-shrink: 0;
+            color: rgba($secondary-text-rgb, 0.3);
+          }
+
+          .curve-end {
+            min-width: 0;
+            font-size: 15px;
+            font-weight: 500;
+            color: rgba($secondary-text-rgb, 0.6);
+            overflow-wrap: anywhere;
+            text-align: center;
+          }
         }
       }
     }

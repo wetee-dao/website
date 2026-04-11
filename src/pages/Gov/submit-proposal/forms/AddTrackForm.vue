@@ -1,5 +1,5 @@
 <template>
-  <div class="space-y-3">
+  <div class="space-y-5">
     <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
       <div class="sm:col-span-2">
         <div class="mb-1.5 text-[11px] tracking-[0.08em] text-white/45">
@@ -52,12 +52,16 @@
         <UInput v-model="model.maxBalance" class="w-full" size="lg" />
       </div>
     </div>
+
+    <CurveForm v-model="model.minApproval" :title="t('proposal.curveMinApproval')" />
+    <CurveForm v-model="model.minSupport" :title="t('proposal.curveMinSupport')" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import type { AddTrackFormModel } from '../types'
+import CurveForm from './CurveForm.vue'
 
 const model = defineModel<AddTrackFormModel>({ required: true })
 

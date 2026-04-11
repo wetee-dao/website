@@ -29,7 +29,7 @@ export class GraphqlClient {
             throw new Error(response.data.errors[0].message)
         }
 
-        console.log(response.data.data)
+        // console.log(response.data.data)
         return response.data.data
     };
 

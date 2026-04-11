@@ -44,7 +44,12 @@ export class SecretContract {
 
     /** 查询锁定余额 */
     async lockBalanceOf(owner: string) {
-        return await this.contract_query("gov", "lockBalanceOf", { owner })
+        return await this.contract_query("gov", "lockBalanceOf", {
+            owner: {
+                T: 1,
+                V: ss58toHex(owner)
+            }
+        })
     }
 
     /** 转账 */
@@ -146,7 +151,11 @@ export class SecretContract {
 
     /** 查询提案 */
     async proposal(id: number) {
-        return await this.contract_query("gov", "proposal", { id })
+        let result = await this.contract_query("gov", "proposal", { id })
+        return {
+            ...result.proposal,
+            id: result.id,
+        }
     }
 
     /** 查询提案状态 */
@@ -156,7 +165,17 @@ export class SecretContract {
 
     /** 查询所有提案 */
     async proposals() {
-        return await this.contract_query("gov", "proposals", {})
+        let result = await this.contract_query("gov", "proposals", {
+            startKey: null,
+            size: 20,
+        })
+
+        return result.map((item: any) => {
+            return {
+                ...item.proposal,
+                id: item.id,
+            }
+        })
     }
 
     /** 取消提案 */
@@ -183,31 +202,50 @@ export class SecretContract {
     }
 
     // ============ Voting ============
+    // Abi（gov.json）：submit_vote(proposal_i_d, opinion_yes, lock_amount) → proposalID, opinionYes, lockAmount
     /** 提交投票 */
     async submitVote(wallet: WalletWrap, proposalId: number, opinionYes: boolean, lockAmount: string) {
-        const result = await this.contract_builder("gov", "submitVote", { proposalId, opinionYes, lockAmount }, "0")
+        const result = await this.contract_builder("gov", "submitVote", {
+            proposalID: proposalId,
+            opinionYes,
+            lockAmount,
+        }, "0")
         return await this.call(wallet, result.params)
     }
 
-    /** 查询投票 */
-    async vote(id: number) {
-        return await this.contract_query("gov", "vote", { id })
+    // Abi：vote(proposal_i_d, index) → proposalID, index
+    /** 按提案与投票序号查询单条投票 */
+    async vote(proposalId: number, index: number) {
+        return await this.contract_query("gov", "vote", { proposalID: proposalId, index })
     }
 
-    /** 查询所有投票 */
-    async votes() {
-        return await this.contract_query("gov", "votes", {})
+    // Abi：votes(proposal_i_d, start_key: Option<Vote>, size) → proposalID, startKey, size
+    /** 分页查询某提案下的投票；首屏 startKey 传 null */
+    async votes(proposalId: number, startKey: unknown | null = null, size = 512) {
+        return await this.contract_query("gov", "votes", {
+            proposalID: proposalId,
+            startKey,
+            size,
+        })
     }
 
-    /** 取消投票 */
-    async cancelVote(wallet: WalletWrap, voteId: number) {
-        const result = await this.contract_builder("gov", "cancelVote", { voteId }, "0")
+    // Abi：cancel_vote(proposal_i_d, index)
+    /** 取消投票（提案 ID + 投票序号 index） */
+    async cancelVote(wallet: WalletWrap, proposalId: number, index: number) {
+        const result = await this.contract_builder("gov", "cancelVote", {
+            proposalID: proposalId,
+            index,
+        }, "0")
         return await this.call(wallet, result.params)
     }
 
-    /** 解锁投票 */
-    async unlock(wallet: WalletWrap, voteId: number) {
-        const result = await this.contract_builder("gov", "unlock", { voteId }, "0")
+    // Abi：unlock(proposal_i_d, index)
+    /** 解锁投票（提案 ID + 投票序号 index） */
+    async unlock(wallet: WalletWrap, proposalId: number, index: number) {
+        const result = await this.contract_builder("gov", "unlock", {
+            proposalID: proposalId,
+            index,
+        }, "0")
         return await this.call(wallet, result.params)
     }
 
@@ -261,13 +299,15 @@ export class SecretContract {
 
         console.log("tee-secret  contract", contract)
         console.log("              method", methodAbi.method)
-        console.log("            abi args", methodAbi.args)
+        // console.log("            abi args", methodAbi.args)
         console.log("                args", args)
         console.log("            hex args", argstrs)
 
         const response = await this.tryRun(userInfo.addr, contract, methodAbi.selector.toHex(), argstrs, methodAbi.isMutating || false)
         const bt = hexToU8a(response)
         let retutnData = decodeReturnValue(methodAbi.returnType, u8aToBuffer(bt), abi!.registry) as any
+
+        console.log(methodAbi.method, retutnData)
 
         return {
             dry: retutnData,

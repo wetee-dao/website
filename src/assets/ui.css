@@ -31,35 +31,13 @@
 
     /* 交互高亮用项目主色 */
     --ui-primary: var(--g-primary-text);
+    --ui-secondary: rgba(var(--g-primary-text-rgb), 0.56);
     --ui-primary-foreground: rgb(12, 16, 19);
     --ui-ring: rgba(var(--g-primary-text-rgb), 0.35);
     --ui-radius: 0rem;
   }
+}
 
-  html.light {
-    /* 浅色模式下也保持“克制”风格 */
-    --ui-bg: var(--g-primary-bg);
-    --ui-bg-muted: rgba(var(--g-primary-bg-rgb), 0.96);
-    --ui-bg-elevated: rgba(var(--g-primary-bg-rgb), 0.98);
-    --ui-bg-accented: rgba(0, 0, 0, 0.03);
-    --ui-bg-inverted: rgb(12, 16, 19);
+button.bg-inverted{
 
-    --ui-text: rgba(var(--g-secondary-text-rgb), 0.9);
-    --ui-text-muted: rgba(var(--g-secondary-text-rgb), 0.72);
-    --ui-text-dimmed: rgba(var(--g-secondary-text-rgb), 0.55);
-    --ui-text-toned: rgba(var(--g-secondary-text-rgb), 0.8);
-    --ui-text-highlighted: rgba(var(--g-secondary-text-rgb), 0.98);
-    --ui-text-inverted: #fff;
-
-    --ui-border: rgba(0, 0, 0, 0.08);
-    --ui-border-muted: rgba(0, 0, 0, 0.06);
-    --ui-border-accented: rgba(0, 0, 0, 0.12);
-    --ui-border-inverted: rgba(255, 255, 255, 0.9);
-
-    --ui-primary: var(--g-primary-text);
-    --ui-primary-foreground: #fff;
-    --ui-ring: rgba(var(--g-primary-text-rgb), 0.28);
-
-    --ui-radius: 0rem;
-  }
 }

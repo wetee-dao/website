@@ -18,8 +18,26 @@ export default {
   confirmPeriod: 'Confirm Period',
   maxDeciding: 'Max Deciding',
   decisionDeposit: 'Decision Deposit',
-  maxBalance: 'Max Balance',
-  
+  maxBalance: 'Max Amount',
+
+  curveMinApproval: 'Min approval curve',
+  curveMinSupport: 'Min support curve',
+  curveType: 'Curve type',
+  curveLinear: 'Linear decreasing',
+  curveStepped: 'Stepped decreasing',
+  curveReciprocal: 'Reciprocal',
+  linearBegin: 'Begin (permille)',
+  linearEnd: 'End (permille)',
+  linearLength: 'Length (blocks)',
+  stepBegin: 'Begin (permille)',
+  stepEnd: 'End (permille)',
+  stepSize: 'Step size (permille)',
+  stepPeriod: 'Step period (blocks)',
+  reciprocalFactor: 'K (ReciprocalFactor)',
+  reciprocalXScale: 'S (ReciprocalXScale)',
+  reciprocalXOffset: 'x offset (ReciprocalXOffset)',
+  reciprocalYOffset: 'y offset (ReciprocalYOffset)',
+
   // Spend form
   spendTo: 'Recipient',
   spendAmount: 'Amount',

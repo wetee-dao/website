@@ -1,6 +1,7 @@
 export default {
   title: 'Voting Tracks',
   subtitle: 'Manage voting tracks configuration',
+  trackName: 'Name',
   default: 'Default',
   setDefault: 'Set Default',
   addTrack: 'Add Track',

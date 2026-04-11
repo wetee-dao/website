@@ -13,4 +13,5 @@ export default {
   no: 'No',
   submit: 'Submit',
   cancel: 'Cancel',
+  close: 'Close',
 }

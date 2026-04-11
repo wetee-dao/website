@@ -30,7 +30,7 @@ export default {
   othersTitle: '其他',
   staking: '质押',
   preimages: '预映像',
-  statusDeciding: '决策中',
+  statusDeciding: '投票中',
   statusPreparing: '准备中',
   statusExecuted: '已执行',
   statusTimedOut: '已超时',

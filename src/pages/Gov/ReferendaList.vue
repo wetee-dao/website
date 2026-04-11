@@ -115,7 +115,7 @@ function statusLabel(status: GovProposalUiStatus): string {
   letter-spacing: -0.03em;
   font-variant-numeric: tabular-nums;
   color: $primary-text;
-  background-color: rgba($secondary-bg-rgb, 0.55);
+  background-color: rgba(255, 255, 255, 0.06);
   height: 60px;
   width: 60px;
   line-height: 60px;
