@@ -11,6 +11,7 @@ import type { WalletWrap } from "@/providers";
 import { hexToSS58, ss58toHex } from "@/utils/chain";
 import { store } from "@/stores/global";
 import { concatUint8Array } from "@/utils/buffer";
+import { Loading } from "@/plugins/pop";
 
 export class SecretContract {
     govAbi: Abi | undefined
@@ -403,19 +404,30 @@ export class SecretContract {
             ...args.map((v) => hexToU8a(v)),
         )
 
-        const sig = (await wallet.signMsg(data, hexToSS58(caller))).replace(/^0x/i, '');
-        const response = await (new GraphqlClient(CurrentSecretUrl())).mut({
-            query: `mutation{
-                    contractCall(
-                        caller:"${ss58toHex(caller)}",
-                        callerType: 1,
-                        contract:"${contract}",
-                        method: "${method}",
-                        args: ${argStr},
-                        signature: "${sig}"
-                    )
-                }`,
-        })
+        const loading = Loading(null)
+        let response: any;
+        try {
+            const sig = (await wallet.signMsg(data, hexToSS58(caller))).replace(/^0x/i, '');
+             response = await (new GraphqlClient(CurrentSecretUrl())).mut({
+                query: `mutation{
+                        contractCall(
+                            caller:"${ss58toHex(caller)}",
+                            callerType: 1,
+                            contract:"${contract}",
+                            method: "${method}",
+                            args: ${argStr},
+                            signature: "${sig}"
+                        )
+                    }`,
+            })
+            
+            await new Promise(resolve => setTimeout(resolve, 3000));
+        } catch (error) {
+            loading.close();
+            throw error;
+        } finally {
+            loading.close();
+        }
 
         return response.contractCall
     }

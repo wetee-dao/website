@@ -17,7 +17,7 @@
   left: calc(50vw - 200px);
   width: 400px;
   height: 220px;
-  background-color: rgba($primary-bg-rgb, $alpha: 0.90);
+  background-color: rgb(0 0 0 / 80%);
   border: 3px solid rgba($secondary-text-rgb, 0.1);
   z-index: 200;
 

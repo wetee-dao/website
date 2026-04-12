@@ -208,7 +208,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useNotification } from 'naive-ui'
+import { useToast } from '@nuxt/ui/composables'
 import { ss58toHex } from '@/utils/chain'
 import { useGlobalStore } from '@/stores/global'
 import useGlobelProperties from '@/plugins/globel'
@@ -233,7 +233,7 @@ const switchLocale = (l: LocaleId) => {
 
 const props = defineProps(['shadow'])
 const userStore = useGlobalStore()
-const notification = useNotification()
+const notification = useToast()
 
 const group = ref("main")
 const showSub = ref(true)

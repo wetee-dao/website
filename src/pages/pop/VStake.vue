@@ -25,7 +25,7 @@
               <button class="text-sm text-purple-normal font-medium" @click="max">Max</button>
             </div>
           </div>
-          <NSlider class="pb-5" :value="valueSlider" :step="5" @UpdateValue="onValueSlider" />
+          <!-- <NSlider class="pb-5" :value="valueSlider" :step="5" @UpdateValue="onValueSlider" /> -->
         </div>
         <div class="split">
           <i class="iconfont" @click="opposite()">&#xe696;</i>
@@ -58,7 +58,6 @@
 
 <script lang="ts" setup>
 import { nextTick, onMounted, ref } from "vue";
-import { NSlider } from 'naive-ui'
 
 import PopHeader from "@/components/PopHeader.vue";
 import { useGlobalStore } from "@/stores/global";
