@@ -8,7 +8,9 @@ import { Bytes } from '@polkadot/types';
 import type { AnyJson, Registry, TypeDef } from "@polkadot/types/types";
 import { transformUserInput } from "@/utils/ink";
 import type { WalletWrap } from "@/providers";
-import { ss58toHex } from "@/utils/chain";
+import { hexToSS58, ss58toHex } from "@/utils/chain";
+import { store } from "@/stores/global";
+import { concatUint8Array } from "@/utils/buffer";
 
 export class SecretContract {
     govAbi: Abi | undefined
@@ -196,8 +198,8 @@ export class SecretContract {
     }
 
     /** 执行提案 */
-    async execProposal(wallet: WalletWrap, proposalId: number) {
-        const result = await this.contract_builder("gov", "execProposal", { proposalId }, "0")
+    async execProposal(wallet: WalletWrap, proposalID: number) {
+        const result = await this.contract_builder("gov", "execProposal", { proposalID }, "0")
         return await this.call(wallet, result.params)
     }
 
@@ -278,7 +280,7 @@ export class SecretContract {
         if (!methodAbi) {
             window.$notification["error"]({
                 content: 'Error',
-                message: "contract contract method not found: " + method,
+                description: "contract contract method not found: " + method,
                 duration: 2500,
                 keepAliveOnHover: true
             })
@@ -329,10 +331,7 @@ export class SecretContract {
         }
         const params = transformUserInput(abi.registry, methodAbi.args, args)
         const argBts = methodAbi.args.map(({ type: { lookupName, type } }, index) => {
-            let p = abi.registry.createType(lookupName || type, params[index]).toU8a()
-            if (type == "Address") {
-                p = p.slice(1)
-            }
+            let p = abi.registry.createType(lookupName || type, params[index]).toHex()
             return p
         })
 
@@ -398,9 +397,13 @@ export class SecretContract {
     async call(wallet: WalletWrap, params: { caller: string, contract: string, method: string, args: string[] }) {
         const { caller, contract, method, args } = params
         const argStr = JSON.stringify(args)
-        // const sig = await wallet.signMsg(argStr, caller)
-        const sig = ""
+        const data = concatUint8Array(
+            stringToU8a(contract),
+            hexToU8a(method),
+            ...args.map((v) => hexToU8a(v)),
+        )
 
+        const sig = (await wallet.signMsg(data, hexToSS58(caller))).replace(/^0x/i, '');
         const response = await (new GraphqlClient(CurrentSecretUrl())).mut({
             query: `mutation{
                     contractCall(
@@ -419,12 +422,7 @@ export class SecretContract {
 
     // get caller info
     getCallerInfo() {
-        let userInfo = null
-        if (window.localStorage.getItem("userInfo")) {
-            userInfo = JSON.parse(window.localStorage.getItem("userInfo") || "{}")
-        }
-
-        return userInfo
+        return store.state.value.global.userInfo
     }
 }
 
@@ -464,10 +462,10 @@ function getReturnTypeName(type: TypeDef | null | undefined) {
 export class CallContent {
     contract: string
     selector: Uint8Array
-    args: Uint8Array[]
+    args: string[]
     amount: number
 
-    constructor(contract: string, selector: Uint8Array, args: Uint8Array[], amount: number) {
+    constructor(contract: string, selector: Uint8Array, args: string[], amount: number) {
         this.contract = contract
         this.selector = selector
         this.args = args
@@ -479,4 +477,3 @@ export const SecretContractApi = new SecretContract({
     govContract: "gov",
     govAbiUrl: "contract/gov.json",
 })
-

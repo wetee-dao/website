@@ -41,15 +41,14 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-
-export type GovProposalUiStatus = 'Deciding' | 'Preparing' | 'Executed' | 'TimedOut' | 'Rejected'
+import { type ProposalStatusKey } from '@/utils/proposalState'
 
 export interface ReferendaListItem {
   id: number
   submitBlock?: number
   proposer?: string
   trackLabel?: string
-  status: GovProposalUiStatus
+  status: ProposalStatusKey
   callLabel?: string
   callContract?: string
   callMethod?: string
@@ -67,26 +66,21 @@ const title = (id: number) => t('gov.proposalTitle', { id })
 const atBlock = (block: number) => t('gov.atBlock', { block })
 const amountPrefix = t('gov.callAmountPrefix')
 
-function statusClass(status: GovProposalUiStatus): string {
-  const map: Record<GovProposalUiStatus, string> = {
-    Deciding: 'status-deciding',
-    Preparing: 'status-preparing',
-    Executed: 'status-executed',
-    TimedOut: 'status-timedout',
-    Rejected: 'status-rejected',
-  }
-  return map[status] || ''
+function statusClass(status: ProposalStatusKey): string {
+  return `status-${status.toLowerCase()}`
 }
 
-function statusLabel(status: GovProposalUiStatus): string {
-  const map: Record<GovProposalUiStatus, string> = {
-    Deciding: t('gov.statusDeciding'),
-    Preparing: t('gov.statusPreparing'),
-    Executed: t('gov.statusExecuted'),
-    TimedOut: t('gov.statusTimedOut'),
+function statusLabel(status: ProposalStatusKey): string {
+  const map: Record<ProposalStatusKey, string> = {
+    Pending: t('gov.statusPending'),
+    Ongoing: t('gov.statusOngoing'),
+    Confirming: t('gov.statusConfirming'),
+    Confirmed: t('gov.statusConfirmed'),
+    Approved: t('gov.statusApproved'),
     Rejected: t('gov.statusRejected'),
+    Canceled: t('gov.statusCanceled'),
   }
-  return map[status] || status
+  return map[status] ?? status
 }
 </script>
 
@@ -174,7 +168,7 @@ function statusLabel(status: GovProposalUiStatus): string {
   display: inline-block;
   width: 1px;
   height: 14px;
-  margin: 0 12px;
+  margin: 0 2px;
   background: rgba(255, 255, 255, 0.12);
   border-radius: 0;
 }
@@ -224,15 +218,25 @@ function statusLabel(status: GovProposalUiStatus): string {
   white-space: nowrap;
   letter-spacing: 0.02em;
 
-  &.status-deciding,
-  &.status-preparing,
-  &.status-executed {
+  &.status-pending,
+  &.status-ongoing,
+  &.status-approved {
     background: rgba(255, 255, 255, 0.06);
     color: rgba($secondary-text-rgb, 0.8);
   }
 
-  &.status-timedout,
-  &.status-rejected {
+  &.status-confirming {
+    background: rgba(234, 179, 8, 0.12);
+    color: rgba(253, 224, 71, 0.92);
+  }
+
+  &.status-confirmed {
+    background: rgba(56, 189, 248, 0.14);
+    color: rgba(125, 211, 252, 0.95);
+  }
+
+  &.status-rejected,
+  &.status-canceled {
     background: rgba(255, 255, 255, 0.06);
     color: rgba($secondary-text-rgb, 0.6);
   }

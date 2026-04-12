@@ -1,5 +1,6 @@
 <template>
-    <div ref="rootRef" class="account-input flex">
+    <div ref="rootRef" class="account-input flex flex-col gap-1">
+        <div class="flex w-full min-w-0">
         <USelect
             v-model="accountType"
             :items="typeOptions"
@@ -29,13 +30,22 @@
                 </div>
             </template>
         </UInput>
+        </div>
+        <p v-if="formatError" class="text-xs text-rose-400/90 pl-0.5 leading-snug">
+            {{ formatError }}
+        </p>
     </div>
 </template>
 
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { hexToU8a } from '@polkadot/util'
+import { decodeAddress } from '@polkadot/util-crypto'
 import PolkadotIdenticon from '@/components/PolkadotIdenticon.vue'
 import { hexToSS58, ss58toHex } from '@/utils/chain'
+
+const { t } = useI18n()
 
 type UniAddr = { t: 1 | 2; v: string }
 
@@ -67,22 +77,73 @@ function scheduleFocusInput() {
     setTimeout(() => token === focusToken.value && focusInput(), 120)
 }
 
+/** 非空时：SS58 或 32 字节公钥（0x… 或 64 位 hex） */
+function isValidPolkadotInput(input: string): boolean {
+    const s = input.trim()
+    if (!s) return true
+    if (/^0x[0-9a-fA-F]+$/i.test(s)) {
+        try {
+            return hexToU8a(s).length === 32
+        } catch {
+            return false
+        }
+    }
+    if (/^[0-9a-fA-F]{64}$/i.test(s)) {
+        try {
+            return hexToU8a(`0x${s}`).length === 32
+        } catch {
+            return false
+        }
+    }
+    try {
+        decodeAddress(s)
+        return true
+    } catch {
+        return false
+    }
+}
+
+/** 非空时：0x + 20 字节 */
+function isValidEthInput(input: string): boolean {
+    const s = input.trim()
+    if (!s) return true
+    let hex = s.startsWith('0x') || s.startsWith('0X') ? s.slice(2) : s
+    return /^[0-9a-fA-F]{40}$/.test(hex)
+}
+
 function normalizePolkadot(input: string): string {
     const s = input.trim()
     if (!s) return ''
-    if (/^0x[0-9a-fA-F]{2,}$/.test(s)) return s
+    if (/^0x[0-9a-fA-F]+$/i.test(s)) {
+        try {
+            const u8 = hexToU8a(s)
+            if (u8.length !== 32) return ''
+            return `0x${s.slice(2).toLowerCase()}`
+        } catch {
+            return ''
+        }
+    }
+    if (/^[0-9a-fA-F]{64}$/i.test(s)) {
+        try {
+            const u8 = hexToU8a(`0x${s}`)
+            if (u8.length !== 32) return ''
+            return `0x${s.toLowerCase()}`
+        } catch {
+            return ''
+        }
+    }
     try {
         return ss58toHex(s)
     } catch {
-        return s
+        return ''
     }
 }
 
 function normalizeEth(input: string): string {
     const s = input.trim()
     if (!s) return ''
-    if (s.startsWith('0x') || s.startsWith('0X')) return s
-    return `0x${s}`
+    const lower = s.startsWith('0x') || s.startsWith('0X') ? `0x${s.slice(2).toLowerCase()}` : `0x${s.toLowerCase()}`
+    return lower
 }
 
 function syncFromModel(v: UniAddr | null) {
@@ -96,11 +157,41 @@ function syncFromModel(v: UniAddr | null) {
 }
 
 function syncToModel() {
-    const t = accountType.value
+    const ty = accountType.value
     const input = raw.value
-    const v = t === 1 ? normalizePolkadot(input) : normalizeEth(input)
-    model.value = v ? ({ t, v } as UniAddr) : null
+    const trimmed = input.trim()
+    if (!trimmed) {
+        model.value = null
+        return
+    }
+    if (ty === 1 && !isValidPolkadotInput(input)) {
+        model.value = null
+        return
+    }
+    if (ty === 2 && !isValidEthInput(input)) {
+        model.value = null
+        return
+    }
+    const v = ty === 1 ? normalizePolkadot(input) : normalizeEth(input)
+    model.value = v ? ({ t: ty, v } as UniAddr) : null
 }
+
+const formatError = computed(() => {
+    const s = raw.value.trim()
+    if (!s) return ''
+    if (accountType.value === 1) {
+        return isValidPolkadotInput(raw.value) ? '' : t('common.accountInvalidPolkadot')
+    }
+    return isValidEthInput(raw.value) ? '' : t('common.accountInvalidEthereum')
+})
+
+const isFormatValid = computed(() => {
+    const s = raw.value.trim()
+    if (!s) return true
+    return accountType.value === 1 ? isValidPolkadotInput(raw.value) : isValidEthInput(raw.value)
+})
+
+defineExpose({ isFormatValid })
 
 watch(
     () => model.value,
@@ -125,9 +216,16 @@ const POLKADOT_PLACEHOLDER =
 const polkadotIconAddress = computed(() => {
     const s = raw.value.trim()
     if (!s) return POLKADOT_PLACEHOLDER
-    if (/^0x[0-9a-fA-F]{2,}$/.test(s)) {
+    if (/^0x[0-9a-fA-F]{2,}$/i.test(s)) {
         try {
             return hexToSS58(s)
+        } catch {
+            return POLKADOT_PLACEHOLDER
+        }
+    }
+    if (/^[0-9a-fA-F]{64}$/i.test(s)) {
+        try {
+            return hexToSS58(`0x${s}`)
         } catch {
             return POLKADOT_PLACEHOLDER
         }

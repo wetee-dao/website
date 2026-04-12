@@ -14,7 +14,7 @@ export default {
   trackName: '轨道名称',
   trackNamePlaceholder: '输入轨道名称',
   preparePeriod: '准备期',
-  decisionPeriod: '决策期',
+  decisionPeriod: '投票期',
   confirmPeriod: '确认期',
   maxDeciding: '最大决策数',
   decisionDeposit: '决策押金',

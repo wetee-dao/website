@@ -6,7 +6,7 @@ export default {
   setDefault: 'Set Default',
   addTrack: 'Add Track',
   preparePeriod: 'Prepare Period',
-  decisionPeriod: 'Decision Period',
+  decisionPeriod: 'Voting Period',
   confirmPeriod: 'Confirm Period',
   decisionDeposit: 'Decision Deposit',
   maxBalance: 'Max Balance',

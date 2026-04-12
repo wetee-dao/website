@@ -1,49 +1,39 @@
-import { parseHumanNumber } from '@/utils/parseHumanNumber'
-
-/** 与链上 gov 合约 Proposal 状态枚举一致 */
+/**
+ * 与后端 gov ProposalStatus 一致（uint8）
+ * Pending→Ongoing→Confirming→Confirmed→Approved / Rejected / Canceled
+ */
 export const ProposalState = {
   Pending: 0,
   Ongoing: 1,
   Confirming: 2,
-  Approved: 3,
-  Rejected: 4,
-  Canceled: 5,
+  /** 已确认，确认期结束，等待执行 */
+  Confirmed: 3,
+  /** 已批准，提案通过 */
+  Approved: 4,
+  Rejected: 5,
+  Canceled: 6,
 } as const
 
-export type GovProposalUiStatus =
-  | 'Deciding'
-  | 'Preparing'
-  | 'Executed'
-  | 'TimedOut'
-  | 'Rejected'
+/** 与 ProposalState 字段名一一对应，用于展示与 i18n */
+export type ProposalStatusKey = keyof typeof ProposalState
 
-/** 从 `proposal.status` 或 `status.state` 读出数值枚举 */
-export function readProposalStateCode(status: unknown): number {
-  if (status == null) return ProposalState.Pending
-  if (typeof status === 'number' && Number.isFinite(status)) return status
-  if (typeof status === 'object' && status !== null && 'state' in status) {
-    return readProposalStateCode((status as { state: unknown }).state)
-  }
-  const n = parseHumanNumber(status)
-  return Number.isFinite(n) ? n : ProposalState.Pending
-}
-
-/** 映射到页面用的五种状态文案/样式 */
-export function proposalStateToGovUi(code: number): GovProposalUiStatus {
+export function proposalStatusKey(code: number): ProposalStatusKey {
   switch (code) {
     case ProposalState.Pending:
-      return 'Preparing'
+      return 'Pending'
     case ProposalState.Ongoing:
-      return 'Deciding'
+      return 'Ongoing'
     case ProposalState.Confirming:
-      return 'Deciding'
+      return 'Confirming'
+    case ProposalState.Confirmed:
+      return 'Confirmed'
     case ProposalState.Approved:
-      return 'Executed'
+      return 'Approved'
     case ProposalState.Rejected:
       return 'Rejected'
     case ProposalState.Canceled:
-      return 'TimedOut'
+      return 'Canceled'
     default:
-      return 'Deciding'
+      return 'Pending'
   }
 }

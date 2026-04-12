@@ -23,7 +23,7 @@ export class SubstrateProvider {
     if (this.client == undefined) {
       window.$notification["error"]({
         content: 'Error',
-        message: 'chain client not connected',
+        description: 'chain client not connected',
         duration: 2500,
         keepAliveOnHover: true
       })
@@ -62,7 +62,7 @@ export class SubstrateProvider {
     // if (!confirm) {
     //   ElNotification({
     //     title: 'Error',
-    //     message: 'Cancel ink tx',
+    //     description: 'Cancel ink tx',
     //     type: 'error',
     //   })
     //   throw Error('Cancel ink tx')
@@ -174,13 +174,11 @@ export class SubstrateProvider {
     await this.signAndSend(proxyTx, signer, onSeccess, onError)
   }
 
-  signMsg = async (msg: U8aLike, signer: string) => {
+  signMsg = async (msg: Uint8Array, signer: string) => {
     const keypair = JSON.parse(window.localStorage.getItem("keypair") || "{}")
-    const wrapped = u8aWrapBytes(msg);
-
     if (keypair[signer]) {
       const pair = keyring.addFromUri(keypair[signer], { name: 'x' }, 'sr25519');
-      return pair.sign(wrapped)
+      return pair.sign(msg)
     }
 
 
@@ -199,7 +197,7 @@ export class SubstrateProvider {
     if (!account) {
       window.$notification["error"]({
         content: 'Error',
-        message: 'Account ' + signer + ' not found',
+        description: 'Account ' + signer + ' not found',
         duration: 2500,
         keepAliveOnHover: true
       })
@@ -208,11 +206,24 @@ export class SubstrateProvider {
 
     const walletInjector = account!.wallet!.signer;
     const signRaw = walletInjector.signRaw;
-    const sig = await signRaw({
-      address: account.address,
-      data: u8aToHex(wrapped),
-      type: 'bytes'
-    });
+
+    var sig = {signature: ""};
+    try {
+      sig = await signRaw({
+        address: account.address,
+        data: u8aToHex(msg),
+        type: 'bytes'
+      }); 
+    } catch (error:any) {
+      window.$notification["error"]({
+        content: 'Error',
+        description: 'Sign message error: ' + error.toString(),
+        duration: 2500,
+        keepAliveOnHover: true
+      })
+      throw error
+    }
+
     return sig.signature
   }
 

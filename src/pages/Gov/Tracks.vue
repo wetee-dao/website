@@ -141,6 +141,7 @@ import { useI18n } from 'vue-i18n'
 import GovSidebar from './GovSidebar.vue'
 import SubmitProposal from './submit-proposal'
 import { SecretContractApi } from '@/apis/contract'
+import { bytesToString } from '@/utils/gov'
 import { parseHumanNumber } from '@/utils/parseHumanNumber'
 import { parseCurveFromApi, type Curve, curveY, formatCurveType, permilleToPercent } from '@/utils/curve'
 
@@ -169,16 +170,6 @@ const showProposalModal = ref(false)
 const proposalDefaultAction = ref<string>('addTrack')
 const proposalDefaultTrackId = ref<number | undefined>(undefined)
 
-// 将字节数组转换为字符串
-function bytesToString(bytes: any): string {
-  if (!bytes) return ''
-  if (typeof bytes === 'string') return bytes
-  if (Array.isArray(bytes)) {
-    return String.fromCharCode(...bytes.filter((b: number) => b !== 0))
-  }
-  return String(bytes)
-}
-
 /** tracks() 单条：{ id, track } 或 [id, track] */
 function normalizeTrackEntry(item: any, index: number): { id: number; data: any } {
   if (item == null) return { id: index, data: {} }
@@ -186,17 +177,6 @@ function normalizeTrackEntry(item: any, index: number): { id: number; data: any 
     return { id: parseHumanNumber(item[0]), data: item[1] ?? {} }
   }
   return { id: parseHumanNumber(item.id), data: item.track ?? {} }
-}
-
-// 格式化块数为可读时间
-function formatBlocks(blocks: number): string {
-  if (!blocks) return '0 blocks'
-  // 假设每块约6秒
-  const seconds = blocks * 6
-  if (seconds < 60) return `${blocks} blocks`
-  if (seconds < 3600) return `${Math.round(seconds / 60)} min`
-  if (seconds < 86400) return `${Math.round(seconds / 3600)} hours`
-  return `${Math.round(seconds / 86400)} days`
 }
 
 async function loadData() {
@@ -222,9 +202,9 @@ async function loadData() {
         return {
           id: tid,
           name: bytesToString(trackData.name) || `Track ${index}`,
-          preparePeriod: formatBlocks(prepareBlocks),
-          decisionPeriod: formatBlocks(decisionBlocks),
-          confirmPeriod: formatBlocks(confirmBlocks),
+          preparePeriod: t('gov.blockCount', { count: prepareBlocks }),
+          decisionPeriod: t('gov.blockCount', { count: decisionBlocks }),
+          confirmPeriod: t('gov.blockCount', { count: confirmBlocks }),
           decisionDeposit: `${parseHumanNumber(trackData.decisionDeposit)} VOTE`,
           maxBalance: `${parseHumanNumber(trackData.maxBalance)} VOTE`,
           minApproval,

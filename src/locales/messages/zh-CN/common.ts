@@ -14,4 +14,6 @@ export default {
   submit: '提交',
   cancel: '取消',
   close: '关闭',
+  accountInvalidPolkadot: '地址格式无效：请使用有效的 SS58 或 32 字节公钥（0x…）',
+  accountInvalidEthereum: '地址格式无效：请使用有效的以太坊地址（0x + 40 位十六进制）',
 }

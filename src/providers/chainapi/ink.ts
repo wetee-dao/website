@@ -217,7 +217,7 @@ export class InkApi {
         if (!methodAbi) {
             window.$notification["error"]({
                 content: 'Error',
-                message: "Ink contract method not found: " + method,
+                description: "Ink contract method not found: " + method,
                 duration: 2500,
                 keepAliveOnHover: true
             })
@@ -269,7 +269,7 @@ export class InkApi {
         if (resp.Ok.flags.bits == "1") {
             window.$notification["error"]({
                 content: 'Error',
-                message: "Ink contract call failed with contract error: " + (retutnData.Err || retutnData.Ok.Err),
+                description: "Ink contract call failed with contract error: " + (retutnData.Err || retutnData.Ok.Err),
                 duration: 2500,
                 keepAliveOnHover: true
             })
@@ -279,7 +279,7 @@ export class InkApi {
         if (!retutnData || retutnData["Err"]) {
             window.$notification["error"]({
                 content: 'Error',
-                message: "Ink contract dry run reverted: " + retutnData["Err"],
+                description: "Ink contract dry run reverted: " + retutnData["Err"],
                 duration: 2500,
                 keepAliveOnHover: true
             })

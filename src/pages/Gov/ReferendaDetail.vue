@@ -13,11 +13,19 @@
         </div>
 
         <template v-else>
-          <!-- Breadcrumb: Referenda / Track / #id -->
-          <nav class="breadcrumb flex flex-wrap items-center gap-1 text-sm mb-4">
-            <RouterLink to="/gov" class="breadcrumb-link">{{ t('govDetail.referenda') }}</RouterLink>
-            <span class="breadcrumb-sep">/</span>
-            <span class="breadcrumb-current">#{{ detail.id }}</span>
+          <!-- Breadcrumb: Referenda / #id · 右侧链头高度 -->
+          <nav
+            class="breadcrumb breadcrumb--row flex flex-wrap items-center justify-between gap-x-4 gap-y-2 text-sm mb-4">
+            <div class="flex flex-wrap items-center gap-1 min-w-0">
+              <RouterLink to="/gov" class="breadcrumb-link">{{ t('govDetail.referenda') }}</RouterLink>
+              <span class="breadcrumb-sep">/</span>
+              <span class="breadcrumb-current">#{{ detail.id }}</span>
+            </div>
+            <span class="breadcrumb-head-block shrink-0 tabular-nums"
+              :aria-label="headBlock !== null ? t('govDetail.currentHeadBlock', { block: headBlock }) : undefined">
+              <template v-if="headBlock !== null">{{ t('govDetail.currentHeadBlock', { block: headBlock }) }}</template>
+              <template v-else>—</template>
+            </span>
           </nav>
 
           <div class="chain-box main-box">
@@ -49,10 +57,16 @@
                     :loading="canceling" @click="handleCancel">
                     {{ t('govDetail.cancel') }}
                   </UButton>
-                  <UButton v-if="showExecuteBtn" type="button" color="neutral" variant="outline" size="lg" class="p-2"
-                    :loading="executing" @click="handleExecute">
-                    {{ t('govDetail.execute') }}
-                  </UButton>
+                  <div v-if="showExecuteBtn" class="flex flex-wrap items-center gap-2">
+                    <span v-if="executeCountdownBlocks !== null"
+                      class="text-sm text-secondary tabular-nums whitespace-nowrap p-2">
+                      {{ t('govDetail.executeCountdown', { count: executeCountdownBlocks }) }}
+                    </span>
+                    <UButton type="button" color="neutral" variant="outline" size="lg"
+                      :loading="executing" @click="handleExecute">
+                      {{ t('govDetail.execute') }}
+                    </UButton>
+                  </div>
                 </div>
               </div>
             </div>
@@ -127,6 +141,7 @@
 
             <GovThresholdCurvesModal v-model:open="curvesModalOpen"
               :decision-period-blocks="detail.decisionPeriodBlocks" :decision-start-block="detail.decisionStartBlock"
+              :deposit-block="detail.depositBlock"
               :min-approval="detail.track?.minApproval" :min-support="detail.track?.minSupport" :vote-items="voteItems"
               :total-supply-bn="totalSupplyBn" :votes-loading="votesLoading" />
 
@@ -137,7 +152,7 @@
                   <h3 class="section-title">{{ t('gov.tracks') }}</h3>
                   <div class="track-grid">
                     <div class="track-kv">
-                      <span class="track-k">Name</span>
+                      <span class="track-k">{{ t('govTracks.trackName') }}</span>
                       <span class="track-v">#{{ detail.track.id }} {{ detail.track.name }}</span>
                     </div>
                     <div class="track-kv">
@@ -188,17 +203,72 @@
                     {{ t('govDetail.translationsPlaceholder') }}
                   </div>
                 </div>
+
+                <!-- 我的投票：取消 / 解锁（主栏，提案正文下方，紧凑） -->
+                <div class="my-vote-section my-vote-section--main my-vote-section--compact border-t border-white-4">
+                  <div class="my-vote-head">
+                    <span class="my-vote-head-title">{{ t('govDetail.myVote') }}</span>
+                  </div>
+                  <div v-if="votesLoading" class="my-vote-muted">{{ t('govDetail.votesLoading') }}</div>
+                  <template v-else-if="!myWalletAddress">
+                    <p class="my-vote-muted my-vote-muted--body">{{ t('govDetail.myVoteConnectHint') }}</p>
+                  </template>
+                  <template v-else-if="myVotes.length === 0">
+                    <p class="my-vote-muted my-vote-muted--body text-center">{{ t('govDetail.myVoteEmpty') }}</p>
+                  </template>
+                  <template v-else>
+                    <div v-for="mv in myVotes" :key="mv.id" class="my-vote-card my-vote-card--compact">
+                      <div class="my-vote-compact-row">
+                        <div class="my-vote-compact-main">
+                          <UBadge class="my-vote-badge shrink-0" color="neutral" variant="soft" size="sm"
+                            :class="mv.yes ? 'my-vote--aye' : 'my-vote--nay'">
+                            {{ mv.yes ? t('govDetail.voteYes') : t('govDetail.voteNo') }}
+                          </UBadge>
+                          <span v-if="mv.deleted" class="my-vote-deleted">{{ t('govDetail.myVoteCanceled') }}</span>
+                          <span v-else class="my-vote-meta-line">
+                            <span class="tabular-nums">{{ mv.lockAmount.toString() }}</span>
+                            <span class="my-vote-dot">·</span>
+                            <span>w{{ mv.weight }}</span>
+                            <span class="my-vote-dot">·</span>
+                            <span>{{ t('gov.atBlock', { block: mv.voteBlock }) }}</span>
+                            <template v-if="!mv.deleted && detail.statusBlock > 0">
+                              <span class="my-vote-dot">·</span>
+                              <span class="my-vote-unlock-hint"
+                                :title="t('govDetail.myVoteUnlockHint', { block: detail.statusBlock + mv.unlockBlock })">≥{{
+                                  detail.statusBlock + mv.unlockBlock }}</span>
+                            </template>
+                          </span>
+                        </div>
+                        <div v-if="!mv.deleted" class="my-vote-actions">
+                          <UButton v-if="showCancelVoteFor(mv)" type="button" size="sm" color="neutral"
+                            variant="outline" class="my-vote-btn" :loading="cancelingVote"
+                            @click="handleCancelMyVote(mv)">
+                            {{ t('govDetail.cancelMyVote') }}
+                          </UButton>
+                          <UButton v-if="canUnlockVote(mv)" type="button" size="sm" color="neutral" variant="solid"
+                            class="my-vote-btn" :loading="unlocking" @click="handleUnlockMyVote(mv)">
+                            {{ t('govDetail.unlockMyVote') }}
+                          </UButton>
+                        </div>
+                      </div>
+                      <p v-if="!mv.deleted && isProposalTerminalState() && !canUnlockVote(mv)" class="my-vote-wait">
+                        {{ t('govDetail.myVoteUnlockWait') }}
+                      </p>
+                    </div>
+                  </template>
+                </div>
               </div>
 
               <aside
                 class="gov-detail-side flex flex-col w-full lg:w-[min(22rem,38%)] xl:max-w-[26rem] flex-shrink-0 border-t border-white-4 lg:border-t-0 lg:border-l lg:border-white-4 divide-y divide-white/[0.06]">
-                <!-- Status: 决策期进度条 + 确认期 + 尝试次数 -->
-                <div class="status-section gov-detail-side-section p-5 lg:p-6">
+                <!-- Status: 投票期进度条 / 确认期进度条 + 尝试次数 -->
+                <div class="status-section gov-detail-side-section p-5 lg:p-6"
+                  v-if="isVotingPeriod">
                   <h3 class="section-title">{{ t('govDetail.status') }}</h3>
                   <div class="status-decision-block">
                     <div class="status-kv-row">
                       <span class="status-k">{{ t('govDetail.decision') }}</span>
-                      <span class="status-v">{{ formatDurationShort(detail.decisionPeriodBlocks) }}</span>
+                      <span class="status-v">{{ formatBlockCountLabel(detail.decisionPeriodBlocks) }}</span>
                     </div>
                     <div class="status-progress-track" role="progressbar"
                       :aria-valuenow="Math.round(decisionPhaseProgress)" aria-valuemin="0" aria-valuemax="100">
@@ -206,13 +276,20 @@
                     </div>
                   </div>
                   <div class="status-divider" />
-                  <div class="status-kv-row">
-                    <span class="status-k">{{ t('govDetail.confirmation') }}</span>
-                    <span class="status-v">{{ formatDurationShort(detail.confirmPeriodBlocks) }}</span>
-                  </div>
-                  <div class="status-kv-row">
-                    <span class="status-k">{{ t('govDetail.attempts') }}</span>
-                    <span class="status-v">{{ detail.attempts }}</span>
+
+                  <div class="status-decision-block">
+                    <div class="status-kv-row">
+                      <span class="status-k">{{ t('govDetail.confirmation') }}</span>
+                      <span class="status-v">{{ formatBlockCountLabel(detail.confirmPeriodBlocks) }}</span>
+                    </div>
+                    <div class="status-progress-track" role="progressbar"
+                      :aria-valuenow="Math.round(confirmationPhaseProgress)" aria-valuemin="0" aria-valuemax="100">
+                      <div class="status-progress-fill" :style="{ width: `${confirmationPhaseProgress}%` }" />
+                    </div>
+                    <div class="status-kv-row">
+                      <span class="status-k">{{ t('govDetail.attempts') }}</span>
+                      <span class="status-v">{{ detail.attempts }}</span>
+                    </div>
                   </div>
                 </div>
 
@@ -244,7 +321,7 @@
                     <span>{{ govTallyMetrics.currentApprovalPct.toFixed(2) }}% {{ t('govDetail.aye') }}</span>
                     <span class="gov-pct-mid">{{ govTallyMetrics.approvalThresholdPct.toFixed(2) }}% {{
                       t('govDetail.threshold')
-                      }}</span>
+                    }}</span>
                     <span>{{ voteTally.nayPct.toFixed(2) }}% {{ t('govDetail.nay') }}</span>
                   </div>
                   <div class="gov-amount-rows">
@@ -275,7 +352,7 @@
                     <div class="gov-amount-row">
                       <span class="gov-amount-icon gov-amount-icon--muted" aria-hidden="true">▣</span>
                       <span>{{ t('govDetail.support') }} {{ govTallyMetrics.currentSupportPct.toFixed(2) }}%</span>
-                      <span class="gov-amount-amt">{{ formatApproxAmount(voteSummary.total) }} VOTE</span>
+                      <span class="gov-amount-amt">{{ formatApproxAmount(voteSummary.totalPledge) }} VOTE</span>
                     </div>
                     <div class="gov-amount-row">
                       <span class="gov-amount-icon gov-amount-icon--muted" aria-hidden="true">▤</span>
@@ -313,7 +390,7 @@
             </div>
 
             <!-- Actions -->
-            <div class="actions-section p-5 lg:p-8 border-t border-white-4">
+            <div class="actions-section p-4 lg:p-6 border-t border-white-4">
               <div class="actions-btns flex flex-wrap items-center gap-3">
                 <UButton v-if="showVoteBtn" type="button" class="p-3" color="neutral" variant="solid" size="lg"
                   :loading="voting" @click="openVoteModal">
@@ -327,10 +404,16 @@
                   :loading="canceling" @click="handleCancel">
                   {{ t('govDetail.cancel') }}
                 </UButton>
-                <UButton v-if="showExecuteBtn" type="button" class="p-3" color="neutral" variant="outline" size="lg"
-                  :loading="executing" @click="handleExecute">
-                  {{ t('govDetail.execute') }}
-                </UButton>
+                <div v-if="showExecuteBtn" class="flex flex-wrap items-center gap-2">
+                  <UButton type="button" class="p-3" color="neutral" variant="outline" size="lg" :loading="executing"
+                    @click="handleExecute">
+                    {{ t('govDetail.execute') }}
+                  </UButton>
+                  <span v-if="executeCountdownBlocks !== null"
+                    class="text-sm text-secondary tabular-nums whitespace-nowrap">
+                    {{ t('govDetail.executeCountdown', { count: executeCountdownBlocks }) }}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -338,7 +421,6 @@
       </main>
     </div>
     <div class="mb-4" />
-    <Footer />
   </div>
 </template>
 
@@ -346,24 +428,23 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import axios from 'axios'
-import Footer from '@/components/Footer.vue'
 import GovSidebar from './GovSidebar.vue'
 import GovThresholdCurvesModal from './GovThresholdCurvesModal.vue'
 import { SecretContractApi } from '@/apis/contract'
-import { CurrentChainNode } from '@/plugins/chain'
-import { hexToSS58 } from '@/utils/chain'
+import { getLatestBlockHeight } from '@/apis/side'
+import { bytesToString, callerToSs58 } from '@/utils/gov'
 import { parseHumanNumber } from '@/utils/parseHumanNumber'
-import { ProposalState, proposalStateToGovUi, readProposalStateCode, type GovProposalUiStatus } from '@/utils/proposalState'
 import { $getTxProvider } from '@/plugins/chain'
 import type { WalletWrap } from '@/providers'
 import { BN } from '@polkadot/util'
 import { getBnFromChain } from '@/utils/chain'
 import { parseCurveFromApi, curveY, type Curve } from '@/utils/curve'
+import { ProposalState, proposalStatusKey, type ProposalStatusKey } from '@/utils/proposalState'
+import { parseProposalStatusResult } from '@/utils/parseProposalStatus'
 
 const { t } = useI18n()
 
-type Status = GovProposalUiStatus
+type Status = ProposalStatusKey
 
 interface ReferendumDetail {
   id: number
@@ -384,28 +465,37 @@ interface ReferendumDetail {
     maxDeciding: number
   }
   submitBlock: number
+  /** 与 ProposalState 字段名一致，来自 proposalStatusKey */
   status: Status
   stateCode: number
   comments?: number
   contentParagraphs: string[]
   aiSummary: string[]
-  /** 决策期总长度（区块）用于进度条 */
+  /** 投票期总长度（区块）用于进度条 */
   decisionPeriodBlocks: number
+  /** 轨道 min_enactment_period（区块），Confirmed 执行倒计时用 */
+  minEnactmentPeriodBlocks: number
   confirmPeriodBlocks: number
-  /** 准备期长度（区块），用于推算决策起点 */
+  /** 准备期长度（区块），用于推算投票期起点 */
   preparePeriodBlocks: number
   /**
-   * 决策期时间起点（区块号），与阈值曲线 x=0 一致。
-   * 优先取链上 status.block（已进入 Ongoing/Confirming），否则为 submitBlock + preparePeriod。
+   * 投票期时间起点（区块号），与阈值曲线 x=0 一致。
+   * 来自 proposalStatus 的 Block（Ongoing/Confirming 时），否则 submitBlock + preparePeriod。
    */
   decisionStartBlock: number
+  /** 质押激活块 Deposit.Block，用于 end = depositBlock + maxDeciding */
+  depositBlock: number
+  /** proposalStatus.blockHeight，用于解锁时间推算等 */
+  statusBlock: number
+  /** proposalStatus.lastConfirmedBlock，确认期进度用 statusBlock − 此值 */
+  lastConfirmedBlock: number
+  /** proposalStatus.confirmedNumber，尝试次数 */
   attempts: number
 }
 
 const route = useRoute()
 const id = computed(() => Number(route.params.id) || 0)
 const activeTab = ref<'content' | 'summary' | 'translations'>('content')
-const votesView = ref<'nested' | 'flattened'>('nested')
 
 const contentTabs = [
   { key: 'content' as const, labelKey: 'govDetail.tabContent' },
@@ -417,6 +507,8 @@ const detail = ref<ReferendumDetail | null>(null)
 const depositAmount = ref('')
 const depositing = ref(false)
 const canceling = ref(false)
+const cancelingVote = ref(false)
+const unlocking = ref(false)
 const executing = ref(false)
 const depositModalOpen = ref(false)
 const voteModalOpen = ref(false)
@@ -428,12 +520,16 @@ const votePercent = ref(0)
 const unlockedBalance = ref<BN>(new BN(0))
 
 type VoteItem = {
+  /** 链上投票记录 id，用于 cancelVote / unlock */
   id: number
   voter: string
   yes: boolean
   lockAmount: BN
   weight: number
   voteBlock: number
+  /** 提案结束后需再经过的区块数方可 unlock */
+  unlockBlock: number
+  deleted?: boolean
 }
 
 const votesLoading = ref(false)
@@ -441,21 +537,77 @@ const voteItems = ref<VoteItem[]>([])
 const headBlock = ref<number | null>(null)
 const totalSupplyBn = ref<BN>(new BN(0))
 
+function getWalletAddress(): string {
+  const u = SecretContractApi.getCallerInfo()
+  return (u?.addr as string | undefined)?.trim() || ''
+}
+
+const myWalletAddress = ref('')
+
+function refreshWalletAddress() {
+  myWalletAddress.value = getWalletAddress()
+}
+
+const myVotes = computed(() => {
+  const addr = myWalletAddress.value
+  if (!addr) return []
+  return voteItems.value.filter((v) => v.voter === addr)
+})
+
+/** 提案已终结且达到 unlock 区块后，可链上 unlock 取回锁仓 */
+function canUnlockVote(v: VoteItem): boolean {
+  const d = detail.value
+  if (!d || v.deleted) return false
+  const done =
+    d.stateCode === ProposalState.Approved ||
+    d.stateCode === ProposalState.Rejected ||
+    d.stateCode === ProposalState.Canceled
+  if (!done) return false
+  const endB = d.statusBlock
+  const head = headBlock.value
+  if (endB <= 0 || head == null) return true
+  return head >= endB + v.unlockBlock
+}
+
+/** 合约侧仅 Ongoing 可取消投票 */
+function showCancelVoteFor(v: VoteItem): boolean {
+  const d = detail.value
+  if (!d || v.deleted) return false
+  return (
+    d.stateCode === ProposalState.Ongoing || d.stateCode === ProposalState.Confirming
+  )
+}
+
+function isProposalTerminalState(): boolean {
+  const d = detail.value
+  if (!d) return false
+  return (
+    d.stateCode === ProposalState.Approved ||
+    d.stateCode === ProposalState.Rejected ||
+    d.stateCode === ProposalState.Canceled
+  )
+}
+
 const voteSummary = computed(() => {
   let ayeCount = 0
   let nayCount = 0
   let ayeTotal = new BN(0)
   let nayTotal = new BN(0)
+  let totalPledge = new BN(0)
   for (const v of voteItems.value) {
+    if (v.deleted) continue
+    totalPledge = totalPledge.add(v.lockAmount)
+    const wBn = new BN(v.weight)
+    const weighted = v.lockAmount.mul(wBn)
     if (v.yes) {
       ayeCount += 1
-      ayeTotal = ayeTotal.add(v.lockAmount)
+      ayeTotal = ayeTotal.add(weighted)
     } else {
       nayCount += 1
-      nayTotal = nayTotal.add(v.lockAmount)
+      nayTotal = nayTotal.add(weighted)
     }
   }
-  return { ayeCount, nayCount, ayeTotal, nayTotal, total: ayeTotal.add(nayTotal) }
+  return { ayeCount, nayCount, ayeTotal, nayTotal, totalPledge }
 })
 
 function formatBnComma(b: BN): string {
@@ -464,12 +616,13 @@ function formatBnComma(b: BN): string {
 
 /** 按 pledge（lockAmount）汇总：占比与展示用金额 */
 const voteTally = computed(() => {
-  const { ayeTotal, nayTotal, total } = voteSummary.value
+  const { ayeTotal, nayTotal } = voteSummary.value
+  const sumW = ayeTotal.add(nayTotal)
   let ayePct = 0
   let nayPct = 0
-  if (total.gt(new BN(0))) {
-    ayePct = Math.round(ayeTotal.mul(new BN(10000)).div(total).toNumber()) / 100
-    nayPct = Math.round(nayTotal.mul(new BN(10000)).div(total).toNumber()) / 100
+  if (sumW.gt(new BN(0))) {
+    ayePct = Math.round(ayeTotal.mul(new BN(10000)).div(sumW).toNumber()) / 100
+    nayPct = Math.round(nayTotal.mul(new BN(10000)).div(sumW).toNumber()) / 100
   }
   return {
     ayePct,
@@ -483,69 +636,76 @@ function permilleToNum(permille: number): number {
   return Math.round(permille) / 100
 }
 
-/** 决策期起点：与图表横轴 0、curveY(x) 的 x 一致 */
+/** 投票期起点：与图表横轴 0、curveY(x) 的 x 一致（块号来自 proposalStatus） */
 function resolveDecisionStartBlock(
   submitBlock: number,
   prepareBlocks: number,
-  statusRaw: unknown,
+  stateCode: number,
+  statusBlock: number,
 ): number {
   const fallback = submitBlock + Math.max(0, prepareBlocks)
-  if (statusRaw == null || typeof statusRaw !== 'object') return fallback
-  const o = statusRaw as Record<string, unknown>
-  const stateBlock = parseHumanNumber(o.block ?? o.Block ?? 0)
-  const code = readProposalStateCode(o.state ?? o)
   if (
-    stateBlock > 0 &&
-    (code === ProposalState.Ongoing || code === ProposalState.Confirming)
+    statusBlock > 0 &&
+    (stateCode === ProposalState.Ongoing || stateCode === ProposalState.Confirming)
   ) {
-    return stateBlock
+    return statusBlock
   }
   return fallback
 }
 
-/** 链上曲线用的 x：决策期内已过去区块数（不超过决策期长度） */
+/**
+ * 投票期曲线横轴 x：已过区块 = 当前块 − 质押块（与链上决策期一致），不超过 decisionPeriodBlocks。
+ * 用于 minApproval/minSupport 的 curveY(x)，随投票期推进阈值应降低。
+ */
 const curveElapsedBlocks = computed(() => {
   const d = detail.value
   if (!d || d.decisionPeriodBlocks <= 0) return 0
-  const start = d.decisionStartBlock
-  let head = headBlock.value
-  if (head == null || head <= start) {
-    let maxVB = 0
-    for (const v of voteItems.value) maxVB = Math.max(maxVB, v.voteBlock)
-    if (maxVB > start) head = maxVB
-    else return 0
-  }
-  const elapsed = head - start
+  const head = headBlock.value
+  if (head == null || d.depositBlock <= 0) return 0
+  const elapsed = head - d.depositBlock
   if (elapsed < 0) return 0
   return Math.min(d.decisionPeriodBlocks, elapsed)
 })
 
-/** 与参考 UI 一致：批准占比、支持占比、动态阈值、发行量 */
+/** 侧栏票数展示：当前批准/支持万分比（与投票列表同源，非合约状态推演） */
 const govTallyMetrics = computed(() => {
   const d = detail.value
-  const { ayeTotal, nayTotal, total } = voteSummary.value
   const ma = d?.track?.minApproval
   const ms = d?.track?.minSupport
   const x = curveElapsedBlocks.value
+  const iss = totalSupplyBn.value
 
   let approvalThresholdPct = 0
   let supportThresholdPct = 0
   if (ma) approvalThresholdPct = permilleToNum(curveY(ma, x))
   if (ms) supportThresholdPct = permilleToNum(curveY(ms, x))
 
-  const sum = ayeTotal.add(nayTotal)
-  let currentApprovalPct = 0
-  if (sum.gt(new BN(0))) {
-    currentApprovalPct = Math.round(ayeTotal.mul(new BN(10000)).div(sum).toNumber()) / 100
+  let yes = new BN(0)
+  let no = new BN(0)
+  let support = new BN(0)
+  for (const v of voteItems.value) {
+    if (v.deleted) continue
+    const wBn = new BN(v.weight)
+    support = support.add(v.lockAmount)
+    if (v.yes) yes = yes.add(v.lockAmount.mul(wBn))
+    else no = no.add(v.lockAmount.mul(wBn))
   }
-
-  let currentSupportPct = 0
-  if (totalSupplyBn.value.gt(new BN(0)) && total.gt(new BN(0))) {
-    currentSupportPct = Math.round(total.mul(new BN(1000000)).div(totalSupplyBn.value).toNumber()) / 10000
+  const totalVotes = yes.add(no)
+  let approvalPermille = 0
+  if (totalVotes.gt(new BN(0))) {
+    approvalPermille = yes.mul(new BN(10000)).div(totalVotes).toNumber()
   }
+  let supportPermille = 0
+  if (iss.gt(new BN(0))) {
+    supportPermille = support.mul(new BN(10000)).div(iss).toNumber()
+  }
+  const currentApprovalPct = approvalPermille / 100
+  const currentSupportPct = supportPermille / 100
 
-  const approvalMet = currentApprovalPct >= approvalThresholdPct - 0.0001
-  const supportMet = currentSupportPct >= supportThresholdPct - 0.0001
+  const minAp = ma ? curveY(ma, x) : 0
+  const minSp = ms ? curveY(ms, x) : 0
+  const approvalMet = approvalPermille >= minAp
+  const supportMet = supportPermille >= minSp
 
   return {
     approvalThresholdPct,
@@ -554,27 +714,44 @@ const govTallyMetrics = computed(() => {
     currentSupportPct,
     approvalMet,
     supportMet,
-    issuance: totalSupplyBn.value,
+    issuance: iss,
   }
 })
 
-/** 决策期进度 0–100（用于 Status 条） */
+/** 投票期进度 0–100（侧栏 Status 条，与 curveElapsedBlocks 同源） */
 const decisionPhaseProgress = computed(() => {
   const d = detail.value
   if (!d || d.decisionPeriodBlocks <= 0) return 0
   return Math.min(100, (curveElapsedBlocks.value / d.decisionPeriodBlocks) * 100)
 })
 
-function formatDurationShort(blocks: number): string {
-  if (!blocks) return '0'
-  const sec = blocks * 6
-  const days = Math.round(sec / 86400)
-  if (days >= 1) return `${days}d`
-  const hours = Math.round(sec / 3600)
-  if (hours >= 1) return `${hours}h`
-  const mins = Math.round(sec / 60)
-  if (mins >= 1) return `${mins}m`
-  return `${blocks} blocks`
+/** 确认期内已过去区块数：链上为 blockHeight − lastConfirmedBlock（仅 state=确认中 时有意义） */
+const confirmElapsedBlocks = computed(() => {
+  const d = detail.value
+  if (!d || d.confirmPeriodBlocks <= 0) return 0
+  if (d.stateCode !== ProposalState.Confirming) return 0
+  const elapsed = d.statusBlock - d.lastConfirmedBlock
+  if (!Number.isFinite(elapsed) || elapsed < 0) return 0
+  return Math.min(d.confirmPeriodBlocks, elapsed)
+})
+
+/**
+ * 确认期进度 0–100。
+ * 链上 state：2=确认中，3=已确认（确认期已结束）… —— 见 gov ProposalStatusConfirmed。
+ * 仅在 Confirming 用 blockHeight−lastConfirmedBlock；Confirmed/Approved 视为已满。
+ */
+const confirmationPhaseProgress = computed(() => {
+  const d = detail.value
+  if (!d || d.confirmPeriodBlocks <= 0) return 0
+  if (d.stateCode === ProposalState.Confirmed || d.stateCode === ProposalState.Approved) {
+    return 100
+  }
+  if (d.stateCode !== ProposalState.Confirming) return 0
+  return Math.min(100, (confirmElapsedBlocks.value / d.confirmPeriodBlocks) * 100)
+})
+
+function formatBlockCountLabel(blocks: number): string {
+  return t('gov.blockCount', { count: blocks || 0 })
 }
 
 function formatApproxAmount(b: BN): string {
@@ -587,27 +764,10 @@ function formatApproxAmount(b: BN): string {
   return s
 }
 
-/** tracks() 单条：{ id, track } 或 [id, track]，与 Tracks.vue 一致 */
 function normalizeTrackEntry(item: any, index: number): { id: number; data: any } {
   if (item == null) return { id: index, data: {} }
   if (Array.isArray(item)) return { id: parseHumanNumber(item[0]), data: item[1] ?? {} }
   return { id: parseHumanNumber(item.id), data: item.track ?? {} }
-}
-
-async function fetchHeadBlockNumber(): Promise<number | null> {
-  try {
-    const rpc = CurrentChainNode().rpcUrl
-    const { data } = await axios.post(
-      rpc,
-      { jsonrpc: '2.0', id: 1, method: 'chain_getHeader', params: [] },
-      { headers: { 'Content-Type': 'application/json' } },
-    )
-    const num = data?.result?.number
-    if (num == null) return null
-    return typeof num === 'string' ? parseInt(num.replace(/^0x/i, ''), 16) : Number(num)
-  } catch {
-    return null
-  }
 }
 
 function unwrapContractOk(v: unknown): unknown {
@@ -634,7 +794,18 @@ const showCancelBtn = computed(() => {
 
 const showExecuteBtn = computed(() => {
   if (!detail.value) return false
-  return detail.value.stateCode === ProposalState.Approved
+  return detail.value.stateCode === ProposalState.Confirmed
+})
+
+/** Confirmed：decisionPeriod + minEnactmentPeriod − (当前块 − 质押块) */
+const executeCountdownBlocks = computed(() => {
+  const d = detail.value
+  if (!d || d.stateCode !== ProposalState.Confirmed) return null
+  const head = headBlock.value
+  if (head == null || d.depositBlock <= 0) return null
+  const elapsed = head - d.depositBlock
+  const windowBlocks = d.decisionPeriodBlocks + d.minEnactmentPeriodBlocks
+  return Math.max(0, windowBlocks - elapsed)
 })
 
 const showVoteBtn = computed(() => {
@@ -645,27 +816,10 @@ const showVoteBtn = computed(() => {
   )
 })
 
-function bytesToString(bytes: unknown): string {
-  if (!bytes) return ''
-  if (typeof bytes === 'string') return bytes
-  if (Array.isArray(bytes)) return String.fromCharCode(...bytes.filter((b: number) => b !== 0))
-  return String(bytes)
-}
-
-function formatBlocks(blocks: number): string {
-  if (!blocks) return '0'
-  const seconds = blocks * 6
-  if (seconds < 60) return `${blocks} blocks`
-  if (seconds < 3600) return `${Math.round(seconds / 60)} min`
-  if (seconds < 86400) return `${Math.round(seconds / 3600)} hours`
-  return `${Math.round(seconds / 86400)} days`
-}
-
-function callerToSs58(caller: { t?: string | number; v?: string } | null | undefined): string {
-  if (!caller?.v) return '—'
-  if (String(caller.t) !== '1') return '—'
-  return hexToSS58(caller.v)
-}
+/** 侧栏「投票期」进度条仅在链上投票期（Ongoing）展示 */
+const isVotingPeriod = computed(
+  () => detail.value?.stateCode === ProposalState.Ongoing || detail.value?.stateCode === ProposalState.Confirming || detail.value?.stateCode === ProposalState.Confirmed,
+)
 
 async function loadVotes() {
   const proposalId = id.value
@@ -676,13 +830,16 @@ async function loadVotes() {
     const list = Array.isArray(rows) ? rows : []
 
     voteItems.value = list.map((v: any) => ({
-      id: parseHumanNumber(v.index),
+      id: parseHumanNumber(v.index ?? v.Index),
       voter: callerToSs58(v.caller),
-      yes: Boolean(v.opinionYes),
-      lockAmount: getBnFromChain(String(v.pledge ?? '0')),
-      weight: parseHumanNumber(v.voteWeight),
+      yes: Boolean(v.opinionYes ?? v.OpinionYes),
+      lockAmount: getBnFromChain(String(v.pledge ?? v.Pledge ?? '0')),
+      weight: parseHumanNumber(v.voteWeight ?? v.VoteWeight),
       voteBlock: parseHumanNumber(v.voteBlock ?? v.VoteBlock ?? 0),
+      unlockBlock: parseHumanNumber(v.unlockBlock ?? v.UnlockBlock ?? 0),
+      deleted: Boolean(v.deleted ?? v.Deleted ?? false),
     }))
+    refreshWalletAddress()
   } catch (e) {
     console.error('Failed to load votes:', e)
     voteItems.value = []
@@ -728,13 +885,15 @@ async function loadDetail() {
   if (!Number.isFinite(rid)) return
   loading.value = true
   try {
-    const [proposalResult, tracksResult, methodBySelector, headNum, supplyRaw] = await Promise.all([
-      SecretContractApi.proposal(rid),
-      SecretContractApi.tracks(),
-      SecretContractApi.getGovSelectorMethodMap(),
-      fetchHeadBlockNumber(),
-      SecretContractApi.totalSupply().catch(() => null),
-    ])
+    const [proposalResult, tracksResult, methodBySelector, headNum, supplyRaw, statusRaw] =
+      await Promise.all([
+        SecretContractApi.proposal(rid),
+        SecretContractApi.tracks(),
+        SecretContractApi.getGovSelectorMethodMap(),
+        getLatestBlockHeight(),
+        SecretContractApi.totalSupply().catch(() => null),
+        SecretContractApi.proposalStatus(rid).catch(() => null),
+      ])
 
     headBlock.value = headNum
     totalSupplyBn.value = supplyRaw != null ? bnFromContract(supplyRaw) : new BN(0)
@@ -749,6 +908,7 @@ async function loadDetail() {
     let trackLabel = `#${trackId}`
     let trackDetail: ReferendumDetail['track'] | undefined = undefined
     let decisionPeriodBlocks = 0
+    let minEnactmentPeriodBlocks = 0
     let confirmPeriodBlocks = 0
     let preparePeriodBlocks = 0
 
@@ -768,6 +928,12 @@ async function loadDetail() {
         decisionPeriodBlocks = parseHumanNumber(
           (dataAny as any).decision_period ?? (dataAny as any).decisionPeriod ?? 0,
         )
+        minEnactmentPeriodBlocks = parseHumanNumber(
+          (dataAny as any).min_enactment_period ??
+            (dataAny as any).minEnactmentPeriod ??
+            (dataAny as any).MinEnactmentPeriod ??
+            0,
+        )
         confirmPeriodBlocks = parseHumanNumber(
           (dataAny as any).confirm_period ?? (dataAny as any).confirmPeriod ?? 0,
         )
@@ -779,9 +945,9 @@ async function loadDetail() {
         trackDetail = {
           id: trackId,
           name: name || trackLabel,
-          preparePeriod: formatBlocks(prepareBlocks),
-          decisionPeriod: formatBlocks(decisionPeriodBlocks),
-          confirmPeriod: formatBlocks(confirmPeriodBlocks),
+          preparePeriod: t('gov.blockCount', { count: prepareBlocks }),
+          decisionPeriod: t('gov.blockCount', { count: decisionPeriodBlocks }),
+          confirmPeriod: t('gov.blockCount', { count: confirmPeriodBlocks }),
           decisionDeposit: `${String((dataAny as any).decision_deposit ?? (dataAny as any).decisionDeposit ?? '0')} VOTE`,
           maxBalance: `${String((dataAny as any).max_balance ?? (dataAny as any).maxBalance ?? '0')} VOTE`,
           minApproval,
@@ -792,7 +958,11 @@ async function loadDetail() {
       }
     }
 
-    const code = readProposalStateCode((p as any).status)
+    const parsedSt = parseProposalStatusResult(statusRaw)
+    const code = parsedSt?.stateCode ?? ProposalState.Pending
+    const statusBlock = parsedSt?.statusBlock ?? 0
+    const lastConfirmedBlock = parsedSt?.lastConfirmedBlock ?? 0
+    const attemptsFromStatus = parsedSt?.confirmedNumber
     const { callLabel, callAmount } = formatProposalCall((p as any).call, methodBySelector)
 
     const content = [
@@ -802,11 +972,9 @@ async function loadDetail() {
     ]
 
     const submitBlock = parseHumanNumber((p as any).submitBlock)
-    const decisionStartBlock = resolveDecisionStartBlock(
-      submitBlock,
-      preparePeriodBlocks,
-      (p as any).status,
-    )
+    const dep = (p as any).deposit ?? (p as any).Deposit
+    const depositBlock = parseHumanNumber(dep?.block ?? dep?.Block ?? 0)
+    const decisionStartBlock = resolveDecisionStartBlock(submitBlock, preparePeriodBlocks, code, statusBlock)
 
     detail.value = {
       id: parseHumanNumber((p as any).id),
@@ -816,15 +984,22 @@ async function loadDetail() {
       trackLabel,
       track: trackDetail,
       submitBlock,
-      status: proposalStateToGovUi(code),
+      status: proposalStatusKey(code),
       stateCode: code,
       contentParagraphs: content,
       aiSummary: [],
       decisionPeriodBlocks,
+      minEnactmentPeriodBlocks,
       confirmPeriodBlocks,
       preparePeriodBlocks,
       decisionStartBlock,
-      attempts: parseHumanNumber((p as any).attempts ?? (p as any).attemptCount ?? 0),
+      depositBlock,
+      statusBlock,
+      lastConfirmedBlock,
+      attempts:
+        attemptsFromStatus !== undefined
+          ? attemptsFromStatus
+          : parseHumanNumber((p as any).attempts ?? (p as any).attemptCount ?? 0),
     }
     loadVotes()
   } catch (e) {
@@ -837,6 +1012,10 @@ async function loadDetail() {
 
 watch(id, () => loadDetail(), { immediate: true })
 
+onMounted(() => {
+  refreshWalletAddress()
+})
+
 function openDepositModal() {
   depositAmount.value = ''
   depositModalOpen.value = true
@@ -846,6 +1025,7 @@ function openVoteModal() {
   voteYes.value = true
   voteLockAmount.value = ''
   votePercent.value = 0
+  refreshWalletAddress()
   loadUnlockedBalance()
   voteModalOpen.value = true
 }
@@ -926,12 +1106,45 @@ async function handleVote() {
       await SecretContractApi.submitVote(wallet, detail.value!.id, voteYes.value, voteLockAmount.value)
     })
     voteModalOpen.value = false
+    refreshWalletAddress()
     await loadDetail()
     loadVotes()
   } catch (e) {
     console.error('SubmitVote failed:', e)
   } finally {
     voting.value = false
+  }
+}
+
+async function handleCancelMyVote(v: VoteItem) {
+  if (!detail.value || cancelingVote.value) return
+  cancelingVote.value = true
+  try {
+    await $getTxProvider(async (wallet: WalletWrap) => {
+      await SecretContractApi.cancelVote(wallet, detail.value!.id, v.id)
+    })
+    await loadDetail()
+    loadUnlockedBalance()
+  } catch (e) {
+    console.error('cancelVote failed:', e)
+  } finally {
+    cancelingVote.value = false
+  }
+}
+
+async function handleUnlockMyVote(v: VoteItem) {
+  if (!detail.value || unlocking.value) return
+  unlocking.value = true
+  try {
+    await $getTxProvider(async (wallet: WalletWrap) => {
+      await SecretContractApi.unlock(wallet, detail.value!.id, v.id)
+    })
+    await loadDetail()
+    loadUnlockedBalance()
+  } catch (e) {
+    console.error('unlock failed:', e)
+  } finally {
+    unlocking.value = false
   }
 }
 
@@ -966,25 +1179,20 @@ async function handleExecute() {
 }
 
 function statusClass(status: Status): string {
-  const map: Record<Status, string> = {
-    Deciding: 'status-deciding',
-    Preparing: 'status-preparing',
-    Executed: 'status-executed',
-    TimedOut: 'status-timedout',
-    Rejected: 'status-rejected',
-  }
-  return map[status] || ''
+  return `status-${status.toLowerCase()}`
 }
 
 function statusLabel(status: Status): string {
   const map: Record<Status, string> = {
-    Deciding: t('gov.statusDeciding'),
-    Preparing: t('gov.statusPreparing'),
-    Executed: t('gov.statusExecuted'),
-    TimedOut: t('gov.statusTimedOut'),
+    Pending: t('gov.statusPending'),
+    Ongoing: t('gov.statusOngoing'),
+    Confirming: t('gov.statusConfirming'),
+    Confirmed: t('gov.statusConfirmed'),
+    Approved: t('gov.statusApproved'),
     Rejected: t('gov.statusRejected'),
+    Canceled: t('gov.statusCanceled'),
   }
-  return map[status] || status
+  return map[status] ?? status
 }
 </script>
 
@@ -1023,6 +1231,16 @@ function statusLabel(status: Status): string {
 
   .breadcrumb-current {
     color: rgba($secondary-text-rgb, 0.7);
+  }
+
+  &.breadcrumb--row {
+    width: 100%;
+  }
+
+  .breadcrumb-head-block {
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    color: rgba($secondary-text-rgb, 0.55);
   }
 }
 
@@ -1121,7 +1339,6 @@ function statusLabel(status: Status): string {
 
   .prose p,
   .prose ul {
-    margin: 0 0 1.25em;
     color: rgba($secondary-text-rgb, 0.7);
     line-height: 1.7;
     font-size: 14px;
@@ -1167,6 +1384,7 @@ function statusLabel(status: Status): string {
     height: 6px;
     background: rgba(255, 255, 255, 0.06);
     overflow: hidden;
+    margin: 3px 0;
   }
 
   .status-progress-fill {
@@ -1405,6 +1623,121 @@ function statusLabel(status: Status): string {
   }
 }
 
+.my-vote-section--compact {
+  .my-vote-head {
+    padding: 10px 28px;
+  }
+
+  .my-vote-head-title {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: rgba($secondary-text-rgb, 0.5);
+  }
+
+  .my-vote-muted {
+    font-size: 13px;
+    line-height: 1.45;
+    color: rgba($secondary-text-rgb, 0.55);
+  }
+
+  .my-vote-muted--body {
+    line-height: 1.5;
+  }
+}
+
+.my-vote-section--main {
+  .my-vote-card--compact {
+    max-width: none;
+  }
+}
+
+.my-vote-section {
+  .my-vote-card--compact {
+    padding: 6px 23px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+
+    &+& {
+      margin-top: 6px;
+    }
+  }
+
+  .my-vote-compact-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px 10px;
+  }
+
+  .my-vote-compact-main {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 8px;
+    min-width: 0;
+    flex: 1 1 12rem;
+  }
+
+  .my-vote-meta-line {
+    font-size: 14px;
+    line-height: 1.45;
+    color: rgba($secondary-text-rgb, 0.55);
+  }
+
+  .my-vote-dot {
+    margin: 0 0.15em;
+    opacity: 0.45;
+  }
+
+  .my-vote-unlock-hint {
+    font-variant-numeric: tabular-nums;
+    opacity: 0.85;
+  }
+
+  .my-vote-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  :deep(.my-vote-btn) {
+    padding-left: 12px;
+    padding-right: 12px;
+    min-height: 2rem;
+    font-size: 13px;
+  }
+
+  :deep(.my-vote-badge) {
+    font-size: 12px !important;
+  }
+
+  .my-vote-wait {
+    margin: 6px 0 0;
+    font-size: 12px;
+    line-height: 1.45;
+    color: rgba($secondary-text-rgb, 0.4);
+  }
+
+  .my-vote-deleted {
+    font-size: 12px;
+    color: rgba($secondary-text-rgb, 0.42);
+  }
+
+  :deep(.my-vote--aye) {
+    border-color: rgba(34, 197, 94, 0.35);
+    color: rgba(187, 247, 208, 0.95);
+  }
+
+  :deep(.my-vote--nay) {
+    border-color: rgba(239, 68, 68, 0.35);
+    color: rgba(254, 202, 202, 0.95);
+  }
+}
+
 .gov-detail-side {
   @media (min-width: 1024px) {
     position: sticky;
@@ -1444,27 +1777,25 @@ function statusLabel(status: Status): string {
   white-space: nowrap;
   letter-spacing: 0.02em;
 
-  &.status-deciding {
+  &.status-pending,
+  &.status-ongoing,
+  &.status-approved {
     background: rgba(255, 255, 255, 0.06);
     color: rgba($secondary-text-rgb, 0.8);
   }
 
-  &.status-preparing {
-    background: rgba(255, 255, 255, 0.06);
-    color: rgba($secondary-text-rgb, 0.8);
+  &.status-confirming {
+    background: rgba(234, 179, 8, 0.12);
+    color: rgba(253, 224, 71, 0.92);
   }
 
-  &.status-executed {
-    background: rgba(255, 255, 255, 0.06);
-    color: rgba($secondary-text-rgb, 0.8);
+  &.status-confirmed {
+    background: rgba(56, 189, 248, 0.14);
+    color: rgba(125, 211, 252, 0.95);
   }
 
-  &.status-timedout {
-    background: rgba(255, 255, 255, 0.06);
-    color: rgba($secondary-text-rgb, 0.6);
-  }
-
-  &.status-rejected {
+  &.status-rejected,
+  &.status-canceled {
     background: rgba(255, 255, 255, 0.06);
     color: rgba($secondary-text-rgb, 0.6);
   }

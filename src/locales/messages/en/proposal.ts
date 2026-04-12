@@ -14,7 +14,7 @@ export default {
   trackName: 'Track Name',
   trackNamePlaceholder: 'Enter track name',
   preparePeriod: 'Prepare Period',
-  decisionPeriod: 'Decision Period',
+  decisionPeriod: 'Voting Period',
   confirmPeriod: 'Confirm Period',
   maxDeciding: 'Max Deciding',
   decisionDeposit: 'Decision Deposit',

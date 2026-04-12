@@ -59,14 +59,12 @@ import ReferendaList, { type ReferendaListItem } from './ReferendaList.vue'
 import SubmitProposal from './submit-proposal'
 import { SecretContractApi } from '@/apis/contract'
 import { hexToSS58 } from '@/utils/chain'
+import { bytesToString } from '@/utils/gov'
 import { parseHumanNumber } from '@/utils/parseHumanNumber'
-import {
-  proposalStateToGovUi,
-  readProposalStateCode,
-  type GovProposalUiStatus,
-} from '@/utils/proposalState'
+import { ProposalState, proposalStatusKey, type ProposalStatusKey } from '@/utils/proposalState'
+import { parseProposalStatusResult } from '@/utils/parseProposalStatus'
 
-type Status = GovProposalUiStatus
+type Status = ProposalStatusKey
 type TrackCategory = 'system' | 'treasury' | 'others'
 
 interface Referendum {
@@ -124,15 +122,6 @@ function shortCaller(caller: { t?: string | number; v?: string } | null | undefi
   if (String(caller.t) !== '1') return '—'
   const ss58 = hexToSS58(caller.v)
   return ss58.length > 14 ? `${ss58.slice(0, 6)}…${ss58.slice(-4)}` : ss58
-}
-
-function bytesToString(bytes: unknown): string {
-  if (!bytes) return ''
-  if (typeof bytes === 'string') return bytes
-  if (Array.isArray(bytes)) {
-    return String.fromCharCode(...bytes.filter((b: number) => b !== 0))
-  }
-  return String(bytes)
 }
 
 function trackCategoryFromName(name: string): TrackCategory {
@@ -203,9 +192,9 @@ function mapProposal(
   p: Record<string, unknown>,
   categoryByTrackId: Map<number, TrackCategory>,
   methodBySelector: Map<string, string>,
+  stateCode: number,
 ): Referendum {
   const trackId = parseHumanNumber(p.trackID)
-  const code = readProposalStateCode(p.status)
   const { callLabel, callContract, callMethod, callAmount } = formatProposalCall(
     p.call,
     methodBySelector,
@@ -216,7 +205,7 @@ function mapProposal(
     proposer: shortCaller(p.caller as { t?: string | number; v?: string }),
     trackId,
     trackCategory: categoryByTrackId.get(trackId) ?? 'others',
-    status: proposalStateToGovUi(code),
+    status: proposalStatusKey(stateCode),
     callLabel,
     callContract,
     callMethod,
@@ -234,15 +223,19 @@ async function loadData() {
       SecretContractApi.getGovSelectorMethodMap(),
     ])
 
-    const proposals: Referendum[] = []
     const categoryByTrackId = buildTrackCategoryById(tracksResult)
-    for (const item of proposalsResult) {
-      if (item && typeof item === 'object') {
-        proposals.push(
-          mapProposal(item as Record<string, unknown>, categoryByTrackId, methodBySelector),
-        )
-      }
-    }
+    const rows = proposalsResult.filter(
+      (item: unknown): item is Record<string, unknown> => item != null && typeof item === 'object',
+    )
+    const proposals: Referendum[] = await Promise.all(
+      rows.map(async (p: Record<string, unknown>) => {
+        const pid = parseHumanNumber(p.id)
+        const stRaw = await SecretContractApi.proposalStatus(pid).catch(() => null)
+        const parsed = parseProposalStatusResult(stRaw)
+        const stateCode = parsed?.stateCode ?? ProposalState.Pending
+        return mapProposal(p, categoryByTrackId, methodBySelector, stateCode)
+      }),
+    )
     proposals.sort((a, b) => b.id - a.id)
 
     let ts = [{ id: "all", name: 'all', label: t('gov.all') }]

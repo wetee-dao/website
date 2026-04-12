@@ -14,4 +14,6 @@ export default {
   submit: 'Submit',
   cancel: 'Cancel',
   close: 'Close',
+  accountInvalidPolkadot: 'Invalid address: use a valid SS58 or 32-byte public key (0x…)',
+  accountInvalidEthereum: 'Invalid address: use a valid Ethereum address (0x + 40 hex digits)',
 }

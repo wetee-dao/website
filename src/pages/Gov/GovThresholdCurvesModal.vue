@@ -107,13 +107,17 @@ type CurveModalVoteItem = {
   lockAmount: BN
   weight: number
   voteBlock: number
+  unlockBlock?: number
+  deleted?: boolean
 }
 
 const props = defineProps<{
   open: boolean
   decisionPeriodBlocks: number
-  /** 决策期起点（与页面 govTallyMetrics / curveY 的 x 一致） */
+  /** 回退用：无质押块时的投票期起点 */
   decisionStartBlock: number
+  /** 质押激活块；与详情页 curveY 一致，优先作为投票期起点 */
+  depositBlock: number
   minApproval: Curve | null | undefined
   minSupport: Curve | null | undefined
   voteItems: CurveModalVoteItem[]
@@ -139,16 +143,21 @@ const voteSummaryLocal = computed(() => {
   let nayCount = 0
   let ayeTotal = new BN(0)
   let nayTotal = new BN(0)
+  let totalPledge = new BN(0)
   for (const v of props.voteItems) {
+    if (v.deleted) continue
+    totalPledge = totalPledge.add(v.lockAmount)
+    const wBn = new BN(v.weight)
+    const weighted = v.lockAmount.mul(wBn)
     if (v.yes) {
       ayeCount += 1
-      ayeTotal = ayeTotal.add(v.lockAmount)
+      ayeTotal = ayeTotal.add(weighted)
     } else {
       nayCount += 1
-      nayTotal = nayTotal.add(v.lockAmount)
+      nayTotal = nayTotal.add(weighted)
     }
   }
-  return { ayeCount, nayCount, ayeTotal, nayTotal, total: ayeTotal.add(nayTotal) }
+  return { ayeCount, nayCount, ayeTotal, nayTotal, total: totalPledge }
 })
 
 const modalUi = {
@@ -161,10 +170,6 @@ const modalUi = {
   title: 'text-[0.95rem] font-semibold tracking-tight text-[rgba(var(--g-secondary-text-rgb),0.92)]',
   description: 'mt-1 text-xs text-[rgba(var(--g-secondary-text-rgb),0.55)]',
   close: 'top-4 end-4',
-}
-
-function blocksToHours(b: number): number {
-  return (b * 6) / 3600
 }
 
 function permilleToNum(permille: number): number {
@@ -190,58 +195,72 @@ const lineData = computed(() => {
   const maxB = props.decisionPeriodBlocks
   const ma = props.minApproval
   const ms = props.minSupport
+  /** 与 ReferendaDetail curveElapsedBlocks 一致：质押块优先于 proposalStatus 起点 */
+  const periodStart =
+    props.depositBlock > 0 ? props.depositBlock : props.decisionStartBlock
   if (!maxB || maxB <= 0 || !ma || !ms) {
     return { datasets: [] }
   }
 
-  const maxH = blocksToHours(maxB)
+  /** 投票期内已过区块数（与 curveY 横轴一致） */
+  function elapsedClamped(voteBlock: number): number {
+    return Math.min(maxB, Math.max(0, voteBlock - periodStart))
+  }
+
+  /**
+   * 图表横轴：链上绝对区块号 = periodStart + elapsed；
+   * 无起点时退回 0 … decisionPeriodBlocks。
+   */
+  function toChartX(elapsedInDecision: number): number {
+    const e = Math.min(Math.max(0, elapsedInDecision), maxB)
+    if (periodStart > 0) return periodStart + e
+    return e
+  }
+
   const n = 96
   const approvalThresh: { x: number; y: number }[] = []
   const supportThresh: { x: number; y: number }[] = []
   for (let i = 0; i <= n; i++) {
-    const xb = Math.floor((maxB * i) / n)
-    const h = blocksToHours(xb)
-    approvalThresh.push({ x: h, y: permilleToNum(curveY(ma, xb)) })
-    supportThresh.push({ x: h, y: permilleToNum(curveY(ms, xb)) })
+    const elapsed = Math.floor((maxB * i) / n)
+    const yA = permilleToNum(curveY(ma, elapsed))
+    const yS = permilleToNum(curveY(ms, elapsed))
+    approvalThresh.push({ x: toChartX(elapsed), y: yA })
+    supportThresh.push({ x: toChartX(elapsed), y: yS })
   }
 
-  const start = props.decisionStartBlock
   const sorted = [...props.voteItems].sort((a, b) => a.voteBlock - b.voteBlock)
   let aye = new BN(0)
   let nay = new BN(0)
+  let supportSum = new BN(0)
   const appr: { x: number; y: number }[] = []
   const supp: { x: number; y: number }[] = []
-  let finalAp = 0
-  let finalSp = 0
 
   const iss = props.totalSupplyBn
 
   for (const v of sorted) {
-    const xb = Math.min(maxB, Math.max(0, v.voteBlock - start))
-    const h = blocksToHours(xb)
-    if (v.yes) aye = aye.add(v.lockAmount)
-    else nay = nay.add(v.lockAmount)
+    if (v.deleted) continue
+    const elapsed = elapsedClamped(v.voteBlock)
+    const wBn = new BN(v.weight)
+    const contrib = v.lockAmount.mul(wBn)
+    supportSum = supportSum.add(v.lockAmount)
+    if (v.yes) aye = aye.add(contrib)
+    else nay = nay.add(contrib)
     const sum = aye.add(nay)
     let ap = 0
     if (sum.gt(new BN(0))) ap = Math.round(aye.mul(new BN(10000)).div(sum).toNumber()) / 100
     let sp = 0
-    if (iss.gt(new BN(0))) sp = Math.round(sum.mul(new BN(1000000)).div(iss).toNumber()) / 10000
-    finalAp = ap
-    finalSp = sp
-    /** x=0 处不展示当前批准/支持（决策起点不画点） */
-    if (h > 0) {
-      appr.push({ x: h, y: ap })
-      supp.push({ x: h, y: sp })
+    if (iss.gt(new BN(0))) sp = Math.round(supportSum.mul(new BN(1000000)).div(iss).toNumber()) / 10000
+    /** 投票期起点当刻（elapsed=0）不画点；无有效投票则不产生虚线系列；不在投票期末尾补点 */
+    if (elapsed > 0) {
+      appr.push({ x: toChartX(elapsed), y: ap })
+      supp.push({ x: toChartX(elapsed), y: sp })
     }
   }
 
   const hasCurrentLines = appr.length > 0
-  if (hasCurrentLines) {
-    appr.push({ x: maxH, y: finalAp })
-    supp.push({ x: maxH, y: finalSp })
-  }
 
-  const pr = showVoters.value ? 4 : 0
+  /** 仅有投票轨迹时才显示折线点（无投票则无虚线系列，此处为双保险） */
+  const pr = showVoters.value && hasCurrentLines ? 4 : 0
 
   const datasets: ChartData<'line'>['datasets'] = [
     {
@@ -309,32 +328,41 @@ const lineData = computed(() => {
 
 const chartOptions = computed(() => {
   const maxB = props.decisionPeriodBlocks
-  const maxH = maxB > 0 ? blocksToHours(maxB) : 1
+  const periodStart =
+    props.depositBlock > 0 ? props.depositBlock : props.decisionStartBlock
+  const useAbs = periodStart > 0 && maxB > 0
+  const xMin = useAbs ? periodStart : 0
+  const xMax = useAbs ? periodStart + maxB : maxB > 0 ? maxB : 1
 
   return {
     responsive: true,
     maintainAspectRatio: false,
-    interaction: { mode: 'index' as const, intersect: false },
+    /**
+     * 不可用 index：各数据集点数不同（阈值 ~97 点 vs 投票阶梯少量点），
+     * index 会按下标对齐，导致在某一链上高度错配到「第 i 票」的 y，出现「该块无投票却有当前批准率」的假象。
+     * 按 x 轴取最近点，使每条线在鼠标横坐标处独立取最近样本。
+     */
+    interaction: { mode: 'nearest' as const, intersect: false, axis: 'x' as const },
     parsing: false as const,
     /** 避免贴顶时线宽/数据点被 canvas 裁切 */
     layout: {
-      padding: { top: 20, right: 10, left: 4, bottom: 6 },
+      padding: { top: 20, right: 10, left: 0, bottom: 6 },
     },
     scales: {
       x: {
         type: 'linear' as const,
-        min: 0,
-        max: maxH,
+        min: xMin,
+        max: xMax,
         title: {
           display: true,
-          text: t('govDetail.chartAxisHours'),
+          text: useAbs ? t('govDetail.chartAxisBlocksChain') : t('govDetail.chartAxisBlocks'),
           color: 'rgba(148,163,184,0.85)',
           font: { size: 11 },
         },
         ticks: {
           color: 'rgba(148,163,184,0.75)',
-          maxTicksLimit: 8,
-          callback: (v: string | number) => `${Math.round(Number(v))}h`,
+          maxTicksLimit: 10,
+          callback: (v: string | number) => String(Math.round(Number(v))),
         },
         grid: { color: 'rgba(255,255,255,0.06)' },
       },
@@ -342,14 +370,10 @@ const chartOptions = computed(() => {
         min: 0,
         max: 100,
         title: {
-          display: true,
-          text: t('govDetail.chartAxisPercent'),
-          color: 'rgba(148,163,184,0.85)',
-          font: { size: 11 },
+          display: false,
         },
         ticks: {
-          color: 'rgba(148,163,184,0.75)',
-          callback: (v: string | number) => `${Number(v)}%`,
+          display: false,
         },
         grid: { color: 'rgba(255,255,255,0.06)' },
       },
@@ -365,11 +389,15 @@ const chartOptions = computed(() => {
         },
       },
       tooltip: {
+        mode: 'nearest' as const,
+        intersect: false,
+        axis: 'x' as const,
         callbacks: {
           title(items: { parsed: { x?: number } }[]) {
             const x = items[0]?.parsed?.x
             if (x === undefined) return ''
-            return `${t('govDetail.chartAxisHours')}: ${Number(x).toFixed(1)}h`
+            if (useAbs) return t('gov.atBlock', { block: Math.round(Number(x)) })
+            return t('govDetail.chartTooltipDecisionElapsed', { blocks: Math.round(Number(x)) })
           },
           label(ctx: { dataset: { label?: string }; parsed: { y?: number } }) {
             const y = ctx.parsed.y

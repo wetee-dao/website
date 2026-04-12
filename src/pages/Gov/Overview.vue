@@ -49,13 +49,15 @@ import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import GovSidebar from './GovSidebar.vue'
 import { SecretContractApi } from '@/apis/contract'
+import { bytesToString } from '@/utils/gov'
 import { parseHumanNumber } from '@/utils/parseHumanNumber'
-import { proposalStateToGovUi, readProposalStateCode, type GovProposalUiStatus } from '@/utils/proposalState'
+import { ProposalState, proposalStatusKey, type ProposalStatusKey } from '@/utils/proposalState'
+import { parseProposalStatusResult } from '@/utils/parseProposalStatus'
 import ReferendaList, { type ReferendaListItem } from './ReferendaList.vue'
 
 const { t } = useI18n()
 
-type Status = GovProposalUiStatus
+type Status = ProposalStatusKey
 
 interface Proposal {
   id: number
@@ -85,37 +87,25 @@ const recentMembers = ref<Member[]>([])
 const latestListItems = ref<ReferendaListItem[]>([])
 
 function statusClass(status: Status): string {
-  const map: Record<Status, string> = {
-    Deciding: 'status-deciding',
-    Preparing: 'status-preparing',
-    Executed: 'status-executed',
-    TimedOut: 'status-timedout',
-    Rejected: 'status-rejected',
-  }
-  return map[status] || ''
+  return `status-${status.toLowerCase()}`
 }
 
 function statusLabel(status: Status): string {
   const map: Record<Status, string> = {
-    Deciding: t('gov.statusDeciding'),
-    Preparing: t('gov.statusPreparing'),
-    Executed: t('gov.statusExecuted'),
-    TimedOut: t('gov.statusTimedOut'),
+    Pending: t('gov.statusPending'),
+    Ongoing: t('gov.statusOngoing'),
+    Confirming: t('gov.statusConfirming'),
+    Confirmed: t('gov.statusConfirmed'),
+    Approved: t('gov.statusApproved'),
     Rejected: t('gov.statusRejected'),
+    Canceled: t('gov.statusCanceled'),
   }
-  return map[status] || status
+  return map[status] ?? status
 }
 
 function formatAddress(addr: string): string {
   if (addr.length <= 12) return addr
   return addr.slice(0, 6) + '...' + addr.slice(-4)
-}
-
-function bytesToString(bytes: unknown): string {
-  if (!bytes) return ''
-  if (typeof bytes === 'string') return bytes
-  if (Array.isArray(bytes)) return String.fromCharCode(...bytes.filter((b: number) => b !== 0))
-  return String(bytes)
 }
 
 function normalizeSelectorHex(s: string): string {
@@ -163,19 +153,23 @@ async function loadData() {
     }
 
     const list = Array.isArray(proposalsResult) ? proposalsResult : []
-    const mapped: Proposal[] = list
-      .filter((x) => x && typeof x === 'object')
-      .map((p: any) => {
-        const id = parseHumanNumber(p.id)
-        const trackId = parseHumanNumber(p.trackID)
-        const trackLabel = trackNameById.get(trackId) ?? `#${trackId}`
-        const submitBlock = parseHumanNumber(p.submitBlock)
-        const code = readProposalStateCode(p.status)
-        const status = proposalStateToGovUi(code)
-        const { callLabel, callAmount } = formatProposalCall(p.call, methodBySelector)
-        return { id, callLabel, callAmount, trackId, trackLabel, submitBlock, status }
-      })
-      .sort((a, b) => b.id - a.id)
+    const rows = list.filter((x) => x && typeof x === 'object')
+    const mapped: Proposal[] = (
+      await Promise.all(
+        rows.map(async (p: any) => {
+          const id = parseHumanNumber(p.id)
+          const stRaw = await SecretContractApi.proposalStatus(id).catch(() => null)
+          const parsed = parseProposalStatusResult(stRaw)
+          const code = parsed?.stateCode ?? ProposalState.Pending
+          const trackId = parseHumanNumber(p.trackID)
+          const trackLabel = trackNameById.get(trackId) ?? `#${trackId}`
+          const submitBlock = parseHumanNumber(p.submitBlock)
+          const status = proposalStatusKey(code)
+          const { callLabel, callAmount } = formatProposalCall(p.call, methodBySelector)
+          return { id, callLabel, callAmount, trackId, trackLabel, submitBlock, status }
+        }),
+      )
+    ).sort((a, b) => b.id - a.id)
 
     latestProposals.value = mapped.slice(0, 5)
     latestListItems.value = latestProposals.value.map((p) => ({
@@ -189,7 +183,13 @@ async function loadData() {
       callMethod: p.callLabel.split('.').slice(1).join('.') || p.callLabel,
       callAmount: p.callAmount,
     }))
-    stats.value.activeProposals = mapped.filter((p) => p.status === 'Deciding' || p.status === 'Preparing').length
+    stats.value.activeProposals = mapped.filter(
+      (p) =>
+        p.status === 'Ongoing' ||
+        p.status === 'Confirming' ||
+        p.status === 'Confirmed' ||
+        p.status === 'Pending',
+    ).length
 
     // 加载成员
     const membersResult = await SecretContractApi.members()

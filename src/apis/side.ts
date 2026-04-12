@@ -8,6 +8,19 @@ export const GetSideChainStatus = async () => {
     return resp.data.result
 }
 
+/** 侧链 /status 中 sync_info.latest_block_height（最新区块高度） */
+export async function getLatestBlockHeight(): Promise<number | null> {
+    try {
+        const data = await GetSideChainStatus()
+        const h = data?.sync_info?.latest_block_height
+        if (h == null || h === "") return null
+        const n = typeof h === "string" ? parseInt(String(h).trim(), 10) : Number(h)
+        return Number.isFinite(n) ? n : null
+    } catch {
+        return null
+    }
+}
+
 export const GetSideChainNodes = async () => {
     const url = CurrentChainNode().rpcUrl + "/net_info"
     const resp = await axios.get(url)
