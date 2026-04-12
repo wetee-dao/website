@@ -326,12 +326,12 @@
                   </div>
                   <div class="gov-amount-rows">
                     <div class="gov-amount-row gov-amount-row--aye">
-                      <span class="gov-amount-icon" aria-hidden="true">✓</span>
+                      <PixelCheckIcon class="gov-amount-icon gov-amount-icon--pixel" />
                       <span>{{ t('govDetail.votesAyeCount') }} ({{ voteSummary.ayeCount }})</span>
                       <span class="gov-amount-amt">{{ formatApproxAmount(voteSummary.ayeTotal) }} VOTE</span>
                     </div>
                     <div class="gov-amount-row gov-amount-row--nay">
-                      <span class="gov-amount-icon" aria-hidden="true">✗</span>
+                      <PixelCrossIcon class="gov-amount-icon gov-amount-icon--pixel" />
                       <span>{{ t('govDetail.votesNayCount') }} ({{ voteSummary.nayCount }})</span>
                       <span class="gov-amount-amt">{{ formatApproxAmount(voteSummary.nayTotal) }} VOTE</span>
                     </div>
@@ -430,6 +430,8 @@ import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import GovSidebar from './GovSidebar.vue'
 import GovThresholdCurvesModal from './GovThresholdCurvesModal.vue'
+import PixelCheckIcon from '@/components/svg/PixelCheckIcon.vue'
+import PixelCrossIcon from '@/components/svg/PixelCrossIcon.vue'
 import { SecretContractApi } from '@/apis/contract'
 import { getLatestBlockHeight } from '@/apis/side'
 import { bytesToString, callerToSs58 } from '@/utils/gov'
@@ -1530,6 +1532,11 @@ function statusLabel(status: Status): string {
       text-align: center;
       font-size: 14px;
 
+      &--pixel {
+        display: block;
+        height: 14px;
+      }
+
       &--muted {
         color: rgba($secondary-text-rgb, 0.45);
       }
@@ -1552,7 +1559,7 @@ function statusLabel(status: Status): string {
 
   .gov-support-fill {
     height: 100%;
-    background: rgba(255, 255, 255, 0.18);
+    background: rgb(57, 85, 47);
     min-width: 0;
     transition: width 0.35s ease;
   }
