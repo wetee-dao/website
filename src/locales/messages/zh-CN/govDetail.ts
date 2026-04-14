@@ -65,6 +65,7 @@ export default {
   myVoteCanceled: '已取消',
   myVoteLock: '锁仓',
   cancelMyVote: '取消投票',
+  voteUnlockedOnChain: '已解锁',
   unlockMyVote: '解锁代币',
   myVoteUnlockHint: '预计在区块 {block} 及之后可解锁。',
   myVoteUnlockWait: '尚未到达可解锁高度，请等待提案结束后再经过约定区块数。',

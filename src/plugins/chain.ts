@@ -106,11 +106,11 @@ export const $getTxProvider = async (run: (chain: WalletWrap, builder: ChainInte
     });
 
     if (!userInfo || !userInfo.provider) {
-      window.$notification["error"]({
-        content: 'Error',
-        meta: 'Please connect wallet first',
+      window.$toast.add({
+        title: 'Error',
+        description: 'Please connect wallet first',
+        color: 'error',
         duration: 2500,
-        keepAliveOnHover: true
       })
       throw new Error("Please connect wallet first");
     }
@@ -153,11 +153,11 @@ export const $getQueryApi = (): ChainInterface => {
   const ins = useGlobalStore(store)
   const userInfo: any = ins.userInfo
   if (!userInfo || !userInfo.provider) {
-    window.$notification["error"]({
-      content: 'Error',
-      meta: 'Please connect wallet first',
+    window.$toast.add({
+      title: 'Error',
+      description: 'Please connect wallet first',
+      color: 'error',
       duration: 2500,
-      keepAliveOnHover: true
     })
     throw new Error("Please connect wallet first");
   }
@@ -171,11 +171,11 @@ export const $getQueryApi = (): ChainInterface => {
       break;
   }
 
-  window.$notification["error"]({
-    content: 'Error',
-    meta: 'wallet ' + userInfo.provider + ' not support',
+  window.$toast.add({
+    title: 'Error',
+    description: 'wallet ' + userInfo.provider + ' not support',
+    color: 'error',
     duration: 2500,
-    keepAliveOnHover: true
   })
 
   throw new Error("wallet " + userInfo.provider + " not support");
@@ -246,11 +246,11 @@ export default {
       if (window.localStorage.getItem("userInfo")) {
         callbak()
       } else {
-        window.$notification["error"]({
-          content: 'Wallet not connected',
-          meta: 'Please connect your wallet before performing this action.',
+        window.$toast.add({
+          title: 'Wallet not connected',
+          description: 'Please connect your wallet before performing this action.',
+          color: 'error',
           duration: 2500,
-          keepAliveOnHover: true
         })
       }
     };

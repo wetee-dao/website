@@ -62,8 +62,9 @@
                     </div>
                   </div>
                 </div>
-                <div class="text-sm text-white/70 shrink-0">
-                  {{ v.lockAmount.toString() }} VOTE
+                <div class="text-sm text-white/70 shrink-0 flex flex-col items-end gap-0.5">
+                  <span v-if="v.unlockedOnChain" class="text-[11px] text-emerald-400/90">{{ t('govDetail.voteUnlockedOnChain') }}</span>
+                  <span>{{ v.lockAmount.toString() }} VOTE</span>
                 </div>
               </div>
             </div>
@@ -109,6 +110,8 @@ type CurveModalVoteItem = {
   voteBlock: number
   unlockBlock?: number
   deleted?: boolean
+  /** vote_unlock_statuses */
+  unlockedOnChain?: boolean
 }
 
 const props = defineProps<{

@@ -24,6 +24,7 @@ export default {
   discussions: '讨论',
   delegation: '委托',
   treasuryTitle: '国库',
+  personalTitle: '个人',
   status: '状态',
   spends: '支出',
   treasuryTokens: '国库代币',

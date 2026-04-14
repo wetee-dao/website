@@ -166,24 +166,31 @@ export class SecretContract {
         return await this.contract_query("gov", "proposalStatus", { id })
     }
 
-    /** 查询所有提案 */
-    async proposals() {
-        let result = await this.contract_query("gov", "proposals", {
-            startKey: null,
-            size: 20,
+    /**
+     * 分页查询提案列表。
+     * @param startKey 上一页最后一条提案 id，首屏传 null
+     * @param size 每页条数
+     */
+    async proposalsPage(startKey: number | null = null, size = 64) {
+        const result = await this.contract_query("gov", "proposals", {
+            startKey: startKey === null ? null : { Some: startKey },
+            size,
         })
+        const rows = Array.isArray(result) ? result : []
+        return rows.map((item: any) => ({
+            ...item.proposal,
+            id: item.id,
+        }))
+    }
 
-        return result.map((item: any) => {
-            return {
-                ...item.proposal,
-                id: item.id,
-            }
-        })
+    /** 查询提案列表（默认首屏 20 条，与历史行为一致） */
+    async proposals() {
+        return this.proposalsPage(null, 20)
     }
 
     /** 取消提案 */
-    async cancelProposal(wallet: WalletWrap, proposalId: number) {
-        const result = await this.contract_builder("gov", "cancelProposal", { proposalId }, "0")
+    async cancelProposal(wallet: WalletWrap, proposalID: number) {
+        const result = await this.contract_builder("gov", "cancelProposal", { proposalID }, "0")
         return await this.call(wallet, result.params)
     }
 
@@ -205,7 +212,7 @@ export class SecretContract {
     }
 
     // ============ Voting ============
-    // Abi（gov.json）：submit_vote(proposal_i_d, opinion_yes, lock_amount) → proposalID, opinionYes, lockAmount
+    // Abi（gov.json）：submit_vote(proposal_i_d, opinion_yes, lock_amount) → ProposalID, opinionYes, lockAmount
     /** 提交投票 */
     async submitVote(wallet: WalletWrap, proposalId: number, opinionYes: boolean, lockAmount: string) {
         const result = await this.contract_builder("gov", "submitVote", {
@@ -216,13 +223,13 @@ export class SecretContract {
         return await this.call(wallet, result.params)
     }
 
-    // Abi：vote(proposal_i_d, index) → proposalID, index
+    // Abi：vote(proposal_i_d, index) → ProposalID, index
     /** 按提案与投票序号查询单条投票 */
     async vote(proposalId: number, index: number) {
         return await this.contract_query("gov", "vote", { proposalID: proposalId, index })
     }
 
-    // Abi：votes(proposal_i_d, start_key: Option<Vote>, size) → proposalID, startKey, size
+    // Abi：votes(proposal_i_d, start_key: Option<Vote>, size) → ProposalID, startKey, size
     /** 分页查询某提案下的投票；首屏 startKey 传 null */
     async votes(proposalId: number, startKey: unknown | null = null, size = 512) {
         return await this.contract_query("gov", "votes", {
@@ -230,6 +237,29 @@ export class SecretContract {
             startKey,
             size,
         })
+    }
+
+    /**
+     * 分页查询某用户的投票记录（完整 Vote 结构）。
+     * startKey：None 表示首页；Some(proposal_id) 为上一页最后一条的 ProposalID。
+     */
+    async votesOfUser(userAddr: string, startKey: number | null = null, size = 64) {
+        return await this.contract_query("gov", "votesOfUser", {
+            user: {
+                T: 1,
+                V: ss58toHex(userAddr),
+            },
+            startKey: startKey === null ? null : { Some: startKey },
+            size,
+        })
+    }
+
+    /**
+     * 批量查询投票解锁状态（与 keys 顺序对应：VoteUnlockStatus[]）。
+     * keys：{ ProposalID, VoteIndex }[]
+     */
+    async voteUnlockStatuses(keys: Array<{ ProposalID: number; VoteIndex: number }>) {
+        return await this.contract_query("gov", "voteUnlockStatuses", { keys })
     }
 
     // Abi：cancel_vote(proposal_i_d, index)
@@ -279,11 +309,11 @@ export class SecretContract {
         const abi = await this.initContract(contract)
         const methodAbi = abi.messages.find(item => item.method === method)
         if (!methodAbi) {
-            window.$notification["error"]({
-                content: 'Error',
+            window.$toast.add({
+                title: 'Error',
                 description: "contract contract method not found: " + method,
+                color: 'error',
                 duration: 2500,
-                keepAliveOnHover: true
             })
             throw new Error("method not found")
         }
@@ -408,7 +438,7 @@ export class SecretContract {
         let response: any;
         try {
             const sig = (await wallet.signMsg(data, hexToSS58(caller))).replace(/^0x/i, '');
-             response = await (new GraphqlClient(CurrentSecretUrl())).mut({
+            response = await (new GraphqlClient(CurrentSecretUrl())).mut({
                 query: `mutation{
                         contractCall(
                             caller:"${ss58toHex(caller)}",
@@ -420,7 +450,7 @@ export class SecretContract {
                         )
                     }`,
             })
-            
+
             await new Promise(resolve => setTimeout(resolve, 3000));
         } catch (error) {
             loading.close();

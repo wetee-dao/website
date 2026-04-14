@@ -42,7 +42,7 @@ if (ins.chainId) {
 
 declare global {
     interface Window {
-        $notification: any;
+        $toast: ReturnType<typeof import('@nuxt/ui/composables').useToast>;
         $app: any;
     }
 }

@@ -244,7 +244,7 @@ export function parseTrackFromApi(id: number, data: any): TrackData {
 export function parseVoteFromApi(data: any): Vote {
   return {
     index: Number(data.index || 0),
-    proposalId: Number(data.proposalID || data.proposalId || 0),
+    proposalId: Number(data.proposalId || 0),
     caller: String(data.caller || ''),
     pledge: new BN(String(data.pledge || 0).replace(/,/g, '')),
     opinionYes: Boolean(data.opinionYes),

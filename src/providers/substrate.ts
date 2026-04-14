@@ -21,11 +21,11 @@ export class SubstrateProvider {
   // 构建inkcall
   buildCall = async (data: any, signer: string): Promise<any> => {
     if (this.client == undefined) {
-      window.$notification["error"]({
-        content: 'Error',
+      window.$toast.add({
+        title: 'Error',
         description: 'chain client not connected',
+        color: 'error',
         duration: 2500,
-        keepAliveOnHover: true
       })
       return
     }
@@ -92,11 +92,11 @@ export class SubstrateProvider {
       await checkMetaData(this.client!, wallet!.extension)
       const account = (await wallet!.getAccounts()).find(account => account.address === signer);
       if (!account) {
-        window.$notification["error"]({
-          content: 'Error',
-          meta: 'Account ' + signer + ' not found',
+        window.$toast.add({
+          title: 'Error',
+          description: 'Account ' + signer + ' not found',
+          color: 'error',
           duration: 2500,
-          keepAliveOnHover: true
         })
         return
       }
@@ -121,11 +121,11 @@ export class SubstrateProvider {
             loading.close();
             unsub();
 
-            window.$notification["error"]({
-              content: 'Error',
-              meta: error,
+            window.$toast.add({
+              title: 'Error',
+              description: error,
+              color: 'error',
               duration: 2500,
-              keepAliveOnHover: true
             })
 
             onError(error);
@@ -150,11 +150,11 @@ export class SubstrateProvider {
       } catch (e: any) {
         loading.close();
 
-        window.$notification["error"]({
-          content: 'Error',
-          meta: e.toString(),
+        window.$toast.add({
+          title: 'Error',
+          description: e.toString(),
+          color: 'error',
           duration: 2500,
-          keepAliveOnHover: true
         })
 
         onError(e)
@@ -195,11 +195,11 @@ export class SubstrateProvider {
     await checkMetaData(this.client!, wallet!.extension)
     const account = (await wallet!.getAccounts()).find(account => account.address === signer);
     if (!account) {
-      window.$notification["error"]({
-        content: 'Error',
+      window.$toast.add({
+        title: 'Error',
         description: 'Account ' + signer + ' not found',
+        color: 'error',
         duration: 2500,
-        keepAliveOnHover: true
       })
       return
     }
@@ -215,11 +215,11 @@ export class SubstrateProvider {
         type: 'bytes'
       }); 
     } catch (error:any) {
-      window.$notification["error"]({
-        content: 'Error',
+      window.$toast.add({
+        title: 'Error',
         description: 'Sign message error: ' + error.toString(),
+        color: 'error',
         duration: 2500,
-        keepAliveOnHover: true
       })
       throw error
     }

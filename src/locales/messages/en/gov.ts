@@ -25,6 +25,7 @@ export default {
   discussions: 'Discussions',
   delegation: 'Delegation',
   treasuryTitle: 'Treasury',
+  personalTitle: 'Personal',
   status: 'Status',
   spends: 'Spends',
   treasuryTokens: 'Treasury tokens',

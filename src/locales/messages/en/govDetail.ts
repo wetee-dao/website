@@ -68,6 +68,7 @@ export default {
   myVoteCanceled: 'Canceled',
   myVoteLock: 'Locked',
   cancelMyVote: 'Cancel vote',
+  voteUnlockedOnChain: 'Unlocked',
   unlockMyVote: 'Unlock tokens',
   myVoteUnlockHint: 'Unlock available on or after block {block}.',
   myVoteUnlockWait: 'Unlock is not available yet; wait until the chain head passes the required block after the proposal ends.',

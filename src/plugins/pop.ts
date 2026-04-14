@@ -101,11 +101,11 @@ function AsyncComponentLoad(c: any) {
     timeout: 3000,
     loadingComponent: LoadingPop,
     onError: (error: Error, retry: () => void, fail: () => void, attempts: number) => {
-      window.$notification["error"]({
-        content: 'Page loading error',
-        meta: error.message,
+      window.$toast.add({
+        title: 'Page loading error',
+        description: error.message,
+        color: 'error',
         duration: 2500,
-        keepAliveOnHover: true
       })
     }
   })

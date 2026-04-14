@@ -30,6 +30,13 @@
           {{ t('gov.treasuryTokens') }}
         </RouterLink>
       </nav>
+      <div class="sidebar-divider" />
+      <div class="sidebar-title">{{ t('gov.personalTitle') }}</div>
+      <nav class="sidebar-nav">
+        <RouterLink to="/gov/me" class="nav-item" :class="{ active: isMyActive }">
+          {{ t('govMy.nav') }}
+        </RouterLink>
+      </nav>
     </div>
   </aside>
 </template>
@@ -44,9 +51,14 @@ const { t } = useI18n()
 
 const isOverviewActive = computed(() => route.path === '/gov/overview')
 
-const isReferendaActive = computed(() => {
-  return route.path === '/gov' || route.path.startsWith('/gov/referenda')
-})
+const isReferendaActive = computed(
+  () => route.path === '/gov' || route.path.startsWith('/gov/referenda'),
+)
+
+/** 不能用 startsWith('/gov/me')：会与 /gov/members 前缀冲突 */
+const isMyActive = computed(
+  () => route.path === '/gov/me' || route.path.startsWith('/gov/me/'),
+)
 
 const isMembersActive = computed(() => route.path.startsWith('/gov/members'))
 

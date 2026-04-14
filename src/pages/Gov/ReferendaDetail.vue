@@ -58,7 +58,7 @@
                     {{ t('govDetail.cancel') }}
                   </UButton>
                   <div v-if="showExecuteBtn" class="flex flex-wrap items-center gap-2">
-                    <span v-if="executeCountdownBlocks !== null"
+                    <span v-if="executeCountdownBlocks !== null && executeCountdownBlocks > 0"
                       class="text-sm text-secondary tabular-nums whitespace-nowrap p-2">
                       {{ t('govDetail.executeCountdown', { count: executeCountdownBlocks }) }}
                     </span>
@@ -226,16 +226,19 @@
                           </UBadge>
                           <span v-if="mv.deleted" class="my-vote-deleted">{{ t('govDetail.myVoteCanceled') }}</span>
                           <span v-else class="my-vote-meta-line">
-                            <span class="tabular-nums">{{ mv.lockAmount.toString() }}</span>
-                            <span class="my-vote-dot">·</span>
-                            <span>w{{ mv.weight }}</span>
-                            <span class="my-vote-dot">·</span>
-                            <span>{{ t('gov.atBlock', { block: mv.voteBlock }) }}</span>
-                            <template v-if="!mv.deleted && detail.statusBlock > 0">
+                            <span v-if="mv.unlockedOnChain" class="my-vote-unlocked-badge">{{ t('govDetail.voteUnlockedOnChain') }}</span>
+                            <template v-else>
+                              <span class="tabular-nums">{{ mv.lockAmount.toString() }}</span>
                               <span class="my-vote-dot">·</span>
-                              <span class="my-vote-unlock-hint"
-                                :title="t('govDetail.myVoteUnlockHint', { block: detail.statusBlock + mv.unlockBlock })">≥{{
-                                  detail.statusBlock + mv.unlockBlock }}</span>
+                              <span>w{{ mv.weight }}</span>
+                              <span class="my-vote-dot">·</span>
+                              <span>{{ t('gov.atBlock', { block: mv.voteBlock }) }}</span>
+                              <template v-if="detail.statusBlock > 0">
+                                <span class="my-vote-dot">·</span>
+                                <span class="my-vote-unlock-hint"
+                                  :title="t('govDetail.myVoteUnlockHint', { block: detail.statusBlock + mv.unlockBlock })">≥{{
+                                    detail.statusBlock + mv.unlockBlock }}</span>
+                              </template>
                             </template>
                           </span>
                         </div>
@@ -251,7 +254,7 @@
                           </UButton>
                         </div>
                       </div>
-                      <p v-if="!mv.deleted && isProposalTerminalState() && !canUnlockVote(mv)" class="my-vote-wait">
+                      <p v-if="!mv.deleted && !mv.unlockedOnChain && isProposalTerminalState() && !canUnlockVote(mv)" class="my-vote-wait">
                         {{ t('govDetail.myVoteUnlockWait') }}
                       </p>
                     </div>
@@ -409,7 +412,7 @@
                     @click="handleExecute">
                     {{ t('govDetail.execute') }}
                   </UButton>
-                  <span v-if="executeCountdownBlocks !== null"
+                  <span v-if="executeCountdownBlocks !== null && executeCountdownBlocks > 0"
                     class="text-sm text-secondary tabular-nums whitespace-nowrap">
                     {{ t('govDetail.executeCountdown', { count: executeCountdownBlocks }) }}
                   </span>
@@ -435,6 +438,7 @@ import PixelCrossIcon from '@/components/svg/PixelCrossIcon.vue'
 import { SecretContractApi } from '@/apis/contract'
 import { getLatestBlockHeight } from '@/apis/side'
 import { bytesToString, callerToSs58 } from '@/utils/gov'
+import { fetchVoteUnlockStatusMap, voteRefMapKey } from '@/utils/voteUnlockStatuses'
 import { parseHumanNumber } from '@/utils/parseHumanNumber'
 import { $getTxProvider } from '@/plugins/chain'
 import type { WalletWrap } from '@/providers'
@@ -532,6 +536,8 @@ type VoteItem = {
   /** 提案结束后需再经过的区块数方可 unlock */
   unlockBlock: number
   deleted?: boolean
+  /** vote_unlock_statuses：是否已在链上完成解锁 */
+  unlockedOnChain: boolean
 }
 
 const votesLoading = ref(false)
@@ -559,7 +565,7 @@ const myVotes = computed(() => {
 /** 提案已终结且达到 unlock 区块后，可链上 unlock 取回锁仓 */
 function canUnlockVote(v: VoteItem): boolean {
   const d = detail.value
-  if (!d || v.deleted) return false
+  if (!d || v.deleted || v.unlockedOnChain) return false
   const done =
     d.stateCode === ProposalState.Approved ||
     d.stateCode === ProposalState.Rejected ||
@@ -831,7 +837,7 @@ async function loadVotes() {
     const rows = (await SecretContractApi.votes(proposalId, null, 1024)) as unknown
     const list = Array.isArray(rows) ? rows : []
 
-    voteItems.value = list.map((v: any) => ({
+    const base = list.map((v: any) => ({
       id: parseHumanNumber(v.index ?? v.Index),
       voter: callerToSs58(v.caller),
       yes: Boolean(v.opinionYes ?? v.OpinionYes),
@@ -840,6 +846,20 @@ async function loadVotes() {
       voteBlock: parseHumanNumber(v.voteBlock ?? v.VoteBlock ?? 0),
       unlockBlock: parseHumanNumber(v.unlockBlock ?? v.UnlockBlock ?? 0),
       deleted: Boolean(v.deleted ?? v.Deleted ?? false),
+      unlockedOnChain: false,
+    }))
+
+    const keys = base.map((v) => ({ ProposalID: proposalId, VoteIndex: v.id }))
+    let unlockMap = new Map<string, boolean>()
+    try {
+      unlockMap = await fetchVoteUnlockStatusMap(keys)
+    } catch (e) {
+      console.warn('vote_unlock_statuses failed:', e)
+    }
+
+    voteItems.value = base.map((v) => ({
+      ...v,
+      unlockedOnChain: unlockMap.get(voteRefMapKey(proposalId, v.id)) ?? false,
     }))
     refreshWalletAddress()
   } catch (e) {
@@ -1727,6 +1747,12 @@ function statusLabel(status: Status): string {
     font-size: 12px;
     line-height: 1.45;
     color: rgba($secondary-text-rgb, 0.4);
+  }
+
+  .my-vote-unlocked-badge {
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(52, 211, 153, 0.92);
   }
 
   .my-vote-deleted {

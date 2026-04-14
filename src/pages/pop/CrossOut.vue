@@ -193,11 +193,11 @@ const submit = async (isTry: boolean = false) => {
 
   //   try {
   //     await chain.signAndSend(call, signer, () => {
-  //       window.$notification["success"]({
-  //         content: 'Success',
-  //         meta: "Staking successful, the staking rewards will be calculated in the next cycle.",
+  //       window.$toast.add({
+  //         title: 'Success',
+  //         description: "Staking successful, the staking rewards will be calculated in the next cycle.",
+  //         color: 'success',
   //         duration: 2500,
-  //         keepAliveOnHover: true
   //       })
   //       props.close();
   //     }, () => {

@@ -215,11 +215,11 @@ export class InkApi {
         const abi = await this.initContract(contract)
         const methodAbi = abi.messages.find(item => item.method === method)
         if (!methodAbi) {
-            window.$notification["error"]({
-                content: 'Error',
+            window.$toast.add({
+                title: 'Error',
                 description: "Ink contract method not found: " + method,
+                color: 'error',
                 duration: 2500,
-                keepAliveOnHover: true
             })
             throw new Error("method not found")
         }
@@ -256,32 +256,32 @@ export class InkApi {
         const resp = response.result
 
         if (resp.Err) {
-            window.$notification["error"]({
-                content: 'Error',
-                message: resp.Err,
+            window.$toast.add({
+                title: 'Error',
+                description: String(resp.Err),
+                color: 'error',
                 duration: 2500,
-                keepAliveOnHover: true
             })
             throw new Error(resp.Err)
         }
 
         let retutnData = decodeReturnValue(methodAbi.returnType, resp.Ok.data, abi!.registry) as any
         if (resp.Ok.flags.bits == "1") {
-            window.$notification["error"]({
-                content: 'Error',
+            window.$toast.add({
+                title: 'Error',
                 description: "Ink contract call failed with contract error: " + (retutnData.Err || retutnData.Ok.Err),
+                color: 'error',
                 duration: 2500,
-                keepAliveOnHover: true
             })
             throw new Error("Ink contract call failed with contract error: " + (retutnData.Err || retutnData.Ok.Err))
         }
 
         if (!retutnData || retutnData["Err"]) {
-            window.$notification["error"]({
-                content: 'Error',
+            window.$toast.add({
+                title: 'Error',
                 description: "Ink contract dry run reverted: " + retutnData["Err"],
+                color: 'error',
                 duration: 2500,
-                keepAliveOnHover: true
             })
             throw new Error("Ink contract dry run reverted: " + retutnData["Err"])
         }

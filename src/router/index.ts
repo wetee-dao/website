@@ -115,6 +115,11 @@ const router = createRouter({
       component: () => import('../pages/Gov/Referenda.vue')
     },
     {
+      path: '/gov/me',
+      name: 'Gov My',
+      component: () => import('../pages/Gov/My.vue')
+    },
+    {
       path: '/gov/overview',
       name: 'Gov Overview',
       component: () => import('../pages/Gov/Overview.vue')

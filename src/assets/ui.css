@@ -38,6 +38,7 @@
   }
 }
 
-button.bg-inverted{
-
+button.ring{
+  box-shadow: none;
+  border: 1.5px solid var(--tw-ring-color);
 }

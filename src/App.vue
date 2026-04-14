@@ -1,5 +1,5 @@
 <template>
-  <UApp>
+  <UApp :toaster="toaster">
     <Header />
     <Header :shadow="true" />
     <RouterView />
@@ -10,6 +10,8 @@
 import { RouterView } from 'vue-router'
 import Header from '@/components/Header.vue'
 import { onMounted } from 'vue';
+
+const toaster = { position: 'top-right', duration: 5000 }
 
 onMounted(async () => {
   document.getElementById('loader')!.style.display = "none";

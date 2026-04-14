@@ -127,11 +127,11 @@ export const getWalletInfo = (userInfo: any) => {
   }
   const wallet: Wallet | undefined = getWallets().find(wallet => wallet.extensionName === userInfo.wallet);
   if (!wallet) {
-    window.$notification["error"]({
-      content: 'Error',
-      meta: "插件 " + userInfo.wallet + " 未安装",
+    window.$toast.add({
+      title: 'Error',
+      description: "插件 " + userInfo.wallet + " 未安装",
+      color: 'error',
       duration: 2500,
-      keepAliveOnHover: true
     })
     return {
 

@@ -233,7 +233,7 @@ const switchLocale = (l: LocaleId) => {
 
 const props = defineProps(['shadow'])
 const userStore = useGlobalStore()
-const notification = useToast()
+const toast = useToast()
 
 const group = ref("main")
 const showSub = ref(true)
@@ -256,8 +256,8 @@ const global = useGlobelProperties()
 
 if (!props.shadow) {
   window.$app = global;
-  window.$notification = notification;
-  global.$notification = notification;
+  window.$toast = toast;
+  global.$toast = toast;
 }
 
 const toggleMenu = () => {

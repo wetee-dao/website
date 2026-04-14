@@ -20,11 +20,11 @@ export class GraphqlClient {
         })
 
         if (response.data.errors) {
-            window.$notification["error"]({
-                content: 'Call tee chain error',
-                meta: response.data.errors[0].message,
+            window.$toast.add({
+                title: 'Call tee chain error',
+                description: response.data.errors[0].message,
+                color: 'error',
                 duration: 2500,
-                keepAliveOnHover: true
             })
             throw new Error(response.data.errors[0].message)
         }
