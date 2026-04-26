@@ -8,7 +8,7 @@
 
 Web2Plus is a TEE-backed confidential computing platform that connects off-chain programs with on-chain smart contracts. Pay with USDT, ETH, BNB, or SOL — no new token required.
 
-[Website](https://wetee.app) · [Docs](https://docs.wetee.app) · [Twitter](https://twitter.com/web2plus)
+[Website](https://wetee.app) · [Docs](https://docs.wetee.app) · [Twitter](https://x.com/plus_web2)
 
 ---
 
@@ -85,9 +85,9 @@ Smart Contract
 
 ## Community
 
-- [Twitter](https://twitter.com/web2plus) — product updates & threads
+- [Twitter](https://x.com/plus_web2) — product updates & threads
 - [Discord](https://discord.gg/web2plus) — developer chat
-- [Telegram](https://t.me/web2plus) — announcements
+- [Telegram](https://t.me/weteedao) — announcements
 
 ---
 

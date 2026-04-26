@@ -8,7 +8,7 @@
 
 Web2Plus 是一个基于 TEE 的机密计算平台，将链外程序与链上智能合约连接起来。支持 USDT、ETH、BNB、SOL 支付，无需新代币。
 
-[官网](https://wetee.app) · [文档](https://docs.wetee.app) · [Twitter](https://twitter.com/web2plus)
+[官网](https://wetee.app) · [文档](https://docs.wetee.app) · [Twitter](https://x.com/plus_web2)
 
 ---
 
@@ -85,9 +85,9 @@ TEE 硬件 (Intel SGX/TDX/SEV-SNP)
 
 ## 社区
 
-- [Twitter](https://twitter.com/web2plus) — 产品更新和技术讨论
+- [Twitter](https://x.com/plus_web2) — 产品更新和技术讨论
 - [Discord](https://discord.gg/web2plus) — 开发者交流
-- [Telegram](https://t.me/web2plus) — 公告
+- [Telegram](https://t.me/weteedao) — 公告
 
 ---
 

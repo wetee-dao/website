@@ -12,7 +12,7 @@
                 <span class="contact__text">contact@asyou.me</span>
             </a>
 
-            <a href="https://twitter.com/Wetee_DAO" class="contact">
+            <a href="https://x.com/plus_web2" class="contact">
                 <span class="contact__icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <path
@@ -22,7 +22,7 @@
                 <span class="contact__text">@WeTEE</span>
             </a>
 
-            <a href="https://t.me/wetee_bai" class="contact">
+            <a href="https://t.me/weteedao" class="contact">
                 <span class="contact__icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24">
                         <path
