@@ -25,7 +25,7 @@
           <div class="footer__col">
             <h6 class="footer__col-title">{{ t('home.footer.community') }}</h6>
             <nav class="footer__nav">
-              <a href="https://twitter.com/Wetee_DAO" target="_blank" rel="noreferrer">{{ t('home.footer.twitter') }}</a>
+              <a href="https://twitter.com/plus_web2" target="_blank" rel="noreferrer">{{ t('home.footer.twitter') }}</a>
               <a href="https://discord.gg" target="_blank" rel="noreferrer">{{ t('home.footer.discord') }}</a>
               <a href="https://t.me/wetee_bai" target="_blank" rel="noreferrer">{{ t('home.footer.telegram') }}</a>
             </nav>
