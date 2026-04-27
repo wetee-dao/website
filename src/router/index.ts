@@ -75,6 +75,11 @@ const router = createRouter({
       component: () => import('../pages/Launch/Economy.vue')
     },
     {
+      path: '/docs',
+      name: 'Docs',
+      component: () => import('../pages/Docs.vue')
+    },
+    {
       path: '/chain/blocks',
       name: 'Blocks',
       component: () => import('../pages/Chain/Blocks.vue')

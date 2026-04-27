@@ -141,8 +141,11 @@
         <li :class="path == '/gov' ? 'active' : ''">
           <RouterLink to="/gov">{{ t('nav.openGov') }}</RouterLink>
         </li>
+        <li :class="path.indexOf('/docs') > -1 ? 'active' : ''">
+          <RouterLink to="/docs">{{ t('common.docs') }}</RouterLink>
+        </li>
         <li>
-          <a target="_blank" href="https://wetee.gitbook.io/docment">{{ t('common.docs') }}</a>
+          <a target="_blank" href="https://wetee.gitbook.io/docment">{{ t('common.docsExternal') }}</a>
         </li>
       </ul>
       <!-- end navigation -->

@@ -21,6 +21,7 @@ import govMy from './govMy'
 import proposal from './proposal'
 import launch from './launch'
 import pods from './pods'
+import docs from './docs'
 
 export default {
   common,
@@ -46,4 +47,5 @@ export default {
   proposal,
   launch,
   pods,
+  docs,
 }

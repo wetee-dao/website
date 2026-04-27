@@ -1,6 +1,7 @@
 export default {
   connect: 'Connect',
   docs: 'Docs',
+  docsExternal: 'GitBook Docs',
   viewAll: 'View All',
   dapp: 'Dapp',
   contacts: 'Contacts',

@@ -1,6 +1,7 @@
 export default {
   connect: '连接',
   docs: '文档',
+  docsExternal: 'GitBook 文档',
   viewAll: '查看全部',
   dapp: '应用',
   contacts: '联系我们',
