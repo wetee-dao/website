@@ -108,7 +108,7 @@ function statusLabel(status: ProposalStatusKey): string {
   font-weight: 700;
   letter-spacing: -0.03em;
   font-variant-numeric: tabular-nums;
-  color: $primary-text;
+  color: rgba($secondary-text-rgb, 0.92);
   background-color: rgba(255, 255, 255, 0.06);
   height: 60px;
   width: 60px;
@@ -127,7 +127,7 @@ function statusLabel(status: ProposalStatusKey): string {
 .referendum-title {
   font-size: 14px;
   font-weight: 500;
-  color: $primary-text;
+  color: rgba($secondary-text-rgb, 0.92);
   margin: 0;
   line-height: 1.5;
 }
@@ -201,7 +201,7 @@ function statusLabel(status: ProposalStatusKey): string {
   font-size: 14px;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
-  color: $primary-text;
+  color: rgba($secondary-text-rgb, 0.9);
 }
 
 .proposal-call__amount-unit {

@@ -8,7 +8,7 @@
         <div class="chain-box main-box">
           <div class="title-wrap title-wrap--pixel flex flex-wrap justify-between items-center gap-4">
             <div class="title-pixel-bg" aria-hidden="true">
-              <PixelBg :tile-size="6" :gap="4" :max-opacity="0.08" :density="0.18" :wave-speed="0.0014" />
+              <PixelBg :tile-size="6" :gap="4" :max-opacity="0.28" :density="0.18" :wave-speed="0.0014" />
             </div>
             <div class="relative z-[1]">
               <h1 class="page-title">{{ t('gov.pageTitle') }}</h1>
@@ -186,7 +186,7 @@ onMounted(() => {
   .page-title {
     font-size: 18px;
     font-weight: 500;
-    color: $primary-text;
+    color: rgba($secondary-text-rgb, 0.92);
     margin: 0 0 6px;
     letter-spacing: -0.01em;
   }
@@ -213,7 +213,7 @@ onMounted(() => {
 
     &:hover {
       border-color: rgba($secondary-text-rgb, 0.35);
-      color: $primary-text;
+      color: rgba($secondary-text-rgb, 0.92);
     }
 
     &--outline {
@@ -222,7 +222,7 @@ onMounted(() => {
 
     &--primary {
       background: rgba(255, 255, 255, 0.08);
-      color: $primary-text;
+      color: rgba($secondary-text-rgb, 0.92);
       border-color: transparent;
 
       &:hover {
@@ -255,13 +255,13 @@ onMounted(() => {
     font-weight: 400;
 
     &:hover {
-      color: $primary-text;
+      color: rgba($secondary-text-rgb, 0.92);
       background: rgba(255, 255, 255, 0.03);
     }
 
     &.active {
       background: rgba(255, 255, 255, 0.06);
-      color: $primary-text;
+      color: rgba($secondary-text-rgb, 0.92);
     }
   }
 }

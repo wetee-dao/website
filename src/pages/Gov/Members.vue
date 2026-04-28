@@ -7,7 +7,7 @@
         <div class="chain-box main-box">
           <div class="title-wrap title-wrap--pixel flex flex-wrap justify-between items-center gap-4">
             <div class="title-pixel-bg" aria-hidden="true">
-              <PixelBg :tile-size="6" :gap="4" :max-opacity="0.08" :density="0.18" :wave-speed="0.0014" />
+              <PixelBg :tile-size="6" :gap="4" :max-opacity="0.28" :density="0.18" :wave-speed="0.0014" />
             </div>
             <div class="relative z-[1]">
               <h1 class="page-title">{{ t('govMembers.title') }}</h1>
@@ -62,15 +62,18 @@
             <h3 class="section-title">{{ t('govMembers.memberList') }}</h3>
             <div class="members-list">
               <div v-for="m in members" :key="m.account.v" class="member-item">
-                <div class="member-info flex flex-row" v-if="m.account.t == 1">
+                <div class="member-info flex flex-row">
                   <div class="member-address-row">
                     <!-- Polkadot 账户显示 identicon -->
-                    <PolkadotIdenticon 
+                    <PolkadotIdenticon
+                      v-if="m.account.t == 1"
                       class="member-icon"
                       :address="hexToSS58(m.account.v)"
                     />
+                    <SystemNodeIcon v-else-if="m.account && m.account.t == 0" class="member-icon" />
+                    
                     <span class="member-address">
-                      {{ hexToSS58(m.account.v)}}
+                      {{ getMemberSS58(m) }}
                     </span>
                   </div>
                   <span class="member-balance">{{ formatBalanceValue(m.balance) }}</span>
@@ -95,6 +98,7 @@ import { useI18n } from 'vue-i18n'
 import GovSidebar from './GovSidebar.vue'
 import PixelBg from '@/components/anim/PixelBg.vue'
 import PolkadotIdenticon from '@/components/PolkadotIdenticon.vue'
+import SystemNodeIcon from '@/components/icons/SystemNodeIcon.vue'
 import { SecretContractApi } from '@/apis/contract'
 import { BN } from '@polkadot/util'
 import { $getTxProvider } from '@/plugins/chain'
@@ -122,6 +126,11 @@ function getMemberSS58(m: any): string {
   if (m.account.t === 1) {
     return hexToSS58(m.account.v)
   }
+
+  if (m.account.v == "") {
+    return "-"
+  }
+
   return m.account.v
 }
 
@@ -243,7 +252,7 @@ onMounted(() => {
   .page-title {
     font-size: 18px;
     font-weight: 500;
-    color: $primary-text;
+    color: rgba($secondary-text-rgb, 0.92);
     margin: 0 0 6px;
     letter-spacing: -0.01em;
   }
@@ -270,12 +279,12 @@ onMounted(() => {
 
     &:hover {
       border-color: rgba($secondary-text-rgb, 0.4);
-      color: $primary-text;
+      color: rgba($secondary-text-rgb, 0.92);
     }
 
     &--primary {
       background: rgba(255, 255, 255, 0.08);
-      color: $primary-text;
+      color: rgba($secondary-text-rgb, 0.92);
       border-color: transparent;
     }
 
@@ -308,7 +317,7 @@ onMounted(() => {
     .stat-value {
       font-size: 15px;
       font-weight: 500;
-      color: $primary-text;
+      color: rgba($secondary-text-rgb, 0.88);
     }
   }
 }
@@ -346,7 +355,6 @@ onMounted(() => {
           .member-icon {
             width: 40px;
             height: 40px;
-            border-radius: 50%;
             overflow: hidden;
           }
 

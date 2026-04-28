@@ -7,7 +7,7 @@
         <div class="chain-box main-box">
           <div class="title-wrap title-wrap--pixel flex flex-wrap items-center justify-between gap-4">
             <div class="title-pixel-bg" aria-hidden="true">
-              <PixelBg :tile-size="6" :gap="4" :max-opacity="0.08" :density="0.18" :wave-speed="0.0014" />
+              <PixelBg :tile-size="6" :gap="4" :max-opacity="0.28" :density="0.18" :wave-speed="0.0014" />
             </div>
             <div class="relative z-[1]">
               <h1 class="page-title">{{ t('govTreasuryTokens.title') }}</h1>
@@ -146,7 +146,7 @@ const tokenRows = computed<TokenRow[]>(() => [
     font-size: 18px;
     font-weight: 500;
     letter-spacing: -0.01em;
-    color: $primary-text;
+    color: rgba($secondary-text-rgb, 0.92);
   }
 
   .page-subtitle {
@@ -198,7 +198,7 @@ const tokenRows = computed<TokenRow[]>(() => [
 .token-symbol {
   font-size: 15px;
   font-weight: 600;
-  color: $primary-text;
+  color: rgba($secondary-text-rgb, 0.92);
 }
 
 .token-asset {

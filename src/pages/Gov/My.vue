@@ -7,7 +7,7 @@
         <div class="chain-box main-box">
           <div class="title-wrap title-wrap--pixel flex flex-wrap justify-between items-center gap-4">
             <div class="title-pixel-bg" aria-hidden="true">
-              <PixelBg :tile-size="6" :gap="4" :max-opacity="0.08" :density="0.18" :wave-speed="0.0014" />
+              <PixelBg :tile-size="6" :gap="4" :max-opacity="0.28" :density="0.18" :wave-speed="0.0014" />
             </div>
             <div class="relative z-[1]">
               <h1 class="page-title">{{ t('govMy.title') }}</h1>
@@ -383,7 +383,7 @@ watch(userAddr, (a) => {
   .page-title {
     font-size: 18px;
     font-weight: 500;
-    color: $primary-text;
+    color: rgba($secondary-text-rgb, 0.92);
     margin: 0 0 6px;
   }
 
@@ -415,7 +415,7 @@ watch(userAddr, (a) => {
   .stat-value {
     font-size: 18px;
     font-weight: 500;
-    color: $primary-text;
+    color: rgba($secondary-text-rgb, 0.9);
     font-variant-numeric: tabular-nums;
   }
 }
@@ -423,7 +423,7 @@ watch(userAddr, (a) => {
 .section-title {
   font-size: 14px;
   font-weight: 500;
-  color: $primary-text;
+  color: rgba($secondary-text-rgb, 0.9);
   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 }
 

@@ -1297,7 +1297,7 @@ function statusLabel(status: Status): string {
   .detail-title {
     font-size: 20px;
     font-weight: 500;
-    color: $primary-text;
+    color: rgba($secondary-text-rgb, 0.92);
     margin: 0;
     line-height: 1.4;
     letter-spacing: -0.01em;
@@ -1349,7 +1349,7 @@ function statusLabel(status: Status): string {
       }
 
       &.active {
-        color: $primary-text;
+        color: rgba($secondary-text-rgb, 0.92);
         border-bottom-color: rgba(255, 255, 255, 0.2);
       }
     }
@@ -1443,9 +1443,9 @@ function statusLabel(status: Status): string {
   transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
 
   &:hover {
-    color: rgba($primary-text-rgb, 0.92);
-    border-color: rgba($primary-text-rgb, 0.35);
-    background: rgba($primary-text-rgb, 0.06);
+    color: rgba($secondary-text-rgb, 0.92);
+    border-color: rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.06);
   }
 }
 
@@ -1477,7 +1477,7 @@ function statusLabel(status: Status): string {
     min-width: 0;
 
     &--aye {
-      background: rgba($primary-text-rgb, 0.78);
+      background: rgba(255, 255, 255, 0.18);
     }
 
     &--nay {
@@ -1793,12 +1793,12 @@ function statusLabel(status: Status): string {
 
   &:hover {
     border-color: rgba($secondary-text-rgb, 0.4);
-    color: $primary-text;
+    color: rgba($secondary-text-rgb, 0.92);
   }
 
   &--primary {
     background: rgba(255, 255, 255, 0.08);
-    color: $primary-text;
+    color: rgba($secondary-text-rgb, 0.92);
     border-color: transparent;
   }
 }
@@ -1854,7 +1854,7 @@ function statusLabel(status: Status): string {
 }
 
 .track-v {
-  color: $primary-text;
+  color: rgba($secondary-text-rgb, 0.88);
   font-size: 12px;
   font-variant-numeric: tabular-nums;
   text-align: right;

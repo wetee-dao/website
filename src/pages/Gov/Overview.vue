@@ -254,7 +254,7 @@ onMounted(() => {
   .page-title {
     font-size: 18px;
     font-weight: 500;
-    color: $primary-text;
+    color: rgba($secondary-text-rgb, 0.92);
     margin: 0 0 6px;
     letter-spacing: -0.01em;
   }
@@ -290,7 +290,7 @@ onMounted(() => {
     .stat-value {
       font-size: 24px;
       font-weight: 500;
-      color: $primary-text;
+      color: rgba($secondary-text-rgb, 0.92);
     }
   }
 }
@@ -325,7 +325,7 @@ onMounted(() => {
 
     .member-address {
       font-size: 14px;
-      color: $primary-text;
+      color: rgba($secondary-text-rgb, 0.85);
       font-family: monospace;
     }
 

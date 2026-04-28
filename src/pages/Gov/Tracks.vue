@@ -7,7 +7,7 @@
         <div class="chain-box main-box">
           <div class="title-wrap title-wrap--pixel flex flex-wrap justify-between items-center gap-4">
             <div class="title-pixel-bg" aria-hidden="true">
-              <PixelBg :tile-size="6" :gap="4" :max-opacity="0.08" :density="0.18" :wave-speed="0.0014" />
+              <PixelBg :tile-size="6" :gap="4" :max-opacity="0.28" :density="0.18" :wave-speed="0.0014" />
             </div>
             <div class="relative z-[1]">
               <h1 class="page-title">{{ t('govTracks.title') }}</h1>
@@ -280,7 +280,7 @@ onMounted(() => {
   .page-title {
     font-size: 18px;
     font-weight: 500;
-    color: $primary-text;
+    color: rgba($secondary-text-rgb, 0.92);
     margin: 0 0 6px;
     letter-spacing: -0.01em;
   }
@@ -313,7 +313,7 @@ onMounted(() => {
     &:hover {
       background: rgba(255, 255, 255, 0.04);
       border-color: rgba(255, 255, 255, 0.15);
-      color: $primary-text;
+      color: rgba($secondary-text-rgb, 0.92);
     }
   }
 
@@ -325,7 +325,7 @@ onMounted(() => {
         display: block;
         font-size: 28px;
         font-weight: 300;
-        color: $primary-text;
+        color: rgba($secondary-text-rgb, 0.92);
         line-height: 1;
         letter-spacing: -0.02em;
       }
@@ -391,7 +391,7 @@ onMounted(() => {
     .track-name {
       font-size: 16px;
       font-weight: 500;
-      color: $primary-text;
+      color: rgba($secondary-text-rgb, 0.92);
       margin: 0;
       letter-spacing: -0.01em;
     }
@@ -436,7 +436,7 @@ onMounted(() => {
         
         .meta-value {
           font-size: 13px;
-          color: $primary-text;
+          color: rgba($secondary-text-rgb, 0.9);
           font-weight: 500;
           letter-spacing: -0.01em;
         }
@@ -465,7 +465,7 @@ onMounted(() => {
         
         .deposit-value {
           font-size: 14px;
-          color: $primary-text;
+          color: rgba($secondary-text-rgb, 0.9);
           font-weight: 500;
           font-family: monospace;
           letter-spacing: -0.02em;
@@ -572,7 +572,7 @@ onMounted(() => {
       &:hover {
         background: rgba(255, 255, 255, 0.04);
         border-color: rgba(255, 255, 255, 0.15);
-        color: $primary-text;
+        color: rgba($secondary-text-rgb, 0.92);
       }
     }
   }

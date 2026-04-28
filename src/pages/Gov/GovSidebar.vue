@@ -1,5 +1,5 @@
 <template>
-  <aside class="gov-sidebar shrink-0 lg:w-56">
+  <aside class="gov-sidebar shrink-0 lg:w-48">
     <div class="chain-box sidebar-box pb-4">
       <div class="sidebar-title">{{ t('gov.governance') }}</div>
       <nav class="sidebar-nav">
@@ -107,7 +107,7 @@ const isTreasuryTokensActive = computed(() => route.path.startsWith('/gov/treasu
 
     &.active {
       
-      color: $primary-text;
+      color: rgba($secondary-text-rgb, 0.92);
       position: relative;
       &::after {
         content: '';
