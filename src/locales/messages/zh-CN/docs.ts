@@ -4,8 +4,6 @@ export default {
   readDocs: '阅读文档',
   viewSource: '在 GitHub 查看',
   langHint: '提示：部分章节可能暂无中文翻译，可切换到英文版查看。',
-  openZhDocs: '打开中文文档',
-  openEnDocs: '打开英文文档',
 
   // Category cards
   catProducts: '产品',

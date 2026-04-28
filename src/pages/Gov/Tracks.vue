@@ -1,6 +1,6 @@
 <template>
   <div class="page gradient-body">
-    <div class="gov-layout container flex mb-4 flex-col lg:flex-row gap-4">
+    <div class="gov-layout container flex mb-4 flex-col lg:flex-row gap-0">
       <GovSidebar />
 
       <main class="gov-main flex-1 min-w-0">
@@ -356,19 +356,11 @@ onMounted(() => {
   padding: 16px;
   margin: 12px;
   transition: all 0.2s ease;
-  border-left: 3px solid transparent;
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(48, 49, 48, 0.09);
+  border: 1px solid #1e1d1d;
 
   &.is-default {
-    .track-card-header {
-      .track-id {
-        color: rgba(255, 255, 255, 0.5);
-      }
-      
-      .track-name {
-        color: #fff;
-      }
-    }
+    border-color: rgba($primary-text-rgb, 0.2);
   }
 
   .track-card-header {
@@ -377,7 +369,7 @@ onMounted(() => {
     .track-title-row {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 4px;
     }
     
     .track-id {
@@ -391,9 +383,10 @@ onMounted(() => {
     .track-name {
       font-size: 16px;
       font-weight: 500;
-      color: rgba($secondary-text-rgb, 0.92);
+      color: rgba($secondary-text-rgb, 0.52);
       margin: 0;
       letter-spacing: -0.01em;
+      text-transform: uppercase;
     }
     
     .default-badge {

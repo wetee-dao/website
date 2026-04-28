@@ -4,7 +4,7 @@
       v-for="r in items"
       :key="r.id"
       :to="`/gov/referenda/${r.id}`"
-      class="referendum-item flex flex-col md:flex-row md:items-center gap-3 md:gap-4"
+      class="referendum-item flex flex-col md:flex-row md:items-center gap-0 md:gap-4"
     >
       <div class="referendum-id">#{{ r.id }}</div>
       <div class="referendum-body flex-1 min-w-0">
@@ -109,7 +109,7 @@ function statusLabel(status: ProposalStatusKey): string {
   letter-spacing: -0.03em;
   font-variant-numeric: tabular-nums;
   color: rgba($secondary-text-rgb, 0.92);
-  background-color: rgba(255, 255, 255, 0.06);
+  background-color: rgba(255, 255, 255, 0.04);
   height: 60px;
   width: 60px;
   line-height: 60px;

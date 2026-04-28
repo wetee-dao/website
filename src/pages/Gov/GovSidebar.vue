@@ -1,5 +1,5 @@
 <template>
-  <aside class="gov-sidebar shrink-0 lg:w-48">
+  <aside class="gov-sidebar shrink-0 lg:w-32">
     <div class="chain-box sidebar-box pb-4">
       <div class="sidebar-title">{{ t('gov.governance') }}</div>
       <nav class="sidebar-nav">
@@ -22,11 +22,7 @@
         <RouterLink to="/gov/spends" class="nav-item" :class="{ active: isSpendsActive }">
           {{ t('gov.spends') }}
         </RouterLink>
-        <RouterLink
-          to="/gov/treasury-tokens"
-          class="nav-item"
-          :class="{ active: isTreasuryTokensActive }"
-        >
+        <RouterLink to="/gov/treasury-tokens" class="nav-item" :class="{ active: isTreasuryTokensActive }">
           {{ t('gov.treasuryTokens') }}
         </RouterLink>
       </nav>
@@ -72,8 +68,8 @@ const isTreasuryTokensActive = computed(() => route.path.startsWith('/gov/treasu
 <style lang="scss" scoped>
 .chain-box {
   background-color: rgba($primary-bg-rgb, 0.95);
-  border-top: 1px solid rgba(255, 255, 255, 0.04);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  // border-top: 1px solid rgba(255, 255, 255, 0.04);
+  margin-top: -15px;
 }
 
 .sidebar-box {
@@ -89,7 +85,6 @@ const isTreasuryTokensActive = computed(() => route.path.startsWith('/gov/treasu
   .sidebar-nav {
     display: flex;
     flex-direction: column;
-    padding: 0 16px 0 0;
   }
 
   .nav-item {
@@ -97,7 +92,7 @@ const isTreasuryTokensActive = computed(() => route.path.startsWith('/gov/treasu
     font-size: 13px;
     color: rgba($secondary-text-rgb, 0.6);
     text-decoration: none;
-    
+
     margin: 1px 0;
     transition: all 0.2s ease;
     font-weight: 400;
@@ -107,15 +102,16 @@ const isTreasuryTokensActive = computed(() => route.path.startsWith('/gov/treasu
     }
 
     &.active {
-      
+
       color: rgba($secondary-text-rgb, 0.92);
       position: relative;
+
       &::after {
         content: '';
         position: absolute;
-        left: -5%;
+        left: -6%;
         bottom: 0;
-        width: 110%;
+        width: 116%;
         height: 100%;
         background: rgba(255, 255, 255, 0.05);
       }
@@ -124,8 +120,9 @@ const isTreasuryTokensActive = computed(() => route.path.startsWith('/gov/treasu
 
   .sidebar-divider {
     height: 1px;
-    background: rgba(255, 255, 255, 0.04);
+    background: rgba($secondary-text-rgb, 0.4);
     margin: 10px 24px 10px 0;
+    width: 10px;
   }
 }
 </style>

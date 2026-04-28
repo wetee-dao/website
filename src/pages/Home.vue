@@ -321,9 +321,9 @@
         </h2>
         <div
           class="my-3 mb-6 h-[3px] w-full max-w-[200px] bg-gradient-to-r from-[rgba(var(--g-primary-text-rgb),0.95)] to-transparent opacity-90"
-        ></div>
+        />
         <div class="home-chain-explorer border-rgb flex mb-4 flex-col lg:flex-row">
-          <div class="chain-box flex lg:mb-0 flex-col flex-1 border-r overflow-y-auto">
+          <div class="chain-box flex lg:mb-0 flex-col flex-1 overflow-y-auto border border-white/[0.06] border-r-1 border-b-0  lg:border-r-0 lg:border-b-1">
             <div class="title-wrap flex p-[15px] lg:p-5 flex-wrap justify-between items-center">
               <div class="title flex">
                 <Svgimg class="chain-logo animate-ping-rotate mr-2 flex-shrink-0" name="lineblock" />
@@ -368,7 +368,7 @@
               </div>
             </div>
           </div>
-          <div class="chain-box flex lg:mb-0 flex-col flex-1 overflow-y-auto">
+          <div class="chain-box flex lg:mb-0 flex-col flex-1 overflow-y-auto border border-white/[0.06]">
             <div class="title-wrap flex p-[15px] lg:p-5 flex-wrap justify-between items-center">
               <div class="title flex">
                 <Svgimg class="chain-logo mr-2 flex-shrink-0" name="transfer" />
@@ -565,12 +565,12 @@ onUnmounted(() => {
 
 .section-panel--light .chain-box {
   background: rgba($primary-bg-rgb, 0.72);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.06);
 }
 
 .section-panel--muted .chain-box {
   background: rgba($primary-bg-rgb, 0.65);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.06);
 }
 
 .uc-icon-wrap :deep(.flat-icon) {

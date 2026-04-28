@@ -4,8 +4,6 @@ export default {
   readDocs: 'Read the Docs',
   viewSource: 'View on GitHub',
   langHint: 'Note: Some pages may not be available in Chinese yet. Switch to English if needed.',
-  openZhDocs: 'Open Chinese Docs',
-  openEnDocs: 'Open English Docs',
 
   // Category cards
   catProducts: 'Products',

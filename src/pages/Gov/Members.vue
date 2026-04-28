@@ -1,6 +1,6 @@
 <template>
   <div class="page gradient-body">
-    <div class="gov-layout container flex mb-4 flex-col lg:flex-row gap-4">
+    <div class="gov-layout container flex mb-4 flex-col lg:flex-row gap-0">
       <GovSidebar />
 
       <main class="gov-main flex-1 min-w-0">
@@ -70,6 +70,7 @@
                       class="member-icon"
                       :address="hexToSS58(m.account.v)"
                     />
+                    
                     <SystemNodeIcon v-else-if="m.account && m.account.t == 0" class="member-icon" />
                     
                     <span class="member-address">

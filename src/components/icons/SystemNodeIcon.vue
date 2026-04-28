@@ -6,18 +6,20 @@
     role="img"
     aria-label="System node"
   >
-    <!-- flat chip -->
-    <rect x="10" y="12" width="28" height="24" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.14)" stroke-width="2" />
-    <rect x="18" y="20" width="12" height="8" fill="rgba(255,255,255,0.08)" />
+    <g transform="translate(24 24) scale(1.2) translate(-24 -24)">
+      <!-- flat chip -->
+      <rect x="10" y="12" width="28" height="24" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.14)" stroke-width="2" />
+      <rect x="18" y="20" width="12" height="8" fill="rgba(255,255,255,0.08)" />
 
-    <!-- pins -->
-    <rect x="6" y="16" width="4" height="2" fill="rgba(255,255,255,0.18)" />
-    <rect x="6" y="22" width="4" height="2" fill="rgba(255,255,255,0.18)" />
-    <rect x="6" y="28" width="4" height="2" fill="rgba(255,255,255,0.18)" />
+      <!-- pins -->
+      <rect x="6" y="16" width="4" height="2" fill="rgba(255,255,255,0.18)" />
+      <rect x="6" y="22" width="4" height="2" fill="rgba(255,255,255,0.18)" />
+      <rect x="6" y="28" width="4" height="2" fill="rgba(255,255,255,0.18)" />
 
-    <rect x="38" y="16" width="4" height="2" fill="rgba(255,255,255,0.18)" />
-    <rect x="38" y="22" width="4" height="2" fill="rgba(255,255,255,0.18)" />
-    <rect x="38" y="28" width="4" height="2" fill="rgba(255,255,255,0.18)" />
+      <rect x="38" y="16" width="4" height="2" fill="rgba(255,255,255,0.18)" />
+      <rect x="38" y="22" width="4" height="2" fill="rgba(255,255,255,0.18)" />
+      <rect x="38" y="28" width="4" height="2" fill="rgba(255,255,255,0.18)" />
+    </g>
   </svg>
 </template>
 

@@ -7,7 +7,7 @@ export default {
   hero: {
     title: '在你的链上，用你的代币，直接购买算力',
     subtitle: 'Web2Plus = Web3 开发者工具 + TEE 机密计算',
-    bullets: '无需发币 · 多链原生支付 · 100% 链上控制',
+    bullets: '无需新币 · 多链原生支付 · 100% 链上控制',
     ctaStart: '开始使用',
     ctaDocs: '查看文档',
     featVm: 'TEE VM',
@@ -57,7 +57,7 @@ export default {
   },
   why: {
     sectionTitle: '为什么选 Web2Plus？',
-    noToken: '无需发币',
+    noToken: '无需新币',
     noTokenDesc: '直接用 ETH/BNB/SOL 支付',
     multichain: '多链支付',
     multichainDesc: '一套 API 多链兼容',
