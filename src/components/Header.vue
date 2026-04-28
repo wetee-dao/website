@@ -23,7 +23,7 @@
         <i class="iconfont">&#xe602;</i>
         <!-- <img src="/imgs/TTE.svg" /> -->
         <Logo :fill="true" />
-        <!-- img v-if="group == 'lanch'" src="/imgs/logo-lanch.svg" /-->
+        <!-- legacy group == 'lanch' removed -->
       </div>
       <!-- end logo -->
 
@@ -140,6 +140,9 @@
             </li>
           </ul>
         </li>
+        <li :class="path.indexOf('/launch/economy') > -1 ? 'active' : ''">
+          <RouterLink to="/launch/economy" @click="closeMenu">{{ t('nav.tokenEconomy') }}</RouterLink>
+        </li>
         <li :class="path == '/gov' ? 'active' : ''">
           <RouterLink to="/gov" @click="closeMenu">{{ t('nav.openGov') }}</RouterLink>
         </li>
@@ -149,19 +152,7 @@
       </ul>
       <!-- end navigation -->
 
-      <!-- lanch navigation -->
-      <ul v-if="group == 'lanch'" :class="'header__nav ' + (isActivce ? 'header__nav--active' : '')">
-        <li :class="path == '/launch/economy' ? 'active' : ''">
-          <RouterLink to="/launch/economy">{{ t('launch.tokenEconomy') }}</RouterLink>
-        </li>
-        <li :class="path == '/launch/stake' ? 'active' : ''">
-          <RouterLink to="/launch/stake">{{ t('launch.fairLaunch') }}</RouterLink>
-        </li>
-        <li :class="path == '/launch/cross' ? 'active' : ''">
-          <RouterLink to="/launch/cross">{{ t('launch.crossChain') }}</RouterLink>
-        </li>
-      </ul>
-      <!-- end lanch navigation -->
+      <!-- (removed legacy lanch navigation) -->
 
       <div class="flex space justify-end items-center gap-1">
         <a target="_blank" href="https://github.com/wetee-dao" class="coin__btn hidden md:block" title="github code">
@@ -245,9 +236,7 @@ const getPath = (paths: any) => {
   if (paths.length === 0) return '/'
 
   const lpath = paths[paths.length - 1]
-  if (lpath.meta && lpath.meta.group) {
-    group.value = lpath.meta.group
-  }
+  // legacy: meta.group (e.g. "lanch") removed
 
   return paths[paths.length - 1].path
 }

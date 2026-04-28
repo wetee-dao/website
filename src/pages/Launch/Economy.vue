@@ -6,13 +6,8 @@
         <div class="flex">
           <div class="iconfont plogo">&#xe612;</div>
           <div class="flex-1 flex flex-col justify-center">
-            <strong>Token &amp; economics</strong>
-            <h2>
-              WeTEE is a non-profit-oriented decentralized project that issues and maintains tool software and
-              blockchain using the DAO model. WTE is the core token behind WeTEE. Coordination between governance token
-              holders and network stakeholders is crucial for successful decentralized governance, and WTE serves as the
-              tool to facilitate this coordination. WTE can be used to participate in WeTEE's OpenGov voting.
-            </h2>
+            <strong>{{ t('launch.economy.title') }}</strong>
+            <h2 v-html="t('launch.economy.heroHtml')" />
           </div>
         </div>
       </div>
@@ -20,18 +15,14 @@
 
       <div class="token-item">
         <div class="token-item-title">
-          Total Supply: 5,000,000
+          {{ t('launch.economy.usage.title') }}
         </div>
-        <div class="token-item-body">
-          100% fairlanch<br />
-          No financing<br />
-          No founding team token
-        </div>
+        <div class="token-item-body" v-html="t('launch.economy.usage.bodyHtml')" />
       </div>
 
       <div class="token-item">
         <div class="token-item-title">
-          WTE allocation has different proportions of vesting, as shown below:
+          {{ t('launch.economy.voteSplit.title') }}
         </div>
         <!-- chart -->
         <div class="token-item-body flex flex-col md:flex-row">
@@ -39,34 +30,30 @@
             <table class="table">
               <thead>
                 <tr>
-                  <th style="width:120px">Distribution of Tokens</th>
-                  <th style="width:120px">Reward Ratio</th>
-                  <th>Vesting</th>
+                  <th style="width:160px">{{ t('launch.economy.voteSplit.table.party') }}</th>
+                  <th style="width:160px">{{ t('launch.economy.voteSplit.table.vote') }}</th>
+                  <th>{{ t('launch.economy.voteSplit.table.desc') }}</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>Chain Node Rewards</td>
-                  <td>10%</td>
-                  <td>Nodes participating in blockchain consensus receive 10% of the block reward after producing a
-                    block.</td>
+                  <td>{{ t('launch.economy.voteSplit.rows.consumer.party') }}</td>
+                  <td>{{ t('launch.economy.voteSplit.rows.consumer.vote') }}</td>
+                  <td>{{ t('launch.economy.voteSplit.rows.consumer.desc') }}</td>
                 </tr>
                 <tr>
-                  <td>App Rewards</td>
-                  <td>10%</td>
-                  <td>Upload the application template to the TEE application store, and the applications will
-                    share 5% of the current block's reward.</td>
+                  <td>{{ t('launch.economy.voteSplit.rows.compute.party') }}</td>
+                  <td>{{ t('launch.economy.voteSplit.rows.compute.vote') }}</td>
+                  <td>{{ t('launch.economy.voteSplit.rows.compute.desc') }}</td>
                 </tr>
                 <tr>
-                  <td>TEE Node Rewards</td>
-                  <td>40%</td>
-                  <td>By staking TOKEN and providing TEE hardware to connect to the network, all TEE nodes will share 40%
-                    of the current block's reward.</td>
+                  <td>{{ t('launch.economy.voteSplit.rows.consensus.party') }}</td>
+                  <td>{{ t('launch.economy.voteSplit.rows.consensus.vote') }}</td>
+                  <td>{{ t('launch.economy.voteSplit.rows.consensus.desc') }}</td>
                 </tr>
                 <tr>
-                  <td>Staking</td>
-                  <td>40%</td>
-                  <td>Users participating in staking with vDOT/vETH/vBNC will share 40% of the current block's reward.
+                  <td colspan="3">
+                    {{ t('launch.economy.voteSplit.note') }}
                   </td>
                 </tr>
               </tbody>
@@ -89,83 +76,36 @@
 
       <div class="token-item">
         <div class="token-item-title">
-          Block Reward
+          {{ t('launch.economy.fees.title') }}
         </div>
-        <div class="token-item-body">
-          The reward for each block on the first day is 0.1645834 WTE.<br />
-          The block reward decreases by 0.000474 (four ten-thousandths) every day (14400 blocks), meaning it halves in
-          approximately four years, reducing to 0.08236 WTE (0.999526^1460=0.500471780053).<br />
-          The total issuance approaches 5,000,001.8878164 WTE.
-          <img class="token-total" src="/public/imgs/token-total.png" />
-        </div>
+        <div class="token-item-body" v-html="t('launch.economy.fees.bodyHtml')" />
       </div>
 
       <div class="token-item">
         <div class="token-item-title">
-          Multiple token staking details <span style="color: #93805b">(The staked tokens and the staking rewards may be adjusted through openGov in the future)</span>
+          {{ t('launch.economy.treasury.title') }}
         </div>
-        <br/>
-        <div class="token-item-body">
-          <table class="table">
-            <thead>
-              <tr>
-                <th style="width:120px">Token</th>
-                <th style="width:120px">Reward Ratio</th>
-                <th style="width:140px">Quota</th>
-                <th>Reward Explanation</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>vDOT</td>
-                <td>20%</td>
-                <td>58,000 DOT</td>
-                <td>The maximum staking amount is 58,000 DOT. The fewer the total stakes, the greater the earnings per unit of DOT. Each 1000 DOT will earn at least 8 WTE in rewards per day.</td>
-              </tr>
-              <tr>
-                <td>vETH</td>
-                <td>10%</td>
-                <td>228 ETH</td>
-                <td>The maximum staking amount is 228 ETH. The fewer the total stakes, the greater the earnings per unit of DOT. Each ETH will earn at least 1.03 WTE in rewards per day.</td>
-              </tr>
-              <tr>
-                <td>vBNC</td>
-                <td>10%</td>
-                <td>2,100,000 BNC</td>
-                <td>The maximum staking amount is 2,100,000 BNC. The fewer the total stakes, the greater the earnings per unit of DOT. Each 10000 BNC will earn at least 1.12 WTE in rewards per day.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <div class="token-item-body" v-html="t('launch.economy.treasury.bodyHtml')" />
       </div>
 
       <div class="token-item">
         <div class="token-item-title">
-          Treasury
+          {{ t('launch.economy.govRole.title') }}
         </div>
-        <div class="token-item-body">
-          Treasury does not hold WTE, all proceeds will be channeled into the national treasury, which is managed
-          using an openGOV approach.
-        </div>
+        <div class="token-item-body" v-html="t('launch.economy.govRole.bodyHtml')" />
       </div>
 
-      <div class="token-item">
-        <div class="token-item-title">
-          Brun of WTE
-        </div>
-        <div class="token-item-body">
-          All WTE used for GAS will be permanently destroyed, making WTE increasingly scarce in the future.
-        </div>
-      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 import { onUnmounted, ref } from 'vue';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
 import { Doughnut } from 'vue-chartjs'
-import { tokenRatio } from '@/utils/tokens';
+
+const { t } = useI18n()
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 onUnmounted(() => {
@@ -190,7 +130,16 @@ const options = ref({
   },
 })
 
-const tokens = ref(tokenRatio)
+// 每笔消费对应的 VOTE 分配比例（归一化成 100% 用于图表展示）
+// 消费者: 2, 算力节点: 1, 共识打包节点: 当前交易VOTE/3 = (2 + 1)/3 = 1  => total = 4
+const TX_VOTE_BASE = 2 + 1
+const CONSENSUS_VOTE = TX_VOTE_BASE / 3
+const SPLIT_TOTAL = 2 + 1 + CONSENSUS_VOTE
+const tokens = ref([
+  { name: t('launch.economy.voteSplit.legend.consumer'), amount: Number(((2 / SPLIT_TOTAL) * 100).toFixed(2)), color: '#e076b6' },
+  { name: t('launch.economy.voteSplit.legend.compute'), amount: Number(((1 / SPLIT_TOTAL) * 100).toFixed(2)), color: '#6378d6' },
+  { name: t('launch.economy.voteSplit.legend.consensus'), amount: Number(((CONSENSUS_VOTE / SPLIT_TOTAL) * 100).toFixed(2)), color: '#e8c189' },
+])
 const tokenLabels = tokens.value.map(t => t.name)
 const tokenValueData = tokens.value.map(t => t.amount)
 const tokenColors = tokens.value.map(t => t.color)
@@ -242,7 +191,6 @@ const tokenData = ref({
     font-size: 16px;
     line-height: 100%;
     margin-bottom: 8px;
-    display: block;
   }
 
   h2 {

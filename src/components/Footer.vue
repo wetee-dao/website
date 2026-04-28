@@ -123,7 +123,7 @@ const docsArchitectureUrl = () => `https://asyou.me/_book/${docsLang()}/dev/arch
 }
 
 .footer__main {
-  padding: 48px 0 8px;
+  padding: 33px 0 8px;
   border-top: 1px solid rgba(158, 158, 158, 0.12);
 }
 

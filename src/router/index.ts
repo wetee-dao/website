@@ -51,27 +51,8 @@ const router = createRouter({
       component: () => import('../pages/Contact.vue')
     },
     {
-      path: '/launch/stake',
-      name: 'Token fair launch',
-      meta: {
-        group: "lanch",
-      },
-      component: () => import('../pages/Launch/Launch.vue')
-    },
-    {
-      path: '/launch/cross',
-      name: 'Cross asset',
-      meta: {
-        group: "lanch",
-      },
-      component: () => import('../pages/Launch/Cross.vue')
-    },
-    {
       path: '/launch/economy',
       name: 'Token economy',
-      meta: {
-        group: "lanch",
-      },
       component: () => import('../pages/Launch/Economy.vue')
     },
     {

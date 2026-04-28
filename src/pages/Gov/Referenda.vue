@@ -1,6 +1,6 @@
 <template>
   <div class="page gradient-body">
-    <div class="gov-layout container flex mb-4 flex-col lg:flex-row gap-0">
+    <div class="gov-layout container flex mb-4 flex-row gap-0 overflow-x-auto">
       <GovSidebar />
 
       <!-- 主内容区 -->
