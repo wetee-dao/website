@@ -4,12 +4,32 @@
 /* Nuxt UI 全局主题：贴合 Wetee 现有设计变量（--g-*），减少“原生 Nuxt UI”观感 */
 @layer theme {
   :root {
-    /* 更硬朗的圆角与间距基调 */
-    --ui-radius: 2px;
+    /* 扁平化：全站圆角基调（避免页面各写各的） */
+    --ui-radius: 0; /* 全站直角 */
     --ui-container: 80rem;
   }
 
   html.dark {
+    /* Flat tokens（全站通用）：纯色面/细边框/绿色强调 */
+    --flat-surface-0: rgba(12, 12, 14, 1); /* page */
+    --flat-surface-1: rgba(16, 16, 18, 1); /* panel */
+    --flat-surface-2: rgba(255, 255, 255, 0.03); /* subtle hover/selected */
+
+    --flat-border-1: rgba(255, 255, 255, 0.08);
+    --flat-border-2: rgba(255, 255, 255, 0.12);
+
+    --flat-text-strong: rgba(var(--g-secondary-text-rgb), 0.92);
+    --flat-text: rgba(var(--g-secondary-text-rgb), 0.78);
+    --flat-text-muted: rgba(var(--g-secondary-text-rgb), 0.58);
+
+    --flat-accent: rgb(var(--g-primary-text-rgb)); /* green */
+    --flat-accent-weak: rgba(var(--g-primary-text-rgb), 0.14);
+
+    --flat-radius: 0; /* 10px */
+    --flat-radius-sm: 0; /* 8px */
+
+    --flat-focus-ring: rgba(var(--g-primary-text-rgb), 0.32);
+
     /* 背景/文字体系对齐现有暗色 UI */
     --ui-bg: var(--g-primary-bg);
     --ui-bg-muted: rgba(var(--g-primary-bg-rgb), 0.92);
@@ -34,11 +54,81 @@
     --ui-secondary: rgba(var(--g-primary-text-rgb), 0.56);
     --ui-primary-foreground: rgb(12, 16, 19);
     --ui-ring: rgba(var(--g-primary-text-rgb), 0.35);
-    --ui-radius: 0rem;
+    --ui-radius: var(--flat-radius);
   }
 }
 
+/* 全站直角：强制移除所有圆角（包含第三方组件默认圆角） */
+:where(*, *::before, *::after) {
+  border-radius: 0 !important;
+}
+
+/* 扁平化：不使用阴影，focus 用边框/颜色表达 */
 button.ring{
   box-shadow: none;
   border: 1.5px solid var(--tw-ring-color);
+}
+
+/* Flat primitives（跨页面复用） */
+.flat-panel {
+  background: var(--flat-surface-1);
+  border: 1px solid var(--flat-border-1);
+  border-radius: var(--flat-radius);
+}
+
+.flat-panel--dense {
+  border-radius: var(--flat-radius-sm);
+}
+
+.flat-divider {
+  height: 1px;
+  background: var(--flat-border-1);
+}
+
+.flat-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.flat-list-item {
+  border-bottom: 1px solid var(--flat-border-1);
+}
+
+.flat-list-item:last-child {
+  border-bottom: none;
+}
+
+.flat-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: var(--flat-radius-sm);
+  border: 1px solid var(--flat-border-1);
+  background: transparent;
+  color: var(--flat-text-strong);
+}
+
+.flat-btn:active {
+  background: var(--flat-surface-2);
+}
+
+.flat-btn--primary {
+  border-color: rgba(var(--g-primary-text-rgb), 0.55);
+  background: rgba(var(--g-primary-text-rgb), 0.12);
+  color: var(--flat-text-strong);
+}
+
+.flat-input {
+  border: 1px solid var(--flat-border-1);
+  border-radius: var(--flat-radius-sm);
+  background: transparent;
+  color: var(--flat-text-strong);
+}
+
+.flat-input:focus {
+  outline: none;
+  border-color: rgba(var(--g-primary-text-rgb), 0.55);
+  box-shadow: none;
 }

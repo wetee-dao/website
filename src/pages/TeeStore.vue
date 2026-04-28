@@ -172,13 +172,7 @@ const renderTemps = (t: string) => {
   padding-top: 80px;
   min-height: 100vh;
   box-sizing: border-box;
-  background-image: linear-gradient(196.83deg,
-      #00000000 30vw,
-      rgba(255, 255, 255, 0.02) 40vw,
-      rgba(255, 255, 255, 0.06) 45vw,
-      rgba(255, 255, 255, 0.02) 50vw,
-      rgba(0, 0, 0, 0) 70vw,
-    );
+  background-color: $primary-bg;
 }
 
 .app-wrap {
@@ -192,7 +186,7 @@ const renderTemps = (t: string) => {
 
 .app_type {
   min-width: 220px;
-  border-right: 1px solid rgba(170, 114, 206, 0.12);
+  border-right: 1px solid var(--flat-border-1);
   // margin-right: 20px;
   margin-left: 20px;
   color: #fff;
@@ -314,7 +308,7 @@ const renderTemps = (t: string) => {
     width: 100%;
     margin: 0;
     margin-top: 5px;
-    border-top: 1px solid rgba(170, 114, 206, 0.12);
+    border-top: 1px solid var(--flat-border-1);
     padding-top: 5px;
 
     li {

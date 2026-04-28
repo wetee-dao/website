@@ -56,15 +56,15 @@
 
 @keyframes chip_diffuse {
   0% {
-    box-shadow: 0 0 0px rgba($primary-text-rgb, $alpha: 0.05);
+    box-shadow: none;
   }
 
   80% {
-    box-shadow: 0 0 40px rgba($primary-text-rgb, $alpha: 0.05);
+    box-shadow: none;
   }
 
   100% {
-    box-shadow: 0 0 0px rgba($primary-text-rgb, $alpha: 0.05);
+    box-shadow: none;
   }
 }
 
@@ -90,7 +90,7 @@
   display: block;
   height: 5em;
   width: 2px;
-  background: linear-gradient(to top, transparent, $primary-text);
+  background: $primary-text;
   animation: bottom_to_top 4s 0s infinite;
 }
 
@@ -126,7 +126,7 @@
   display: block;
   height: 5em;
   width: 2px;
-  background: linear-gradient(to bottom, transparent, $primary-text);
+  background: $primary-text;
   animation: top_to_bottom 4s 0s infinite;
 }
 
@@ -163,7 +163,7 @@
   display: block;
   height: 2px;
   width: 5em;
-  background: linear-gradient(to left, transparent, $primary-text);
+  background: $primary-text;
   animation: right_to_left 4s 0s infinite;
 }
 
@@ -200,7 +200,7 @@
   display: block;
   height: 2px;
   width: 5em;
-  background: linear-gradient(to right, transparent, $primary-text);
+  background: $primary-text;
   animation: left_to_right 4s 0s infinite;
 }
 

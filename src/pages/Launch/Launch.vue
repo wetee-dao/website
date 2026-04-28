@@ -134,6 +134,7 @@
 import { getBnFromChain, getNumstrfromChain, showWTE, showToken } from '@/utils/chain';
 import { BN } from '@polkadot/util';
 import { onMounted, onUnmounted, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 import loadingBox from "@/components/loading-box.vue";
 // import { getHttpApi } from '@/plugins/chain';
@@ -153,6 +154,12 @@ const vtoken2token = ref<any>([])
 const quotaData = ref<any>({});
 const userStore = useGlobalStore();
 const address = ref<string>(userStore.userInfo ? userStore.userInfo.addr : "");
+
+const { locale } = useI18n()
+const docsLang = () => (String(locale.value).toLowerCase().startsWith('zh') ? 'zh' : 'en')
+const docsUrl = () => `https://asyou.me/_book/${docsLang()}`
+const docsEntryUrl = () => `${docsUrl()}/user/intro/what-is-wetee.html`
+const docsMinerTypesUrl = () => `${docsUrl()}/user/miner/miner-types.html`
 const StakeDesc = ref<any>({
   "wDOT": "Staking vDOT to earn WTE rewards",
   "Chain mint": "Joining the consensus network to earn WTE rewards",
@@ -207,13 +214,13 @@ const getTotalStakingReward = (economics: any, stakings: any, reward: BN) => {
 const action = (item: any) => {
   switch (item.id) {
     case "0":
-      window.open("https://wetee.gitbook.io/docment/mint/blockchain-mint", "_blank");
+      window.open(docsEntryUrl(), "_blank");
       break;
     case "1":
-      window.open("https://wetee.gitbook.io/docment/mint/tee-computing-mint", "_blank");
+      window.open(docsMinerTypesUrl(), "_blank");
       break;
     case "2":
-      window.open("https://wetee.gitbook.io/docment/mint/tee-computing-mint", "_blank");
+      window.open(docsMinerTypesUrl(), "_blank");
       break;
     default:
       let vstakeItem = vtoken2token.value.find((v: any) => {

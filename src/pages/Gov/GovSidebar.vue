@@ -72,7 +72,7 @@ const isTreasuryTokensActive = computed(() => route.path.startsWith('/gov/treasu
 <style lang="scss" scoped>
 .chain-box {
   background-color: rgba($primary-bg-rgb, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  // border: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .sidebar-box {
@@ -82,17 +82,17 @@ const isTreasuryTokensActive = computed(() => route.path.startsWith('/gov/treasu
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: rgba($secondary-text-rgb, 0.4);
-    padding: 20px 20px 10px;
+    padding: 16px 24px 8px 0;
   }
 
   .sidebar-nav {
     display: flex;
     flex-direction: column;
-    padding: 0 8px;
+    padding: 0 16px 0 0;
   }
 
   .nav-item {
-    padding: 10px 12px;
+    padding: 10px 12px 10px 0;
     font-size: 13px;
     color: rgba($secondary-text-rgb, 0.6);
     text-decoration: none;
@@ -102,20 +102,29 @@ const isTreasuryTokensActive = computed(() => route.path.startsWith('/gov/treasu
     font-weight: 400;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.03);
-      color: rgba($secondary-text-rgb, 0.8);
+      color: rgba($secondary-text-rgb, 1);
     }
 
     &.active {
-      background: rgba(255, 255, 255, 0.05);
+      
       color: $primary-text;
+      position: relative;
+      &::after {
+        content: '';
+        position: absolute;
+        left: -5%;
+        bottom: 0;
+        width: 110%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.05);
+      }
     }
   }
 
   .sidebar-divider {
     height: 1px;
     background: rgba(255, 255, 255, 0.04);
-    margin: 8px 16px;
+    margin: 10px 24px 10px 0;
   }
 }
 </style>

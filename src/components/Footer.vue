@@ -16,10 +16,10 @@
           <div class="footer__col">
             <h6 class="footer__col-title">{{ t('home.footer.resources') }}</h6>
             <nav class="footer__nav">
-              <a target="_blank" href="https://wetee.gitbook.io/docment">{{ t('common.docs') }}</a>
+              <a target="_blank" :href="docsEntryUrl()">{{ t('common.docs') }}</a>
               <a target="_blank" href="https://github.com/wetee-dao">{{ t('footer.github') }}</a>
-              <a target="_blank" href="https://wetee.gitbook.io/docment">{{ t('home.footer.whitepaper') }}</a>
-              <a target="_blank" href="https://wetee.gitbook.io/docment">{{ t('home.footer.apiRef') }}</a>
+              <a target="_blank" :href="docsEntryUrl()">{{ t('home.footer.whitepaper') }}</a>
+              <a target="_blank" :href="docsArchitectureUrl()">{{ t('home.footer.apiRef') }}</a>
             </nav>
           </div>
           <div class="footer__col">
@@ -53,7 +53,7 @@
           <div class="">
             <h6 class="footer__title">Docs</h6>
             <div class="footer__nav">
-              <a target="_blank" href="https://wetee.gitbook.io/docment">Docs</a>
+              <a target="_blank" :href="docsEntryUrl()">Docs</a>
               <a target="_blank" href="https://github.com/wetee-dao">Github</a>
               <a href="https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fpaseo.asyou.me%2Fws#/explorer">Explore</a>
             </div>
@@ -110,7 +110,11 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-const { t } = useI18n()
+const { t, locale } = useI18n()
+
+const docsLang = () => (String(locale.value).toLowerCase().startsWith('zh') ? 'zh' : 'en')
+const docsEntryUrl = () => `https://asyou.me/_book/${docsLang()}/user/intro/what-is-wetee.html`
+const docsArchitectureUrl = () => `https://asyou.me/_book/${docsLang()}/dev/architecture/three-layer-model.html`
 </script>
 
 <style lang="scss" scoped>

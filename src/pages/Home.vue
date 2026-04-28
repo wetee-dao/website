@@ -30,7 +30,7 @@
             <a href="/dapp" :class="homeBtnPrimary">{{ t('home.hero.ctaStart') }}</a>
             <a
               target="_blank"
-              href="https://wetee.gitbook.io/docment"
+              :href="docsEntryUrl()"
               :class="homeBtnOutline"
               >{{ t('home.hero.ctaDocs') }}</a
             >
@@ -448,7 +448,7 @@
             <a href="/dapp" :class="homeBtnPrimary">{{ t('home.cta.start') }}</a>
             <a
               target="_blank"
-              href="https://wetee.gitbook.io/docment"
+              :href="docsEntryUrl()"
               :class="homeBtnOutline"
               >{{ t('home.cta.docs') }}</a
             >
@@ -476,7 +476,10 @@ import { GetNowBlocks, GetNowTx, SubNewBlock } from '@/apis/side'
 import { formatTimeDiff } from '@/utils/time'
 import { ReconnectingWebSocket } from '@/utils/ws'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
+
+const docsLang = () => (String(locale.value).toLowerCase().startsWith('zh') ? 'zh' : 'en')
+const docsEntryUrl = () => `https://asyou.me/_book/${docsLang()}/user/intro/what-is-wetee.html`
 
 /** 首页按钮（替代原 .btn / .btn-primary / .btn-outline） */
 const homeBtnBase =
@@ -510,7 +513,7 @@ const prodBadgeClass =
   'mt-auto pt-4 text-[0.6875rem] font-medium uppercase tracking-[0.1em] text-[rgba(var(--g-secondary-text-rgb),0.35)]'
 
 const whyCardClass =
-  'group rounded-sm border-l-2 border-l-[rgba(var(--g-primary-text-rgb),0.38)] bg-[linear-gradient(100deg,rgba(var(--g-primary-text-rgb),0.07)_0%,rgba(255,255,255,0.02)_45%,transparent_100%)] px-5 py-6 pl-5 transition-[border-color,box-shadow] duration-300 hover:border-white/[0.1] hover:border-l-[rgba(var(--g-primary-text-rgb),0.55)] hover:shadow-[0_16px_40px_rgba(0,0,0,0.35)]'
+  'group rounded-sm border-l-2 border-l-[rgba(var(--g-primary-text-rgb),0.38)] bg-[rgba(255,255,255,0.02)] px-5 py-6 pl-5 transition-[border-color,background-color] duration-300 hover:border-white/[0.1] hover:border-l-[rgba(var(--g-primary-text-rgb),0.55)] hover:bg-[rgba(255,255,255,0.03)]'
 
 const blocks = ref<any[]>([])
 const txs = ref<any[]>([])

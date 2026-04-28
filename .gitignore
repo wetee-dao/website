@@ -32,3 +32,5 @@ coverage
 
 hacks/.config
 ossutil_output
+
+public/docs

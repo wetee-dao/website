@@ -66,7 +66,7 @@
 
 .red.lego>.container-top>.top>.dot {
   background: #f55a4e;
-  filter: drop-shadow(5px 5px 0px #ea1c0d);
+  filter: none;
 }
 
 .blue.lego {
@@ -87,7 +87,7 @@
 
 .blue.lego>.container-top>.top>.dot {
   background: #3594e8;
-  filter: drop-shadow(5px 5px 0px #166dba);
+  filter: none;
 }
 
 .yellow.lego {
@@ -108,7 +108,7 @@
 
 .yellow.lego>.container-top>.top>.dot {
   background: #fddd4e;
-  filter: drop-shadow(5px 5px 0px #fdce03);
+  filter: none;
 }
 
 .lego {

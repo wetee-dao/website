@@ -1,12 +1,15 @@
 <template>
   <div class="page gradient-body">
-    <div class="gov-layout container mb-4 flex flex-col gap-6 lg:flex-row">
+    <div class="gov-layout container mb-4 flex flex-col gap-4 lg:flex-row">
       <GovSidebar />
 
       <main class="gov-main min-w-0 flex-1">
         <div class="chain-box main-box">
-          <div class="title-wrap flex flex-wrap items-center justify-between gap-4">
-            <div>
+          <div class="title-wrap title-wrap--pixel flex flex-wrap items-center justify-between gap-4">
+            <div class="title-pixel-bg" aria-hidden="true">
+              <PixelBg :tile-size="6" :gap="4" :max-opacity="0.08" :density="0.18" :wave-speed="0.0014" />
+            </div>
+            <div class="relative z-[1]">
               <h1 class="page-title">{{ t('govTreasuryTokens.title') }}</h1>
               <p class="page-subtitle">{{ t('govTreasuryTokens.subtitle') }}</p>
             </div>
@@ -73,6 +76,7 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import GovSidebar from './GovSidebar.vue'
+import PixelBg from '@/components/anim/PixelBg.vue'
 
 const { t } = useI18n()
 
@@ -121,6 +125,20 @@ const tokenRows = computed<TokenRow[]>(() => [
   .title-wrap {
     padding: 28px 32px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  }
+
+  .title-wrap--pixel {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .title-pixel-bg {
+    position: absolute;
+    inset: 0;
+    opacity: 0.65;
+    filter: blur(0.15px);
+    -webkit-mask-image: radial-gradient(90% 140% at 50% 0%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 72%);
+    mask-image: radial-gradient(90% 140% at 50% 0%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 72%);
   }
 
   .page-title {

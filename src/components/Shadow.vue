@@ -1,6 +1,6 @@
 <template>
   <div class="shadow-box">
-    <div class="slot" :style="'background-image: radial-gradient(transparent 1em, ' + bg + ' 1em)'">
+    <div class="slot" :style="'background-color: ' + bg">
       <div>
         <slot></slot>
       </div>
@@ -30,10 +30,8 @@ const bg = ref(props.bg ?? "#090909")
     height: 140%;
     position: absolute;
     z-index: 1;
-    background-color: transparent;
-    transition: background - color 0.5s ease;
-    background-size: 4em 4em;
-    backdrop-filter: saturate(50%) blur(4em);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: background-color 0.2s ease, border-color 0.2s ease;
     top: calc(-12.5% - 2em);
     left: calc(-12.5% - 1em);
 

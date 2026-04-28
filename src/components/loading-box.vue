@@ -26,8 +26,8 @@ const text = ref(props.text || "Loading...");
         width: fit-content;
         font-family: "letter-font", Serif;
         letter-spacing: 1em;
-        background: linear-gradient(90deg, rgba($secondary-text-rgb, 0.04) 50%, #0000 0) right/200% 100%;
-        animation: l21 2s infinite linear;
+        background: rgba($secondary-text-rgb, 0.04);
+        animation: none;
         height: 8em;
         line-height: 8em;
         padding: 0 1em;
@@ -41,10 +41,5 @@ const text = ref(props.text || "Loading...");
         background-clip: text;
     }
 
-    @keyframes l21 {
-        100% {
-            background-position: left
-        }
-    }
 }
 </style>

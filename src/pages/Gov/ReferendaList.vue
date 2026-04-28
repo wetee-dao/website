@@ -179,7 +179,6 @@ function statusLabel(status: ProposalStatusKey): string {
   font-weight: 500;
   letter-spacing: -0.02em;
   color: rgba($secondary-text-rgb, 0.82);
-  text-shadow: none;
 }
 
 .proposal-call__amount {

@@ -3,7 +3,7 @@
     <div class="header__content container">
       <!-- btn -->
       <button v-if="group == 'main'" :class="'header__btn  block md:hidden ' + (isActivce ? 'header__btn--active' : '')"
-        type="button" @click="toggleMenu()">
+        type="button" aria-label="Toggle navigation" @click="toggleMenu()">
         <span></span>
         <span></span>
         <span></span>
@@ -27,13 +27,15 @@
       </div>
       <!-- end logo -->
 
+      <div v-if="isActivce" class="header__overlay md:hidden" @click="closeMenu" />
+
       <!-- navigation -->
       <ul v-if="group == 'main'" :class="'header__nav ' + (isActivce ? 'header__nav--active' : '')">
         <li :class="path.indexOf('/chain') > -1 ? 'active' : ''">
           <a href="javascript:void(0)">{{ t('nav.blockchain') }} <i class="iconfont">&#xe68f;</i></a>
           <ul v-if="props.shadow && showSub" class="header__dropdown">
             <li>
-              <RouterLink to="/chain/blocks" @click="unfocus">
+              <RouterLink to="/chain/blocks" @click="onNavItemClick">
                 <div class="flex items-center ">
                   <Svgimg class="icon" name="block" />
                   <div class="title-wrap">
@@ -44,7 +46,7 @@
               </RouterLink>
             </li>
             <li>
-              <RouterLink to="/chain/txs" @click="unfocus">
+              <RouterLink to="/chain/txs" @click="onNavItemClick">
                 <div class="flex items-center">
                   <Svgimg class="icon" name="transfer" />
                   <div class="title-wrap">
@@ -55,7 +57,7 @@
               </RouterLink>
             </li>
             <li>
-              <RouterLink to="/chain/nodes" @click="unfocus">
+              <RouterLink to="/chain/nodes" @click="onNavItemClick">
                 <div class="flex items-center">
                   <Svgimg class="icon" name="secret" />
                   <div class="title-wrap">
@@ -66,7 +68,7 @@
               </RouterLink>
             </li>
             <li>
-              <RouterLink to="/chain/pods" @click="unfocus">
+              <RouterLink to="/chain/pods" @click="onNavItemClick">
                 <div class="flex items-center">
                   <Svgimg class="icon" name="applications" />
                   <div class="title-wrap">
@@ -82,7 +84,7 @@
           <a href="javascript:void(0)">{{ t('nav.products') }} <i class="iconfont">&#xe68f;</i></a>
           <ul v-if="props.shadow && showSub" class="header__dropdown">
             <li>
-              <RouterLink to="/products/cloud" @click="unfocus">
+              <RouterLink to="/products/cloud" @click="onNavItemClick">
                 <div class="flex items-center ">
                   <Cloud class="icon" />
                   <div class="title-wrap">
@@ -115,7 +117,7 @@
               </RouterLink>
             </li> -->
             <li>
-              <RouterLink to="/products/store" @click="unfocus">
+              <RouterLink to="/products/store" @click="onNavItemClick">
                 <div class="flex items-center">
                   <Store class="icon" />
                   <div class="title-wrap">
@@ -126,7 +128,7 @@
               </RouterLink>
             </li>
             <li>
-              <RouterLink to="/products/mpc" @click="unfocus">
+              <RouterLink to="/products/mpc" @click="onNavItemClick">
                 <div class="flex items-center">
                   <MPC class="icon" />
                   <div class="title-wrap">
@@ -139,13 +141,10 @@
           </ul>
         </li>
         <li :class="path == '/gov' ? 'active' : ''">
-          <RouterLink to="/gov">{{ t('nav.openGov') }}</RouterLink>
+          <RouterLink to="/gov" @click="closeMenu">{{ t('nav.openGov') }}</RouterLink>
         </li>
         <li :class="path.indexOf('/docs') > -1 ? 'active' : ''">
-          <RouterLink to="/docs">{{ t('common.docs') }}</RouterLink>
-        </li>
-        <li>
-          <a target="_blank" href="https://wetee.gitbook.io/docment">{{ t('common.docsExternal') }}</a>
+          <RouterLink to="/docs" @click="closeMenu">{{ t('common.docs') }}</RouterLink>
         </li>
       </ul>
       <!-- end navigation -->
@@ -209,7 +208,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onBeforeUnmount, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useToast } from '@nuxt/ui/composables'
 import { ss58toHex } from '@/utils/chain'
@@ -267,6 +266,15 @@ const toggleMenu = () => {
   isActivce.value = !isActivce.value
 }
 
+const closeMenu = () => {
+  isActivce.value = false
+}
+
+const onNavItemClick = () => {
+  unfocus()
+  closeMenu()
+}
+
 const login = () => {
   global.$Login()
 }
@@ -274,7 +282,7 @@ const login = () => {
 userStore.$subscribe((mutation, state) => {
   path.value = getPath(state.paths)
   userInfo.value = state.userInfo
-  isActivce.value = false
+  closeMenu()
 }, { detached: true })
 
 const home = () => {
@@ -287,6 +295,15 @@ const unfocus = () => {
     showSub.value = true
   }, 200)
 }
+
+watch(isActivce, (active) => {
+  // 避免移动端菜单打开时页面滚动穿透
+  document.body.style.overflow = active ? 'hidden' : ''
+})
+
+onBeforeUnmount(() => {
+  document.body.style.overflow = ''
+})
 </script>
 
 <style lang="scss" scoped>
@@ -299,17 +316,13 @@ const unfocus = () => {
   left: 0;
   z-index: 20;
   // border-bottom: 1px solid rgba(236, 236, 236, 0.04);
-  background-color: transparent;
-  transition: background - color 0.5s ease;
-  background-image: radial - gradient(transparent 1px, $primary-bg 1px);
-  background-size: 4px 4px;
-  backdrop-filter: saturate(50%) blur(4px);
-  box-shadow: 0 0 4px #2cc2600d;
+  background-color: rgba($primary-bg-rgb, 0.92);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .header-shadow {
   z-index: 8;
-  backdrop-filter: none;
   left: -3px;
   top: 1.5px;
   border: none;
@@ -398,6 +411,8 @@ const unfocus = () => {
     margin-right: 10px;
     position: relative;
     top: 1px;
+    padding: 10px; // 提升移动端可点击区域
+    margin-left: -10px;
 
     span {
       position: absolute;
@@ -664,21 +679,38 @@ const unfocus = () => {
     }
   }
 
+  .header__overlay {
+    position: fixed;
+    inset: 0;
+    top: 80px;
+    background: rgba(0, 0, 0, 0.62);
+    // flat: no blur/glass effect
+    z-index: 18;
+  }
+
   @media (max-width: 765px) {
     .header__nav {
-      background-color: rgba(16, 16, 16, 0.95);
+      // premium drawer (no gradients)
+      background: rgba(12, 12, 14, 0.98);
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+      // flat: no shadows, no blur
       position: fixed;
       top: 80px;
       left: 0;
-      height: 100vh;
-      padding: 25px 45px;
-      display: none;
-      width: 100vw;
+      height: calc(100vh - 80px);
+      padding: 12px 12px 18px;
+      display: block;
+      width: min(360px, 92vw);
       margin-left: 0;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      transform: translate3d(-100%, 0, 0);
+      transition: transform 0.28s cubic-bezier(0.2, 0.9, 0.2, 1);
+      z-index: 19;
 
       li {
-        width: 250px;
-        margin: 0 auto;
+        width: 100%;
+        margin: 0;
 
         &:first-child {
           display: block;
@@ -694,7 +726,14 @@ const unfocus = () => {
         }
 
         a {
-          padding: 10px;
+          padding: 12px 12px;
+          border-radius: 10px;
+          text-align: left;
+          font-size: 14px;
+          line-height: 18px;
+          font-weight: 600;
+          letter-spacing: 0.15px;
+          color: rgba($secondary-text-rgb, 0.86) !important;
         }
 
         .header__dropdown {
@@ -703,12 +742,31 @@ const unfocus = () => {
           position: relative;
           top: 0;
           left: 0;
+          padding: 6px 0 12px;
 
           li {
             width: 100%;
+            background: transparent;
 
             a {
-              text-align: center;
+              text-align: left;
+              font-size: 13px;
+              line-height: 16px;
+              font-weight: 500;
+              color: rgba($secondary-text-rgb, 0.62) !important;
+              padding: 10px 12px 10px 30px;
+              position: relative;
+              border-radius: 10px;
+
+              &:before {
+                content: "";
+                position: absolute;
+                left: 16px;
+                top: 10px;
+                bottom: 10px;
+                width: 1px;
+                background: rgba(255, 255, 255, 0.10);
+              }
             }
           }
         }
@@ -743,8 +801,41 @@ const unfocus = () => {
     }
 
     .header__nav--active {
-      display: block;
+      transform: translate3d(0, 0, 0);
     }
+
+    .header__nav>li {
+      .header__dropdown {
+        margin-top: 4px;
+      }
+    }
+
+    :deep(.header__nav>li) {
+      &.active {
+        // active 背景在移动端更柔和，避免“块状遮挡”
+        &:after {
+          opacity: 0.6;
+        }
+      }
+    }
+
+    // subtle separators between top-level items
+    .header__nav>li {
+      padding: 4px 2px;
+
+      &:not(:last-child) {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      > a {
+        transition: background-color 0.15s ease, color 0.15s ease;
+
+        &:active {
+          background-color: rgba(255, 255, 255, 0.05) !important;
+        }
+      }
+    }
+
   }
 }
 </style>

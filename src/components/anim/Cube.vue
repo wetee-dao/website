@@ -633,8 +633,7 @@
 }
 
 .cube-top:before {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#50fa83cf), to(transparent)), -webkit-gradient(linear, left top, left bottom, from(var(--color-bg-top)), to(var(--color-bg-bottom)));
-  background-image: linear-gradient(to bottom, #50fa83cf, transparent), linear-gradient(to bottom, var(--color-bg-top), var(--color-bg-bottom));
+  background-image: none;
   background-size: 2px 100%, auto;
   background-repeat: no-repeat;
 }
@@ -717,8 +716,7 @@
 }
 
 .cube-front-left:before {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(var(--color-fl-top)), to(var(--color-fl-bottom))), -webkit-gradient(linear, left top, left bottom, from(rgba(174, 231, 173, 0.5)), color-stop(60%, transparent));
-  background-image: linear-gradient(to bottom, var(--color-fl-top), var(--color-fl-bottom)), linear-gradient(to bottom, rgba(174, 231, 173, 0.5), transparent 60%);
+  background-image: none;
   background-size: auto auto 1px 100%;
   background-repeat: no-repeat;
   -webkit-transform-origin: right;
@@ -772,8 +770,7 @@
 }
 
 .cube-front-right:before {
-  background-image: -webkit-gradient(linear, left top, right top, from(var(--color-fr-top)), to(var(--color-fr-bottom)));
-  background-image: linear-gradient(to right, var(--color-fr-top), var(--color-fr-bottom));
+  background-image: none;
   -webkit-transform-origin: top;
   transform-origin: top;
   -webkit-animation-name: cube-front-right;
@@ -820,8 +817,8 @@
 .cube-bottom {
   -webkit-transform: translateZ(-10em);
   transform: translateZ(-10em);
-  background-image: -webkit-gradient(linear, left top, left bottom, from(var(--color-bg-top)), to(var(--color-bg-bottom)));
-  background-image: linear-gradient(to bottom, var(--color-bg-top), var(--color-bg-bottom));
+  background-image: none;
+  background-color: var(--color-bg-bottom);
   -webkit-animation-name: cube-bottom;
   animation-name: cube-bottom;
 }

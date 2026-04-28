@@ -1,13 +1,16 @@
 <template>
   <div class="page gradient-body">
-    <div class="gov-layout container flex mb-4 flex-col lg:flex-row gap-6">
+    <div class="gov-layout container flex mb-4 flex-col lg:flex-row gap-4">
       <GovSidebar />
 
       <!-- 主内容区 -->
       <main class="gov-main flex-1 min-w-0">
         <div class="chain-box main-box">
-          <div class="title-wrap flex flex-wrap justify-between items-center gap-4">
-            <div>
+          <div class="title-wrap title-wrap--pixel flex flex-wrap justify-between items-center gap-4">
+            <div class="title-pixel-bg" aria-hidden="true">
+              <PixelBg :tile-size="6" :gap="4" :max-opacity="0.08" :density="0.18" :wave-speed="0.0014" />
+            </div>
+            <div class="relative z-[1]">
               <h1 class="page-title">{{ t('gov.pageTitle') }}</h1>
               <p class="page-subtitle">{{ t('gov.pageSubtitle') }}</p>
             </div>
@@ -57,6 +60,7 @@ import { useI18n } from 'vue-i18n'
 import GovSidebar from './GovSidebar.vue'
 import ReferendaList, { type ReferendaListItem } from './ReferendaList.vue'
 import SubmitProposal from './submit-proposal'
+import PixelBg from '@/components/anim/PixelBg.vue'
 import { SecretContractApi } from '@/apis/contract'
 import { parseHumanNumber } from '@/utils/parseHumanNumber'
 import { ProposalState, type ProposalStatusKey } from '@/utils/proposalState'
@@ -163,6 +167,20 @@ onMounted(() => {
   .title-wrap {
     padding: 28px 32px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  }
+
+  .title-wrap--pixel {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .title-pixel-bg {
+    position: absolute;
+    inset: 0;
+    opacity: 0.65;
+    filter: blur(0.15px);
+    -webkit-mask-image: radial-gradient(90% 140% at 50% 0%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 72%);
+    mask-image: radial-gradient(90% 140% at 50% 0%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 72%);
   }
 
   .page-title {

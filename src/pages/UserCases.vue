@@ -76,7 +76,6 @@ import Footer from '@/components/Footer.vue';
 
 .chip-text {
   color: #abdeba;
-  text-shadow: 0 2px 2px rgba(196, 196, 196, 0.87);
   font-size: 20px;
   text-align: center;
   font-family: "letter-font";

@@ -16,6 +16,7 @@ export const shortAddress = (address: string) => {
 }
 
 export const ss58toHex = (address: string) => {
+  if (!address) return "0x" + "0".repeat(64)
   const d = decodeAddress(address);
   return u8aToHex(d)
 }

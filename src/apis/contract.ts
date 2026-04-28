@@ -464,7 +464,13 @@ export class SecretContract {
 
     // get caller info
     getCallerInfo() {
-        return store.state.value.global.userInfo
+        const userInfo = store.state.value.global.userInfo
+        if (!userInfo || !userInfo.addr) {
+            return {
+                addr: "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY"
+            }
+        }
+        return userInfo
     }
 }
 

@@ -1,6 +1,6 @@
 <template>
   <div class="page gradient-body">
-    <div class="gov-layout container flex mb-4 flex-col lg:flex-row gap-6">
+    <div class="gov-layout container flex mb-4 flex-col lg:flex-row gap-4">
       <GovSidebar />
 
       <main class="gov-main flex-1 min-w-0">
@@ -1411,7 +1411,7 @@ function statusLabel(status: Status): string {
 
   .status-progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, rgba(59, 130, 246, 0.85), rgba(96, 165, 250, 0.75));
+    background: rgba(255, 255, 255, 0.18);
     transition: width 0.35s ease;
   }
 
@@ -1443,9 +1443,9 @@ function statusLabel(status: Status): string {
   transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
 
   &:hover {
-    color: rgba(244, 63, 94, 0.95);
-    border-color: rgba(244, 63, 94, 0.35);
-    background: rgba(244, 63, 94, 0.06);
+    color: rgba($primary-text-rgb, 0.92);
+    border-color: rgba($primary-text-rgb, 0.35);
+    background: rgba($primary-text-rgb, 0.06);
   }
 }
 
@@ -1477,11 +1477,11 @@ function statusLabel(status: Status): string {
     min-width: 0;
 
     &--aye {
-      background: linear-gradient(90deg, rgba(34, 197, 94, 0.95), rgba(52, 211, 153, 0.75));
+      background: rgba($primary-text-rgb, 0.78);
     }
 
     &--nay {
-      background: linear-gradient(90deg, rgba(248, 113, 113, 0.9), rgba(239, 68, 68, 0.75));
+      background: rgba(255, 255, 255, 0.14);
     }
   }
 

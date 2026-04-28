@@ -77,7 +77,7 @@ watch(() => userStore.paths, (p) => { paths.value = p }, { immediate: true })
   position: relative;
   width: 100%;
   overflow: hidden;
-  border-top: 1px solid rgba(170, 114, 206, 0.12);
+  border-top: 1px solid var(--flat-border-1);
   padding-top: 95px;
   padding-bottom: 15px;
 
