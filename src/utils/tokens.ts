@@ -1,16 +1,16 @@
 export const  tokenRatio = [
   {
-    name: 'Chain Node Mint',
+    name: 'Chain Node Rewards',
     amount: 10,
     color: '#e076b6',
   },
   {
-    name: 'TEE APP Mint',
+    name: 'TEE App Rewards',
     amount: 10,
     color: '#5d5d5d',
   },
   {
-    name: 'TEE Mint',
+    name: 'TEE Node Rewards',
     amount: 40,
     color: '#6378d6',
   },

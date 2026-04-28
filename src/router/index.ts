@@ -27,7 +27,7 @@ const router = createRouter({
     },
     {
       path: '/products/miner',
-      name: 'Decentralized computing power miner',
+      name: 'Decentralized compute node network',
       component: () => import('../pages/Products/Miner.vue')
     },
     {

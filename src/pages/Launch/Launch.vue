@@ -96,19 +96,19 @@
         </div>
         <div class="min-w-[105px] flex-1 flex flex-col justify-center items-center" v-if="economic.id == 0">
           <div class="action flex justify-center items-center" @click="action(economic)">
-            Mint
+            Learn
             <i class="iconfont">&#xe602;</i>
           </div>
         </div>
         <div class="min-w-[105px] flex-1 flex flex-col justify-center items-center" v-if="economic.id == 1">
           <div class="action flex justify-center items-center" @click="action(economic)">
-            Mint
+            Learn
             <i class="iconfont">&#xe602;</i>
           </div>
         </div>
         <div class="min-w-[105px] flex-1 flex flex-col justify-center items-center" v-if="economic.id == 2">
           <div class="action flex justify-center items-center" @click="action(economic)">
-            Mint
+            Learn
             <i class="iconfont">&#xe602;</i>
           </div>
         </div>
@@ -144,7 +144,7 @@ const loader = ref(0)
 
 const global = useGlobelProperties();
 const economicsData = ref<any[]>([
-  { "id": "0", "metadata": { "name": "Chain mint", "symbol": "Chain mint", "decimals": 12, "total": "-", "staking_symbol": "", "action": "Chain Mint" }, "v": "10" },
+  { "id": "0", "metadata": { "name": "Chain rewards", "symbol": "Chain mint", "decimals": 12, "total": "-", "staking_symbol": "", "action": "Chain" }, "v": "10" },
 ]);
 const blockRewardData = ref<BN>(new BN(0));
 const stakingsData = ref<any>({});
@@ -355,23 +355,23 @@ function formatCountdown(seconds: number): string {
 const getAssetInfo = (id: string, assets: any) => {
   if (id == "0") {
     return {
-      "name": "Chain mint",
+      "name": "Chain rewards",
       "symbol": "Chain mint",
       "decimals": 12,
       "total": "-",
       "staking_symbol": "",
-      "action": "Chain Mint",
+      "action": "Chain",
     }
   }
 
   if (id == "1") {
     return {
-      "name": "TEE mint",
+      "name": "TEE rewards",
       "symbol": "TEE mint",
       "decimals": 12,
       "total": "-",
       "staking_symbol": "",
-      "action": "TEE mint",
+      "action": "TEE",
     }
   }
 

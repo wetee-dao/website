@@ -11,10 +11,17 @@
           <div class="docs-hero">
             <h1 class="docs-hero__title">{{ t('docs.heroTitle') }}</h1>
             <p class="docs-hero__subtitle">{{ t('docs.heroSubtitle') }}</p>
+            <p class="docs-hero__hint">{{ t('docs.langHint') }}</p>
             <div class="docs-hero__actions">
               <a :href="gitbookUrl" target="_blank" class="docs-btn docs-btn--primary">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L1.74 6v12L12 24l10.26-6V6L12 0zm3.12 13.93l-3.12 3.12-3.12-3.12-.83.83 3.95 3.95 3.95-3.95-.83-.83zM5.3 7.56L3.86 6.12l-.83.83 1.44 1.44.83-.83zM18.14 6.12l-1.44 1.44.83.83 1.44-1.44-.83-.83z"/></svg>
                 {{ t('docs.readDocs') }}
+              </a>
+              <a :href="docsEntryZh" target="_blank" class="docs-btn docs-btn--outline">
+                {{ t('docs.openZhDocs') }}
+              </a>
+              <a :href="docsEntryEn" target="_blank" class="docs-btn docs-btn--outline">
+                {{ t('docs.openEnDocs') }}
               </a>
               <a :href="githubUrl" target="_blank" class="docs-btn docs-btn--outline">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
@@ -79,6 +86,10 @@ const { t, locale } = useI18n()
 
 const docsLang = computed(() => (String(locale.value).toLowerCase().startsWith('zh') ? 'zh' : 'en'))
 const docsUrl = computed(() => `https://asyou.me/_book/${docsLang.value}`)
+const docsUrlZh = 'https://asyou.me/_book/zh'
+const docsUrlEn = 'https://asyou.me/_book/en'
+const docsEntryZh = `${docsUrlZh}/user/intro/what-is-wetee.html`
+const docsEntryEn = `${docsUrlEn}/user/intro/what-is-wetee.html`
 const docsEntryUrl = computed(() => `${docsUrl.value}/user/intro/what-is-wetee.html`)
 const githubUrl = 'https://github.com/wetee-dao'
 
@@ -141,7 +152,6 @@ const gitbookUrl = docsEntryUrl
   overflow: hidden;
   padding: 18px;
   border: 1px solid var(--flat-border-1);
-  background: rgba(255, 255, 255, 0.01);
 }
 
 .docs-hero-grid {
@@ -231,6 +241,13 @@ const gitbookUrl = docsEntryUrl
     font-size: 1.05rem;
     color: rgba(var(--g-secondary-text-rgb), 0.75);
     margin: 0 auto 32px;
+    line-height: 1.6;
+  }
+
+  &__hint {
+    font-size: 0.95rem;
+    color: rgba(var(--g-secondary-text-rgb), 0.65);
+    margin: -18px auto 20px;
     line-height: 1.6;
   }
 

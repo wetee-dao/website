@@ -10,7 +10,7 @@
             <h2>
               WeTEE is a non-profit-oriented decentralized project that issues and maintains tool software and
               blockchain using the DAO model. WTE is the core token behind WeTEE. Coordination between governance token
-              holders and mining stakeholders is crucial for successful decentralized governance, and WTE serves as the
+              holders and network stakeholders is crucial for successful decentralized governance, and WTE serves as the
               tool to facilitate this coordination. WTE can be used to participate in WeTEE's OpenGov voting.
             </h2>
           </div>
@@ -46,21 +46,21 @@
               </thead>
               <tbody>
                 <tr>
-                  <td>Chain Mint</td>
+                  <td>Chain Node Rewards</td>
                   <td>10%</td>
-                  <td>Nodes participating in the consensus of blockchain will receive 10% of the block reward after
-                    mining a block.</td>
+                  <td>Nodes participating in blockchain consensus receive 10% of the block reward after producing a
+                    block.</td>
                 </tr>
                 <tr>
-                  <td>App Mint</td>
+                  <td>App Rewards</td>
                   <td>10%</td>
                   <td>Upload the application template to the TEE application store, and the applications will
                     share 5% of the current block's reward.</td>
                 </tr>
                 <tr>
-                  <td>TEE Mint</td>
+                  <td>TEE Node Rewards</td>
                   <td>40%</td>
-                  <td>By staking TOKEN and providing TEE hardware to connect to the network, all miners will share 40%
+                  <td>By staking TOKEN and providing TEE hardware to connect to the network, all TEE nodes will share 40%
                     of the current block's reward.</td>
                 </tr>
                 <tr>

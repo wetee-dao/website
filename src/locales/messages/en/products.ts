@@ -1,7 +1,7 @@
 export default {
   cloud: 'TEE Vm Cloud',
   bridge: 'TEE Bridge',
-  miner: 'TEE Miner',
+  miner: 'TEE Node',
   store: 'TEE Storage',
   mpc: 'TEE MPC',
 }

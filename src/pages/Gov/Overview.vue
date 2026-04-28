@@ -274,7 +274,6 @@ onMounted(() => {
 
   .stat-card {
     padding: 20px;
-    background: rgba(255, 255, 255, 0.02);
     border: 1px solid rgba(255, 255, 255, 0.04);
     
 

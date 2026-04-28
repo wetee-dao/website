@@ -72,7 +72,8 @@ const isTreasuryTokensActive = computed(() => route.path.startsWith('/gov/treasu
 <style lang="scss" scoped>
 .chain-box {
   background-color: rgba($primary-bg-rgb, 0.95);
-  // border: 1px solid rgba(255, 255, 255, 0.04);
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .sidebar-box {
