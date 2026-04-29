@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 397 311" fill="none" aria-hidden="true">
+  <path d="M64.6 237.4c2.3-2.3 5.5-3.6 8.8-3.6h313.8c5.5 0 8.2 6.7 4.3 10.6l-61.9 61.9c-2.3 2.3-5.5 3.6-8.8 3.6H7c-5.5 0-8.2-6.7-4.3-10.6z" fill="url(#a)"/>
+  <path d="M64.6 4.6C66.9 2.3 70.1 1 73.4 1h313.8c5.5 0 8.2 6.7 4.3 10.6l-61.9 61.9c-2.3 2.3-5.5 3.6-8.8 3.6H7C1.5 77.1-1.2 70.4 2.7 66.5z" fill="url(#b)"/>
+  <path d="M329.6 120.3c-2.3-2.3-5.5-3.6-8.8-3.6H7c-5.5 0-8.2 6.7-4.3 10.6l61.9 61.9c2.3 2.3 5.5 3.6 8.8 3.6h313.8c5.5 0 8.2-6.7 4.3-10.6z" fill="url(#c)"/>
+  <defs>
+    <linearGradient id="a" x1="360.9" y1="-43.5" x2="141.2" y2="378.1" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#00FFA3"/>
+      <stop offset="1" stop-color="#DC1FFF"/>
+    </linearGradient>
+    <linearGradient id="b" x1="264.8" y1="-93.5" x2="45.1" y2="328.1" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#00FFA3"/>
+      <stop offset="1" stop-color="#DC1FFF"/>
+    </linearGradient>
+    <linearGradient id="c" x1="312.2" y1="-68.8" x2="92.6" y2="352.8" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#00FFA3"/>
+      <stop offset="1" stop-color="#DC1FFF"/>
+    </linearGradient>
+  </defs>
+</svg>

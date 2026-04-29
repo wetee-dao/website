@@ -195,10 +195,6 @@ watch(height, fetchBlock)
   border: 4px solid rgba(255, 255, 255, 0.0588235294);
   min-height: calc(100vh - 230px);
 
-  .title-wrap {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.0588235294);
-  }
-
   .title {
     font-size: 16px;
     font-weight: bold;

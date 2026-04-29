@@ -175,9 +175,6 @@ watch(hash, fetchTx)
   border-radius: 4px;
   min-height: calc(100vh - 140px);
 
-  .title-wrap {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  }
 
   .title {
     .chain-logo {

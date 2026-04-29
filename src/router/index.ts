@@ -86,6 +86,11 @@ const router = createRouter({
       component: () => import('../pages/Chain/Txs.vue')
     },
     {
+      path: '/chain/contracts',
+      name: 'Mainchain Contracts',
+      component: () => import('../pages/Chain/Contracts.vue')
+    },
+    {
       path: '/chain/tx/:hash',
       name: 'Tx Detail',
       component: () => import('../pages/Chain/Tx.vue')

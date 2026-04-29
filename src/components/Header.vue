@@ -35,6 +35,17 @@
           <a href="javascript:void(0)">{{ t('nav.blockchain') }} <i class="iconfont">&#xe68f;</i></a>
           <ul v-if="props.shadow && showSub" class="header__dropdown">
             <li>
+              <RouterLink to="/chain/contracts" @click="onNavItemClick">
+                <div class="flex items-center">
+                  <MainchainContracts class="icon icon--mainchain" />
+                  <div class="title-wrap">
+                    <div class="title">{{ t('nav.mainchainContracts') }}</div>
+                    <div class="subtitle">{{ t('nav.mainchainContractsSubtitle') }}</div>
+                  </div>
+                </div>
+              </RouterLink>
+            </li>
+            <li>
               <RouterLink to="/chain/blocks" @click="onNavItemClick">
                 <div class="flex items-center ">
                   <Svgimg class="icon" name="block" />
@@ -182,8 +193,7 @@
           <span class="text">&nbsp;{{ t('common.connect') }}</span>
         </div>
         <div class="header__cta connect" @click="login" v-if="userInfo">
-          <Identicon class="uicon" :key="userInfo.addr" @click="login" :hash="ss58toHex(userInfo.addr)" :padding="0.28"
-            :foreground="[80, 250, 130, 255]" :background="[80, 255, 130, 0]" :size="16" />
+          <img class="uicon wallet-logo" :src="walletIcon(userInfo)" :alt="userInfo?.name || 'wallet'" />
           <span class="text">{{ userInfo.name }}</span>
         </div>
         <!-- end wallet -->
@@ -202,11 +212,10 @@
 import { onBeforeUnmount, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useToast } from '@nuxt/ui/composables'
-import { ss58toHex } from '@/utils/chain'
+import { getWallets, type Wallet } from '@talismn/connect-wallets'
 import { useGlobalStore } from '@/stores/global'
 import useGlobelProperties from '@/plugins/globel'
 import { setLocale, getLocale, type LocaleId } from '@/locales'
-import Identicon from './identicon.vue'
 import router from '@/router'
 import Svgimg from '@/components/svg/SvgImg.vue'
 import MPC from './svg/MPC.vue'
@@ -214,6 +223,7 @@ import Miner from './svg/Miner.vue'
 import Bridge from './svg/Bridge.vue'
 import Store from './svg/Store.vue'
 import Cloud from './svg/Cloud.vue'
+import MainchainContracts from './svg/MainchainContracts.vue'
 import Logo from './svg/Logo2.vue'
 
 const { t } = useI18n()
@@ -227,6 +237,15 @@ const switchLocale = (l: LocaleId) => {
 const props = defineProps(['shadow'])
 const userStore = useGlobalStore()
 const toast = useToast()
+const supportedWallets: Wallet[] = getWallets()
+
+const walletIcon = (info: any) => {
+  const walletName = String(info?.wallet ?? '').toLowerCase()
+  const target = supportedWallets.find((wallet) => wallet.extensionName.toLowerCase() === walletName)
+  if (target?.logo?.src) return target.logo.src
+  if (walletName === 'demo-login') return '/imgs/by_polkadot.svg'
+  return '/imgs/by_polkadot.svg'
+}
 
 const group = ref("main")
 const showSub = ref(true)
@@ -540,7 +559,7 @@ onBeforeUnmount(() => {
           color: $primary-text;
           fill: $primary-text;
         }
-
+        
         .title {
           font-size: 16px;
           margin-bottom: 2px;
@@ -643,11 +662,15 @@ onBeforeUnmount(() => {
     }
 
     .uicon {
-      width: 36px;
-      height: 36px;
+      width: 30px;
+      height: 30px;
       cursor: pointer;
       margin-left: -3px;
-      margin-right: -2px;
+      margin-right: 9px;
+    }
+
+    .wallet-logo {
+      object-fit: contain;
     }
 
     svg {

@@ -134,9 +134,6 @@ watch(() => [route.query.height, route.params.height], () => loadTxs())
   background-color: rgba($primary-bg-rgb, 0.5);
   border-radius: 4px;
 
-  .title-wrap {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  }
 
   .title {
     font-size: 14px;
