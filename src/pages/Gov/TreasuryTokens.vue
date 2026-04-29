@@ -6,7 +6,7 @@
       <main class="gov-main min-w-0 flex-1">
         <div class="chain-box main-box">
           <div class="title-wrap title-wrap--pixel flex flex-wrap items-center justify-between gap-4">
-            <div class="title-pixel-bg" aria-hidden="true">
+            <div class="title-pixel-bg pointer-events-none" aria-hidden="true">
               <PixelBg :tile-size="6" :gap="4" :max-opacity="0.28" :density="0.18" :wave-speed="0.0014" />
             </div>
             <div class="relative z-[1]">

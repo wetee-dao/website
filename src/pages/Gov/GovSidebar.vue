@@ -109,9 +109,9 @@ const isTreasuryTokensActive = computed(() => route.path.startsWith('/gov/treasu
       &::after {
         content: '';
         position: absolute;
-        left: -6%;
+        left: -12px;
         bottom: 0;
-        width: 116%;
+        width: calc(100% + 24px);
         height: 100%;
         background: rgba(255, 255, 255, 0.05);
       }
