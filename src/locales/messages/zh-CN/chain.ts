@@ -25,6 +25,7 @@ export default {
   contractsSubtitle: '已接入链路与资产支持',
   contractsDesc: '当前已接入区块链列表。',
   contractAddress: '合约地址',
+  contractSource: '源码地址',
   supportedAssets: '支持资产',
   supportedWallets: '支持钱包',
   contractsColChain: '接入链',

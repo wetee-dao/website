@@ -2,7 +2,7 @@
   <div class="page gradient-body">
     <div class="blocks container flex mb-2 flex-col lg:flex-row">
       <div class="chain-box flex lg:mb-0 flex-col flex-1">
-        <div class="title-wrap flex p-6 lg:p-8 flex-wrap justify-between items-center" style="position: relative; height: 120px;">
+        <div class="title-wrap flex p-6 lg:p-8 flex-wrap justify-between items-center border-b border-white/5" style="position: relative; height: 120px;">
           <PixelBg :tileSize="6" :gap="4" :maxOpacity="0.12" :density="0.4" />
           <div class="title flex overflow-hidden relative z-5">
             <Svgimg class="chain-logo mr-3 flex-shrink-0"  name="transfer" />

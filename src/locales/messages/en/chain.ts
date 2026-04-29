@@ -25,6 +25,7 @@ export default {
   contractsSubtitle: 'Integrated chain route and asset support',
   contractsDesc: 'List of currently integrated chains.',
   contractAddress: 'Contract Address',
+  contractSource: 'Source Code',
   supportedAssets: 'Supported Assets',
   supportedWallets: 'Supported Wallets',
   contractsColChain: 'Chain',

@@ -2,7 +2,7 @@
   <div class="page gradient-body">
     <div class="container flex mb-4 flex-col lg:flex-row">
       <div class="chain-box flex lg:mb-0 flex-col flex-1">
-        <div class="title-wrap flex p-[15px] lg:p-5 flex-wrap justify-between items-center">
+        <div class="title-wrap flex p-[15px] lg:p-5 flex-wrap justify-between items-center border-b border-white/5">
           <div class="title flex overflow-hidden">
             <Svgimg class="chain-logo mr-2 flex-shrink-0" name="lineblock" />
             <div class="inline truncate">{{ t('chainDetail.blockTitle') }} #{{ height }}</div>

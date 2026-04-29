@@ -24,7 +24,7 @@
                   </div>
                 </div>
                 <button class="card-action" type="button" :disabled="!item.apiUrl">
-                  <span>{{ item.apiUrl ? t('chain.contractsActionOpenApi') : t('chain.contractsStatusPending') }}</span>
+                  <span>{{ item.contract !== '-' ? t('chain.contractsStatusActive') : t('chain.contractsStatusPending') }}</span>
                   <span aria-hidden="true">↗</span>
                 </button>
               </div>
@@ -32,6 +32,21 @@
                 <div class="meta-line">
                   <span class="meta-label">{{ t('chain.contractAddress') }}</span>
                   <span class="chip mono">{{ item.contract }}</span>
+                </div>
+                <div class="meta-line">
+                  <span class="meta-label">{{ t('chain.contractSource') }}</span>
+                  <div class="meta-values">
+                    <a
+                      v-if="item.sourceUrl"
+                      class="chip mono link-chip"
+                      :href="item.sourceUrl"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {{ item.sourceUrl }}
+                    </a>
+                    <span v-else class="chip mono">-</span>
+                  </div>
                 </div>
                 <div class="meta-line">
                   <span class="meta-label">{{ t('chain.supportedAssets') }}</span>
@@ -74,7 +89,8 @@ const chainItems = [
     icon: '/imgs/polkadot_mini.svg',
     fallbackIcon: 'P',
     description: 'Polkadot 具备共享安全、平行链互操作与链上治理升级能力。',
-    contract: '-',
+    contract: '0x0b974c94f5ad06c4236efaed5a962cce3ddfbc18',
+    sourceUrl: 'https://github.com/wetee-dao/contract/tree/main/revives',
     apiUrl: '',
     assets: ['DOT', 'USDT', 'USDC'],
     wallets: [
@@ -90,6 +106,7 @@ const chainItems = [
     fallbackIcon: 'E',
     description: 'Ethereum 具备成熟的智能合约生态与广泛的钱包及资产支持。',
     contract: '-',
+    sourceUrl: '',
     apiUrl: '',
     assets: ['ETH', 'USDT', 'USDC'],
     wallets: [
@@ -103,6 +120,7 @@ const chainItems = [
     fallbackIcon: 'B',
     description: 'BNB Chain 具备高兼容 EVM 生态与常见稳定币资产接入能力。',
     contract: '-',
+    sourceUrl: '',
     apiUrl: '',
     assets: ['BNB', 'USDT', 'USDC'],
     wallets: [
@@ -116,6 +134,7 @@ const chainItems = [
     fallbackIcon: 'S',
     description: 'Solana 具备高吞吐链上执行能力与主流资产钱包生态支持。',
     contract: '-',
+    sourceUrl: '',
     apiUrl: '',
     assets: ['SOL', 'USDT', 'USDC'],
     wallets: [
@@ -141,7 +160,8 @@ const chainItems = [
   .title-wrap {
     position: relative;
     overflow: hidden;
-    padding: 28px 32px;
+    padding: 40px 32px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   }
 
   .title {
@@ -179,6 +199,9 @@ const chainItems = [
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 18px;
   padding: 24px;
+  &:last-child {
+    border-bottom: none;
+  }
 }
 
 .card-top {
@@ -292,6 +315,12 @@ const chainItems = [
   font-size: 13px;
   line-height: 1.1;
   border-radius: 10px;
+}
+
+.link-chip {
+  max-width: 100%;
+  text-decoration: none;
+  overflow-wrap: anywhere;
 }
 
 .wallet-chip {

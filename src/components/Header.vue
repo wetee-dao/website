@@ -569,6 +569,10 @@ onBeforeUnmount(() => {
           font-size: 12px;
           color: rgba($secondary-text-rgb, 0.5);
         }
+
+        &:last-child {
+          border-bottom: none;
+        }
       }
     }
   }
