@@ -3,10 +3,10 @@ export default {
   polkadot: 'Polkadot network',
   latestBlocks: 'Latest Blocks',
   transfers: 'Transfers',
-  brand: 'Web2Plus',
+  brand: 'PlusWeb2',
   hero: {
     title: 'Buy compute on your chain, with your tokens, directly',
-    subtitle: 'Web2Plus = Web3 developer tooling + TEE confidential computing',
+    subtitle: 'PlusWeb2 = Web3 developer tooling + TEE confidential computing',
     bullets: 'No new token · Multi-chain native payments · 100% on-chain control',
     ctaStart: 'Get started',
     ctaDocs: 'Read the docs',
@@ -56,7 +56,7 @@ export default {
     step3Desc: 'Pay as you go, no monthly fee',
   },
   why: {
-    sectionTitle: 'Why Web2Plus?',
+    sectionTitle: 'Why PlusWeb2?',
     noToken: 'No new token',
     noTokenDesc: 'Pay with ETH / BNB / SOL',
     multichain: 'Multi-chain payments',
@@ -99,6 +99,6 @@ export default {
     discord: 'Discord',
     telegram: 'Telegram',
     powered: 'Powered by Polkadot · Built with TEE',
-    copyright: '© 2026 Web2Plus',
+    copyright: '© 2026 PlusWeb2',
   },
 }

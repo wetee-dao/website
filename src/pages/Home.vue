@@ -236,7 +236,7 @@
       </div>
     </section>
 
-    <!-- Why Web2Plus -->
+    <!-- Why PlusWeb2 -->
     <section
       class="section-panel section-panel--dark text-[rgba(var(--g-secondary-text-rgb),0.88)]"
     >

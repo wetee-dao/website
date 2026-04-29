@@ -3,10 +3,10 @@ export default {
   polkadot: 'Polkadot network',
   latestBlocks: '最新区块',
   transfers: '最新交易',
-  brand: 'Web2Plus',
+  brand: 'PlusWeb2',
   hero: {
     title: '在你的链上，用你的代币，直接购买算力',
-    subtitle: 'Web2Plus = Web3 开发者工具 + TEE 机密计算',
+    subtitle: 'PlusWeb2 = Web3 开发者工具 + TEE 机密计算',
     bullets: '无需新币 · 多链原生支付 · 100% 链上控制',
     ctaStart: '开始使用',
     ctaDocs: '查看文档',
@@ -56,7 +56,7 @@ export default {
     step3Desc: '按需付费，无月费',
   },
   why: {
-    sectionTitle: '为什么选 Web2Plus？',
+    sectionTitle: '为什么选 PlusWeb2？',
     noToken: '无需新币',
     noTokenDesc: '直接用 ETH/BNB/SOL 支付',
     multichain: '多链支付',
@@ -99,6 +99,6 @@ export default {
     discord: 'Discord',
     telegram: 'Telegram',
     powered: 'Powered by Polkadot · Built with TEE',
-    copyright: '© 2026 Web2Plus',
+    copyright: '© 2026 PlusWeb2',
   },
 }

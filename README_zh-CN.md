@@ -2,11 +2,11 @@
 
 ---
 
-# Web2Plus
+# PlusWeb2
 
 **运行任何程序，保护隐私，部署到任何链。**
 
-Web2Plus 是一个基于 TEE 的机密计算平台，将链外程序与链上智能合约连接起来。支持 USDT、ETH、BNB、SOL 支付，无需新代币。
+PlusWeb2 是一个基于 TEE 的机密计算平台，将链外程序与链上智能合约连接起来。支持 USDT、ETH、BNB、SOL 支付，无需新代币。
 
 [官网](https://wetee.app) · [文档](https://docs.wetee.app) · [Twitter](https://x.com/plus_web2)
 
@@ -25,7 +25,7 @@ Web2Plus 是一个基于 TEE 的机密计算平台，将链外程序与链上智
 Web2 程序快速且私密，但无法与区块链逻辑交互。
 智能合约透明且去中心化，但无法运行复杂程序。
 
-**Web2Plus 打通两者。**
+**PlusWeb2 打通两者。**
 
 ---
 
@@ -62,7 +62,7 @@ TEE 硬件 (Intel SGX/TDX/SEV-SNP)
 
 ---
 
-## 为什么选 Web2Plus
+## 为什么选 PlusWeb2
 
 | | |
 |-|---|
@@ -86,7 +86,7 @@ TEE 硬件 (Intel SGX/TDX/SEV-SNP)
 ## 社区
 
 - [Twitter](https://x.com/plus_web2) — 产品更新和技术讨论
-- [Discord](https://discord.gg/web2plus) — 开发者交流
+- [Discord](https://discord.gg/PlusWeb2) — 开发者交流
 - [Telegram](https://t.me/weteedao) — 公告
 
 ---

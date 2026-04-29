@@ -2,11 +2,11 @@
 
 ---
 
-# Web2Plus
+# PlusWeb2
 
 **Run any program with privacy. Deploy to any chain.**
 
-Web2Plus is a TEE-backed confidential computing platform that connects off-chain programs with on-chain smart contracts. Pay with USDT, ETH, BNB, or SOL — no new token required.
+PlusWeb2 is a TEE-backed confidential computing platform that connects off-chain programs with on-chain smart contracts. Pay with USDT, ETH, BNB, or SOL — no new token required.
 
 [Website](https://wetee.app) · [Docs](https://docs.wetee.app) · [Twitter](https://x.com/plus_web2)
 
@@ -25,7 +25,7 @@ Easy to build         →     Hard to build
 Web2 programs are fast and private but can't interact with blockchain logic.
 Smart contracts are transparent and decentralized but can't run complex programs.
 
-**Web2Plus bridges both.**
+**PlusWeb2 bridges both.**
 
 ---
 
@@ -62,7 +62,7 @@ Smart Contract
 
 ---
 
-## Why Web2Plus
+## Why PlusWeb2
 
 | | |
 |-|---|
@@ -86,7 +86,7 @@ Smart Contract
 ## Community
 
 - [Twitter](https://x.com/plus_web2) — product updates & threads
-- [Discord](https://discord.gg/web2plus) — developer chat
+- [Discord](https://discord.gg/PlusWeb2) — developer chat
 - [Telegram](https://t.me/weteedao) — announcements
 
 ---

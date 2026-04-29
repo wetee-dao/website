@@ -1,6 +1,6 @@
 export default {
   heroTitle: '开发者文档',
-  heroSubtitle: '构建 Web2Plus 所需的一切 — 从 TEE VM 部署到区块链集成。',
+  heroSubtitle: '构建 PlusWeb2 所需的一切 — 从 TEE VM 部署到区块链集成。',
   readDocs: '阅读文档',
   viewSource: '在 GitHub 查看',
   langHint: '提示：部分章节可能暂无中文翻译，可切换到英文版查看。',

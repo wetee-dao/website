@@ -1,6 +1,6 @@
 export default {
   heroTitle: 'Developer Documentation',
-  heroSubtitle: 'Everything you need to build with Web2Plus — from TEE VM deployment to blockchain integration.',
+  heroSubtitle: 'Everything you need to build with PlusWeb2 — from TEE VM deployment to blockchain integration.',
   readDocs: 'Read the Docs',
   viewSource: 'View on GitHub',
   langHint: 'Note: Some pages may not be available in Chinese yet. Switch to English if needed.',
