@@ -65,7 +65,8 @@ export default {
         '- On-chain protocol parameter changes and upgrades<br />' +
         '- Proposals, referenda, and track-based voting<br />' +
         '<br />' +
-        '<strong>Important:</strong> once you use VOTE to vote in governance, the voted VOTE will be <strong>permanently locked</strong> (cannot be unlocked or returned to available balance).',
+        '<strong>Important:</strong> once you use VOTE to vote in governance, the voted VOTE will be <strong>permanently burned</strong> (irreversible; cannot be restored to available balance).<br />' +
+        '<strong>Why:</strong> burning on vote discourages long-term hoarding and prevents the emergence of governance whales.',
     },
   },
 }

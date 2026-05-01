@@ -2,7 +2,6 @@
   <footer class="footer">
     <div class="footer__main">
       <div class="container">
-        <p class="footer__powered">{{ t('home.footer.powered') }}</p>
         <div class="footer__grid">
           <div class="footer__col">
             <h6 class="footer__col-title">{{ t('home.footer.products') }}</h6>
@@ -78,7 +77,9 @@
     <div class="footer__content flex items-center">
       <div class="container">
         <div class="flex items-center">
-          <small class="footer__copyright flex-1">{{ t('home.footer.copyright') }}</small>
+          <small class="footer__copyright flex-1">
+            {{ t('home.footer.copyright') }} · Powered by Polkadot · Built with TEE
+          </small>
           <div class="footer__social">
             <a href="https://x.com/plus_web2" target="_blank">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">

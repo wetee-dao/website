@@ -64,7 +64,8 @@ export default {
         '- 链上协议参数调整与升级决策<br />' +
         '- 治理提案、公投与各类 Track（轨道）投票<br />' +
         '<br />' +
-        '<strong>重要规则：</strong>一旦你使用 VOTE 参与治理投票，对应的投票 VOTE 将<strong>直接永久锁定</strong>（不可解锁/不可回退为可用余额）。',
+        '<strong>重要规则：</strong>一旦你使用 VOTE 参与治理投票，对应的投票 VOTE 将<strong>直接永久销毁</strong>（不可撤销/不可恢复为可用余额）。<br />' +
+        '<strong>原因：</strong>投票即销毁用于抑制 VOTE 的长期囤积，阻止“治理巨鲸”的诞生。',
     },
   },
 }
