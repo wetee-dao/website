@@ -300,9 +300,10 @@ onMounted(() => {
     font-size: 11px;
     font-weight: 500;
     color: rgba($secondary-text-rgb, 0.4);
-    margin: 0 0 16px;
+    padding: 0 0 16px;
     text-transform: uppercase;
     letter-spacing: 0.08em;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   }
 
   .members-list {

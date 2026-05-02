@@ -1,6 +1,11 @@
 export default {
   title: '国库代币持仓',
-  subtitle: '国库持有的中继链原生资产。接口接入后将显示链上余额。',
+  subtitle: '国库持有的 Asset Hub 原生资产；通过链上 RPC 查询 Cloud 合约地址余额。',
+  selectChain: '网络',
+  loading: '加载中…',
+  errorLoad: '加载失败',
+  noCloudAddress: '当前链未配置 Cloud 合约地址。',
+  emptyTokens: '暂无代币数据',
   mockHint: '链上数据尚未接入，下表余额为占位展示。',
   colSymbol: '符号',
   colAsset: '资产',
@@ -13,4 +18,13 @@ export default {
   ksmAsset: 'Kusama',
   ksmNetwork: 'Kusama',
   balancePlaceholder: '—',
+  assetKind: {
+    native: '原生',
+    assets: '资产',
+    builtin: '内置',
+    erc20: 'ERC-20',
+    erc721: 'ERC-721',
+    erc1155: 'ERC-1155',
+    other: '其他',
+  },
 }

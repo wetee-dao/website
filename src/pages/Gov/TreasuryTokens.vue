@@ -9,15 +9,31 @@
             <div class="title-pixel-bg pointer-events-none" aria-hidden="true">
               <PixelBg :tile-size="6" :gap="4" :max-opacity="0.28" :density="0.18" :wave-speed="0.0014" />
             </div>
-            <div class="relative z-[1]">
+            <div class="relative z-[1] min-w-0 flex-1">
               <h1 class="page-title">{{ t('govTreasuryTokens.title') }}</h1>
               <p class="page-subtitle">{{ t('govTreasuryTokens.subtitle') }}</p>
             </div>
+            <div v-if="chainSelectItems.length" class="relative z-[1] w-full shrink-0 sm:w-72">
+              <div class="mb-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/40">
+                {{ t('govTreasuryTokens.selectChain') }}
+              </div>
+              <USelect
+                v-model="selectedChainId"
+                class="w-full p-3"
+                :items="chainSelectItems"
+                value-key="id"
+                label-key="name"
+                size="lg"
+              />
+            </div>
           </div>
 
-          <div class="mock-banner px-5 py-3 lg:px-8">
-            <p class="mock-banner-text">{{ t('govTreasuryTokens.mockHint') }}</p>
-          </div>
+          <p v-if="loadError" class="error-banner px-5 py-3 text-sm lg:px-8" role="alert">
+            {{ t('govTreasuryTokens.errorLoad') }}: {{ loadError }}
+          </p>
+          <p v-else-if="noCloudAddress" class="hint-banner px-5 py-3 text-sm lg:px-8">
+            {{ t('govTreasuryTokens.noCloudAddress') }}
+          </p>
 
           <!-- 桌面表格 -->
           <div class="hidden md:block token-table-wrap px-5 pb-8 lg:px-8">
@@ -31,39 +47,55 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="row in tokenRows" :key="row.id">
-                  <td>
-                    <span class="token-symbol">{{ row.symbol }}</span>
-                  </td>
-                  <td class="token-asset">{{ row.assetLabel }}</td>
-                  <td>
-                    <UBadge color="neutral" variant="subtle" size="sm" class="network-badge">
-                      {{ row.networkLabel }}
-                    </UBadge>
-                  </td>
-                  <td class="token-balance text-end font-mono">{{ row.balance }}</td>
+                <tr v-if="loading">
+                  <td colspan="4" class="token-loading">{{ t('govTreasuryTokens.loading') }}</td>
                 </tr>
+                <tr v-else-if="!tokenRows.length && !noCloudAddress">
+                  <td colspan="4" class="token-empty">{{ t('govTreasuryTokens.emptyTokens') }}</td>
+                </tr>
+                <template v-else>
+                  <tr v-for="row in tokenRows" :key="row.id">
+                    <td>
+                      <span class="token-symbol">{{ row.symbol }}</span>
+                    </td>
+                    <td class="token-asset">{{ row.assetLabel }}</td>
+                    <td>
+                      <UBadge color="neutral" variant="subtle" size="sm" class="network-badge">
+                        {{ row.networkLabel }}
+                      </UBadge>
+                    </td>
+                    <td class="token-balance text-end font-mono">{{ row.balance }}</td>
+                  </tr>
+                </template>
               </tbody>
             </table>
           </div>
 
           <!-- 移动端卡片 -->
           <div class="grid gap-3 px-5 pb-8 md:hidden lg:px-8">
-            <div v-for="row in tokenRows" :key="row.id" class="token-card">
-              <div class="flex items-start justify-between gap-3">
-                <div>
-                  <div class="token-symbol text-lg">{{ row.symbol }}</div>
-                  <div class="token-asset mt-1 text-sm">{{ row.assetLabel }}</div>
+            <template v-if="loading">
+              <div class="token-card token-card--muted">{{ t('govTreasuryTokens.loading') }}</div>
+            </template>
+            <template v-else-if="!tokenRows.length && !noCloudAddress">
+              <div class="token-card token-card--muted">{{ t('govTreasuryTokens.emptyTokens') }}</div>
+            </template>
+            <template v-else>
+              <div v-for="row in tokenRows" :key="row.id" class="token-card">
+                <div class="flex items-start justify-between gap-3">
+                  <div>
+                    <div class="token-symbol text-lg">{{ row.symbol }}</div>
+                    <div class="token-asset mt-1 text-sm">{{ row.assetLabel }}</div>
+                  </div>
+                  <UBadge color="neutral" variant="subtle" size="sm" class="network-badge shrink-0">
+                    {{ row.networkLabel }}
+                  </UBadge>
                 </div>
-                <UBadge color="neutral" variant="subtle" size="sm" class="network-badge shrink-0">
-                  {{ row.networkLabel }}
-                </UBadge>
+                <div class="mt-4 flex items-baseline justify-between border-t border-white/[0.06] pt-3">
+                  <span class="label-muted">{{ t('govTreasuryTokens.colBalance') }}</span>
+                  <span class="token-balance font-mono">{{ row.balance }}</span>
+                </div>
               </div>
-              <div class="mt-4 flex items-baseline justify-between border-t border-white/[0.06] pt-3">
-                <span class="label-muted">{{ t('govTreasuryTokens.colBalance') }}</span>
-                <span class="token-balance font-mono">{{ row.balance }}</span>
-              </div>
-            </div>
+            </template>
           </div>
         </div>
       </main>
@@ -73,38 +105,85 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import GovSidebar from './GovSidebar.vue'
 import PixelBg from '@/components/anim/PixelBg.vue'
+import { fetchChainContractsSlice, type ChainContractsSlice } from '@/apis/chain-info'
+import { fetchCloudTreasuryTokenRows, type TreasuryTokenRow } from '@/apis/treasury-polkadot-tokens'
 
 const { t } = useI18n()
 
-interface TokenRow {
-  id: string
-  symbol: string
-  assetLabel: string
-  networkLabel: string
-  balance: string
+const chains = ref<ChainContractsSlice[]>([])
+const selectedChainId = ref('0')
+const tokenRows = ref<TreasuryTokenRow[]>([])
+const loading = ref(false)
+const loadError = ref<string | null>(null)
+
+const chainSelectItems = computed(() =>
+  chains.value.map((c, i) => ({
+    id: String(i),
+    name: c.network_label,
+  })),
+)
+
+const currentChain = computed(() => {
+  const i = Number.parseInt(selectedChainId.value, 10)
+  if (Number.isNaN(i) || i < 0 || i >= chains.value.length) return undefined
+  return chains.value[i]
+})
+
+const noCloudAddress = computed(() => {
+  const c = currentChain.value
+  if (!c) return false
+  return !String(c.cloud_contract ?? '').trim()
+})
+
+async function loadTokens() {
+  const c = currentChain.value
+  loadError.value = null
+  if (!c || !String(c.cloud_contract ?? '').trim()) {
+    tokenRows.value = []
+    return
+  }
+  loading.value = true
+  try {
+    tokenRows.value = await fetchCloudTreasuryTokenRows({
+      cloudAddress: c.cloud_contract,
+      networkLabel: c.network_label,
+      tAssetKind: (key: string) => t(`govTreasuryTokens.assetKind.${key}`),
+    })
+  } catch (e) {
+    loadError.value = e instanceof Error ? e.message : String(e)
+    tokenRows.value = []
+  } finally {
+    loading.value = false
+  }
 }
 
-/** 接口未就绪：占位数据，后续替换为 API 响应 */
-const tokenRows = computed<TokenRow[]>(() => [
-  {
-    id: 'dot',
-    symbol: t('govTreasuryTokens.dotSymbol'),
-    assetLabel: t('govTreasuryTokens.dotAsset'),
-    networkLabel: t('govTreasuryTokens.dotNetwork'),
-    balance: t('govTreasuryTokens.balancePlaceholder'),
+watch([selectedChainId, chains], () => {
+  void loadTokens()
+})
+
+watch(
+  chainSelectItems,
+  (items) => {
+    if (!items.length) return
+    if (!items.some((x) => x.id === selectedChainId.value)) {
+      selectedChainId.value = items[0].id
+    }
   },
-  {
-    id: 'ksm',
-    symbol: t('govTreasuryTokens.ksmSymbol'),
-    assetLabel: t('govTreasuryTokens.ksmAsset'),
-    networkLabel: t('govTreasuryTokens.ksmNetwork'),
-    balance: t('govTreasuryTokens.balancePlaceholder'),
-  },
-])
+  { immediate: true },
+)
+
+onMounted(async () => {
+  try {
+    chains.value = await fetchChainContractsSlice()
+  } catch {
+    chains.value = []
+  }
+  await loadTokens()
+})
 </script>
 
 <style lang="scss" scoped>
@@ -157,16 +236,15 @@ const tokenRows = computed<TokenRow[]>(() => [
   }
 }
 
-.mock-banner {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-  background: rgba(255, 255, 255, 0.02);
+.error-banner {
+  border-bottom: 1px solid rgba(255, 80, 80, 0.2);
+  background: rgba(255, 80, 80, 0.06);
+  color: rgba(255, 200, 200, 0.9);
 }
 
-.mock-banner-text {
-  margin: 0;
-  font-size: 12px;
-  line-height: 1.5;
-  color: rgba($secondary-text-rgb, 0.45);
+.hint-banner {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  color: rgba($secondary-text-rgb, 0.55);
 }
 
 .token-table-wrap {
@@ -195,6 +273,12 @@ const tokenRows = computed<TokenRow[]>(() => [
   }
 }
 
+.token-loading,
+.token-empty {
+  font-size: 14px;
+  color: rgba($secondary-text-rgb, 0.55);
+}
+
 .token-symbol {
   font-size: 15px;
   font-weight: 600;
@@ -219,6 +303,11 @@ const tokenRows = computed<TokenRow[]>(() => [
   padding: 16px;
   border: 1px solid rgba(255, 255, 255, 0.06);
   background: rgba(255, 255, 255, 0.02);
+}
+
+.token-card--muted {
+  color: rgba($secondary-text-rgb, 0.55);
+  font-size: 14px;
 }
 
 .label-muted {

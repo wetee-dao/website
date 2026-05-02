@@ -226,20 +226,11 @@
                           </UBadge>
                           <span v-if="mv.deleted" class="my-vote-deleted">{{ t('govDetail.myVoteCanceled') }}</span>
                           <span v-else class="my-vote-meta-line">
-                            <span v-if="mv.unlockedOnChain" class="my-vote-unlocked-badge">{{ t('govDetail.voteUnlockedOnChain') }}</span>
-                            <template v-else>
-                              <span class="tabular-nums">{{ mv.lockAmount.toString() }}</span>
-                              <span class="my-vote-dot">·</span>
-                              <span>w{{ mv.weight }}</span>
-                              <span class="my-vote-dot">·</span>
-                              <span>{{ t('gov.atBlock', { block: mv.voteBlock }) }}</span>
-                              <template v-if="detail.statusBlock > 0">
-                                <span class="my-vote-dot">·</span>
-                                <span class="my-vote-unlock-hint"
-                                  :title="t('govDetail.myVoteUnlockHint', { block: detail.statusBlock + mv.unlockBlock })">≥{{
-                                    detail.statusBlock + mv.unlockBlock }}</span>
-                              </template>
-                            </template>
+                            <span class="tabular-nums">{{ mv.lockAmount.toString() }}</span>
+                            <span class="my-vote-dot">·</span>
+                            <span>w{{ mv.weight }}</span>
+                            <span class="my-vote-dot">·</span>
+                            <span>{{ t('gov.atBlock', { block: mv.voteBlock }) }}</span>
                           </span>
                         </div>
                         <div v-if="!mv.deleted" class="my-vote-actions">
@@ -248,15 +239,8 @@
                             @click="handleCancelMyVote(mv)">
                             {{ t('govDetail.cancelMyVote') }}
                           </UButton>
-                          <UButton v-if="canUnlockVote(mv)" type="button" size="sm" color="neutral" variant="solid"
-                            class="my-vote-btn" :loading="unlocking" @click="handleUnlockMyVote(mv)">
-                            {{ t('govDetail.unlockMyVote') }}
-                          </UButton>
                         </div>
                       </div>
-                      <p v-if="!mv.deleted && !mv.unlockedOnChain && isProposalTerminalState() && !canUnlockVote(mv)" class="my-vote-wait">
-                        {{ t('govDetail.myVoteUnlockWait') }}
-                      </p>
                     </div>
                   </template>
                 </div>
@@ -438,7 +422,6 @@ import PixelCrossIcon from '@/components/svg/PixelCrossIcon.vue'
 import { SecretContractApi } from '@/apis/contract'
 import { getLatestBlockHeight } from '@/apis/side'
 import { bytesToString, callerToSs58 } from '@/utils/gov'
-import { fetchVoteUnlockStatusMap, voteRefMapKey } from '@/utils/voteUnlockStatuses'
 import { parseHumanNumber } from '@/utils/parseHumanNumber'
 import { $getTxProvider } from '@/plugins/chain'
 import type { WalletWrap } from '@/providers'
@@ -514,7 +497,6 @@ const depositAmount = ref('')
 const depositing = ref(false)
 const canceling = ref(false)
 const cancelingVote = ref(false)
-const unlocking = ref(false)
 const executing = ref(false)
 const depositModalOpen = ref(false)
 const voteModalOpen = ref(false)
@@ -526,18 +508,14 @@ const votePercent = ref(0)
 const unlockedBalance = ref<BN>(new BN(0))
 
 type VoteItem = {
-  /** 链上投票记录 id，用于 cancelVote / unlock */
+  /** 链上投票记录 id，用于 cancelVote */
   id: number
   voter: string
   yes: boolean
   lockAmount: BN
   weight: number
   voteBlock: number
-  /** 提案结束后需再经过的区块数方可 unlock */
-  unlockBlock: number
   deleted?: boolean
-  /** vote_unlock_statuses：是否已在链上完成解锁 */
-  unlockedOnChain: boolean
 }
 
 const votesLoading = ref(false)
@@ -562,37 +540,12 @@ const myVotes = computed(() => {
   return voteItems.value.filter((v) => v.voter === addr)
 })
 
-/** 提案已终结且达到 unlock 区块后，可链上 unlock 取回锁仓 */
-function canUnlockVote(v: VoteItem): boolean {
-  const d = detail.value
-  if (!d || v.deleted || v.unlockedOnChain) return false
-  const done =
-    d.stateCode === ProposalState.Approved ||
-    d.stateCode === ProposalState.Rejected ||
-    d.stateCode === ProposalState.Canceled
-  if (!done) return false
-  const endB = d.statusBlock
-  const head = headBlock.value
-  if (endB <= 0 || head == null) return true
-  return head >= endB + v.unlockBlock
-}
-
 /** 合约侧仅 Ongoing 可取消投票 */
 function showCancelVoteFor(v: VoteItem): boolean {
   const d = detail.value
   if (!d || v.deleted) return false
   return (
     d.stateCode === ProposalState.Ongoing || d.stateCode === ProposalState.Confirming
-  )
-}
-
-function isProposalTerminalState(): boolean {
-  const d = detail.value
-  if (!d) return false
-  return (
-    d.stateCode === ProposalState.Approved ||
-    d.stateCode === ProposalState.Rejected ||
-    d.stateCode === ProposalState.Canceled
   )
 }
 
@@ -837,29 +790,14 @@ async function loadVotes() {
     const rows = (await SecretContractApi.votes(proposalId, null, 1024)) as unknown
     const list = Array.isArray(rows) ? rows : []
 
-    const base = list.map((v: any) => ({
+    voteItems.value = list.map((v: any) => ({
       id: parseHumanNumber(v.index ?? v.Index),
       voter: callerToSs58(v.caller),
       yes: Boolean(v.opinionYes ?? v.OpinionYes),
       lockAmount: getBnFromChain(String(v.pledge ?? v.Pledge ?? '0')),
       weight: parseHumanNumber(v.voteWeight ?? v.VoteWeight),
       voteBlock: parseHumanNumber(v.voteBlock ?? v.VoteBlock ?? 0),
-      unlockBlock: parseHumanNumber(v.unlockBlock ?? v.UnlockBlock ?? 0),
       deleted: Boolean(v.deleted ?? v.Deleted ?? false),
-      unlockedOnChain: false,
-    }))
-
-    const keys = base.map((v) => ({ ProposalID: proposalId, VoteIndex: v.id }))
-    let unlockMap = new Map<string, boolean>()
-    try {
-      unlockMap = await fetchVoteUnlockStatusMap(keys)
-    } catch (e) {
-      console.warn('vote_unlock_statuses failed:', e)
-    }
-
-    voteItems.value = base.map((v) => ({
-      ...v,
-      unlockedOnChain: unlockMap.get(voteRefMapKey(proposalId, v.id)) ?? false,
     }))
     refreshWalletAddress()
   } catch (e) {
@@ -1060,10 +998,7 @@ async function loadUnlockedBalance() {
       unlockedBalance.value = new BN(0)
       return
     }
-    const [bal, locked] = await Promise.all([
-      SecretContractApi.balanceOf(addr),
-      SecretContractApi.lockBalanceOf(addr),
-    ])
+    const bal = await SecretContractApi.balanceOf(addr)
     const unwrapOk = (v: unknown): unknown => {
       if (!v) return v
       if (Array.isArray(v) && v.length === 1) return unwrapOk(v[0])
@@ -1087,9 +1022,7 @@ async function loadUnlockedBalance() {
       return getBnFromChain(s)
     }
     const total = toBn(bal)
-    const lock = toBn(locked)
-    const free = total.sub(lock)
-    unlockedBalance.value = free.gt(new BN(0)) ? free : new BN(0)
+    unlockedBalance.value = total.gt(new BN(0)) ? total : new BN(0)
   } catch (e) {
     console.error('Failed to load unlocked balance:', e)
     unlockedBalance.value = new BN(0)
@@ -1151,22 +1084,6 @@ async function handleCancelMyVote(v: VoteItem) {
     console.error('cancelVote failed:', e)
   } finally {
     cancelingVote.value = false
-  }
-}
-
-async function handleUnlockMyVote(v: VoteItem) {
-  if (!detail.value || unlocking.value) return
-  unlocking.value = true
-  try {
-    await $getTxProvider(async (wallet: WalletWrap) => {
-      await SecretContractApi.unlock(wallet, detail.value!.id, v.id)
-    })
-    await loadDetail()
-    loadUnlockedBalance()
-  } catch (e) {
-    console.error('unlock failed:', e)
-  } finally {
-    unlocking.value = false
   }
 }
 

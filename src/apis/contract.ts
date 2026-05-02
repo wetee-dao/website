@@ -45,16 +45,6 @@ export class SecretContract {
         })
     }
 
-    /** 查询锁定余额 */
-    async lockBalanceOf(owner: string) {
-        return await this.contract_query("gov", "lockBalanceOf", {
-            owner: {
-                T: 1,
-                V: ss58toHex(owner)
-            }
-        })
-    }
-
     /** 转账 */
     async transfer(wallet: WalletWrap, to: string, value: string) {
         const result = await this.contract_builder("gov", "transfer", { to, value }, "0")
@@ -254,28 +244,10 @@ export class SecretContract {
         })
     }
 
-    /**
-     * 批量查询投票解锁状态（与 keys 顺序对应：VoteUnlockStatus[]）。
-     * keys：{ ProposalID, VoteIndex }[]
-     */
-    async voteUnlockStatuses(keys: Array<{ ProposalID: number; VoteIndex: number }>) {
-        return await this.contract_query("gov", "voteUnlockStatuses", { keys })
-    }
-
     // Abi：cancel_vote(proposal_i_d, index)
     /** 取消投票（提案 ID + 投票序号 index） */
     async cancelVote(wallet: WalletWrap, proposalId: number, index: number) {
         const result = await this.contract_builder("gov", "cancelVote", {
-            proposalID: proposalId,
-            index,
-        }, "0")
-        return await this.call(wallet, result.params)
-    }
-
-    // Abi：unlock(proposal_i_d, index)
-    /** 解锁投票（提案 ID + 投票序号 index） */
-    async unlock(wallet: WalletWrap, proposalId: number, index: number) {
-        const result = await this.contract_builder("gov", "unlock", {
             proposalID: proposalId,
             index,
         }, "0")

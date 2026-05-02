@@ -1,6 +1,11 @@
 export default {
   title: 'Treasury token holdings',
-  subtitle: 'Native relay-chain assets held by the treasury. Balances will load from the API once connected.',
+  subtitle: 'Native Asset Hub balances for the Cloud contract address, loaded via on-chain RPC.',
+  selectChain: 'Network',
+  loading: 'Loading…',
+  errorLoad: 'Failed to load',
+  noCloudAddress: 'No Cloud contract address is configured for this chain.',
+  emptyTokens: 'No token data',
   mockHint: 'On-chain balances are not wired yet; values below are placeholders.',
   colSymbol: 'Symbol',
   colAsset: 'Asset',
@@ -13,4 +18,13 @@ export default {
   ksmAsset: 'Kusama',
   ksmNetwork: 'Kusama',
   balancePlaceholder: '—',
+  assetKind: {
+    native: 'Native',
+    assets: 'Assets',
+    builtin: 'Builtin',
+    erc20: 'ERC-20',
+    erc721: 'ERC-721',
+    erc1155: 'ERC-1155',
+    other: 'Other',
+  },
 }

@@ -5,6 +5,8 @@ export default {
   voteBalance: 'VOTE 余额',
   voteLocked: '投票锁定',
   voteFree: '可用余额',
+  voteActive: '有效',
+  voteCanceled: '已取消',
   myProposals: '我的提案',
   voteHistory: '投票历史',
   connectHint: '请先连接钱包以查看个人治理数据。',

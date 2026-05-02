@@ -5,6 +5,8 @@ export default {
   voteBalance: 'VOTE balance',
   voteLocked: 'Locked in votes',
   voteFree: 'Available',
+  voteActive: 'Active',
+  voteCanceled: 'Canceled',
   myProposals: 'My proposals',
   voteHistory: 'Vote history',
   connectHint: 'Connect your wallet to view your governance data.',

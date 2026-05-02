@@ -29,14 +29,6 @@
                 <span class="stat-label">{{ t('govMy.voteBalance') }}</span>
                 <span class="stat-value">{{ voteBalanceDisplay }}</span>
               </div>
-              <div class="stat-item">
-                <span class="stat-label">{{ t('govMy.voteLocked') }}</span>
-                <span class="stat-value">{{ voteLockedDisplay }}</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-label">{{ t('govMy.voteFree') }}</span>
-                <span class="stat-value">{{ voteFreeDisplay }}</span>
-              </div>
             </div>
 
             <div v-if="loading" class="empty-state p-10 text-center text-secondary">
@@ -67,7 +59,7 @@
                         <th class="py-3 pr-4">{{ t('govMy.colSide') }}</th>
                         <th class="py-3 pr-4">{{ t('govMy.colAmount') }}</th>
                         <th class="py-3 pr-4">{{ t('govMy.colBlock') }}</th>
-                        <th class="py-3 pr-4">{{ t('govMy.colUnlock') }}</th>
+                        <th class="py-3 pr-4">{{ t('govMy.colStatus') }}</th>
                         <th class="py-3" />
                       </tr>
                     </thead>
@@ -83,8 +75,8 @@
                         <td class="py-3 pr-4 tabular-nums">{{ row.lockDisplay }}</td>
                         <td class="py-3 pr-4 tabular-nums">{{ row.voteBlock }}</td>
                         <td class="py-3 pr-4">
-                          <span v-if="row.unlockedOnChain" class="text-emerald-400/90">{{ t('govMy.unlocked') }}</span>
-                          <span v-else class="text-secondary">{{ t('govMy.locked') }}</span>
+                          <span v-if="row.deleted" class="text-secondary">{{ t('govMy.voteCanceled') }}</span>
+                          <span v-else class="text-emerald-400/90">{{ t('govMy.voteActive') }}</span>
                         </td>
                         <td class="py-3">
                           <RouterLink :to="`/gov/referenda/${row.proposalId}`"
@@ -123,7 +115,6 @@ import { parseProposalStatusResult } from '@/utils/parseProposalStatus'
 import { useGlobalStore } from '@/stores/global'
 import useGlobelProperties from '@/plugins/globel'
 import { buildTrackCategoryById, mapProposal, type GovReferendumRow } from './govReferendaMap'
-import { fetchVoteUnlockStatusMap, voteRefMapKey } from '@/utils/voteUnlockStatuses'
 
 const { t } = useI18n()
 const globalStore = useGlobalStore()
@@ -133,8 +124,6 @@ const userAddr = computed(() => (globalStore.userInfo?.addr as string | undefine
 
 const loading = ref(false)
 const voteBalanceDisplay = ref('—')
-const voteLockedDisplay = ref('—')
-const voteFreeDisplay = ref('—')
 const myReferenda = ref<GovReferendumRow[]>([])
 const trackNameById = ref<Map<number, string>>(new Map())
 const voteHistoryRows = ref<
@@ -144,7 +133,7 @@ const voteHistoryRows = ref<
     lockDisplay: string
     voteBlock: number
     index: number
-    unlockedOnChain: boolean
+    deleted: boolean
   }[]
 >([])
 
@@ -205,27 +194,30 @@ async function fetchAllProposalRows(): Promise<Record<string, unknown>[]> {
 }
 
 
-/** 链上 Vote 结构 → 表格行（已删除的投票不展示） */
+/** 链上 Vote 结构 → 表格行 */
 function mapVoteRecordToHistoryRow(v: Record<string, unknown>): {
   proposalId: number
   yes: boolean
   lockDisplay: string
   voteBlock: number
   index: number
+  deleted: boolean
 } | null {
-  const proposalId = parseHumanNumber(v.proposalID)
+  const proposalId = parseHumanNumber(v.proposalID ?? v.proposalId)
   const index = parseHumanNumber(v.index)
   // proposalID 可能从 0 开始；仅过滤负数/非数字
   if (!Number.isFinite(proposalId) || proposalId < 0) return null
   const lock = getBnFromChain(String(v.Pledge ?? v.pledge ?? '0'))
   const yesVal = v.OpinionYes ?? v.opinionYes
   const yes = yesVal === true || String(yesVal).toLowerCase() === 'true'
+  const deleted = Boolean(v.Deleted ?? v.deleted ?? false)
   return {
     proposalId,
     yes,
     lockDisplay: formatBnVote(lock),
     voteBlock: parseHumanNumber(v.VoteBlock ?? v.voteBlock ?? 0),
     index,
+    deleted,
   }
 }
 
@@ -249,7 +241,7 @@ async function fetchAllVotesOfUser(addr: string): Promise<Record<string, unknown
   return acc
 }
 
-/** votes_of_user 拉全量 Vote 后，再 batch vote_unlock_statuses */
+/** votes_of_user 拉全量 Vote */
 async function loadVoteHistory(addr: string) {
   const voteRecords = await fetchAllVotesOfUser(addr)
   const collected = voteRecords
@@ -258,19 +250,7 @@ async function loadVoteHistory(addr: string) {
 
   collected.sort((a, b) => b.voteBlock - a.voteBlock || b.proposalId - a.proposalId)
 
-  const unlockKeys = collected.map((r) => ({ ProposalID: r.proposalId, VoteIndex: r.index }))
-  let unlockMap = new Map<string, boolean>()
-  try {
-    unlockMap = await fetchVoteUnlockStatusMap(unlockKeys)
-  } catch (e) {
-    console.warn('vote_unlock_statuses (my page) failed:', e)
-  }
-
   voteHistoryRows.value = collected
-    .map((r) => ({
-      ...r,
-      unlockedOnChain: unlockMap.get(voteRefMapKey(r.proposalId, r.index)) ?? false,
-    }))
 }
 
 async function loadData() {
@@ -299,13 +279,8 @@ async function loadData() {
     const categoryByTrackId = buildTrackCategoryById(tracksResult)
 
     const balRaw = await SecretContractApi.balanceOf(addr)
-    const lockedRaw = await SecretContractApi.lockBalanceOf(addr)
     const total = unwrapBn(balRaw)
-    const locked = unwrapBn(lockedRaw)
-    const free = total.sub(locked)
     voteBalanceDisplay.value = formatBnVote(total)
-    voteLockedDisplay.value = formatBnVote(locked)
-    voteFreeDisplay.value = formatBnVote(free.gt(new BN(0)) ? free : new BN(0))
 
     const mineRaw = allRows.filter((p) => callerToSs58(p.caller as any) === addr)
     const mineMapped: GovReferendumRow[] = await Promise.all(
@@ -340,8 +315,6 @@ watch(userAddr, (a) => {
     myReferenda.value = []
     voteHistoryRows.value = []
     voteBalanceDisplay.value = '—'
-    voteLockedDisplay.value = '—'
-    voteFreeDisplay.value = '—'
   }
 })
 </script>

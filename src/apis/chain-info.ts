@@ -1,18 +1,22 @@
 import { CurrentSecretUrl } from '@/plugins/chain'
 import { GraphqlClient } from '@/utils/gql'
 
-/** 仅拉取链上合约地址与支持 token（与 `chain.graphqls` 字段一致） */
+/** 与 tee-dsecret `ChainInfo` 对齐 */
 export interface ChainContractsSlice {
+  is_main: boolean
   cloud_contract: string
   subnet_contract: string
-  token: string[]
+  network_label: string
+  /** 预留；GraphQL 可能未返回 */
+  token?: string[]
 }
 
 const QUERY = `query ChainContractsSlice {
   chain_info {
+    is_main
     cloud_contract
     subnet_contract
-    is_main
+    network_label
   }
 }`
 
