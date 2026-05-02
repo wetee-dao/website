@@ -1,7 +1,6 @@
 <template>
   <svg class="icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <g transform="translate(512 512) scale(1.1) translate(-512 -512)">
-      <rect x="90" y="145" width="844" height="734" rx="86" ry="86" fill="currentColor" fill-opacity="0.14" />
+    <g transform="translate(512 512) scale(1.26) translate(-512 -512)">
       <rect x="170" y="245" width="300" height="220" rx="28" ry="28" fill="currentColor" fill-opacity="0.92" />
       <rect x="554" y="245" width="300" height="220" rx="28" ry="28" fill="currentColor" fill-opacity="0.68" />
       <rect x="170" y="560" width="300" height="220" rx="28" ry="28" fill="currentColor" fill-opacity="0.68" />

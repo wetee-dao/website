@@ -172,7 +172,7 @@ watch(hash, fetchTx)
 .chain-box {
   background-color: rgba($primary-bg-rgb, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 4px;
+  
   min-height: calc(100vh - 140px);
 
 
@@ -242,7 +242,7 @@ watch(hash, fetchTx)
   color: rgba($primary-text-rgb, 0.8);
   background: rgba(0, 0, 0, 0.2);
   padding: 12px;
-  border-radius: 4px;
+  
   overflow-x: auto;
   white-space: pre-wrap;
   word-break: break-all;

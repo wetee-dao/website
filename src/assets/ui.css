@@ -58,10 +58,6 @@
   }
 }
 
-/* 全站直角：强制移除所有圆角（包含第三方组件默认圆角） */
-:where(*, *::before, *::after) {
-  border-radius: 0 !important;
-}
 
 /* 扁平化：不使用阴影，focus 用边框/颜色表达 */
 button.ring{

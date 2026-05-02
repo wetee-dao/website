@@ -82,9 +82,7 @@
             </div>
           </div>
           <div class="md:w-1/3 flex justify-center items-center p-20">
-            <Shadow bg="#151616">
-              <Container />
-            </Shadow>
+            <Container />
           </div>
         </div>
       </div>
@@ -166,7 +164,7 @@ const { t } = useI18n()
 
 .features {
   border: none;
-  background-color: rgb(0, 13, 0);
+  background-color: rgb(14, 15, 14);
   padding-top: 60px;
   padding-bottom: 60px;
   margin-top: 60px;

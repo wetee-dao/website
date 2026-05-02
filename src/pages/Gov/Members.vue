@@ -311,7 +311,7 @@ onMounted(() => {
       justify-content: space-between;
       align-items: center;
       padding: 16px 0;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 
       &:last-child {
         border-bottom: none;

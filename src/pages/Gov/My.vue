@@ -47,7 +47,7 @@
               <!-- 我的提案 -->
               <section class="section-block border-b border-white-4">
                 <h2 class="section-title px-8 py-6">{{ t('govMy.myProposals') }}</h2>
-                <div v-if="myProposalItems.length === 0" class="text-secondary text-sm px-8 pb-6">
+                <div v-if="myProposalItems.length === 0" class="text-secondary text-sm px-8 py-6">
                   {{ t('govMy.emptyProposals') }}
                 </div>
                 <ReferendaList v-else :items="myProposalItems" />

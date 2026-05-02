@@ -132,7 +132,7 @@ watch(() => [route.query.height, route.params.height], () => loadTxs())
 
 .chain-box {
   background-color: rgba($primary-bg-rgb, 0.5);
-  border-radius: 4px;
+  
 
 
   .title {
