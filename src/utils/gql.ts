@@ -20,13 +20,14 @@ export class GraphqlClient {
         })
 
         if (response.data.errors) {
-            window.$toast.add({
+            const msg = response.data.errors[0].message as string
+            window.$toast?.add({
                 title: 'Call tee chain error',
-                description: response.data.errors[0].message,
+                description: msg,
                 color: 'error',
                 duration: 2500,
             })
-            throw new Error(response.data.errors[0].message)
+            throw new Error(msg)
         }
 
         // console.log(response.data.data)

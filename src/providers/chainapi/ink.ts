@@ -5,7 +5,7 @@ import { Bytes } from '@polkadot/types';
 import type { AnyJson, Registry, TypeDef } from "@polkadot/types/types";
 import { ApiPromise, HttpProvider, Keyring } from "@polkadot/api";
 import { toH160Address, transformUserInput } from "@/utils/ink";
-import { MAIN_CHAIN_CLOUD_CONTRACT, MAIN_CHAIN_SUBNET_CONTRACT } from "@/config";
+import { getMainChainCloudContract, getMainChainSubnetContract } from "@/config";
 
 export class InkApi {
     cloudAbi: Abi | undefined
@@ -404,9 +404,9 @@ function formatInputData(arr: Uint8Array): Uint8Array {
 }
 
 export const Ink = new InkApi({
-    subnetContract: MAIN_CHAIN_SUBNET_CONTRACT,
+    subnetContract: getMainChainSubnetContract(),
     subnetAbiUrl: "contract/subnet.json",
-    cloudContract: MAIN_CHAIN_CLOUD_CONTRACT,
+    cloudContract: getMainChainCloudContract(),
     cloudAbiUrl: "contract/cloud.json",
 })
 

@@ -100,6 +100,7 @@ import Footer from '@/components/Footer.vue'
 import PixelBg from '@/components/anim/PixelBg.vue'
 import MainchainContracts from '@/components/svg/MainchainContracts.vue'
 import { fetchChainContractsSlice } from '@/apis/chain-info'
+import { iconUrlForChainNetwork } from '@/utils/chain_network_icon'
 
 const { t } = useI18n()
 
@@ -182,7 +183,7 @@ function staticRows(): ChainRow[] {
     {
       ...base(),
       id: MAIN_CHAIN_ID,
-      name: 'POLKAODOT',
+      name: 'Polkadot',
       icon: '/imgs/polkadot_mini.svg',
       fallbackIcon: 'P',
       description: 'Polkadot 具备共享安全、平行链互操作与链上治理升级能力。',
@@ -242,18 +243,21 @@ const chainRowsView = computed(() =>
 onMounted(async () => {
   try {
     const slice = await fetchChainContractsSlice()
-    const info = slice[0]
+    const info = slice.find((r) => r.is_main) ?? slice[0]
     if (!info) return
 
     const cloud = (info.cloud_contract ?? '').trim()
     const subnet = (info.subnet_contract ?? '').trim()
     const tokens = info.token?.filter(Boolean) ?? []
+    const label = (info.network_label ?? '').trim()
 
     chainItems.value = chainItems.value.map((row) => {
       if (row.id !== MAIN_CHAIN_ID) return row
       const integrated = Boolean(cloud && subnet)
       return {
         ...row,
+        name: label || row.name,
+        icon: iconUrlForChainNetwork(info.network_label ?? '', info.chain_type),
         cloudContract: cloud || '-',
         subnetContract: subnet || '-',
         assets: tokens.length ? [...tokens] : row.assets,
