@@ -689,7 +689,7 @@ onBeforeUnmount(() => {
       // text-transform: uppercase;
       font-size: 13px;
       line-height: 16px;
-      color: $primary-text;
+      color: $secondary-text;
       transition: 0.5s ease;
       word-break: break-all;
     }
